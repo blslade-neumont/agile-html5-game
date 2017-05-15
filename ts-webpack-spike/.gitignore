@@ -1,0 +1,12 @@
+
+
+.vs
+/**/bin
+/**/dist
+/**/obj
+/**/node_modules
+
+/**/config/local-*.json
+
+/**/src/*.js
+/**/src/*.js.map

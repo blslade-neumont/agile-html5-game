@@ -1,0 +1,35 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "target": "es5",
+        "outDir": "dist",
+        "rootDir": "src",
+        "sourceMap": true,
+        "emitDecoratorMetadata": false,
+        "experimentalDecorators": false,
+        "moduleResolution": "node",
+        "removeComments": true,
+        "forceConsistentCasingInFileNames": true,
+        "noImplicitThis": true,
+        "strictNullChecks": false,
+        "alwaysStrict": true,
+        "noImplicitAny": false,
+        "pretty": true,
+        "skipLibCheck": true,
+        "lib": [ "es6", "dom" ],
+        "baseUrl": ".",
+        "paths": {
+            "*": [ "node_modules/*", "src/*", "public/assets/*" ]
+        },
+        "types": [
+            "core-js"
+        ]
+    },
+    "exclude": [
+        "node_modules",
+        ".c9",
+        "**/deprecated"
+    ],
+    "compileOnSave": false,
+    "buildOnSave": false
+}

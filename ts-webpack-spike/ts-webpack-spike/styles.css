@@ -1,0 +1,22 @@
+﻿
+
+html, body, .canvas-container {
+    height: 100%;
+}
+body {
+    margin: 0;
+    background: black;
+}
+.canvas-container {
+}
+.canvas-pad {
+    height: 50%;
+}
+canvas {
+    margin: 0 auto;
+    margin-top: -240px;
+    width: 640px;
+    height: 480px;
+    background: white;
+    display: block;
+}
