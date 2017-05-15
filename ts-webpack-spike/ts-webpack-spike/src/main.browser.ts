@@ -1,3 +1,4 @@
-﻿
+﻿import { Game } from './game';
 
-console.log("Hello, World!");
+let game = new Game();
+game.start();

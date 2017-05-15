@@ -11,7 +11,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>7bef8e68-00e3-474f-aeb2-5fd87e546083</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>src\index.ts</StartupFile>
+    <StartupFile>dist\index.ts</StartupFile>
     <StartWebBrowser>False</StartWebBrowser>
     <SearchPath>
     </SearchPath>
@@ -22,7 +22,7 @@
     <TypeScriptSourceMap>true</TypeScriptSourceMap>
     <TypeScriptModuleKind>CommonJS</TypeScriptModuleKind>
     <EnableTypeScript>true</EnableTypeScript>
-    <StartWebBrowser>false</StartWebBrowser>
+    <StartWebBrowser>False</StartWebBrowser>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -44,9 +44,22 @@
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
+    <Content Include="styles.css">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="tsconfig.json" />
+    <TypeScriptCompile Include="src\game.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="src\index.ts" />
+    <Content Include="index.html">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="package.json" />
     <Content Include="README.md" />
+    <TypeScriptCompile Include="src\main.browser.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="config\" />
@@ -54,6 +67,12 @@
     <Folder Include="src\" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="config\development.js">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="config\webpack\client-config.js">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="config\webpack\common.js">
       <SubType>Code</SubType>
     </Compile>
