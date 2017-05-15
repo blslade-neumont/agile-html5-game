@@ -7,7 +7,25 @@
     "name": "Brandon"
   },
   "scripts": {
-    "watch": "webpack --config ./config/webpack/development.js --colors --progress --display-error-details --display-cached --watch"
+    "watch": "webpack --config ./config/webpack/development.js --colors --progress --display-error-details --display-cached --watch",
+    "test-watch": "mocha-typescript-watch -p tsconfig.json dist/**/*.spec.js",
+    "test-once": "yarn test",
+    "test": "mocha --require ts-node/register src/**/*.spec.ts"
+  },
+  "devDependencies": {
+    "@types/chai": "^3.4.35",
+    "@types/chai-as-promised": "^0.0.30",
+    "@types/mocha": "^2.2.40",
+    "@types/sinon": "^2.1.1",
+    "@types/sinon-chai": "^2.7.27",
+    "chai": "^3.5.0",
+    "chai-as-promised": "^6.0.0",
+    "mocha": "^3.2.0",
+    "mocha-typescript": "^1.0.23",
+    "sinon": "^2.1.0",
+    "sinon-chai": "^2.10.0",
+    "ts-node": "^3.0.2",
+    "tslint": "^4.5.1"
   },
   "dependencies": {
     "@types/core-js": "^0.9.41",
