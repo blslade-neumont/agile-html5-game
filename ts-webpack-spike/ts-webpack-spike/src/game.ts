@@ -29,6 +29,7 @@ export class Game {
 
     private _objects: GameObject[] = [];
     addObject(obj: GameObject) {
+        obj.addToGame(this);
         this._objects.push(obj);
     }
     
