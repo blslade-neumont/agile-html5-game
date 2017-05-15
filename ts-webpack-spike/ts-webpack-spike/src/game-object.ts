@@ -1,4 +1,5 @@
 ﻿import { degToRad, radToDeg } from './utils/math';
+import { Game } from './game';
 
 export interface GameObjectOptions {
     x?: number,
@@ -97,6 +98,18 @@ export class GameObject {
     }
     set shouldRender(val) {
         this._shouldRender = val;
+    }
+
+    private _game: Game;
+    get game() {
+        return this._game;
+    }
+    get resources() {
+        return this.game.resourceLoader;
+    }
+    addToGame(game: Game) {
+        if (this._game) throw new Error('This game object is already added to a game!');
+        this._game = game;
     }
 
     tick(delta: number) {
