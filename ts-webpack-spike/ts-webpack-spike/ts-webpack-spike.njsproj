@@ -48,7 +48,13 @@
       <SubType>Code</SubType>
     </Content>
     <Content Include="tsconfig.json" />
+    <TypeScriptCompile Include="src\dbs\tile-db.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="src\game.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="src\game-object.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="src\index.ts" />
@@ -57,7 +63,25 @@
     </Content>
     <Content Include="package.json" />
     <Content Include="README.md" />
+    <TypeScriptCompile Include="src\dbs\item-db.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="src\main.browser.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="src\resource-loader.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="src\utils\sprite.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="src\test-object.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="src\utils\delay.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="src\utils\math.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
   </ItemGroup>
@@ -65,6 +89,8 @@
     <Folder Include="config\" />
     <Folder Include="config\webpack\" />
     <Folder Include="src\" />
+    <Folder Include="src\dbs\" />
+    <Folder Include="src\utils\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="config\development.js">

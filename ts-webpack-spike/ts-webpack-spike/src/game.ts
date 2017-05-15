@@ -1,12 +1,19 @@
 ﻿import { GameObject } from './game-object';
 import { TestObject } from './test-object';
+import { ResourceLoader } from './resource-loader';
 
 export class Game {
-    constructor(private framesPerSecond = 30) { }
+    constructor(private framesPerSecond = 30) {
+    }
 
-    private canvas: HTMLCanvasElement;
-    private context: CanvasRenderingContext2D;
+    private canvas: HTMLCanvasElement = null;
+    private context: CanvasRenderingContext2D = null;
     private previousTick: Date = null;
+
+    private _resourceLoader: ResourceLoader = null;
+    get resourceLoader() {
+        return this._resourceLoader;
+    }
 
     start() {
         this.canvas = <HTMLCanvasElement>document.getElementById('gameCanvas');
@@ -14,6 +21,8 @@ export class Game {
         this.canvas.width = 640;
         this.canvas.height = 480;
         setInterval(() => this.onTick(), 1000 / this.framesPerSecond);
+
+        this._resourceLoader = new ResourceLoader();
 
         this.addObject(new TestObject());
     }
@@ -27,8 +36,14 @@ export class Game {
         let currentTime = new Date();
         let delta = (this.previousTick == null) ? 0 : (currentTime.valueOf() - this.previousTick.valueOf()) / 1000;
         this.previousTick = currentTime;
-        this.tick(delta);
-        this.render(this.context);
+
+        if (this.resourceLoader.isDone) {
+            this.tick(delta);
+            this.render(this.context);
+        }
+        else {
+            this.resourceLoader.render(this.context);
+        }
     }
     private tick(delta: number) {
         for (let obj of this._objects) {
