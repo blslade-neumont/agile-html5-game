@@ -9,15 +9,14 @@ export class EventQueue {
     private init() {
         let body = document.getElementsByTagName('body')[0];
         body.onkeydown = e => {
-            //e.preventDefault();
             if (DEBUG_KEYS) console.log(`Pressed: ${e.key}; ${e.code}`);
             if (!this.isKeyDown(e.code)) {
                 this.enqueue({
                     type: 'keyPressed',
                     code: e.code,
-                    altPressed: e.altKey,
-                    ctrlPressed: e.ctrlKey,
-                    shiftPressed: e.shiftKey
+                    altPressed: !!e.altKey,
+                    ctrlPressed: !!e.ctrlKey,
+                    shiftPressed: !!e.shiftKey
                 });
                 this._keys.set(e.code, true);
             }
@@ -25,21 +24,20 @@ export class EventQueue {
                 type: 'keyTyped',
                 key: e.key,
                 code: e.code,
-                altPressed: e.altKey,
-                ctrlPressed: e.ctrlKey,
-                shiftPressed: e.shiftKey
+                altPressed: !!e.altKey,
+                ctrlPressed: !!e.ctrlKey,
+                shiftPressed: !!e.shiftKey
             });
         };
         body.onkeyup = e => {
-            //e.preventDefault();
             if (DEBUG_KEYS) console.log(`Released: ${e.key}; ${e.code}`);
             if (this.isKeyDown(e.code)) {
                 this.enqueue({
                     type: 'keyReleased',
                     code: e.code,
-                    altPressed: e.altKey,
-                    ctrlPressed: e.ctrlKey,
-                    shiftPressed: e.shiftKey
+                    altPressed: !!e.altKey,
+                    ctrlPressed: !!e.ctrlKey,
+                    shiftPressed: !!e.shiftKey
                 });
                 this._keys.set(e.code, false);
             }

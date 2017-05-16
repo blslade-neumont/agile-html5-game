@@ -9,10 +9,11 @@ import { GameObject } from '../game-object';
 import { Game } from '../game';
 
 describe('GameObject', () => {
-    it('should start without a resourceLoader or a game', () => {
+    it('should start without a resourceLoader, eventQueue, or game', () => {
         let gobj = new GameObject('name');
         expect(gobj.game).not.to.be.ok;
         expect(gobj.resources).not.to.be.ok;
+        expect(gobj.events).not.to.be.ok;
     });
 
     describe('.constructor', () => {
@@ -89,22 +90,24 @@ describe('GameObject', () => {
 
     describe('.addToGame', () => {
         let testGame: Game = <any>{ resourceLoader: 'fake resource loader!' };
-        it(`should populate the 'game' and 'resources' helper properties`, () => {
+        it(`should populate the 'game,' 'resources,' and 'events' helper properties`, () => {
             let gobj = new GameObject('test');
             gobj.addToGame(testGame);
             expect(gobj.game).to.deep.eq(testGame);
             expect(gobj.resources).to.deep.eq(testGame.resourceLoader);
+            expect(gobj.events).to.deep.eq(testGame.eventQueue);
         });
     });
 
     describe('.removeFromGame', () => {
         let testGame: Game = <any>{ resourceLoader: 'fake resource loader!' };
-        it(`should populate the 'game' and 'resources' helper properties`, () => {
+        it(`should depopulate the 'game,' 'resources,' and 'events' helper properties`, () => {
             let gobj = new GameObject('test');
             gobj.addToGame(testGame);
             gobj.removeFromGame();
             expect(gobj.game).not.to.be.ok;
             expect(gobj.resources).not.to.be.ok;
+            expect(gobj.events).not.to.be.ok;
         });
     });
 
