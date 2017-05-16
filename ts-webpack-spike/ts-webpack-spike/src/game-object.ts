@@ -120,6 +120,10 @@ export class GameObject {
         if (!this._game) return null;
         return this.game.resourceLoader;
     }
+    get events() {
+        if (!this._game) return null;
+        return this.game.eventQueue;
+    }
     addToGame(game: Game) {
         if (this._game) throw new Error('This game object is already added to a game!');
         this._game = game;

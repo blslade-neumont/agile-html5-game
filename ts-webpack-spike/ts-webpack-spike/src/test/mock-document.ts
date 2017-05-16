@@ -3,11 +3,13 @@
 export class MockDocument {
     constructor() { }
 
-    getElementById() { return {}; }
-    getElementsByClassName() { return [{}]; }
-    getElementsByName() { return [{}]; }
-    getElementsByTagName() { return [{}]; }
-    getElementsByTagNameNS() { return [{}]; }
+    private elemeent: any = {};
+
+    getElementById() { return this.elemeent; }
+    getElementsByClassName() { return [this.elemeent]; }
+    getElementsByName() { return [this.elemeent]; }
+    getElementsByTagName() { return [this.elemeent]; }
+    getElementsByTagNameNS() { return [this.elemeent]; }
 }
 declare let global: any;
 

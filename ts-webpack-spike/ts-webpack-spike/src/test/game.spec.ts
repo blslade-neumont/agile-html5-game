@@ -26,8 +26,9 @@ describe('Game', () => {
         if (game.isRunning) game.stop();
     });
 
-    it('should start with no resource loader', () => {
+    it('should start with no resource loader or event queue', () => {
         expect(game.resourceLoader).not.to.be.ok;
+        expect(game.eventQueue).not.to.be.ok;
     });
     it('should start with isRunning = false', () => {
         expect(game.isRunning).to.be.false;
@@ -43,6 +44,10 @@ describe('Game', () => {
             game.start();
             expect(game.resourceLoader).to.be.ok;
             expect(game.resourceLoader.totalResources).to.be.greaterThan(0);
+        });
+        it('should create a new event queue', () => {
+            game.start();
+            expect(game.eventQueue).to.be.ok;
         });
         it('should throw an error if you try to call it when the game is already running', () => {
             game.start();
@@ -88,6 +93,19 @@ describe('Game', () => {
             expect(gobj.tick).to.have.been.calledOnce;
             expect(gobj.render).to.have.been.calledOnce;
         });
+        it('should invoke GameObject.handleEvent the next time onTick is called, the resource loader is done, and there is an event', () => {
+            let gobj = new GameObject('name');
+            sinon.stub(gobj, 'handleEvent');
+            game.addObject(gobj);
+            game.start();
+            (<any>game)._resourceLoader = { isDone: true, render: () => void (0) };
+            let e: any = { type: 'fish!' };
+            game.eventQueue.enqueue(e);
+            (<any>game).onTick();
+            let subject = expect(gobj.handleEvent).to.have.been;
+            subject.calledOnce;
+            subject.calledWithExactly(e);
+        });
     });
     describe('.removeObject', () => {
         it('should invoke GameObject.removeFromGame()', () => {
@@ -101,7 +119,7 @@ describe('Game', () => {
             let gobj = new GameObject('name');
             expect(() => game.removeObject(gobj)).to.throw(/not .*added/i);
         });
-        it('should not invoke GameObject.tick and GameObject.render when onTick is called', () => {
+        it('should not invoke GameObject.tick or GameObject.render when onTick is called', () => {
             let gobj = new GameObject('name');
             sinon.stub(gobj, 'tick');
             sinon.stub(gobj, 'render');
@@ -110,8 +128,19 @@ describe('Game', () => {
             game.start();
             (<any>game)._resourceLoader = { isDone: true, render: () => void (0) };
             (<any>game).onTick();
-            expect(gobj.tick).not.to.have.been.calledOnce;
-            expect(gobj.render).not.to.have.been.calledOnce;
+            expect(gobj.tick).not.to.have.been.called;
+            expect(gobj.render).not.to.have.been.called;
+        });
+        it('should not invoke GameObject.handleEvent when onTick is called and there is an event', () => {
+            let gobj = new GameObject('name');
+            sinon.stub(gobj, 'handleEvent');
+            game.addObject(gobj);
+            game.removeObject(gobj);
+            game.start();
+            (<any>game)._resourceLoader = { isDone: true, render: () => void (0) };
+            game.eventQueue.enqueue(<any>{ type: 'fish!' });
+            (<any>game).onTick();
+            expect(gobj.handleEvent).not.to.have.been.called;
         });
     });
 
