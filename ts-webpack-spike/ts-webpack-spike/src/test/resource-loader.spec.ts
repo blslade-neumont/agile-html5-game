@@ -6,22 +6,10 @@ import * as sinonChai from 'sinon-chai';
 use(sinonChai);
 
 import { ResourceLoader } from '../resource-loader';
-
-class MockImage {
-    constructor(readonly width?: number, readonly height?: number) { }
-}
-declare let global: any;
+import { stubImage } from './mock-image';
 
 describe('ResourceLoader', () => {
-    let previousImage: any;
-    beforeEach(() => {
-        previousImage = global.Image;
-        global.Image = MockImage;
-    });
-    afterEach(() => {
-        delete global.Image;
-        if (typeof previousImage !== 'undefined') global.Image = previousImage;
-    });
+    stubImage();
 
     describe('.constructor', () => {
         it('should preload item and tile resources if preload = true', () => {

@@ -9,6 +9,12 @@ import { GameObject } from '../game-object';
 import { Game } from '../game';
 
 describe('GameObject', () => {
+    it('should start without a resourceLoader or a game', () => {
+        let gobj = new GameObject('name');
+        expect(gobj.game).not.to.be.ok;
+        expect(gobj.resources).not.to.be.ok;
+    });
+
     describe('.constructor', () => {
         it('should set the object defaults based on the options passed in', () => {
             let options = { x: 45, y: 12, direction: 195, speed: 4.5 };
@@ -88,6 +94,17 @@ describe('GameObject', () => {
             gobj.addToGame(testGame);
             expect(gobj.game).to.deep.eq(testGame);
             expect(gobj.resources).to.deep.eq(testGame.resourceLoader);
+        });
+    });
+
+    describe('.removeFromGame', () => {
+        let testGame: Game = <any>{ resourceLoader: 'fake resource loader!' };
+        it(`should populate the 'game' and 'resources' helper properties`, () => {
+            let gobj = new GameObject('test');
+            gobj.addToGame(testGame);
+            gobj.removeFromGame();
+            expect(gobj.game).not.to.be.ok;
+            expect(gobj.resources).not.to.be.ok;
         });
     });
 
