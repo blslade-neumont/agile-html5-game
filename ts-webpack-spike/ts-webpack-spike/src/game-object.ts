@@ -116,11 +116,15 @@ export class GameObject {
         return this._game;
     }
     get resources() {
+        if (!this._game) return null;
         return this.game.resourceLoader;
     }
     addToGame(game: Game) {
         if (this._game) throw new Error('This game object is already added to a game!');
         this._game = game;
+    }
+    removeFromGame() {
+        this._game = null;
     }
 
     tick(delta: number) {

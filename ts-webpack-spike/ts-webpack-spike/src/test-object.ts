@@ -9,9 +9,9 @@ export class TestObject extends GameObject {
 
     private async patrol() {
         while (true) {
-            this.hspeed = 4;
+            this.hspeed = 50;
             await delay(1000);
-            this.hspeed = -4;
+            this.hspeed = -50;
             await delay(1000);
         }
     }
