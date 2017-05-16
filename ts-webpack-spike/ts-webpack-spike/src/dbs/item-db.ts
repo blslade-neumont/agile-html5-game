@@ -13,6 +13,6 @@ export let items: GameItem[] = [
         sprite: {
             src: 'images/IconSet.png',
             tileset: { width: ITEM_SIZE, height: ITEM_SIZE, tilex: 12, tiley: 8 }
-        },
-    },
+        }
+    }
 ];
