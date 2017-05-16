@@ -1,6 +1,7 @@
 ﻿import { GameObject } from './game-object';
 import { TestObject } from './test-object';
 import { ResourceLoader } from './resource-loader';
+import { EventQueue } from './event-queue';
 
 export class Game {
     constructor(private framesPerSecond = 30, private canvas: HTMLCanvasElement = null) {
@@ -12,6 +13,11 @@ export class Game {
     private _resourceLoader: ResourceLoader = null;
     get resourceLoader() {
         return this._resourceLoader;
+    }
+
+    private _eventQueue: EventQueue = null;
+    get eventQueue() {
+        return this._eventQueue;
     }
 
     private _intervalHandle: number;
@@ -31,6 +37,7 @@ export class Game {
         this._intervalHandle = setInterval(() => this.onTick(), 1000 / this.framesPerSecond);
 
         if (!this._resourceLoader) this._resourceLoader = new ResourceLoader();
+        if (!this._eventQueue) this._eventQueue = new EventQueue();
 
         this.addObject(new TestObject());
     }
@@ -68,6 +75,12 @@ export class Game {
         }
     }
     private tick(delta: number) {
+        let events = this._eventQueue.clearQueue();
+        for (let evt of events) {
+            for (let obj of this._objects) {
+                if (obj.handleEvent(evt)) break;
+            }
+        }
         for (let obj of this._objects) {
             obj.tick(delta);
         }
