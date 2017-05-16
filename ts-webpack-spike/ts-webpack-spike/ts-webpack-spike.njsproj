@@ -75,6 +75,12 @@
     <TypeScriptCompile Include="src\test\game-object.spec.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="src\test\resource-loader.spec.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="src\utils\render.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="src\utils\test\math.spec.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>

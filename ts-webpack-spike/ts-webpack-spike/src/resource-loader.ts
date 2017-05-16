@@ -2,13 +2,17 @@
 import { tiles } from './dbs/tile-db';
 import { fillText } from './utils/render';
 
+const DEBUG_RESOURCES = false;
+
 export class ResourceLoader {
-    constructor() {
-        this.init();
+    constructor(preload = true) {
+        this.init(preload);
     }
-    private init() {
-        this.loadTiles();
-        this.loadItems();
+    private init(preload: boolean) {
+        if (preload) {
+            this.loadTiles();
+            this.loadItems();
+        }
     }
 
     loadTiles() {
@@ -45,7 +49,7 @@ export class ResourceLoader {
         if (this._images.has(src)) return this._images.get(src);
 
         this._resourcesLoading++;
-        console.log(`Loading resource: '${src}'`);
+        if (DEBUG_RESOURCES) console.log(`Loading resource: '${src}'`);
         let img = new Image();
         this._images.set(src, img);
         img.onload = () => {
