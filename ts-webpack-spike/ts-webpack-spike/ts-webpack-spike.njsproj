@@ -72,6 +72,12 @@
     <TypeScriptCompile Include="src\resource-loader.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="src\test\game-object.spec.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="src\utils\test\math.spec.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="src\utils\sprite.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
@@ -90,7 +96,9 @@
     <Folder Include="config\webpack\" />
     <Folder Include="src\" />
     <Folder Include="src\dbs\" />
+    <Folder Include="src\test\" />
     <Folder Include="src\utils\" />
+    <Folder Include="src\utils\test\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="config\development.js">

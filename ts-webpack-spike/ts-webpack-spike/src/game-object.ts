@@ -1,4 +1,4 @@
-﻿import { degToRad, radToDeg } from './utils/math';
+﻿import { degToRad, radToDeg, fmod } from './utils/math';
 import { Game } from './game';
 
 export interface GameObjectOptions {
@@ -10,6 +10,8 @@ export interface GameObjectOptions {
     vspeed?: number,
     shouldRender?: boolean
 };
+
+const DEBUG_MOVEMENT = false;
 
 export class GameObject {
     constructor(name: string, opts: GameObjectOptions = {}) {
@@ -51,6 +53,8 @@ export class GameObject {
         return this._dir;
     }
     set direction(val) {
+        if (DEBUG_MOVEMENT) console.log(`setting direction: ${val}`);
+        val = fmod(val, 360);
         if (this._dir == val) return;
         this._dir = val;
         this.updateHVSpeed();
@@ -59,6 +63,8 @@ export class GameObject {
         return this._speed;
     }
     set speed(val) {
+        if (DEBUG_MOVEMENT) console.log(`setting speed: ${val}`);
+        if (val < 0) throw new Error(`Invalid speed: ${val}. Must be >= 0`);
         if (this._speed == val) return;
         this._speed = val;
         this.updateHVSpeed();
@@ -68,6 +74,7 @@ export class GameObject {
         return this._hspeed;
     }
     set hspeed(val) {
+        if (DEBUG_MOVEMENT) console.log(`setting hspeed: ${val}`);
         if (this._hspeed == val) return;
         this._hspeed = val;
         this.updateDirectionAndSpeed();
@@ -76,6 +83,7 @@ export class GameObject {
         return this._vspeed;
     }
     set vspeed(val) {
+        if (DEBUG_MOVEMENT) console.log(`setting vspeed: ${val}`);
         if (this._vspeed == val) return;
         this._vspeed = val;
         this.updateDirectionAndSpeed();
@@ -83,13 +91,16 @@ export class GameObject {
 
     private updateHVSpeed() {
         let radians = degToRad(this._dir);
-        this._vspeed = Math.sin(radians);
-        this._hspeed = Math.cos(radians);
+        this._vspeed = Math.sin(radians) * this._speed;
+        this._hspeed = Math.cos(radians) * this._speed;
+        if (DEBUG_MOVEMENT) console.log(`  hspeed: ${this._hspeed}; vspeed: ${this._vspeed}`);
     }
     private updateDirectionAndSpeed() {
         this._speed = Math.sqrt(this._hspeed * this._hspeed + this._vspeed * this._vspeed);
         if (this._speed == 0) return;
         this._dir = radToDeg(Math.atan2(this._vspeed, this._hspeed));
+        if (this._dir < 0) this._dir += 360;
+        if (DEBUG_MOVEMENT) console.log(`  speed: ${this._speed}; direction: ${this._dir}`);
     }
 
     private _shouldRender = true;
@@ -113,8 +124,8 @@ export class GameObject {
     }
 
     tick(delta: number) {
-        this.x += this.hspeed;
-        this.y += this.vspeed;
+        this.x += this.hspeed * delta;
+        this.y += this.vspeed * delta;
     }
 
     render(context: CanvasRenderingContext2D) {
