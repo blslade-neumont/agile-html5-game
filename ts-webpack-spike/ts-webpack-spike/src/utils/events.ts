@@ -25,4 +25,41 @@ export interface KeyReleasedEvent {
     shiftPressed: boolean
 }
 
-export type GameEvent = KeyTypedEvent | KeyPressedEvent | KeyReleasedEvent;
+export interface MouseMovedEvent {
+    type: 'mouseMoved',
+    movementX: number,
+    movementY: number,
+    pageX: number,
+    pageY: number
+}
+
+export interface MouseButtonPressedEvent {
+    type: 'mouseButtonPressed',
+    button: MouseButton,
+    pageX: number,
+    pageY: number
+}
+
+export interface MouseButtonReleasedEvent {
+    type: 'mouseButtonReleased',
+    button: MouseButton,
+    pageX: number,
+    pageY: number
+}
+
+export interface MouseWheelEvent {
+    type: 'mouseWheel',
+    delta: number,
+    pageX: number,
+    pageY: number
+}
+
+export enum MouseButton {
+    Left = 0,
+    Middle = 1,
+    Right = 2,
+    BrowserBack = 3,
+    BrowserForward = 5
+}
+
+export type GameEvent = KeyTypedEvent | KeyPressedEvent | KeyReleasedEvent | MouseMovedEvent | MouseButtonPressedEvent | MouseButtonReleasedEvent | MouseWheelEvent;
