@@ -1,5 +1,6 @@
 ﻿import { degToRad, radToDeg, fmod } from './utils/math';
 import { Game } from './game';
+import { GameEvent } from './utils/events';
 
 export interface GameObjectOptions {
     x?: number,
@@ -125,6 +126,9 @@ export class GameObject {
     }
     removeFromGame() {
         this._game = null;
+    }
+
+    handleEvent(evt: GameEvent): boolean | void {
     }
 
     tick(delta: number) {

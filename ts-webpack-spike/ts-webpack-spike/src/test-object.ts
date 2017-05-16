@@ -1,18 +1,26 @@
 ﻿import { GameObject, GameObjectOptions } from './game-object';
 import { delay } from './utils/delay';
+import { GameEvent } from './utils/events';
+
+const MOVE_SPEED = 4 * 30;
 
 export class TestObject extends GameObject {
     constructor(opts: GameObjectOptions = { x: 50, y: 50 }) {
         super('TestObject', opts);
-        this.patrol();
     }
 
-    private async patrol() {
-        while (true) {
-            this.hspeed = 50;
-            await delay(1000);
-            this.hspeed = -50;
-            await delay(1000);
+    handleEvent(evt: GameEvent) {
+        if (evt.type == 'keyPressed') {
+            if (evt.code == 'ArrowLeft') this.hspeed -= MOVE_SPEED;
+            else if (evt.code == 'ArrowRight') this.hspeed += MOVE_SPEED;
+            else if (evt.code == 'ArrowUp') this.vspeed -= MOVE_SPEED;
+            else if (evt.code == 'ArrowDown') this.vspeed += MOVE_SPEED;
+        }
+        else if (evt.type == 'keyReleased') {
+            if (evt.code == 'ArrowLeft') this.hspeed += MOVE_SPEED;
+            else if (evt.code == 'ArrowRight') this.hspeed -= MOVE_SPEED;
+            else if (evt.code == 'ArrowUp') this.vspeed += MOVE_SPEED;
+            else if (evt.code == 'ArrowDown') this.vspeed -= MOVE_SPEED;
         }
     }
 }
