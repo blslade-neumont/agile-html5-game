@@ -1,5 +1,6 @@
 ﻿import { items } from './dbs/item-db';
 import { tiles } from './dbs/tile-db';
+import { fillText } from './utils/render';
 
 export class ResourceLoader {
     constructor() {
@@ -29,9 +30,9 @@ export class ResourceLoader {
     get totalResources() {
         return this._resourcesLoading;
     }
-    private _error: string = null;
+    private _errors: string[] = [];
     get error() {
-        return this._error;
+        return this._errors.join('\n');
     }
 
     get isDone() {
@@ -51,9 +52,8 @@ export class ResourceLoader {
             this._resourcesLoaded++;
         };
         img.onerror = (e) => {
-            this._error = e.message;
-            this._resourcesLoaded++;
-        }
+            this._errors.push(`ERROR: Could not load ${src}`);
+        };
         img.src = src;
         return img;
     }
@@ -62,17 +62,18 @@ export class ResourceLoader {
         context.fillStyle = 'grey';
         context.fillRect(0, 0, 640, 480);
         
-        if (this.totalResources > 0 && !this.error) {
+        if (this.totalResources > 0) {
             context.fillStyle = 'white';
             context.fillRect(4, 4, 100, 4);
             context.fillStyle = 'black';
             context.fillRect(4, 4, 100 * (this.resourcesLoaded / this.totalResources), 4);
         }
 
-        let msg = this.error || `${this.resourcesLoaded}/${this.totalResources}`;
+        let msg = `${this.resourcesLoaded}/${this.totalResources}`;
+        if (this._errors.length) msg += '\n' + this.error;
         context.textBaseline = 'top';
         context.textAlign = 'left';
         context.fillStyle = 'black';
-        context.fillText(msg, 4, 12);
+        fillText(context, msg, 4, 12);
     }
 }
