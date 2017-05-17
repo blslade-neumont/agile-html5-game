@@ -5,6 +5,7 @@ export class MockContext {
 
     fillRect() { }
     fillText() { }
+    drawImage() { }
 }
 
 export class MockCanvas {

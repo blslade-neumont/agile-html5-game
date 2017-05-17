@@ -2,6 +2,8 @@
 import { TestObject } from './test-object';
 import { ResourceLoader } from './resource-loader';
 import { EventQueue } from './event-queue';
+import { World } from './world';
+import { GridRenderer } from './grid-renderer';
 
 export class Game {
     constructor(private framesPerSecond = 30, private canvas: HTMLCanvasElement = null) {
@@ -9,6 +11,8 @@ export class Game {
     
     private context: CanvasRenderingContext2D = null;
     private previousTick: Date = null;
+    private _world: World = null;
+    private _gridRenderer: GridRenderer = null;
 
     private _resourceLoader: ResourceLoader = null;
     get resourceLoader() {
@@ -38,6 +42,12 @@ export class Game {
 
         if (!this._resourceLoader) this._resourceLoader = new ResourceLoader();
         if (!this._eventQueue) this._eventQueue = new EventQueue();
+        if (!this._world) this._world = new World();
+        if (!this._gridRenderer) this._gridRenderer = new GridRenderer();
+
+        this._world.start(this.canvas.width, this.canvas.height);
+        this._gridRenderer.setWorld(this._world);
+        this._gridRenderer.setLoader(this._resourceLoader);
 
         this.addObject(new TestObject());
     }
@@ -81,6 +91,9 @@ export class Game {
                 if (obj.handleEvent(evt)) break;
             }
         }
+
+        this._world.tick(delta);
+
         for (let obj of this._objects) {
             obj.tick(delta);
         }
@@ -88,6 +101,9 @@ export class Game {
     private render(context: CanvasRenderingContext2D) {
         context.fillStyle = 'pink';
         context.fillRect(0, 0, 100, 100);
+
+        this._gridRenderer.render(context);
+
         for (let obj of this._objects) {
             if (obj.shouldRender) obj.render(context);
         }
