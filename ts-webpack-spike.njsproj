@@ -78,12 +78,15 @@
     </TypeScriptCompile>
     <TypeScriptCompile Include="src\test\event-queue.spec.ts">
       <SubType>Code</SubType>
+      <TestFramework>Mocha</TestFramework>
     </TypeScriptCompile>
     <TypeScriptCompile Include="src\test\game-object.spec.ts">
       <SubType>Code</SubType>
+      <TestFramework>Mocha</TestFramework>
     </TypeScriptCompile>
     <TypeScriptCompile Include="src\test\game.spec.ts">
       <SubType>Code</SubType>
+      <TestFramework>Mocha</TestFramework>
     </TypeScriptCompile>
     <TypeScriptCompile Include="src\test\mock-canvas.ts">
       <SubType>Code</SubType>
@@ -96,6 +99,7 @@
     </TypeScriptCompile>
     <TypeScriptCompile Include="src\test\resource-loader.spec.ts">
       <SubType>Code</SubType>
+      <TestFramework>Mocha</TestFramework>
     </TypeScriptCompile>
     <TypeScriptCompile Include="src\event-queue.ts">
       <SubType>Code</SubType>
@@ -106,8 +110,9 @@
     <TypeScriptCompile Include="src\utils\render.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="src\utils\test\math.spec.ts">
+    <TypeScriptCompile Include="src\test\utils\math.spec.ts">
       <SubType>Code</SubType>
+      <TestFramework>Mocha</TestFramework>
     </TypeScriptCompile>
     <TypeScriptCompile Include="src\utils\sprite.ts">
       <SubType>Code</SubType>
@@ -121,17 +126,19 @@
     <TypeScriptCompile Include="src\utils\math.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="src\utils\test\render.spec.ts" />
+    <TypeScriptCompile Include="src\test\utils\render.spec.ts">
+      <TestFramework>Mocha</TestFramework>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="src\world.ts" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="config\" />
     <Folder Include="config\webpack\" />
+    <Folder Include="src\test\" />
     <Folder Include="src\" />
     <Folder Include="src\dbs\" />
-    <Folder Include="src\test\" />
     <Folder Include="src\utils\" />
-    <Folder Include="src\utils\test\" />
+    <Folder Include="src\test\utils\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="config\development.js">
