@@ -21,8 +21,8 @@ export class ResourceLoader {
         }
     }
     loadItems() {
-        for (let item of items) {
-            this.loadImage(item.sprite.src)
+        for (let item in items) {
+            this.loadImage(items[item].sprite.src)
         }
     }
 
