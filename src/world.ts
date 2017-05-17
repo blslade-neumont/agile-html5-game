@@ -6,18 +6,18 @@ import { WorldTile } from './dbs/tile-db';
 export class World {
     private _tilesX: number = 0;
     private _tilesY: number = 0;
-    private tileIndices : number[] = null;
+    private tileNames : string[] = null;
 
     start(canvasWidth : number, canvasHeight : number) {
         // TODO: TEMPORARY DEBUG MAP HERE
         this._tilesX = canvasWidth / TILE_SIZE;
         this._tilesY = canvasHeight / TILE_SIZE;
 
-        this.tileIndices = [];
+        this.tileNames = [];
         for (let x: number = 0; x < this._tilesX; ++x) {
             for (let y: number = 0; y < this._tilesY; ++y) {
-                let tileIndex : number = (x === 0 || x === this._tilesX - 1) ? 2 : ((y === 0 || y === this._tilesY - 1) ? 1 : 0);
-                this.tileIndices.push(tileIndex);
+                let tileIndex : string = (x === 0 || x === this._tilesX - 1) ? "wallSide" : ((y === 0 || y === this._tilesY - 1) ? "wallTop" : "grass");
+                this.tileNames.push(tileIndex);
             }
         }
 
@@ -35,8 +35,8 @@ export class World {
         // TODO: UPDATE THE WORLD HERE
     }
 
-    getTileAt(x: number, y: number) : WorldTile{
-        return tiles[this.tileIndices[x*this.tilesY + y]];
+    getTileAt(x: number, y: number): WorldTile{
+        return tiles[this.tileNames[x * this.tilesY + y]];
     }
 
 }
