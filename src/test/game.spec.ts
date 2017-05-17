@@ -11,7 +11,6 @@ import { stubDocument } from './mock-document';
 import { stubImage } from './mock-image';
 import { stubCanvas } from './mock-canvas';
 import { delay } from '../utils/delay';
-declare let global: any;
 
 describe('Game', () => {
     stubDocument();

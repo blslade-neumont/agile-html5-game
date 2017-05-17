@@ -88,6 +88,9 @@
       <SubType>Code</SubType>
       <TestFramework>Mocha</TestFramework>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="src\test\grid-renderer.spec.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="src\test\mock-canvas.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>

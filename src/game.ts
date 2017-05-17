@@ -12,7 +12,14 @@ export class Game {
     private context: CanvasRenderingContext2D = null;
     private previousTick: Date = null;
     private _world: World = null;
+    get world() {
+        return this._world;
+    }
+
     private _gridRenderer: GridRenderer = null;
+    get gridRenderer() {
+        return this._gridRenderer;
+    }
 
     private _resourceLoader: ResourceLoader = null;
     get resourceLoader() {

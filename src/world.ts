@@ -4,31 +4,31 @@ import { TILE_SIZE } from './dbs/tile-db';
 import { WorldTile } from './dbs/tile-db';
 
 export class World {
-    private tilesX: number = 0;
-    private tilesY: number = 0;
+    private _tilesX: number = 0;
+    private _tilesY: number = 0;
     private tileIndices : number[] = null;
 
     start(canvasWidth : number, canvasHeight : number) {
         // TODO: TEMPORARY DEBUG MAP HERE
-        this.tilesX = canvasWidth / TILE_SIZE;
-        this.tilesY = canvasHeight / TILE_SIZE;
+        this._tilesX = canvasWidth / TILE_SIZE;
+        this._tilesY = canvasHeight / TILE_SIZE;
 
         this.tileIndices = [];
-        for (let x: number = 0; x < this.tilesX; ++x) {
-            for (let y: number = 0; y < this.tilesY; ++y) {
-                let tileIndex : number = (x === 0 || x === this.tilesX - 1) ? 2 : ((y === 0 || y === this.tilesY - 1) ? 1 : 0);
+        for (let x: number = 0; x < this._tilesX; ++x) {
+            for (let y: number = 0; y < this._tilesY; ++y) {
+                let tileIndex : number = (x === 0 || x === this._tilesX - 1) ? 2 : ((y === 0 || y === this._tilesY - 1) ? 1 : 0);
                 this.tileIndices.push(tileIndex);
             }
         }
 
     }
 
-    getTilesX(): number {
-        return this.tilesX;
+    get tilesX(): number {
+        return this._tilesX;
     }
 
-    getTilesY(): number {
-        return this.tilesY;
+    get tilesY(): number {
+        return this._tilesY;
     }
 
     tick(delta: number) {
