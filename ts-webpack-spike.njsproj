@@ -120,6 +120,8 @@
     <TypeScriptCompile Include="src\utils\math.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="src\utils\test\render.spec.ts" />
+    <TypeScriptCompile Include="src\world.ts" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="config\" />
