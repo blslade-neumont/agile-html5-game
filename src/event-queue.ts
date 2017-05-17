@@ -1,7 +1,7 @@
 ﻿import { GameEvent, MouseButton } from './utils/events';
 
 const DEBUG_KEYS = false;
-const DEBUG_MOUSE = true;
+const DEBUG_MOUSE = false;
 
 export class EventQueue {
     constructor() {
@@ -51,22 +51,28 @@ export class EventQueue {
     private initMouse(body: HTMLBodyElement) {
         body.onmousemove = e => {
             if (DEBUG_MOUSE) console.log(`Mouse moved. Movement: ${e.movementX}, ${e.movementY}; Position: ${e.pageX}, ${e.pageY}`);
+            if (typeof e.pageX !== 'undefined') this._pageX = e.pageX;
+            else this._pageX += e.movementX;
+            if (typeof e.pageY !== 'undefined') this._pageY = e.pageY;
+            else this._pageY += e.movementY;
             this.enqueue({
                 type: 'mouseMoved',
                 movementX: e.movementX,
                 movementY: e.movementY,
-                pageX: this._pageX = (e.pageX || (this._pageX + e.movementX)),
-                pageY: this._pageY = (e.pageY || (this._pageY + e.movementY))
+                pageX: this._pageX,
+                pageY: this._pageY
             });
         };
         body.onmousedown = e => {
             if (DEBUG_MOUSE) console.log(`Mouse button pressed. Button: ${e.button}; Position: ${e.pageX}, ${e.pageY}`);
             if (!this.isMouseButtonDown(e.button)) {
+                if (typeof e.pageX !== 'undefined') this._pageX = e.pageX;
+                if (typeof e.pageY !== 'undefined') this._pageY = e.pageY;
                 this.enqueue({
                     type: 'mouseButtonPressed',
                     button: <MouseButton>e.button,
-                    pageX: this._pageX = e.pageX || this._pageX,
-                    pageY: this._pageY = e.pageY || this._pageY
+                    pageX: this._pageX,
+                    pageY: this._pageY
                 });
                 this._mouseButtons.set(e.button, true);
             }
@@ -74,22 +80,26 @@ export class EventQueue {
         body.onmouseup = e => {
             if (DEBUG_MOUSE) console.log(`Mouse button released. Button: ${e.button}; Position: ${e.pageX}, ${e.pageY}`);
             if (this.isMouseButtonDown(e.button)) {
+                if (typeof e.pageX !== 'undefined') this._pageX = e.pageX;
+                if (typeof e.pageY !== 'undefined') this._pageY = e.pageY;
                 this.enqueue({
                     type: 'mouseButtonReleased',
                     button: <MouseButton>e.button,
-                    pageX: this._pageX = e.pageX || this._pageX,
-                    pageY: this._pageY = e.pageY || this._pageY
+                    pageX: this._pageX,
+                    pageY: this._pageY
                 });
-                this._mouseButtons.set(e.button, true);
+                this._mouseButtons.set(e.button, false);
             }
         };
         body.onmousewheel = e => {
             if (DEBUG_MOUSE) console.log(`Mouse wheel. delta: ${e.wheelDelta}; Position: ${e.pageX}, ${e.pageY}`);
+            if (typeof e.pageX !== 'undefined') this._pageX = e.pageX;
+            if (typeof e.pageY !== 'undefined') this._pageY = e.pageY;
             this.enqueue({
                 type: 'mouseWheel',
                 delta: e.wheelDelta,
-                pageX: this._pageX = e.pageX || this._pageX,
-                pageY: this._pageY = e.pageY || this._pageY
+                pageX: this._pageX,
+                pageY: this._pageY
             });
         };
     }
@@ -104,7 +114,7 @@ export class EventQueue {
         if (!this._keys.has(code)) return false;
         return this._keys.get(code);
     }
-    isMouseButtonDown(button: number) {
+    isMouseButtonDown(button: MouseButton) {
         if (!this._mouseButtons.has(button)) return false;
         return this._mouseButtons.get(button);
     }
@@ -113,9 +123,24 @@ export class EventQueue {
     }
 
     enqueue(e: GameEvent) {
+        let lastEvent = this._events[this._events.length - 1];
+        if (lastEvent && lastEvent.type == e.type) {
+            switch (e.type) {
+            case 'mouseMoved':
+                (<any>lastEvent).movementX += e.movementX;
+                (<any>lastEvent).movementY += e.movementY;
+                (<any>lastEvent).pageX = e.pageX;
+                (<any>lastEvent).pageY = e.pageY;
+                return;
+            case 'mouseWheel':
+                (<any>lastEvent).delta += e.delta;
+                return;
+            }
+        }
         this._events.push(e);
     }
     clearQueue() {
+
         return this._events.splice(0);
     }
 }
