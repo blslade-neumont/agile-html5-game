@@ -44,6 +44,7 @@
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
+    <Content Include=".travis.yml" />
     <Content Include="styles.css">
       <SubType>Code</SubType>
     </Content>
