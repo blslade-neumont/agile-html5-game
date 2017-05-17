@@ -16,13 +16,13 @@ export class ResourceLoader {
     }
 
     loadTiles() {
-        for (let tile of tiles) {
-            this.loadImage(tile.sprite.src)
+        for (let tile in tiles) {
+            this.loadImage(tiles[tile].sprite.src)
         }
     }
     loadItems() {
-        for (let item of items) {
-            this.loadImage(item.sprite.src)
+        for (let item in items) {
+            this.loadImage(items[item].sprite.src)
         }
     }
 
