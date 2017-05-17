@@ -2,6 +2,6 @@ language: node_js
 node_js:
   - "7"
 before_script:
-  - cd "ts-webpack-spike/ts-webpack-spike" && yarn build -s
+  - yarn build -s
 script:
-- cd "ts-webpack-spike/ts-webpack-spike" && yarn travis -s
+- yarn travis -s
