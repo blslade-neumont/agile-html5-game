@@ -49,6 +49,9 @@
       <SubType>Code</SubType>
     </Content>
     <Content Include="tsconfig.json" />
+    <TypeScriptCompile Include="src\agile-game.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="src\dbs\tile-db.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
