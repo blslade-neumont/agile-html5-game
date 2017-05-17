@@ -1,5 +1,10 @@
 language: node_js
 node_js:
   - "7"
+notifications:
+  email:
+    - brandonyoyoslade@gmail.com
+    - jfurtado@student.neumont.edu
+    - keima.ayasaki@gmail.com
 script:
-- yarn travis -s
+  - yarn travis -s
