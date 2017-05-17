@@ -21,8 +21,8 @@
   "scripts": {
     "build": "webpack --config ./config/webpack/development.js --colors --progress --display-error-details --display-cached",
     "watch": "webpack --config ./config/webpack/development.js --colors --progress --display-error-details --display-cached --watch",
-    "test-watch": "mocha-typescript-watch -p tsconfig.json dist/**/*.spec.js",
-    "test-once": "mocha --require ts-node/register src/**/*.spec.ts",
+    "test-watch": "mocha-typescript-watch -p tsconfig.json \"dist/**/*.spec.js\"",
+    "test-once": "mocha --require ts-node/register \"src/**/*.spec.ts\"",
     "test": "yarn test-once -s",
     "travis": "yarn test-once -s"
   },

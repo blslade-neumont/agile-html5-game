@@ -5,8 +5,8 @@ import * as sinon from 'sinon';
 import * as sinonChai from 'sinon-chai';
 use(sinonChai);
 
-import { fillText } from '../render';
-import { stubCanvas } from '../../test/mock-canvas';
+import { fillText } from '../../utils/render';
+import { stubCanvas } from '../mock-canvas';
 
 describe('utils/fillText', () => {
     stubCanvas();
