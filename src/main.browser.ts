@@ -1,4 +1,4 @@
-﻿import { Game } from './game';
+﻿import { AgileGame } from './agile-game';
 
-let game = new Game();
+let game = new AgileGame();
 game.start();

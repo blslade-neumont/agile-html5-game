@@ -1,25 +1,13 @@
 ﻿import { GameObject } from './game-object';
-import { TestObject } from './test-object';
 import { ResourceLoader } from './resource-loader';
 import { EventQueue } from './event-queue';
-import { World } from './world';
-import { GridRenderer } from './grid-renderer';
 
 export class Game {
-    constructor(private framesPerSecond = 30, private canvas: HTMLCanvasElement = null) {
+    constructor(protected readonly framesPerSecond = 30, protected canvas: HTMLCanvasElement = null) {
     }
     
     private context: CanvasRenderingContext2D = null;
     private previousTick: Date = null;
-    private _world: World = null;
-    get world() {
-        return this._world;
-    }
-
-    private _gridRenderer: GridRenderer = null;
-    get gridRenderer() {
-        return this._gridRenderer;
-    }
 
     private _resourceLoader: ResourceLoader = null;
     get resourceLoader() {
@@ -49,14 +37,6 @@ export class Game {
 
         if (!this._resourceLoader) this._resourceLoader = new ResourceLoader();
         if (!this._eventQueue) this._eventQueue = new EventQueue();
-        if (!this._world) this._world = new World();
-        if (!this._gridRenderer) this._gridRenderer = new GridRenderer();
-
-        this._world.start(this.canvas.width, this.canvas.height);
-        this._gridRenderer.setWorld(this._world);
-        this._gridRenderer.setLoader(this._resourceLoader);
-
-        this.addObject(new TestObject());
     }
     stop() {
         if (!this.isRunning) return;
@@ -84,6 +64,7 @@ export class Game {
         this.previousTick = currentTime;
 
         if (this.resourceLoader.isDone) {
+            this.sendEvents();
             this.tick(delta);
             this.render(this.context);
         }
@@ -91,26 +72,20 @@ export class Game {
             this.resourceLoader.render(this.context);
         }
     }
-    private tick(delta: number) {
+    protected sendEvents() {
         let events = this._eventQueue.clearQueue();
         for (let evt of events) {
             for (let obj of this._objects) {
                 if (obj.handleEvent(evt)) break;
             }
         }
-
-        this._world.tick(delta);
-
+    }
+    protected tick(delta: number) {
         for (let obj of this._objects) {
             obj.tick(delta);
         }
     }
-    private render(context: CanvasRenderingContext2D) {
-        context.fillStyle = 'pink';
-        context.fillRect(0, 0, 100, 100);
-
-        this._gridRenderer.render(context);
-
+    protected render(context: CanvasRenderingContext2D) {
         for (let obj of this._objects) {
             if (obj.shouldRender) obj.render(context);
         }

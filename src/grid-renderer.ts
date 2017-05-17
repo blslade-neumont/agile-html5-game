@@ -3,25 +3,27 @@ import { WorldTile } from './dbs/tile-db';
 import { ResourceLoader } from './resource-loader';
 import { TILE_SIZE } from './dbs/tile-db';
 import { SingleTileSpriteT } from './utils/sprite';
+import { AgileGame } from './agile-game';
 
 export class GridRenderer {
-    private _world: World = null;
-    private _loader: ResourceLoader = null;
+    private _game: AgileGame = null;
+
+    get game() {
+        return this._game;
+    }
 
     get world() {
-        return this._world;
+        if (this._game) return this._game.world;
+        return null;
     }
 
     get loader() {
-        return this._loader;
-    }
-    
-    setWorld(world: World) {
-        this._world = world;
+        if (this._game) return this._game.resourceLoader;
+        return null;
     }
 
-    setLoader(loader: ResourceLoader) {
-        this._loader = loader;
+    setGame(game: AgileGame) {
+        this._game = game;
     }
 
     render(context: CanvasRenderingContext2D) {
