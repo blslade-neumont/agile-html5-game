@@ -54,7 +54,6 @@ describe('Game', () => {
         });
         it('should begin invoking onTick the requested number of times per second', async () => {
             sinon.stub(game, 'onTick');
-
             game.start();
             await delay(1000 / 25);
             expect((<any>game).onTick).to.have.been.calledOnce;
@@ -159,14 +158,16 @@ describe('Game', () => {
             expect((<any>game).tick).not.to.have.been.called;
             expect((<any>game).render).not.to.have.been.called;
         });
-        it('should invoke .tick and .render if the resource loader is done loading', () => {
+        it('should invoke .sendEvents, .tick, and .render if the resource loader is done loading', () => {
             game.start();
             (<any>game)._resourceLoader = { isDone: true, render: () => void(0) };
             sinon.stub(game.resourceLoader, 'render');
+            sinon.stub(game, 'sendEvents');
             sinon.stub(game, 'tick');
             sinon.stub(game, 'render');
             (<any>game).onTick();
             expect(game.resourceLoader.render).not.to.have.been.called;
+            expect((<any>game).sendEvents).to.have.been.calledOnce;
             expect((<any>game).tick).to.have.been.calledOnce;
             expect((<any>game).render).to.have.been.calledOnce;
         });
