@@ -3,9 +3,21 @@
   "version": "0.0.0",
   "description": "ts-webpack-spike",
   "main": "dist/index.js",
-  "author": {
-    "name": "Brandon"
-  },
+  "contributors": [
+    {
+      "name": "Brandon",
+      "email": "brandonyoyoslade@gmail.com",
+      "url": "http://www.bestoflies.com"
+    },
+    {
+      "name": "Justin",
+      "email": "jfurtado@student.neumont.edu"
+    },
+    {
+      "name": "Trent Castro",
+      "email": "keima.ayasaki@gmail.com"
+    }
+  ],
   "scripts": {
     "watch": "webpack --config ./config/webpack/development.js --colors --progress --display-error-details --display-cached --watch",
     "test-watch": "mocha-typescript-watch -p tsconfig.json dist/**/*.spec.js",
