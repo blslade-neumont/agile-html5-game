@@ -1,3 +1,3 @@
-# agile-html5-game
+﻿# ts-webpack-spike
 
-An HTML5 game created using the agile development methodology.
+
