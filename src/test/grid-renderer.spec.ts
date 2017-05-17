@@ -6,7 +6,7 @@ import * as sinonChai from 'sinon-chai';
 use(sinonChai);
 
 import { GridRenderer } from '../grid-renderer';
-import { Game } from '../game';
+import { AgileGame } from '../agile-game';
 import { World } from '../world';
 import { ResourceLoader } from '../resource-loader';
 import { stubDocument } from './mock-document';
@@ -22,12 +22,14 @@ describe('GridRenderer', () => {
         expect(renderer.loader).not.to.be.ok;
     });
 
-    describe('.setWorld', () => {
-        it('should set the world based on the object passed in', () => {
-            let world: World = new World();
-            let renderer: GridRenderer = new GridRenderer();
-            renderer.setWorld(world);
-            expect(renderer.world).to.equal(world);
+    describe('.setGame', () => {
+        it('should set the world, game, and renderer based on the object passed in', () => {
+            let renderer = new GridRenderer();
+            let game: AgileGame = <any>{ world: 'myWorld', resourceLoader: 'loader' };
+            renderer.setGame(game);
+            expect(renderer.game).to.deep.equal(game);
+            expect(renderer.world).to.deep.equal(game.world);
+            expect(renderer.loader).to.deep.equal(game.resourceLoader);
         });
     });
 
@@ -38,10 +40,10 @@ describe('GridRenderer', () => {
         stubImage();
         stubCanvas();
 
-        let game: Game;
+        let game: AgileGame;
         beforeEach(() => {
             context = (new HTMLCanvasElement()).getContext("2d");
-            game = new Game(30, new HTMLCanvasElement());
+            game = new AgileGame(30, new HTMLCanvasElement());
         });
 
         afterEach(() => {
@@ -61,5 +63,4 @@ describe('GridRenderer', () => {
             expect(stub.callCount).to.be.within((world.tilesX * world.tilesY), ((world.tilesX+1) * (world.tilesY + 1)));
         });
     });
-
 });
