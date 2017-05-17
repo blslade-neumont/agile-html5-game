@@ -2,7 +2,7 @@
 
 export const TILE_SIZE: number = 32;
 
-interface WorldTile {
+export interface WorldTile {
     name: string,
     sprite: SpriteT,
     isSolid: boolean

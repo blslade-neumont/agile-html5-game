@@ -55,6 +55,7 @@ describe('Game', () => {
         });
         it('should begin invoking onTick the requested number of times per second', async () => {
             sinon.stub(game, 'onTick');
+
             game.start();
             await delay(1000 / 25);
             expect((<any>game).onTick).to.have.been.calledOnce;

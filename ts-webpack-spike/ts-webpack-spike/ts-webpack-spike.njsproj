@@ -57,6 +57,9 @@
     <TypeScriptCompile Include="src\game-object.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="src\grid-renderer.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="src\index.ts" />
     <Content Include="index.html">
       <SubType>Code</SubType>
