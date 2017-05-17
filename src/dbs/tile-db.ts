@@ -3,34 +3,31 @@
 export const TILE_SIZE: number = 32;
 
 export interface WorldTile {
-    name: string,
     sprite: SpriteT,
     isSolid: boolean
 };
 
-export let tiles: WorldTile[] = [
+export let tiles: { [name: string]: WorldTile } =
     {
-        name: 'grass',
-        sprite: {
-            src: 'images/Outside_Tiles.png',
-            tileset: { width: 32, height: 32, tilex: 0, tiley: 2 }
+        grass: {
+            sprite: {
+                src: 'images/Outside_A2.png',
+                tileset: { width: 32, height: 32, tilex: 0, tiley: 0 }
+            },
+            isSolid: false
         },
-        isSolid: false
-    },
-    {
-        name: 'wallTop',
-        sprite: {
-            src: 'images/Outside_Tiles.png',
-            tileset: { width: 32, height: 32, tilex: 0, tiley: 10 }
+        wallTop: {
+            sprite: {
+                src: 'images/Outside_Tiles.png',
+                tileset: { width: 32, height: 32, tilex: 0, tiley: 3 }
+            },
+            isSolid: true
         },
-        isSolid: true
-    },
-    {
-        name: 'wallSide',
-        sprite: {
-            src: 'images/Outside_Tiles.png',
-            tileset: { width: 32, height: 32, tilex: 0, tiley: 11 }
+        wallSide: {
+            sprite: {
+                src: 'images/Outside_Tiles.png',
+                tileset: { width: 32, height: 32, tilex: 0, tiley: 2 }
+            },
+            isSolid: true
         },
-        isSolid: true
-    }
-];
+    };

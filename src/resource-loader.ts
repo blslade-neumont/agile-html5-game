@@ -16,8 +16,8 @@ export class ResourceLoader {
     }
 
     loadTiles() {
-        for (let tile of tiles) {
-            this.loadImage(tile.sprite.src)
+        for (let tile in tiles) {
+            this.loadImage(tiles[tile].sprite.src)
         }
     }
     loadItems() {
