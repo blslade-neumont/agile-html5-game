@@ -11,21 +11,21 @@ export let tiles: { [name: string]: WorldTile } =
     {
         grass: {
             sprite: {
-                src: 'images/Outside_A2.png',
+                src: 'images/Tiles/Outside_A2.png',
                 tileset: { width: 32, height: 32, tilex: 0, tiley: 0 }
             },
             isSolid: false
         },
         wallTop: {
             sprite: {
-                src: 'images/Outside_Tiles.png',
+                src: 'images/Tiles/Outside_Tiles.png',
                 tileset: { width: 32, height: 32, tilex: 0, tiley: 3 }
             },
             isSolid: true
         },
         wallSide: {
             sprite: {
-                src: 'images/Outside_Tiles.png',
+                src: 'images/Tiles/Outside_Tiles.png',
                 tileset: { width: 32, height: 32, tilex: 0, tiley: 2 }
             },
             isSolid: true
