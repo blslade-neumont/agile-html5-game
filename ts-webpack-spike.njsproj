@@ -107,6 +107,15 @@
     <TypeScriptCompile Include="src\main.browser.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="src\test\alive-preload-strategy.spec.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="src\test\item-preload-strategy.spec.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="src\test\tile-preload-strategy.spec.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="src\tile-preload-strategy.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
