@@ -52,6 +52,9 @@
     <TypeScriptCompile Include="src\item-preload-strategy.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="src\player.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="src\test\agile-game.spec.ts">
       <SubType>Code</SubType>
       <TestFramework>Mocha</TestFramework>
