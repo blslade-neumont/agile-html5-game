@@ -1,31 +1,16 @@
-﻿import { items } from './dbs/item-db';
-import { tiles } from './dbs/tile-db';
-import { fillText } from './utils/render';
+﻿import { fillText } from './utils/render';
+import { PreloadStrategy } from './utils/preload-strategy';
 
 const DEBUG_RESOURCES = false;
 
 export class ResourceLoader {
-    constructor(preload = true) {
-        this.init(preload);
-    }
-    private init(preload: boolean) {
-        if (preload) {
-            this.loadTiles();
-            this.loadItems();
-        }
+    constructor() {
     }
 
-    loadTiles() {
-        for (let tile in tiles) {
-            this.loadImage(tiles[tile].sprite.src)
-        }
+    addPreloadStrategy(strategy: PreloadStrategy) {
+        strategy.preload(this);
     }
-    loadItems() {
-        for (let item in items) {
-            this.loadImage(items[item].sprite.src)
-        }
-    }
-
+    
     private _resourcesLoaded = 0;
     get resourcesLoaded() {
         return this._resourcesLoaded;

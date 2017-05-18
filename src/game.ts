@@ -4,6 +4,11 @@ import { EventQueue } from './event-queue';
 
 export class Game {
     constructor(protected readonly framesPerSecond = 30, protected canvas: HTMLCanvasElement = null) {
+        this.init();
+    }
+    private init() {
+        this._resourceLoader = new ResourceLoader();
+        this._eventQueue = new EventQueue();
     }
     
     private context: CanvasRenderingContext2D = null;
@@ -34,9 +39,6 @@ export class Game {
         this.canvas.width = 640;
         this.canvas.height = 480;
         this._intervalHandle = setInterval(() => this.onTick(), 1000 / this.framesPerSecond);
-
-        if (!this._resourceLoader) this._resourceLoader = new ResourceLoader();
-        if (!this._eventQueue) this._eventQueue = new EventQueue();
     }
     stop() {
         if (!this.isRunning) return;

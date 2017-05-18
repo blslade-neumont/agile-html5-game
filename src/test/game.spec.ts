@@ -24,11 +24,7 @@ describe('Game', () => {
     afterEach(() => {
         if (game.isRunning) game.stop();
     });
-
-    it('should start with no resource loader or event queue', () => {
-        expect(game.resourceLoader).not.to.be.ok;
-        expect(game.eventQueue).not.to.be.ok;
-    });
+    
     it('should start with isRunning = false', () => {
         expect(game.isRunning).to.be.false;
     });
@@ -38,15 +34,6 @@ describe('Game', () => {
             game.start();
             game.stop();
             expect(game.isRunning).to.be.false;
-        });
-        it('should create a new resource loader and preload tile and item assets', () => {
-            game.start();
-            expect(game.resourceLoader).to.be.ok;
-            expect(game.resourceLoader.totalResources).to.be.greaterThan(0);
-        });
-        it('should create a new event queue', () => {
-            game.start();
-            expect(game.eventQueue).to.be.ok;
         });
         it('should throw an error if you try to call it when the game is already running', () => {
             game.start();
