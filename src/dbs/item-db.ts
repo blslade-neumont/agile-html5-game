@@ -1,4 +1,4 @@
-﻿import { SpriteT } from '../utils/sprite';
+﻿import { SpriteT } from '../engine';
 
 export const ITEM_SIZE: number = 24;
 

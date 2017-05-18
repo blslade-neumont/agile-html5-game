@@ -1,6 +1,4 @@
-﻿import { SpriteT } from '../utils/sprite';
-
-export const TILE_SIZE: number = 32;
+﻿import { SpriteT } from '../engine';
 
 export interface Alive {
     sprite: SpriteT,

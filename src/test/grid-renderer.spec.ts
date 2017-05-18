@@ -8,14 +8,11 @@ use(sinonChai);
 import { GridRenderer } from '../grid-renderer';
 import { AgileGame } from '../agile-game';
 import { World } from '../world';
-import { ResourceLoader } from '../resource-loader';
-import { stubDocument } from './mock-document';
-import { stubImage } from './mock-image';
-import { stubCanvas } from './mock-canvas';
+import { ResourceLoader } from '../engine';
+import { stubDocument, stubImage, stubCanvas } from '../engine/test';
 import { TILE_SIZE } from '../dbs/tile-db';
 
 describe('GridRenderer', () => {
-
     it('should start without a world, or resource loader', () =>{
         let renderer: GridRenderer = new GridRenderer();
         expect(renderer.world).not.to.be.ok;

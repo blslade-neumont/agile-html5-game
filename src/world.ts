@@ -1,7 +1,5 @@
-﻿import { ResourceLoader } from './resource-loader';
-import { tiles } from './dbs/tile-db';
-import { TILE_SIZE } from './dbs/tile-db';
-import { WorldTile } from './dbs/tile-db';
+﻿import { ResourceLoader } from './engine';
+import { tiles, TILE_SIZE, WorldTile } from './dbs/tile-db';
 
 export class World {
     private _tilesX: number = 0;
@@ -38,5 +36,4 @@ export class World {
     getTileAt(x: number, y: number): WorldTile{
         return tiles[this.tileNames[x * this.tilesY + y]];
     }
-
 }

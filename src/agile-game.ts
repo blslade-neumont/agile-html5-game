@@ -1,4 +1,4 @@
-﻿import { Game } from './game';
+﻿import { Game } from './engine';
 import { World } from './world';
 import { GridRenderer } from './grid-renderer';
 import { Player } from './player';

@@ -1,8 +1,7 @@
 ﻿import { World } from './world';
 import { WorldTile } from './dbs/tile-db';
-import { ResourceLoader } from './resource-loader';
+import { ResourceLoader, SingleTileSpriteT } from './engine';
 import { TILE_SIZE } from './dbs/tile-db';
-import { SingleTileSpriteT } from './utils/sprite';
 import { AgileGame } from './agile-game';
 
 export class GridRenderer {
