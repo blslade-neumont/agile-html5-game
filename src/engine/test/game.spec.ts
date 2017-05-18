@@ -76,7 +76,7 @@ describe('Game', () => {
             game.start();
             (<any>game)._resourceLoader = { isDone: true, render: () => void (0) };
             (<any>game).onTick();
-            expect(gobj.tick).to.have.been.calledOnce;
+            expect(gobj.tick).to.have.been.calledThrice;
             expect(gobj.render).to.have.been.calledOnce;
         });
         it('should invoke GameObject.handleEvent the next time onTick is called, the resource loader is done, and there is an event', () => {
@@ -155,7 +155,7 @@ describe('Game', () => {
             (<any>game).onTick();
             expect(game.resourceLoader.render).not.to.have.been.called;
             expect((<any>game).sendEvents).to.have.been.calledOnce;
-            expect((<any>game).tick).to.have.been.calledOnce;
+            expect((<any>game).tick).to.have.been.calledThrice;
             expect((<any>game).render).to.have.been.calledOnce;
         });
     });
