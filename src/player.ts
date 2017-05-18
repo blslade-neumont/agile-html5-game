@@ -25,8 +25,20 @@ export class Player extends GameObject {
         let thisTileX: number = fmod(this.x, TILE_SIZE);
         let thisTileY: number = fmod(this.y, TILE_SIZE);
 
-        this.hspeed = ((Math.abs(h) < CLOSE_ENOUGH) && (Math.abs(thisTileX - OFFSET) < CLOSE_ENOUGH)) ? (0.0) : ((Math.abs(h) < CLOSE_ENOUGH) ? this.hspeed : h);
-        this.vspeed = ((Math.abs(v) < CLOSE_ENOUGH) && (Math.abs(thisTileY - OFFSET) < CLOSE_ENOUGH)) ? (0.0) : ((Math.abs(v) < CLOSE_ENOUGH) ? this.vspeed : v);
+        if ((Math.abs(h) < CLOSE_ENOUGH) && (Math.abs(thisTileX - OFFSET) < CLOSE_ENOUGH)) {
+            this.x = OFFSET + Math.floor(this.x / TILE_SIZE) * TILE_SIZE;
+            this.hspeed = 0.0;
+        } else {
+            this.hspeed = ((Math.abs(h) < CLOSE_ENOUGH) ? this.hspeed : h);;
+        }
+
+        if((Math.abs(v) < CLOSE_ENOUGH) && (Math.abs(thisTileY - OFFSET) < CLOSE_ENOUGH)) {
+             this.vspeed = 0.0;
+             this.y = OFFSET + Math.floor(this.y / TILE_SIZE) * TILE_SIZE;
+
+        } else {
+             this.vspeed = ((Math.abs(v) < CLOSE_ENOUGH) ? this.vspeed : v);
+        }  
 
         let nextX: number = this.x + delta * this.hspeed;
         let nextY: number = this.y + delta * this.vspeed;
