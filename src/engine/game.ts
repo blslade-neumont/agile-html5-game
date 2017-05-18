@@ -2,6 +2,8 @@
 import { ResourceLoader } from './resource-loader';
 import { EventQueue } from './event-queue';
 
+const LOGIC_TICKS_PER_RENDER_TICK = 3;
+
 export class Game {
     constructor(protected readonly framesPerSecond = 30, protected canvas: HTMLCanvasElement = null) {
         this.init();
@@ -67,7 +69,9 @@ export class Game {
 
         if (this.resourceLoader.isDone) {
             this.sendEvents();
-            this.tick(delta);
+            for (let q = 0; q < LOGIC_TICKS_PER_RENDER_TICK; q++) {
+                this.tick(delta / LOGIC_TICKS_PER_RENDER_TICK);
+            }
             this.render(this.context);
         }
         else {
