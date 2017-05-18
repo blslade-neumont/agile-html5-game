@@ -113,6 +113,9 @@
     <TypeScriptCompile Include="src\test\item-preload-strategy.spec.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="src\test\player.spec.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="src\test\tile-preload-strategy.spec.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
