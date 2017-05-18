@@ -5,12 +5,14 @@ import { Player } from './player';
 import { GuiObject } from './gui-object';
 import { TilePreloadStrategy } from './tile-preload-strategy';
 import { ItemPreloadStrategy } from './item-preload-strategy';
+import { AlivePreloadStrategy } from './alive-preload-strategy';
 
 export class AgileGame extends Game {
     constructor(framesPerSecond = 30, canvas: HTMLCanvasElement = null) {
         super(framesPerSecond, canvas);
         this.resourceLoader.addPreloadStrategy(new TilePreloadStrategy());
         this.resourceLoader.addPreloadStrategy(new ItemPreloadStrategy());
+        this.resourceLoader.addPreloadStrategy(new AlivePreloadStrategy());
     }
 
     private _world: World = null;

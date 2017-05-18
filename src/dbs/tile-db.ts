@@ -16,14 +16,14 @@ export let tiles: { [name: string]: WorldTile } =
             },
             isSolid: false
         },
-        wallTop: {
+        wallSide: {
             sprite: {
                 src: 'images/Tiles/Outside_Tiles.png',
                 tileset: { width: 32, height: 32, tilex: 0, tiley: 3 }
             },
             isSolid: true
         },
-        wallSide: {
+        wallTop: {
             sprite: {
                 src: 'images/Tiles/Outside_Tiles.png',
                 tileset: { width: 32, height: 32, tilex: 0, tiley: 2 }
