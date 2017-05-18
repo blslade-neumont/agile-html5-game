@@ -3,8 +3,8 @@ import { WorldTile, TILE_SIZE } from './dbs/tile-db';
 import { AgileGame } from './agile-game';
 import { ResourceLoader, GameObject, GameObjectOptions, GameEvent, fmod } from './engine';
 
-const MOVE_SPEED = 4 * 30;
-const SIZE = 16;
+const MOVE_SPEED = 2 * 30;
+const SIZE = 24;
 const OFFSET: number = (TILE_SIZE - SIZE) / 2.0;
 const CLOSE_ENOUGH: number = 3.0;
 
@@ -47,7 +47,7 @@ export class Player extends GameObject {
         if ((nextMaxX > maxTX) && (game.world.getTileAt(maxTX / TILE_SIZE, minTY / TILE_SIZE).isSolid || game.world.getTileAt(maxTX / TILE_SIZE, maxTY / TILE_SIZE).isSolid)) {
             this.x = OFFSET + minTX;
             this.hspeed = 0.0;
-        } else if ((nextMinX < maxTX) && (game.world.getTileAt(minTX / TILE_SIZE, minTY / TILE_SIZE).isSolid || game.world.getTileAt(minTX / TILE_SIZE, maxTY / TILE_SIZE).isSolid)) {
+        } else if ((nextMinX <= maxTX) && (game.world.getTileAt(minTX / TILE_SIZE, minTY / TILE_SIZE).isSolid || game.world.getTileAt(minTX / TILE_SIZE, maxTY / TILE_SIZE).isSolid)) {
             this.x = OFFSET + maxTX;
             this.hspeed = 0.0;
         }
