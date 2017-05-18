@@ -2,10 +2,14 @@
 import { World } from './world';
 import { GridRenderer } from './grid-renderer';
 import { TestObject } from './test-object';
+import { TilePreloadStrategy } from './tile-preload-strategy';
+import { ItemPreloadStrategy } from './item-preload-strategy';
 
 export class AgileGame extends Game {
     constructor(framesPerSecond = 30, canvas: HTMLCanvasElement = null) {
         super(framesPerSecond, canvas);
+        this.resourceLoader.addPreloadStrategy(new TilePreloadStrategy());
+        this.resourceLoader.addPreloadStrategy(new ItemPreloadStrategy());
     }
 
     private _world: World = null;
