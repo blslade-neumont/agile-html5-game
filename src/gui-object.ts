@@ -6,11 +6,15 @@ export class GuiObject extends GameObject {
         super('Gui');
     }
 
-    render(context: CanvasRenderingContext2D) {
+    get gameTimeString() {
         let gameTime = (<AgileGame>this.game).world.gameTime;
         let day = Math.floor(gameTime);
         let hour = Math.floor((gameTime - day) * 24);
-        let timeText = `Day ${day + 1}, ${(hour + 23) % 12 + 1} ${hour < 12 ? 'AM' : 'PM'}`;
+        return `Day ${day + 1}, ${(hour + 23) % 12 + 1} ${hour < 12 ? 'AM' : 'PM'}`;
+    }
+
+    render(context: CanvasRenderingContext2D) {
+        let timeText = this.gameTimeString;
         context.font = '24px Verdana';
         let textWidth = context.measureText(timeText).width;
         
