@@ -44,7 +44,12 @@
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
+    <Content Include=".gitignore" />
     <Content Include=".travis.yml" />
+    <Content Include="images\Alive\Katie.png" />
+    <Content Include="images\Icons\IconSet.png" />
+    <Content Include="images\Tiles\Outside_A2.png" />
+    <Content Include="images\Tiles\Outside_Tiles.png" />
     <Content Include="styles.css">
       <SubType>Code</SubType>
     </Content>
@@ -170,6 +175,10 @@
   <ItemGroup>
     <Folder Include="config\" />
     <Folder Include="config\webpack\" />
+    <Folder Include="images\" />
+    <Folder Include="images\Alive\" />
+    <Folder Include="images\Icons\" />
+    <Folder Include="images\Tiles\" />
     <Folder Include="src\engine\" />
     <Folder Include="src\engine\test\" />
     <Folder Include="src\engine\utils\test\" />
