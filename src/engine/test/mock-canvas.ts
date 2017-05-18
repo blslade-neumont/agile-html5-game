@@ -5,6 +5,7 @@ export class MockContext {
 
     fillRect() { }
     fillText() { }
+    measureText() { return { width: 42 } }
     drawImage() { }
 }
 
