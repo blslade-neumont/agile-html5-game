@@ -16,7 +16,9 @@ export class World {
         this.tileNames = [];
         for (let x: number = 0; x < this._tilesX; ++x) {
             for (let y: number = 0; y < this._tilesY; ++y) {
-                let tileIndex : string = (x === 0 || x === this._tilesX - 1) ? "wallSide" : ((y === 0 || y === this._tilesY - 1) ? "wallTop" : "grass");
+                let tileIndex = (y === 0 || y === this._tilesY - 2 || (y < this._tilesY - 1 && (x === 0 || x === this._tilesX - 1))) ? "wallTop" :
+                                                                                                 (y === 1 || y === this._tilesY - 1) ? "wallSide" :
+                                                                                                                                       "grass";
                 this.tileNames.push(tileIndex);
             }
         }
@@ -40,7 +42,6 @@ export class World {
 
     tick(delta: number) {
         this._gameTime += delta * TIME_SCALE;
-        console.log(this._gameTime);
     }
 
     getTileAt(x: number, y: number): WorldTile{

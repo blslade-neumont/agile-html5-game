@@ -49,6 +49,22 @@
       <SubType>Code</SubType>
     </Content>
     <Content Include="tsconfig.json" />
+    <TypeScriptCompile Include="src\alive-preload-strategy.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="src\dbs\alive-db.ts" />
+    <TypeScriptCompile Include="src\engine\index.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="src\engine\test\index.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="src\engine\utils\index.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="src\gui-object.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="src\item-preload-strategy.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
@@ -65,10 +81,10 @@
     <TypeScriptCompile Include="src\dbs\tile-db.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="src\game.ts">
+    <TypeScriptCompile Include="src\engine\game.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="src\game-object.ts">
+    <TypeScriptCompile Include="src\engine\game-object.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="src\grid-renderer.ts">
@@ -89,21 +105,21 @@
     <TypeScriptCompile Include="src\tile-preload-strategy.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="src\utils\preload-strategy.ts">
+    <TypeScriptCompile Include="src\engine\utils\preload-strategy.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="src\resource-loader.ts">
+    <TypeScriptCompile Include="src\engine\resource-loader.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="src\test\event-queue.spec.ts">
-      <SubType>Code</SubType>
-      <TestFramework>Mocha</TestFramework>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="src\test\game-object.spec.ts">
+    <TypeScriptCompile Include="src\engine\test\event-queue.spec.ts">
       <SubType>Code</SubType>
       <TestFramework>Mocha</TestFramework>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="src\test\game.spec.ts">
+    <TypeScriptCompile Include="src\engine\test\game-object.spec.ts">
+      <SubType>Code</SubType>
+      <TestFramework>Mocha</TestFramework>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="src\engine\test\game.spec.ts">
       <SubType>Code</SubType>
       <TestFramework>Mocha</TestFramework>
     </TypeScriptCompile>
@@ -111,45 +127,42 @@
       <SubType>Code</SubType>
       <TestFramework>Mocha</TestFramework>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="src\test\mock-canvas.ts">
+    <TypeScriptCompile Include="src\engine\test\mock-canvas.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="src\test\mock-document.ts">
+    <TypeScriptCompile Include="src\engine\test\mock-document.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="src\test\mock-image.ts">
+    <TypeScriptCompile Include="src\engine\test\mock-image.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="src\test\resource-loader.spec.ts">
-      <SubType>Code</SubType>
-      <TestFramework>Mocha</TestFramework>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="src\event-queue.ts">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="src\utils\events.ts">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="src\utils\render.ts">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="src\test\utils\math.spec.ts">
+    <TypeScriptCompile Include="src\engine\test\resource-loader.spec.ts">
       <SubType>Code</SubType>
       <TestFramework>Mocha</TestFramework>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="src\utils\sprite.ts">
+    <TypeScriptCompile Include="src\engine\event-queue.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="src\test-object.ts">
+    <TypeScriptCompile Include="src\engine\utils\events.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="src\utils\delay.ts">
+    <TypeScriptCompile Include="src\engine\utils\render.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="src\utils\math.ts">
+    <TypeScriptCompile Include="src\engine\utils\test\math.spec.ts">
+      <SubType>Code</SubType>
+      <TestFramework>Mocha</TestFramework>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="src\engine\utils\sprite.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="src\test\utils\render.spec.ts">
+    <TypeScriptCompile Include="src\engine\utils\delay.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="src\engine\utils\math.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="src\engine\utils\test\render.spec.ts">
       <TestFramework>Mocha</TestFramework>
     </TypeScriptCompile>
     <TypeScriptCompile Include="src\world.ts" />
@@ -157,11 +170,13 @@
   <ItemGroup>
     <Folder Include="config\" />
     <Folder Include="config\webpack\" />
+    <Folder Include="src\engine\" />
+    <Folder Include="src\engine\test\" />
+    <Folder Include="src\engine\utils\test\" />
     <Folder Include="src\test\" />
     <Folder Include="src\" />
     <Folder Include="src\dbs\" />
-    <Folder Include="src\utils\" />
-    <Folder Include="src\test\utils\" />
+    <Folder Include="src\engine\utils\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="config\development.js">
