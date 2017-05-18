@@ -1,10 +1,12 @@
 ﻿import { ResourceLoader } from './engine';
 import { tiles, TILE_SIZE, WorldTile } from './dbs/tile-db';
 
+const TIME_SCALE = 1 / (60 * 5);
+
 export class World {
     private _tilesX: number = 0;
     private _tilesY: number = 0;
-    private tileNames : string[] = null;
+    private tileNames: string[] = null;
 
     start(canvasWidth : number, canvasHeight : number) {
         // TODO: TEMPORARY DEBUG MAP HERE
@@ -18,7 +20,6 @@ export class World {
                 this.tileNames.push(tileIndex);
             }
         }
-
     }
 
     get tilesX(): number {
@@ -29,8 +30,17 @@ export class World {
         return this._tilesY;
     }
 
+    private _gameTime = 8 / 24;
+    get gameTime() {
+        return this._gameTime;
+    }
+    set gameTime(val: number) {
+        this._gameTime = val;
+    }
+
     tick(delta: number) {
-        // TODO: UPDATE THE WORLD HERE
+        this._gameTime += delta * TIME_SCALE;
+        console.log(this._gameTime);
     }
 
     getTileAt(x: number, y: number): WorldTile{

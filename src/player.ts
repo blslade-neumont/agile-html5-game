@@ -1,11 +1,7 @@
 ﻿import { World } from './world';
-import { WorldTile } from './dbs/tile-db';
-import { TILE_SIZE } from './dbs/tile-db';
+import { WorldTile, TILE_SIZE } from './dbs/tile-db';
 import { AgileGame } from './agile-game';
-import { ResourceLoader } from './resource-loader';
-import { GameObject, GameObjectOptions } from './game-object';
-import { GameEvent } from './utils/events';
-import { fmod } from './utils/math';
+import { ResourceLoader, GameObject, GameObjectOptions, GameEvent, fmod } from './engine';
 
 const MOVE_SPEED = 4 * 30;
 const SIZE = 16;
@@ -66,8 +62,6 @@ export class Player extends GameObject {
         }
 
         super.tick(delta);
-
-
     }
 
     render(context: CanvasRenderingContext2D) {
@@ -75,5 +69,4 @@ export class Player extends GameObject {
         context.fillStyle = 'green';
         context.fillRect(this.x, this.y, SIZE, SIZE);
     }
-
 }

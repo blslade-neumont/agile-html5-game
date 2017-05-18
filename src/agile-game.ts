@@ -2,6 +2,7 @@
 import { World } from './world';
 import { GridRenderer } from './grid-renderer';
 import { Player } from './player';
+import { GuiObject } from './gui-object';
 import { TilePreloadStrategy } from './tile-preload-strategy';
 import { ItemPreloadStrategy } from './item-preload-strategy';
 
@@ -30,8 +31,9 @@ export class AgileGame extends Game {
 
         this._world.start(this.canvas.width, this.canvas.height);
         this._gridRenderer.setGame(this);
-
+        
         this.addObject(new Player({x:48, y:48}));
+        this.addObject(new GuiObject());
     }
 
     protected tick(delta: number) {
