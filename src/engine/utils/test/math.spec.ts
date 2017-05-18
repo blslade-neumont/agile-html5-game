@@ -5,7 +5,7 @@ import * as sinon from 'sinon';
 import * as sinonChai from 'sinon-chai';
 use(sinonChai);
 
-import { degToRad, radToDeg, fmod } from '../../utils/math';
+import { degToRad, radToDeg, fmod } from '../math';
 
 describe('utils/degToRad', () => {
     it('should convert 0 to 0', () => {

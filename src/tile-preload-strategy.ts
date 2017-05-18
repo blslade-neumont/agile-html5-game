@@ -1,5 +1,4 @@
-﻿import { ResourceLoader } from './resource-loader';
-import { PreloadStrategy } from './utils/preload-strategy';
+﻿import { ResourceLoader, PreloadStrategy } from './engine';
 import { tiles } from './dbs/tile-db';
 
 export class TilePreloadStrategy implements PreloadStrategy {

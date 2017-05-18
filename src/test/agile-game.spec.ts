@@ -6,11 +6,8 @@ import * as sinonChai from 'sinon-chai';
 use(sinonChai);
 
 import { AgileGame } from '../agile-game';
-import { GameObject } from '../game-object';
-import { stubDocument } from './mock-document';
-import { stubImage } from './mock-image';
-import { stubCanvas } from './mock-canvas';
-import { delay } from '../utils/delay';
+import { GameObject, delay } from '../engine';
+import { stubDocument, stubImage, stubCanvas } from '../engine/test';
 
 describe('AgileGame', () => {
     stubDocument();

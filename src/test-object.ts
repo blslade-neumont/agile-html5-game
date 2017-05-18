@@ -1,6 +1,4 @@
-﻿import { GameObject, GameObjectOptions } from './game-object';
-import { delay } from './utils/delay';
-import { GameEvent } from './utils/events';
+﻿import { GameObject, GameObjectOptions, delay, GameEvent } from './engine';
 
 const MOVE_SPEED = 4 * 30;
 
