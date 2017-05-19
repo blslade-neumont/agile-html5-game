@@ -7,6 +7,8 @@ use(sinonChai);
 
 import { GameObject } from '../game-object';
 import { Game } from '../game';
+import { stubCanvas } from './mock-canvas';
+import * as renderUtils from '../utils/render';
 
 describe('GameObject', () => {
     it('should start without a resourceLoader, eventQueue, or game', () => {
@@ -17,14 +19,31 @@ describe('GameObject', () => {
     });
 
     describe('.constructor', () => {
-        it('should set the object defaults based on the options passed in', () => {
+        it('should set the game object name', () => {
+            let gobj = new GameObject('my-name');
+            expect(gobj.name).to.eq('my-name');
+        });
+        it('should set x, y, direction, and speed based on the options passed in', () => {
             let options = { x: 45, y: 12, direction: 195, speed: 4.5 };
             let gobj = new GameObject('my-name', options);
-            expect(gobj.name).to.eq('my-name');
             expect(gobj.x).to.eq(options.x);
             expect(gobj.y).to.eq(options.y);
             expect(gobj.direction).to.eq(options.direction);
             expect(gobj.speed).to.eq(options.speed);
+        });
+        it('should set hspeed and vspeed based on the options passed in', () => {
+            let options = { x: 45, y: 12, hspeed: 6, vspeed: 4 };
+            let gobj = new GameObject('my-name', options);
+            expect(gobj.hspeed).to.eq(options.hspeed);
+            expect(gobj.vspeed).to.eq(options.vspeed);
+        });
+        it('should set shouldRender, sprite, andimationAge, and animationSpeed based on the options passed in', () => {
+            let options = <any>{ shouldRender: 'aaa', sprite: 'bbb', animationAge: 'ccc', animationSpeed: 'ddd' };
+            let gobj = new GameObject('my-name', options);
+            expect(gobj.shouldRender).to.eq(options.shouldRender);
+            expect(gobj.sprite).to.eq(options.sprite);
+            expect(gobj.animationAge).to.eq(options.animationAge);
+            expect(gobj.animationSpeed).to.eq(options.animationSpeed);
         });
     });
 
@@ -123,6 +142,54 @@ describe('GameObject', () => {
             gobj.tick(.5);
             expect(gobj.x).to.eq(gobj.hspeed * .5);
             expect(gobj.y).to.eq(gobj.vspeed * .5);
+        });
+        it('should not modify the animation age if animationSpeed == 0', () => {
+            let gobj = new GameObject('name', { animationSpeed: 0 });
+            gobj.tick(1);
+            expect(gobj.animationAge).to.eq(0);
+        });
+        it('should increase the animation age by animationSpeed * delta', () => {
+            let gobj = new GameObject('name', { animationSpeed: .3 });
+            gobj.tick(.5);
+            expect(gobj.animationAge).to.eq(.5 * .3);
+        });
+    });
+
+    describe('.render', () => {
+        stubCanvas();
+
+        let context: CanvasRenderingContext2D;
+        let drawSpriteStub: sinon.SinonStub;
+        beforeEach(() => {
+            context = new HTMLCanvasElement().getContext('2d');
+            drawSpriteStub = sinon.stub(renderUtils, 'drawSprite');
+        });
+        afterEach(() => {
+            drawSpriteStub.restore();
+        });
+
+        it('should not render anything if shouldRender is false', () => {
+            sinon.stub(context, 'fillRect');
+            sinon.stub(context, 'fillText');
+            let gobj = new GameObject('name', { shouldRender: false });
+            gobj.render(context);
+            expect(renderUtils.drawSprite).not.to.have.been.called;
+            expect(context.fillRect).not.to.have.been.called;
+            expect(context.fillText).not.to.have.been.called;
+        });
+        it('should render the sprite if the game object has one', () => {
+            let sprite = { src: 'blah' };
+            let gobj = new GameObject('name', { sprite: sprite, animationAge: 14.3 });
+            gobj.render(context);
+            expect(renderUtils.drawSprite).to.have.been.calledWith(context, sinon.match.any, sprite, 0, 0, 14.3);
+        });
+        it('should render a rect and a question mark if the game object has no sprite', () => {
+            sinon.stub(context, 'fillRect');
+            sinon.stub(context, 'fillText');
+            let gobj = new GameObject('name');
+            gobj.render(context);
+            expect(context.fillRect).to.have.been.calledOnce;
+            expect(context.fillText).to.have.been.calledWith('?');
         });
     });
 });
