@@ -11,3 +11,6 @@
 
 /**/src/*.js
 /**/src/*.js.map
+
+/**/coverage-js/
+/**/coverage/
