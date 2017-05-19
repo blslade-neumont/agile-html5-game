@@ -19,10 +19,8 @@ export interface GameObjectOptions {
     animationSpeed?: number
 };
 
-const DEBUG_MOVEMENT = false;
-
 export class GameObject {
-    constructor(name: string, opts: GameObjectOptions = {}) {
+    constructor(name: string, opts: GameObjectOptions = {}, private readonly DEBUG_MOVEMENT = false) {
         this._name = name;
         if (typeof opts.x != 'undefined') this.x = opts.x;
         if (typeof opts.y != 'undefined') this.y = opts.y;
@@ -67,7 +65,7 @@ export class GameObject {
         return this._dir;
     }
     set direction(val) {
-        if (DEBUG_MOVEMENT) console.log(`setting direction: ${val}`);
+        if (this.DEBUG_MOVEMENT) console.log(`setting direction: ${val}`);
         val = fmod(val, 360);
         if (this._dir == val) return;
         this._dir = val;
@@ -77,7 +75,7 @@ export class GameObject {
         return this._speed;
     }
     set speed(val) {
-        if (DEBUG_MOVEMENT) console.log(`setting speed: ${val}`);
+        if (this.DEBUG_MOVEMENT) console.log(`setting speed: ${val}`);
         if (val < 0) throw new Error(`Invalid speed: ${val}. Must be >= 0`);
         if (this._speed == val) return;
         this._speed = val;
@@ -88,7 +86,7 @@ export class GameObject {
         return this._hspeed;
     }
     set hspeed(val) {
-        if (DEBUG_MOVEMENT) console.log(`setting hspeed: ${val}`);
+        if (this.DEBUG_MOVEMENT) console.log(`setting hspeed: ${val}`);
         if (this._hspeed == val) return;
         this._hspeed = val;
         this.updateDirectionAndSpeed();
@@ -97,7 +95,7 @@ export class GameObject {
         return this._vspeed;
     }
     set vspeed(val) {
-        if (DEBUG_MOVEMENT) console.log(`setting vspeed: ${val}`);
+        if (this.DEBUG_MOVEMENT) console.log(`setting vspeed: ${val}`);
         if (this._vspeed == val) return;
         this._vspeed = val;
         this.updateDirectionAndSpeed();
@@ -107,14 +105,14 @@ export class GameObject {
         let radians = degToRad(this._dir);
         this._vspeed = Math.sin(radians) * this._speed;
         this._hspeed = Math.cos(radians) * this._speed;
-        if (DEBUG_MOVEMENT) console.log(`  hspeed: ${this._hspeed}; vspeed: ${this._vspeed}`);
+        if (this.DEBUG_MOVEMENT) console.log(`  hspeed: ${this._hspeed}; vspeed: ${this._vspeed}`);
     }
     private updateDirectionAndSpeed() {
         this._speed = Math.sqrt(this._hspeed * this._hspeed + this._vspeed * this._vspeed);
         if (this._speed == 0) return;
         this._dir = radToDeg(Math.atan2(this._vspeed, this._hspeed));
         if (this._dir < 0) this._dir += 360;
-        if (DEBUG_MOVEMENT) console.log(`  speed: ${this._speed}; direction: ${this._dir}`);
+        if (this.DEBUG_MOVEMENT) console.log(`  speed: ${this._speed}; direction: ${this._dir}`);
     }
 
     private _shouldRender = true;
