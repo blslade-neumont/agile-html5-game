@@ -11,6 +11,18 @@ export class Game {
     private init() {
         this._resourceLoader = new ResourceLoader();
         this._eventQueue = new EventQueue();
+        let body = document.getElementsByTagName('body')[0];
+        this.initResize(body);
+    }
+    private initResize(body: HTMLBodyElement) {
+        body.onresize = e => this.refreshCanvasSize();
+    }
+    private refreshCanvasSize() {
+        if (this.canvas) {
+            this.canvasSize = [this.canvas.scrollWidth, this.canvas.scrollHeight];
+            console.log(this.canvasSize);
+            [this.canvas.width, this.canvas.height] = this.canvasSize;
+        }
     }
     
     private context: CanvasRenderingContext2D = null;
@@ -36,16 +48,27 @@ export class Game {
         if (this.isRunning) throw new Error(`This game is already running. You can't run it again.`);
         this._isRunning = true;
 
-        if (!this.canvas) this.canvas = <HTMLCanvasElement>document.getElementById('gameCanvas');
+        if (!this.canvas) {
+            this.canvas = <HTMLCanvasElement>document.getElementById('gameCanvas');
+            this.refreshCanvasSize();
+        }
+
         this.context = this.canvas.getContext("2d");
-        this.canvas.width = 640;
-        this.canvas.height = 480;
+
         this._intervalHandle = setInterval(() => this.onTick(), 1000 / this.framesPerSecond);
     }
     stop() {
         if (!this.isRunning) return;
         this._isRunning = false;
         clearInterval(this._intervalHandle);
+    }
+
+    private _size: [number, number] = [640, 480];
+    get canvasSize(): [number, number] {
+        return [this._size[0], this._size[1]];
+    }
+    set canvasSize(val: [number, number]) {
+        [this._size[0], this._size[1]] = val;
     }
 
     private _objects: GameObject[] = [];

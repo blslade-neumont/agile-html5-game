@@ -7,16 +7,33 @@ body {
     margin: 0;
     background: black;
 }
-.canvas-container {
+
+.fixed-size .canvas-container {
 }
-.canvas-pad {
+.fixed-size .canvas-pad {
     height: 50%;
 }
-canvas {
+.fixed-size canvas {
     margin: 0 auto;
     margin-top: -240px;
     width: 640px;
     height: 480px;
     background: white;
     display: block;
+}
+
+.full-size .canvas-container {
+}
+.full-size .canvas-pad {
+    height: 0;
+}
+.full-size canvas {
+    margin: 0;
+    width: 100vw;
+    height: 100vh;
+    background: white;
+    display: block;
+    position: absolute;
+    left: 0;
+    top: 0;
 }
