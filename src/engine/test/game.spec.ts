@@ -28,6 +28,16 @@ describe('Game', () => {
     it('should start with isRunning = false', () => {
         expect(game.isRunning).to.be.false;
     });
+    it('should start with canvasSize = [640, 480]', () => {
+        expect(game.canvasSize).to.deep.eq([640, 480]);
+    });
+    it('should update the canvas size any time the window is resized', () => {
+        let canvas = (<any>game).canvas;
+        [canvas.scrollWidth, canvas.scrollHeight] = [123, 456];
+        expect(game.canvasSize).not.to.deep.eq([123, 456]);
+        document.getElementsByTagName('body')[0].onresize(<any>void(0));
+        expect(game.canvasSize).to.deep.eq([123, 456]);
+    });
 
     describe('.start', () => {
         it('should set isRunning to true', () => {
@@ -38,6 +48,13 @@ describe('Game', () => {
         it('should throw an error if you try to call it when the game is already running', () => {
             game.start();
             expect(() => game.start()).to.throw(/game is already running/i);
+        });
+        it('should update the canvas size', () => {
+            let canvas = (<any>game).canvas;
+            [canvas.scrollWidth, canvas.scrollHeight] = [123, 456];
+            expect(game.canvasSize).not.to.deep.eq([123, 456]);
+            game.start();
+            expect(game.canvasSize).to.deep.eq([123, 456]);
         });
         it('should begin invoking onTick the requested number of times per second', async () => {
             sinon.stub(game, 'onTick');
