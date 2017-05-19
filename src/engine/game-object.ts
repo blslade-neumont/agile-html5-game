@@ -189,7 +189,7 @@ export class GameObject {
 
             context.fillStyle = 'blue';
             context.font = '16px Consolas';
-            context.fillText('?', 0, 0);
+            context.fillText('?', this.x, this.y);
         }
     }
 }

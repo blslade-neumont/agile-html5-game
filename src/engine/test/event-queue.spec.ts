@@ -10,6 +10,10 @@ import { MouseButton } from '../utils/events';
 import { stubDocument } from './mock-document';
 import { delay } from '../utils/delay';
 
+import { Game } from '../game';
+import { stubImage } from './mock-image';
+import { stubCanvas } from './mock-canvas';
+
 describe('EventQueue', () => {
     stubDocument();
 
@@ -110,6 +114,7 @@ describe('EventQueue', () => {
                 }]);
             });
             it('should emit only one mouseMove event per frame even if multiple are fired', () => {
+                sinon.spy(events, 'enqueue');
                 let body = document.getElementsByTagName('body')[0];
                 body.onmousemove(<any>{ movementX: -3, movementY: 3 });
                 body.onmousemove(<any>{ movementX: -1, movementY: -2 });
@@ -120,6 +125,7 @@ describe('EventQueue', () => {
                     pageX: -4,
                     pageY: 1
                 }]);
+                expect(events.enqueue).to.have.been.calledTwice;
             });
         });
         
@@ -189,6 +195,7 @@ describe('EventQueue', () => {
                 }]);
             });
             it('should emit only one mouseWheel event per frame even if multiple are fired', () => {
+                sinon.spy(events, 'enqueue');
                 let body = document.getElementsByTagName('body')[0];
                 body.onmousewheel(<any>{ wheelDelta: -4 });
                 body.onmousewheel(<any>{ wheelDelta: -5 });
@@ -198,6 +205,7 @@ describe('EventQueue', () => {
                     pageX: 0,
                     pageY: 0
                 }]);
+                expect(events.enqueue).to.have.been.calledTwice;
             });
         });
 
@@ -232,6 +240,49 @@ describe('EventQueue', () => {
                 body.onmousemove(<any>{ button: 0, movementX: 60, movementY: 40 });
                 body.onmousemove(<any>{ button: 0, movementX: -20, movementY: 30 });
                 expect(events.mousePosition).to.deep.eq({ x: 40, y: 70 });
+            });
+        });
+    });
+
+    describe('canvas resize', () => {
+        stubImage();
+        stubCanvas();
+
+        let game: Game;
+        beforeEach(() => {
+            game = new Game(30, new HTMLCanvasElement());
+            events = game.eventQueue;
+        });
+        afterEach(() => {
+            if (game.isRunning) game.stop();
+        });
+
+        describe('onresize', () => {
+            it('should emit a canvasResize event when the body is resized', () => {
+                let canvas = (<any>game).canvas;
+                let body = document.getElementsByTagName('body')[0];
+                [canvas.scrollWidth, canvas.scrollHeight] = [123, 456];
+                body.onresize(<any>void(0));
+                expect(events.clearQueue()).to.deep.eq([{
+                    type: 'canvasResize',
+                    previousSize: [640, 480],
+                    size: [123, 456]
+                }]);
+            });
+            it('should emit only one canvasResize event per frame even if multiple are fired', () => {
+                sinon.spy(events, 'enqueue');
+                let canvas = (<any>game).canvas;
+                let body = document.getElementsByTagName('body')[0];
+                [canvas.scrollWidth, canvas.scrollHeight] = [123, 456];
+                body.onresize(<any>void (0));
+                [canvas.scrollWidth, canvas.scrollHeight] = [234, 567];
+                body.onresize(<any>void (0));
+                expect(events.clearQueue()).to.deep.eq([{
+                    type: 'canvasResize',
+                    previousSize: [640, 480],
+                    size: [234, 567]
+                }]);
+                expect(events.enqueue).to.have.been.calledTwice;
             });
         });
     });

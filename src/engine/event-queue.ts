@@ -135,6 +135,9 @@ export class EventQueue {
             case 'mouseWheel':
                 (<any>lastEvent).delta += e.delta;
                 return;
+            case 'canvasResize':
+                (<any>lastEvent).size = e.size;
+                return;
             }
         }
         this._events.push(e);
