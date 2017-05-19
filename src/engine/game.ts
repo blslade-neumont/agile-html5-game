@@ -63,8 +63,15 @@ export class Game {
     get canvasSize(): [number, number] {
         return [this._size[0], this._size[1]];
     }
-    set canvasSize(val: [number, number]) {
-        [this._size[0], this._size[1]] = val;
+    set canvasSize([newWidth, newHeight]: [number, number]) {
+        if (newWidth == this._size[0] && newHeight == this._size[1]) return;
+        let prevSize = this._size;
+        this._size = [newWidth, newHeight];
+        this.eventQueue.enqueue({
+            type: 'canvasResize',
+            previousSize: prevSize,
+            size: [newWidth, newHeight]
+        });
     }
 
     private _objects: GameObject[] = [];

@@ -62,4 +62,17 @@ export enum MouseButton {
     BrowserForward = 5
 }
 
-export type GameEvent = KeyTypedEvent | KeyPressedEvent | KeyReleasedEvent | MouseMovedEvent | MouseButtonPressedEvent | MouseButtonReleasedEvent | MouseWheelEvent;
+export interface CanvasResizeEvent {
+    type: 'canvasResize',
+    previousSize: [number, number],
+    size: [number, number]
+}
+
+export type GameEvent = KeyTypedEvent
+                      | KeyPressedEvent
+                      | KeyReleasedEvent
+                      | MouseMovedEvent
+                      | MouseButtonPressedEvent
+                      | MouseButtonReleasedEvent
+                      | MouseWheelEvent
+                      | CanvasResizeEvent;
