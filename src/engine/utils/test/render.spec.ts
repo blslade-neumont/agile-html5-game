@@ -45,6 +45,21 @@ describe('utils/drawSprite', () => {
         context = new HTMLCanvasElement().getContext("2d");
     });
 
+    describe('with an invalid resource loader', () => {
+        it('should throw an error', () => {
+            expect(() => drawSprite(context, null, { src: 'some-source' })).to.throw(/ResourceLoader/i);
+        });
+    });
+
+    describe('with an invalid sprite', () => {
+        it('should throw an error if sprite is falsey', () => {
+            expect(() => drawSprite(context, loader, <any>null)).to.throw(/invalid sprite/i);
+        });
+        it('should throw an error if sprite has no src', () => {
+            expect(() => drawSprite(context, loader, <any>{})).to.throw(/invalid sprite/i);
+        });
+    });
+
     describe('with a simple sprite', () => {
         let sprite = { src: 'blah' };
 
