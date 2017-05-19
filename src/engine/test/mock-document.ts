@@ -1,13 +1,6 @@
 ﻿/// <reference types="mocha" />
 
-export class MockElement {
-    get scrollWidth() {
-        return 640;
-    }
-    get scrollHeight() {
-        return 480;
-    }
-}
+import { MockElement } from './mock-element';
 
 export class MockDocument {
     constructor() { }

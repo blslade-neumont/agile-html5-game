@@ -1,6 +1,6 @@
 ﻿/// <reference types="mocha" />
 
-import { MockElement } from './mock-document';
+import { MockElement } from './mock-element';
 
 export class MockContext {
     constructor() { }
