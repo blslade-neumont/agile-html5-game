@@ -1,15 +1,24 @@
-﻿
+﻿/// <reference types="mocha" />
+
+export class MockElement {
+    get scrollWidth() {
+        return 640;
+    }
+    get scrollHeight() {
+        return 480;
+    }
+}
 
 export class MockDocument {
     constructor() { }
 
-    private elemeent: any = {};
+    private element = new MockElement();
 
-    getElementById() { return this.elemeent; }
-    getElementsByClassName() { return [this.elemeent]; }
-    getElementsByName() { return [this.elemeent]; }
-    getElementsByTagName() { return [this.elemeent]; }
-    getElementsByTagNameNS() { return [this.elemeent]; }
+    getElementById() { return this.element; }
+    getElementsByClassName() { return [this.element]; }
+    getElementsByName() { return [this.element]; }
+    getElementsByTagName() { return [this.element]; }
+    getElementsByTagNameNS() { return [this.element]; }
 }
 declare let global: any;
 
