@@ -11,7 +11,7 @@ export class EventQueue {
     }
     private initKeyboard(body: HTMLBodyElement) {
         body.onkeydown = e => {
-            if (this.DEBUG_KEYS) console.log(`Pressed: ${e.key}; ${e.code}`);
+            if (this.DEBUG_KEYS) console.log(`Key Pressed: ${e.key}; ${e.code}`);
             if (!this.isKeyDown(e.code)) {
                 this.enqueue({
                     type: 'keyPressed',
@@ -32,7 +32,7 @@ export class EventQueue {
             });
         };
         body.onkeyup = e => {
-            if (this.DEBUG_KEYS) console.log(`Released: ${e.key}; ${e.code}`);
+            if (this.DEBUG_KEYS) console.log(`Key Released: ${e.key}; ${e.code}`);
             if (this.isKeyDown(e.code)) {
                 this.enqueue({
                     type: 'keyReleased',
