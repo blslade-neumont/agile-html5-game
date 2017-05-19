@@ -5,11 +5,15 @@ export type SimpleSpriteT = {
     pivot?: { x: number, y: number }
 };
 
-export type SingleTileSpriteT = SimpleSpriteT & {
+export type SingleTileSpriteT = {
+    src: string,
+    pivot ?: { x: number, y: number },
     tileset: { width: number, height: number, tilex: number, tiley: number }
 };
 
-export type AnimationSpriteT = SimpleSpriteT & {
+export type AnimationSpriteT = {
+    src: string,
+    pivot?: { x: number, y: number },
     tileset: {
         width: number,
         height: number
@@ -19,3 +23,13 @@ export type AnimationSpriteT = SimpleSpriteT & {
 };
 
 export type SpriteT = SimpleSpriteT | SingleTileSpriteT | AnimationSpriteT;
+
+export function isSimpleSprite(sprite: SpriteT): sprite is SimpleSpriteT {
+    return !(<any>sprite).tileset;
+}
+export function isSingleTileSprite(sprite: SpriteT): sprite is SingleTileSpriteT {
+    return !!(<any>sprite).tileset && !(<any>sprite).frames;
+}
+export function isAnimationSprite(sprite: SpriteT): sprite is AnimationSpriteT {
+    return !!(<any>sprite).frames;
+}
