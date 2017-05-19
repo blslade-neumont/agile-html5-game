@@ -82,10 +82,4 @@ export class Player extends GameObject {
 
         super.tick(delta);
     }
-
-    //render(context: CanvasRenderingContext2D) {
-    //    if (!this.shouldRender) return;
-    //    context.fillStyle = 'green';
-    //    context.fillRect(this.x, this.y, SIZE, SIZE);
-    //}
 }
