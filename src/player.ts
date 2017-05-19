@@ -2,15 +2,17 @@
 import { WorldTile, TILE_SIZE } from './dbs/tile-db';
 import { AgileGame } from './agile-game';
 import { ResourceLoader, GameObject, GameObjectOptions, GameEvent, fmod } from './engine';
+import { alives } from './dbs/alive-db';
 
 const MOVE_SPEED = 2 * 30;
-const SIZE = 24;
+const SIZE = 32;
 const OFFSET: number = (TILE_SIZE - SIZE) / 2.0;
 const CLOSE_ENOUGH: number = 3.0;
 
 export class Player extends GameObject {
-    constructor(opts: GameObjectOptions = {}) {
+    constructor(opts: GameObjectOptions = { }) {
         super("Player", opts);
+        if (!this.sprite) this.sprite = alives['katie_south'].sprite;
     }
 
     tick(delta: number) {
@@ -35,10 +37,15 @@ export class Player extends GameObject {
         if((Math.abs(v) < CLOSE_ENOUGH) && (Math.abs(thisTileY - OFFSET) < CLOSE_ENOUGH)) {
              this.vspeed = 0.0;
              this.y = OFFSET + Math.floor(this.y / TILE_SIZE) * TILE_SIZE;
-
         } else {
              this.vspeed = ((Math.abs(v) < CLOSE_ENOUGH) ? this.vspeed : v);
-        }  
+        }
+
+        this.animationSpeed = this.speed > 0 ? .2 : 0;
+        if (this.hspeed > 0) this.sprite = alives['katie_east'].sprite;
+        else if (this.hspeed < 0) this.sprite = alives['katie_west'].sprite;
+        else if (this.vspeed > 0) this.sprite = alives['katie_south'].sprite;
+        else if (this.vspeed < 0) this.sprite = alives['katie_north'].sprite;
 
         let nextX: number = this.x + delta * this.hspeed;
         let nextY: number = this.y + delta * this.vspeed;
@@ -76,9 +83,9 @@ export class Player extends GameObject {
         super.tick(delta);
     }
 
-    render(context: CanvasRenderingContext2D) {
-        if (!this.shouldRender) return;
-        context.fillStyle = 'green';
-        context.fillRect(this.x, this.y, SIZE, SIZE);
-    }
+    //render(context: CanvasRenderingContext2D) {
+    //    if (!this.shouldRender) return;
+    //    context.fillStyle = 'green';
+    //    context.fillRect(this.x, this.y, SIZE, SIZE);
+    //}
 }
