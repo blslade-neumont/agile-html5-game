@@ -40,12 +40,22 @@ describe('GuiObject', () => {
     });
 
     describe('.render', () => {
+        let context: CanvasRenderingContext2D;
+        beforeEach(() => {
+            context = new HTMLCanvasElement().getContext('2d');
+        });
+
         it('should invoke fillText with the game time string', () => {
-            guiObject.addToGame(<any>{ world: { gameTime: 8 / 24 } });
-            let context = new HTMLCanvasElement().getContext('2d');
+            guiObject.addToGame(<any>{ world: { gameTime: 8 / 24 }, canvasSize: [640, 480] });
             sinon.stub(context, 'fillText');
             guiObject.render(context);
             expect(context.fillText).to.have.been.calledWith('Day 1, 8 AM');
+        });
+        it('should invoke fillText relative to the top right corner of the canvas', () => {
+            guiObject.addToGame(<any>{ world: { gameTime: 8 / 24 }, canvasSize: [804, 480] });
+            sinon.stub(context, 'fillText');
+            guiObject.render(context);
+            expect(context.fillText).to.have.been.calledWith(sinon.match.any, 800, 4);
         });
     });
 });

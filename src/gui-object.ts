@@ -14,16 +14,17 @@ export class GuiObject extends GameObject {
     }
 
     render(context: CanvasRenderingContext2D) {
+        let [canvasWidth, canvasHeight] = this.game.canvasSize;
         let timeText = this.gameTimeString;
         context.font = '24px Verdana';
         let textWidth = context.measureText(timeText).width;
         
         context.fillStyle = 'rgba(0, 0, 0, .5)';
-        context.fillRect(640 - (8 + textWidth), 0, 8 + textWidth, 8 + 24);
+        context.fillRect(canvasWidth - (8 + textWidth), 0, 8 + textWidth, 8 + 24);
 
         context.fillStyle = 'white';
         context.textAlign = 'right';
         context.textBaseline = 'top';
-        context.fillText(timeText, 636, 4);
+        context.fillText(timeText, canvasWidth - 4, 4);
     }
 }
