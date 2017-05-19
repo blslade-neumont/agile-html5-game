@@ -1,15 +1,22 @@
 ﻿import { degToRad, radToDeg, fmod } from './utils/math';
 import { Game } from './game';
 import { GameEvent } from './utils/events';
+import { SpriteT } from './utils/sprite';
+import { drawSprite } from './utils/render';
 
 export interface GameObjectOptions {
     x?: number,
     y?: number,
+
     direction?: number,
     speed?: number,
     hspeed?: number,
     vspeed?: number,
-    shouldRender?: boolean
+
+    shouldRender?: boolean,
+    sprite?: SpriteT,
+    animationAge?: number,
+    animationSpeed?: number
 };
 
 const DEBUG_MOVEMENT = false;
@@ -19,10 +26,16 @@ export class GameObject {
         this._name = name;
         if (typeof opts.x != 'undefined') this.x = opts.x;
         if (typeof opts.y != 'undefined') this.y = opts.y;
+
         if (typeof opts.direction != 'undefined') this.direction = opts.direction;
         if (typeof opts.speed != 'undefined') this.speed = opts.speed;
         if (typeof opts.hspeed != 'undefined') this.hspeed = opts.hspeed;
         if (typeof opts.vspeed != 'undefined') this.vspeed = opts.vspeed;
+
+        if (typeof opts.shouldRender != 'undefined') this.shouldRender = opts.shouldRender;
+        if (typeof opts.sprite != 'undefined') this.sprite = opts.sprite;
+        if (typeof opts.animationAge != 'undefined') this.animationAge = opts.animationAge;
+        if (typeof opts.animationSpeed != 'undefined') this.animationSpeed = opts.animationSpeed;
     }
 
     private _name;
@@ -112,6 +125,29 @@ export class GameObject {
         this._shouldRender = val;
     }
 
+    private _sprite: SpriteT = null;
+    get sprite() {
+        return this._sprite;
+    }
+    set sprite(val) {
+        this._sprite = val;
+    }
+
+    private _animationAge = 0;
+    get animationAge() {
+        return this._animationAge;
+    }
+    set animationAge(val) {
+        this._animationAge = val;
+    }
+    private _animationSpeed = 1;
+    get animationSpeed() {
+        return this._animationSpeed;
+    }
+    set animationSpeed(val) {
+        this._animationSpeed = val;
+    }
+
     private _game: Game;
     get game() {
         return this._game;
@@ -138,11 +174,22 @@ export class GameObject {
     tick(delta: number) {
         this.x += this.hspeed * delta;
         this.y += this.vspeed * delta;
+        this.animationAge += this.animationSpeed * delta;
     }
 
     render(context: CanvasRenderingContext2D) {
         if (!this.shouldRender) return;
-        context.fillStyle = 'red';
-        context.fillRect(this.x, this.y, 16, 16);
+
+        if (this.sprite) {
+            drawSprite(context, this.resources, this.sprite, this.x, this.y, this.animationAge);
+        }
+        else {
+            context.fillStyle = 'red';
+            context.fillRect(this.x, this.y, 16, 16);
+
+            context.fillStyle = 'blue';
+            context.font = '16px Consolas';
+            context.fillText('?', 0, 0);
+        }
     }
 }
