@@ -1,4 +1,6 @@
-﻿
+﻿/// <reference types="mocha" />
+
+import { MockElement } from './mock-document';
 
 export class MockContext {
     constructor() { }
@@ -9,8 +11,10 @@ export class MockContext {
     drawImage() { }
 }
 
-export class MockCanvas {
-    constructor() { }
+export class MockCanvas extends MockElement {
+    constructor() {
+        super();
+    }
 
     getContext(method: '2d') {
         return new MockContext();
