@@ -1,10 +1,8 @@
 ﻿import { fillText } from './utils/render';
 import { PreloadStrategy } from './utils/preload-strategy';
 
-const DEBUG_RESOURCES = false;
-
 export class ResourceLoader {
-    constructor() {
+    constructor(private readonly DEBUG_RESOURCES = false) {
     }
 
     addPreloadStrategy(strategy: PreloadStrategy) {
@@ -34,7 +32,7 @@ export class ResourceLoader {
         if (this._images.has(src)) return this._images.get(src);
 
         this._resourcesLoading++;
-        if (DEBUG_RESOURCES) console.log(`Loading resource: '${src}'`);
+        if (this.DEBUG_RESOURCES) console.log(`Loading resource: '${src}'`);
         let img = new Image();
         this._images.set(src, img);
         img.onload = () => {
