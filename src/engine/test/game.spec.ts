@@ -9,17 +9,15 @@ import { Game } from '../game';
 import { GameObject } from '../game-object';
 import { stubDocument } from './mock-document';
 import { stubImage } from './mock-image';
-import { stubCanvas } from './mock-canvas';
 import { delay } from '../utils/delay';
 
 describe('Game', () => {
     stubDocument();
     stubImage();
-    stubCanvas();
 
     let game: Game;
     beforeEach(() => {
-        game = new Game(30, new HTMLCanvasElement());
+        game = new Game(30);//, new HTMLCanvasElement());
     });
     afterEach(() => {
         if (game.isRunning) game.stop();
@@ -32,11 +30,19 @@ describe('Game', () => {
         expect(game.canvasSize).to.deep.eq([640, 480]);
     });
     it('should update the canvas size any time the window is resized', () => {
-        let canvas = (<any>game).canvas;
+        let canvas = (<any>game).canvas = <any>new HTMLCanvasElement();
         [canvas.scrollWidth, canvas.scrollHeight] = [123, 456];
         expect(game.canvasSize).not.to.deep.eq([123, 456]);
         document.getElementsByTagName('body')[0].onresize(<any>void(0));
         expect(game.canvasSize).to.deep.eq([123, 456]);
+    });
+
+    describe('.refreshCanvasSize', () => {
+        it(`should not modify canvasSize if the game hasn't been started yet`, () => {
+            let [oldWidth, oldHeight] = game.canvasSize;
+            (<any>game).refreshCanvasSize();
+            expect(game.canvasSize).to.deep.eq([oldWidth, oldHeight]);
+        });
     });
 
     describe('.start', () => {
@@ -50,7 +56,7 @@ describe('Game', () => {
             expect(() => game.start()).to.throw(/game is already running/i);
         });
         it('should update the canvas size', () => {
-            let canvas = (<any>game).canvas;
+            let canvas = (<any>game).canvas = <any>new HTMLCanvasElement();
             [canvas.scrollWidth, canvas.scrollHeight] = [123, 456];
             expect(game.canvasSize).not.to.deep.eq([123, 456]);
             game.start();
@@ -75,6 +81,11 @@ describe('Game', () => {
             game.stop();
             await delay(1000 / 25);
             expect((<any>game).onTick).not.to.have.been.called;
+        });
+        it('should not throw an error if the game is already stopped', () => {
+            expect(game.isRunning).to.be.false;
+            expect(() => game.stop()).not.to.throw;
+            expect(game.isRunning).to.be.false;
         });
     });
 
@@ -174,6 +185,34 @@ describe('Game', () => {
             expect((<any>game).sendEvents).to.have.been.calledOnce;
             expect((<any>game).tick).to.have.been.calledThrice;
             expect((<any>game).render).to.have.been.calledOnce;
+        });
+    });
+
+    describe('.sendEvents', () => {
+        //This is more thoroughly tested by the public methods listed above
+        it('should short-circuit if a game object handles an event', () => {
+            let gobj1 = new GameObject('one');
+            sinon.stub(gobj1, 'handleEvent').returns(true);
+            let gobj2 = new GameObject('two');
+            sinon.stub(gobj2, 'handleEvent');
+            game.start();
+            game.eventQueue.enqueue(<any>{ type: 'fakeEvent' });
+            game.addObject(gobj1);
+            game.addObject(gobj2);
+            (<any>game).sendEvents();
+            expect(gobj1.handleEvent).to.have.been.called;
+            expect(gobj2.handleEvent).not.to.have.been.called;
+        });
+    });
+
+    describe('.render', () => {
+        //This is more thoroughly tested by the public methods listed above
+        it('should not call GameObject.render if shouldRender is false', () => {
+            let gobj = new GameObject('name', { shouldRender: false });
+            sinon.stub(gobj, 'render');
+            game.addObject(gobj);
+            (<any>game).render(<any>void(0));
+            expect(gobj.render).not.to.have.been.called;
         });
     });
 });

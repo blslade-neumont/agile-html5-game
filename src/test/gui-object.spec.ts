@@ -6,10 +6,10 @@ import * as sinonChai from 'sinon-chai';
 use(sinonChai);
 
 import { GuiObject } from '../gui-object';
-import { stubCanvas } from '../engine/test';
+import { stubDocument } from '../engine/test';
 
 describe('GuiObject', () => {
-    stubCanvas();
+    stubDocument();
 
     let guiObject: GuiObject;
     beforeEach(() => {

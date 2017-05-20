@@ -6,13 +6,13 @@ import * as sinonChai from 'sinon-chai';
 use(sinonChai);
 
 import { fillText, drawSprite } from '../render';
-import { stubCanvas } from '../../test/mock-canvas';
+import { stubDocument } from '../../test/mock-document';
 import { ResourceLoader } from '../../resource-loader';
 import * as _ from 'lodash';
 let any = sinon.match.any;
 
 describe('utils/fillText', () => {
-    stubCanvas();
+    stubDocument();
 
     let context: CanvasRenderingContext2D;
     beforeEach(() => {
@@ -36,7 +36,7 @@ describe('utils/fillText', () => {
 });
 
 describe('utils/drawSprite', () => {
-    stubCanvas();
+    stubDocument();
 
     let context: CanvasRenderingContext2D;
     let img = <any>'this is my image!';

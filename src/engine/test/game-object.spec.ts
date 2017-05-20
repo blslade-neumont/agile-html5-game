@@ -7,10 +7,12 @@ use(sinonChai);
 
 import { GameObject } from '../game-object';
 import { Game } from '../game';
-import { stubCanvas } from './mock-canvas';
+import { stubDocument } from './mock-document';
 import * as renderUtils from '../utils/render';
 
 describe('GameObject', () => {
+    stubDocument();
+
     it('should start without a resourceLoader, eventQueue, or game', () => {
         let gobj = new GameObject('name');
         expect(gobj.game).not.to.be.ok;
@@ -237,8 +239,6 @@ describe('GameObject', () => {
     });
 
     describe('.render', () => {
-        stubCanvas();
-
         let context: CanvasRenderingContext2D;
         let drawSpriteStub: sinon.SinonStub;
         beforeEach(() => {

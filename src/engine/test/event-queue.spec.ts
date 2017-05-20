@@ -12,7 +12,6 @@ import { delay } from '../utils/delay';
 
 import { Game } from '../game';
 import { stubImage } from './mock-image';
-import { stubCanvas } from './mock-canvas';
 
 describe('EventQueue', () => {
     stubDocument();
@@ -321,11 +320,10 @@ describe('EventQueue', () => {
 
     describe('canvas resize', () => {
         stubImage();
-        stubCanvas();
 
         let game: Game;
         beforeEach(() => {
-            game = new Game(30, new HTMLCanvasElement());
+            game = new Game(30);
             events = game.eventQueue;
         });
         afterEach(() => {
@@ -334,7 +332,7 @@ describe('EventQueue', () => {
 
         describe('onresize', () => {
             it('should emit a canvasResize event when the body is resized', () => {
-                let canvas = (<any>game).canvas;
+                let canvas = (<any>game).canvas = <any>new HTMLCanvasElement();
                 let body = document.getElementsByTagName('body')[0];
                 [canvas.scrollWidth, canvas.scrollHeight] = [123, 456];
                 body.onresize(<any>void(0));
@@ -346,7 +344,7 @@ describe('EventQueue', () => {
             });
             it('should emit only one canvasResize event per frame even if multiple are fired', () => {
                 sinon.spy(events, 'enqueue');
-                let canvas = (<any>game).canvas;
+                let canvas = (<any>game).canvas = <any>new HTMLCanvasElement();
                 let body = document.getElementsByTagName('body')[0];
                 [canvas.scrollWidth, canvas.scrollHeight] = [123, 456];
                 body.onresize(<any>void (0));

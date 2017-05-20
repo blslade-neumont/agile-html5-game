@@ -9,7 +9,7 @@ import { GridRenderer } from '../grid-renderer';
 import { AgileGame } from '../agile-game';
 import { World } from '../world';
 import { ResourceLoader } from '../engine';
-import { stubDocument, stubImage, stubCanvas } from '../engine/test';
+import { stubDocument, stubImage } from '../engine/test';
 import { TILE_SIZE } from '../dbs/tile-db';
 
 describe('GridRenderer', () => {
@@ -35,12 +35,11 @@ describe('GridRenderer', () => {
 
         stubDocument();
         stubImage();
-        stubCanvas();
 
         let game: AgileGame;
         beforeEach(() => {
             context = (new HTMLCanvasElement()).getContext("2d");
-            game = new AgileGame(30, new HTMLCanvasElement());
+            game = new AgileGame();
         });
 
         afterEach(() => {

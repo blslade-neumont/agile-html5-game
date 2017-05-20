@@ -8,8 +8,8 @@ import { ItemPreloadStrategy } from './item-preload-strategy';
 import { AlivePreloadStrategy } from './alive-preload-strategy';
 
 export class AgileGame extends Game {
-    constructor(framesPerSecond = 30, canvas: HTMLCanvasElement = null) {
-        super(framesPerSecond, canvas);
+    constructor(framesPerSecond = 30) {
+        super(framesPerSecond);
         this.resourceLoader.addPreloadStrategy(new TilePreloadStrategy());
         this.resourceLoader.addPreloadStrategy(new ItemPreloadStrategy());
         this.resourceLoader.addPreloadStrategy(new AlivePreloadStrategy());
