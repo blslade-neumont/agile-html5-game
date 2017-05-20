@@ -1,9 +1,13 @@
 ﻿import { GameEvent, MouseButton } from './utils/events';
 
 export class EventQueue {
-    constructor(private readonly DEBUG_KEYS = false, private readonly DEBUG_MOUSE = false) {
+    constructor() {
         this.init();
     }
+
+    private DEBUG_KEYS = false;
+    private DEBUG_MOUSE = false;
+
     private init() {
         let body = document.getElementsByTagName('body')[0];
         this.initKeyboard(body);
