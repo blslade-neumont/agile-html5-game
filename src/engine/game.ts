@@ -3,12 +3,13 @@ import { ResourceLoader } from './resource-loader';
 import { EventQueue } from './event-queue';
 import { Camera } from './camera';
 
-const LOGIC_TICKS_PER_RENDER_TICK = 3;
-
 export class Game {
     constructor(protected readonly framesPerSecond = 30) {
         this.init();
     }
+
+    private LOGIC_TICKS_PER_RENDER_TICK = 3;
+
     private init() {
         this._resourceLoader = new ResourceLoader();
         this._eventQueue = new EventQueue();
@@ -38,14 +39,6 @@ export class Game {
         return this._eventQueue;
     }
 
-    private _camera: Camera;
-    get camera() {
-        return this._camera;
-    }
-    set camera(val: Camera) {
-        this._camera = val;
-    }
-
     private _intervalHandle: number;
     private _isRunning = false;
     get isRunning() {
@@ -66,6 +59,14 @@ export class Game {
     stop() {
         if (this.isRunning) clearInterval(this._intervalHandle);
         this._isRunning = false;
+    }
+
+    private _camera: Camera | null = null;
+    get camera(): Camera | null {
+        return this._camera;
+    }
+    set camera(val: Camera | null) {
+        this._camera = val;
     }
 
     private _size: [number, number] = [640, 480];
@@ -94,24 +95,38 @@ export class Game {
         this._objects.splice(idx, 1);
         obj.removeFromGame();
     }
-    findObject(name: string) {
+    findObject(predicate: (obj: GameObject) => boolean): GameObject | null;
+    findObject<T extends GameObject>(predicate: (obj: GameObject) => obj is T): T | null;
+    findObject(name: string): GameObject | null;
+    findObject(predicate: string | ((obj: GameObject) => boolean)) {
+        if (typeof predicate == 'string') {
+            let name = predicate;
+            predicate = obj => obj.name == name;
+        }
+        else if (!predicate) throw new Error(`Invalid predicate: ${predicate}`);
         for (let obj of this._objects) {
-            if (obj.name == name) return obj;
+            if (predicate(obj)) return obj;
         }
         return null;
     }
-    
+    findObjects(predicate: (obj: GameObject) => boolean): GameObject[];
+    findObjects<T extends GameObject>(predicate: (obj: GameObject) => obj is T): T[];
+    findObjects(predicate: (obj: GameObject) => boolean) {
+        if (typeof predicate !== 'function') throw new Error(`Invalid predicate: ${predicate}`);
+        return this._objects.filter(predicate);
+    }
+
     private onTick() {
         if (!this.isRunning) throw new Error(`An error occurred. Game.onTick was invoked although the game is not running.`);
 
-        let currentTime = new Date();
-        let delta = (this.previousTick == null) ? 0 : (currentTime.valueOf() - this.previousTick.valueOf()) / 1000;
-        this.previousTick = currentTime;
-
         if (this.resourceLoader.isDone) {
+            let currentTime = new Date();
+            let delta = (this.previousTick == null) ? 0 : (currentTime.valueOf() - this.previousTick.valueOf()) / 1000;
+            this.previousTick = currentTime;
+
             this.sendEvents();
-            for (let q = 0; q < LOGIC_TICKS_PER_RENDER_TICK; q++) {
-                this.tick(delta / LOGIC_TICKS_PER_RENDER_TICK);
+            for (let q = 0; q < this.LOGIC_TICKS_PER_RENDER_TICK; q++) {
+                this.tick(delta / this.LOGIC_TICKS_PER_RENDER_TICK);
             }
             this.render(this.context);
         }
@@ -131,7 +146,7 @@ export class Game {
         for (let obj of this._objects) {
             obj.tick(delta);
         }
-        if (this.camera) this.camera.tick(delta / LOGIC_TICKS_PER_RENDER_TICK);
+        if (this.camera) this.camera.tick(delta);
     }
     protected render(context: CanvasRenderingContext2D) {
         let camera = this.camera;

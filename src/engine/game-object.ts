@@ -39,7 +39,7 @@ export class GameObject {
     private DEBUG_MOVEMENT = false;
 
     private _name;
-    get name() {
+    get name(): string {
         return this._name;
     }
 

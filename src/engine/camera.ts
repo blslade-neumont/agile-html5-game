@@ -17,12 +17,26 @@ export class Camera {
         this._clearColor = val;
     }
     
-    protected _center = [0, 0];
-    protected _zoomScale = 1;
+    private _center: [number, number] = [0, 0];
+    get center(): [number, number] {
+        return [this._center[0], this._center[1]];
+    }
+    set center([x, y]: [number, number]) {
+        this._center = [x, y];
+    }
+
+    private _zoomScale = 1;
+    get zoomScale() {
+        return this._zoomScale;
+    }
+    set zoomScale(val) {
+        if (val <= 0) throw new Error(`The zoom scale must be positive`);
+        this._zoomScale = val;
+    }
 
     get bounds() {
         let [cvWidth, cvHeight] = this.game.canvasSize;
-        let [hoff, voff] = [(cvWidth / 2) / this._zoomScale, (cvHeight / 2) / this._zoomScale];
+        let [hoff, voff] = [(cvWidth / 2) * this._zoomScale, (cvHeight / 2) * this._zoomScale];
         return {
             left: this._center[0] - hoff,
             right: this._center[0] + hoff,
