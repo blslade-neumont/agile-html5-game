@@ -2,8 +2,10 @@
 import { PreloadStrategy } from './utils/preload-strategy';
 
 export class ResourceLoader {
-    constructor(private readonly DEBUG_RESOURCES = false) {
+    constructor() {
     }
+
+    private DEBUG_RESOURCES = false;
 
     addPreloadStrategy(strategy: PreloadStrategy) {
         strategy.preload(this);

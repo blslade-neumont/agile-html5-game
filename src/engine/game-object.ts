@@ -20,7 +20,7 @@ export interface GameObjectOptions {
 };
 
 export class GameObject {
-    constructor(name: string, opts: GameObjectOptions = {}, private readonly DEBUG_MOVEMENT = false) {
+    constructor(name: string, opts: GameObjectOptions = {}) {
         this._name = name;
         if (typeof opts.x != 'undefined') this.x = opts.x;
         if (typeof opts.y != 'undefined') this.y = opts.y;
@@ -35,6 +35,8 @@ export class GameObject {
         if (typeof opts.animationAge != 'undefined') this.animationAge = opts.animationAge;
         if (typeof opts.animationSpeed != 'undefined') this.animationSpeed = opts.animationSpeed;
     }
+
+    private DEBUG_MOVEMENT = false;
 
     private _name;
     get name() {
