@@ -245,7 +245,7 @@ describe('EventQueue', () => {
         describe('onmousewheel', () => {
             it('should emit a mouseWheel event when the wheel is moved', () => {
                 let body = document.getElementsByTagName('body')[0];
-                body.onmousewheel(<any>{ wheelDelta: -4 });
+                body.onwheel(<any>{ deltaY: -4 });
                 expect(events.clearQueue()).to.deep.eq([{
                     type: 'mouseWheel',
                     delta: -4,
@@ -256,8 +256,8 @@ describe('EventQueue', () => {
             it('should emit only one mouseWheel event per frame even if multiple are fired', () => {
                 sinon.spy(events, 'enqueue');
                 let body = document.getElementsByTagName('body')[0];
-                body.onmousewheel(<any>{ wheelDelta: -4 });
-                body.onmousewheel(<any>{ wheelDelta: -5 });
+                body.onwheel(<any>{ deltaY: -4 });
+                body.onwheel(<any>{ deltaY: -5 });
                 expect(events.clearQueue()).to.deep.eq([{
                     type: 'mouseWheel',
                     delta: -9,
@@ -268,7 +268,7 @@ describe('EventQueue', () => {
             });
             it('should set the mouse position if one is defined', () => {
                 let body = document.getElementsByTagName('body')[0];
-                body.onmousewheel(<any>{ button: 0, movementX: 999, movementY: 999, pageX: 97, pageY: 83 });
+                body.onwheel(<any>{ button: 0, movementX: 999, movementY: 999, pageX: 97, pageY: 83 });
                 expect(events.mousePosition).to.deep.eq({ x: 97, y: 83 });
             });
             it('should invoke console.log if DEBUG_MOUSE is true', () => {
@@ -277,7 +277,7 @@ describe('EventQueue', () => {
                     stub = sinon.stub(console, 'log');
                     (<any>events).DEBUG_MOUSE = true;
                     let body = document.getElementsByTagName('body')[0];
-                    body.onmousewheel(<any>{ wheelDelta: 13 });
+                    body.onwheel(<any>{ wheelDelta: 13 });
                     expect(console.log).to.have.been.calledWith(sinon.match(/mouse wheel/i));
                 } finally { if (stub) stub.restore(); }
             });

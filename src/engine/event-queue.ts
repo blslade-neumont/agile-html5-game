@@ -92,13 +92,13 @@ export class EventQueue {
                 this._mouseButtons.set(e.button, false);
             }
         };
-        body.onmousewheel = e => {
-            if (this.DEBUG_MOUSE) console.log(`Mouse wheel. delta: ${e.wheelDelta}; Position: ${e.pageX}, ${e.pageY}`);
+        body.onwheel = e => {
+            if (this.DEBUG_MOUSE) console.log(`Mouse wheel. delta: ${e.deltaY}; Position: ${e.pageX}, ${e.pageY}`);
             if (typeof e.pageX !== 'undefined') this._pageX = e.pageX;
             if (typeof e.pageY !== 'undefined') this._pageY = e.pageY;
             this.enqueue({
                 type: 'mouseWheel',
-                delta: e.wheelDelta,
+                delta: e.deltaY,
                 pageX: this._pageX,
                 pageY: this._pageY
             });
