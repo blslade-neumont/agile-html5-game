@@ -82,4 +82,11 @@ export class Player extends GameObject {
 
         super.tick(delta);
     }
+
+    handleEvent(evt: GameEvent) {
+        if (evt.type == 'mouseWheel') {
+            let scale = Math.pow(2, -evt.delta / 30);
+            this.game.camera.zoomScale *= scale;
+        }
+    }
 }
