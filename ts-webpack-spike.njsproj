@@ -58,14 +58,30 @@
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="src\dbs\alive-db.ts" />
+    <TypeScriptCompile Include="src\engine\camera.ts" />
+    <TypeScriptCompile Include="src\engine\follow-camera.ts" />
     <TypeScriptCompile Include="src\engine\index.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="src\engine\test\camera.spec.ts">
+      <TestFramework>Mocha</TestFramework>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="src\engine\test\follow-camera.spec.ts">
+      <TestFramework>Mocha</TestFramework>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="src\engine\test\index.ts">
       <SubType>Code</SubType>
+      <TestFramework>Mocha</TestFramework>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="src\engine\test\mock-element.ts">
+      <TestFramework>
+      </TestFramework>
     </TypeScriptCompile>
     <TypeScriptCompile Include="src\engine\utils\index.ts">
       <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="src\engine\utils\test\sprite.spec.ts">
+      <TestFramework>Mocha</TestFramework>
     </TypeScriptCompile>
     <TypeScriptCompile Include="src\gui-object.ts">
       <SubType>Code</SubType>
@@ -109,15 +125,31 @@
     </TypeScriptCompile>
     <TypeScriptCompile Include="src\test\alive-preload-strategy.spec.ts">
       <SubType>Code</SubType>
+      <TestFramework>Mocha</TestFramework>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="src\test\gui-object.spec.ts">
+      <TestFramework>Mocha</TestFramework>
     </TypeScriptCompile>
     <TypeScriptCompile Include="src\test\item-preload-strategy.spec.ts">
       <SubType>Code</SubType>
+      <TestFramework>Mocha</TestFramework>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="src\test\mock-event-queue.ts">
+      <TestFramework>Mocha</TestFramework>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="src\test\mock-world.ts">
+      <TestFramework>Mocha</TestFramework>
     </TypeScriptCompile>
     <TypeScriptCompile Include="src\test\player.spec.ts">
       <SubType>Code</SubType>
+      <TestFramework>Mocha</TestFramework>
     </TypeScriptCompile>
     <TypeScriptCompile Include="src\test\tile-preload-strategy.spec.ts">
       <SubType>Code</SubType>
+      <TestFramework>Mocha</TestFramework>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="src\test\world.spec.ts">
+      <TestFramework>Mocha</TestFramework>
     </TypeScriptCompile>
     <TypeScriptCompile Include="src\tile-preload-strategy.ts">
       <SubType>Code</SubType>
@@ -144,14 +176,15 @@
       <SubType>Code</SubType>
       <TestFramework>Mocha</TestFramework>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="src\engine\test\mock-canvas.ts">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
     <TypeScriptCompile Include="src\engine\test\mock-document.ts">
       <SubType>Code</SubType>
+      <TestFramework>
+      </TestFramework>
     </TypeScriptCompile>
     <TypeScriptCompile Include="src\engine\test\mock-image.ts">
       <SubType>Code</SubType>
+      <TestFramework>
+      </TestFramework>
     </TypeScriptCompile>
     <TypeScriptCompile Include="src\engine\test\resource-loader.spec.ts">
       <SubType>Code</SubType>
