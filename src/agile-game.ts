@@ -32,6 +32,7 @@ export class AgileGame extends Game {
         this.addObject(new GuiObject());
 
         let camera = this.camera = new FollowCamera(this);
+        camera.clearColor = 'black';
         camera.follow = player;
     }
 

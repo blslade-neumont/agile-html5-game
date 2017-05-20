@@ -8,6 +8,14 @@ export class Camera {
     get game() {
         return this._game;
     }
+
+    private _clearColor: string | null = null;
+    get clearColor() {
+        return this._clearColor;
+    }
+    set clearColor(val: string | null) {
+        this._clearColor = val;
+    }
     
     protected _center = [0, 0];
     protected _zoomScale = 1;
@@ -29,6 +37,12 @@ export class Camera {
     push(context: CanvasRenderingContext2D) {
         let [cvWidth, cvHeight] = this.game.canvasSize;
         context.save();
+
+        if (this._clearColor) {
+            context.fillStyle = this._clearColor;
+            context.fillRect(0, 0, cvWidth, cvHeight);
+        }
+
         context.translate(-this._center[0], -this._center[1]);
         context.scale(this._zoomScale, this._zoomScale);
         context.translate(cvWidth / 2, cvHeight / 2);
