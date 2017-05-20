@@ -34,6 +34,7 @@ export class AgileGame extends Game {
         let camera = this.camera = new FollowCamera(this);
         camera.clearColor = 'black';
         camera.follow = player;
+        camera.enableSmoothing = false;
     }
 
     protected tick(delta: number) {
