@@ -34,7 +34,7 @@ export class ResourceLoader {
         if (this._images.has(src)) return this._images.get(src);
 
         this._resourcesLoading++;
-        if (this.DEBUG_RESOURCES) console.log(`Loading resource: '${src}'`);
+        if (this.DEBUG_RESOURCES) console.log(`Loading image: '${src}'`);
         let img = new Image();
         this._images.set(src, img);
         img.onload = () => {
@@ -49,7 +49,7 @@ export class ResourceLoader {
 
     render(context: CanvasRenderingContext2D) {
         context.fillStyle = 'grey';
-        context.fillRect(0, 0, 640, 480);
+        context.fillRect(0, 0, context.canvas.scrollWidth, context.canvas.scrollHeight);
         
         if (this.totalResources > 0) {
             context.fillStyle = 'white';

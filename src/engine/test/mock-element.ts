@@ -2,7 +2,7 @@
 
 
 export class MockContext {
-    constructor() { }
+    constructor(readonly canvas: MockElement) { }
 
     fillRect() { }
     fillText() { }
@@ -11,10 +11,12 @@ export class MockContext {
 }
 
 export class MockElement {
+    width = 925;
+    height = 295;
     scrollWidth = 640;
     scrollHeight = 480;
 
     getContext() {
-        return new MockContext();
+        return new MockContext(this);
     }
 }
