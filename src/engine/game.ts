@@ -1,6 +1,7 @@
 ﻿import { GameObject } from './game-object';
 import { ResourceLoader } from './resource-loader';
 import { EventQueue } from './event-queue';
+import { Camera } from './camera';
 
 const LOGIC_TICKS_PER_RENDER_TICK = 3;
 
@@ -35,6 +36,14 @@ export class Game {
     private _eventQueue: EventQueue = null;
     get eventQueue() {
         return this._eventQueue;
+    }
+
+    private _camera: Camera;
+    get camera() {
+        return this._camera;
+    }
+    set camera(val: Camera) {
+        this._camera = val;
     }
 
     private _intervalHandle: number;
@@ -85,6 +94,12 @@ export class Game {
         this._objects.splice(idx, 1);
         obj.removeFromGame();
     }
+    findObject(name: string) {
+        for (let obj of this._objects) {
+            if (obj.name == name) return obj;
+        }
+        return null;
+    }
     
     private onTick() {
         if (!this.isRunning) throw new Error(`An error occurred. Game.onTick was invoked although the game is not running.`);
@@ -116,10 +131,14 @@ export class Game {
         for (let obj of this._objects) {
             obj.tick(delta);
         }
+        if (this.camera) this.camera.tick(delta / LOGIC_TICKS_PER_RENDER_TICK);
     }
     protected render(context: CanvasRenderingContext2D) {
+        let camera = this.camera;
+        if (camera) camera.push(context);
         for (let obj of this._objects) {
             if (obj.shouldRender) obj.render(context);
         }
+        if (camera) camera.pop(context);
     }
 }
