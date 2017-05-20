@@ -4,6 +4,13 @@
 export class MockContext {
     constructor(readonly canvas: MockElement) { }
 
+    save() { }
+    restore() { }
+
+    translate() { }
+    rotate() { }
+    scale() { }
+
     fillRect() { }
     fillText() { }
     measureText() { return { width: 42 } }

@@ -13,45 +13,49 @@ import { stubDocument, stubImage } from '../engine/test';
 import { TILE_SIZE } from '../dbs/tile-db';
 
 describe('GridRenderer', () => {
-    it('should start without a world, or resource loader', () =>{
+    stubDocument();
+    stubImage();
+
+    it('should start without a world', () =>{
         let renderer: GridRenderer = new GridRenderer();
         expect(renderer.world).not.to.be.ok;
-        expect(renderer.loader).not.to.be.ok;
     });
 
-    describe('.setGame', () => {
-        it('should set the world, game, and renderer based on the object passed in', () => {
+    describe('.addToGame', () => {
+        it('should throw an error if the passed-in game is falsey', () => {
             let renderer = new GridRenderer();
-            let game: AgileGame = <any>{ world: 'myWorld', resourceLoader: 'loader' };
-            renderer.setGame(game);
+            expect(() => renderer.addToGame(<any>null)).to.throw(/can only be added to .*AgileGame/i);
+        });
+        it('should throw an error if the passed-in game is not an instance of AgileGame', () => {
+            let renderer = new GridRenderer();
+            expect(() => renderer.addToGame(<any>{ key: 'fish!' })).to.throw(/can only be added to .*AgileGame/i);
+        });
+        it('should populate game and world if a valid AgileGame is passed in', () => {
+            let renderer = new GridRenderer();
+            let game: AgileGame = new AgileGame();
+            renderer.addToGame(game);
             expect(renderer.game).to.deep.equal(game);
             expect(renderer.world).to.deep.equal(game.world);
-            expect(renderer.loader).to.deep.equal(game.resourceLoader);
         });
     });
 
     describe('.render', () => {
         let context: CanvasRenderingContext2D;
-
-        stubDocument();
-        stubImage();
-
+        
         let game: AgileGame;
         beforeEach(() => {
             context = (new HTMLCanvasElement()).getContext("2d");
             game = new AgileGame();
         });
-
         afterEach(() => {
             if (game.isRunning) game.stop();
         });
-
-
+        
         it('should call drawImage once per tile in the world', () => {
             game.start();
 
             let world: World = game.world;
-            let renderer: GridRenderer = game.gridRenderer;
+            let renderer: GridRenderer = <GridRenderer>game.findObject('GridRenderer');
 
             let stub = sinon.stub(context, "drawImage");
 
