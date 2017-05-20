@@ -151,6 +151,12 @@ describe('Camera', () => {
             camera.push(context);
             expect(context.scale).to.have.been.calledWith(.25, .25);
         });
+        it('should disable image smoothing if the camera has it disabled', () => {
+            camera.enableSmoothing = false;
+            sinon.stub(context, 'scale');
+            camera.push(context);
+            expect(context.imageSmoothingEnabled).to.be.false;
+        });
     });
 
     describe('.pop', () => {

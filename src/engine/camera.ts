@@ -34,6 +34,14 @@ export class Camera {
         this._zoomScale = val;
     }
 
+    private _smoothing = true;
+    get enableSmoothing() {
+        return this._smoothing;
+    }
+    set enableSmoothing(val) {
+        this._smoothing = val;
+    }
+
     get bounds() {
         let [cvWidth, cvHeight] = this.game.canvasSize;
         let [hoff, voff] = [(cvWidth / 2) * this._zoomScale, (cvHeight / 2) * this._zoomScale];
@@ -57,9 +65,11 @@ export class Camera {
             context.fillRect(0, 0, cvWidth, cvHeight);
         }
 
-        context.translate(-this._center[0], -this._center[1]);
+        context.imageSmoothingEnabled = context.mozImageSmoothingEnabled = context.oImageSmoothingEnabled = context.webkitImageSmoothingEnabled = this._smoothing;
+
+        context.translate(Math.floor(cvWidth / 2), Math.floor(cvHeight / 2));
         context.scale(this._zoomScale, this._zoomScale);
-        context.translate(cvWidth / 2, cvHeight / 2);
+        context.translate(-Math.floor(this._center[0]), -Math.floor(this._center[1]));
     }
     pop(context: CanvasRenderingContext2D) {
         context.restore();
