@@ -80,6 +80,10 @@
     <TypeScriptCompile Include="src\engine\utils\index.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="src\engine\utils\test\delay.spec.ts">
+      <SubType>Code</SubType>
+      <TestFramework>Mocha</TestFramework>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="src\engine\utils\test\sprite.spec.ts">
       <TestFramework>Mocha</TestFramework>
     </TypeScriptCompile>
