@@ -5,7 +5,7 @@ import { EventQueue } from './event-queue';
 const LOGIC_TICKS_PER_RENDER_TICK = 3;
 
 export class Game {
-    constructor(protected readonly framesPerSecond = 30, protected canvas: HTMLCanvasElement = null) {
+    constructor(protected readonly framesPerSecond = 30) {
         this.init();
     }
     private init() {
@@ -22,7 +22,8 @@ export class Game {
             [this.canvas.width, this.canvas.height] = this.canvasSize = [this.canvas.scrollWidth, this.canvas.scrollHeight];
         }
     }
-    
+
+    protected canvas: HTMLCanvasElement = null;
     private context: CanvasRenderingContext2D = null;
     private previousTick: Date = null;
 
@@ -54,9 +55,8 @@ export class Game {
         this._intervalHandle = setInterval(() => this.onTick(), 1000 / this.framesPerSecond);
     }
     stop() {
-        if (!this.isRunning) return;
+        if (this.isRunning) clearInterval(this._intervalHandle);
         this._isRunning = false;
-        clearInterval(this._intervalHandle);
     }
 
     private _size: [number, number] = [640, 480];
