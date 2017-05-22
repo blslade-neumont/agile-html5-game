@@ -7,6 +7,16 @@ export function radToDeg(rad: number) {
     return (rad / Math.PI) * 180;
 }
 
+export function clamp(value: number, lowerBound: number, upperBound: number) {
+    if (lowerBound > upperBound) {
+        throw new Error("Attempting to clamp with a lower bound greater than the upper bound");
+    }
+
+    if (value < lowerBound) value = lowerBound;
+    else if (value > upperBound) value = upperBound;
+    return value;
+}
+
 export function fmod(a: number, b: number) {
     //Adapted from https://gist.github.com/wteuber/6241786
     //TODO: this implementation loses precision. Doesn't matter much in games, but still
