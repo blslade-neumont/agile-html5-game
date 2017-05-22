@@ -3,6 +3,7 @@ import { Game } from './game';
 import { GameEvent } from './utils/events';
 import { SpriteT } from './utils/sprite';
 import { drawSprite } from './utils/render';
+import { clamp } from './utils/math';
 
 export interface GameObjectOptions {
     x?: number,
@@ -16,12 +17,16 @@ export interface GameObjectOptions {
     shouldRender?: boolean,
     sprite?: SpriteT,
     animationAge?: number,
-    animationSpeed?: number
+    animationSpeed?: number,
+
+    maxHealth?: number,
+    currentHealth?: number,
 };
 
 export class GameObject {
     constructor(name: string, opts: GameObjectOptions = {}, private readonly DEBUG_MOVEMENT = false) {
         this._name = name;
+
         if (typeof opts.x != 'undefined') this.x = opts.x;
         if (typeof opts.y != 'undefined') this.y = opts.y;
 
@@ -34,6 +39,10 @@ export class GameObject {
         if (typeof opts.sprite != 'undefined') this.sprite = opts.sprite;
         if (typeof opts.animationAge != 'undefined') this.animationAge = opts.animationAge;
         if (typeof opts.animationSpeed != 'undefined') this.animationSpeed = opts.animationSpeed;
+        
+        if (typeof opts.maxHealth != 'undefined') this._maxHealth = opts.maxHealth;
+        if (typeof opts.currentHealth != 'undefined') this.currentHealth = opts.currentHealth;
+        else if (typeof opts.maxHealth != 'undefined' && typeof opts.currentHealth == 'undefined') this.currentHealth = opts.maxHealth;
     }
 
     private _name;
@@ -189,5 +198,18 @@ export class GameObject {
             context.font = '16px Consolas';
             context.fillText('?', this.x, this.y);
         }
+    }
+    
+    private _maxHealth = 0;
+    get maxHealth() {
+        return this._maxHealth;
+    }
+
+    private _currentHealth = 0;
+    get currentHealth() {
+        return this._currentHealth;
+    }
+    set currentHealth(val) {
+        this._currentHealth = clamp(val, 0, this._maxHealth);
     }
 }
