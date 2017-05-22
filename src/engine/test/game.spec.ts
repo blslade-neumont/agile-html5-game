@@ -75,8 +75,9 @@ describe('Game', () => {
     });
 
     describe('.camera', () => {
-        it('should start as null', () => {
-            expect(game.camera).to.be.null;
+        it('should start with a default camera', () => {
+            expect(game.camera).to.be.ok;
+            expect(game.camera).to.be.an.instanceof(Camera);
         });
     });
 
@@ -101,7 +102,7 @@ describe('Game', () => {
             let canvas = (<any>game).canvas = <any>new HTMLCanvasElement();
             [canvas.scrollWidth, canvas.scrollHeight] = [123, 456];
             expect(game.canvasSize).not.to.deep.eq([123, 456]);
-            document.getElementsByTagName('body')[0].onresize(<any>void (0));
+            document.getElementsByTagName('body')[0].onresize(<any>void(0));
             expect(game.canvasSize).to.deep.eq([123, 456]);
         });
     });
@@ -137,7 +138,7 @@ describe('Game', () => {
             sinon.stub(gobj, 'render');
             game.addObject(gobj);
             game.start();
-            (<any>game)._resourceLoader = { isDone: true, render: () => void (0) };
+            (<any>game)._resourceLoader = { isDone: true, render: () => void(0) };
             (<any>game).onTick();
             expect(gobj.tick).to.have.been.calledThrice;
             expect(gobj.render).to.have.been.calledOnce;
@@ -147,7 +148,7 @@ describe('Game', () => {
             sinon.stub(gobj, 'handleEvent');
             game.addObject(gobj);
             game.start();
-            (<any>game)._resourceLoader = { isDone: true, render: () => void (0) };
+            (<any>game)._resourceLoader = { isDone: true, render: () => void(0) };
             let e: any = { type: 'fish!' };
             game.eventQueue.enqueue(e);
             (<any>game).onTick();
@@ -175,7 +176,7 @@ describe('Game', () => {
             game.addObject(gobj);
             game.removeObject(gobj);
             game.start();
-            (<any>game)._resourceLoader = { isDone: true, render: () => void (0) };
+            (<any>game)._resourceLoader = { isDone: true, render: () => void(0) };
             (<any>game).onTick();
             expect(gobj.tick).not.to.have.been.called;
             expect(gobj.render).not.to.have.been.called;
@@ -186,7 +187,7 @@ describe('Game', () => {
             game.addObject(gobj);
             game.removeObject(gobj);
             game.start();
-            (<any>game)._resourceLoader = { isDone: true, render: () => void (0) };
+            (<any>game)._resourceLoader = { isDone: true, render: () => void(0) };
             game.eventQueue.enqueue(<any>{ type: 'fish!' });
             (<any>game).onTick();
             expect(gobj.handleEvent).not.to.have.been.called;
@@ -248,7 +249,7 @@ describe('Game', () => {
         describe('when the resource loader is not done loading', () => {
             it('should invoke ResourceLoader.render', () => {
                 game.start();
-                (<any>game)._resourceLoader = { isDone: false, render: () => void (0) };
+                (<any>game)._resourceLoader = { isDone: false, render: () => void(0) };
                 sinon.stub(game.resourceLoader, 'render');
                 sinon.stub(game, 'tick');
                 sinon.stub(game, 'render');
@@ -263,7 +264,7 @@ describe('Game', () => {
             it('should use 0 as the delta if it is the first tick', () => {
                 game.start();
                 (<any>game).LOGIC_TICKS_PER_RENDER_TICK = 1;
-                (<any>game)._resourceLoader = { isDone: true, render: () => void (0) };
+                (<any>game)._resourceLoader = { isDone: true, render: () => void(0) };
                 sinon.stub(game, 'tick');
                 (<any>game).onTick();
                 let subject = expect((<any>game).tick).to.have.been;
@@ -272,8 +273,10 @@ describe('Game', () => {
             });
             it('should specify the delta based on the previous tick time if it is not the first tick', async () => {
                 (<any>game)._isRunning = true;
+                game.camera = null;
                 (<any>game).LOGIC_TICKS_PER_RENDER_TICK = 1;
                 (<any>game)._resourceLoader = { isDone: true, render: () => void (0) };
+                (<any>game).context = new HTMLCanvasElement().getContext('2d');
                 (<any>game).onTick();
                 await delay(50);
                 sinon.stub(game, 'tick');
@@ -284,7 +287,7 @@ describe('Game', () => {
             });
             it('should invoke tick three times for every one time it calls render when the resource loader is done loading', () => {
                 game.start();
-                (<any>game)._resourceLoader = { isDone: true, render: () => void (0) };
+                (<any>game)._resourceLoader = { isDone: true, render: () => void(0) };
                 sinon.stub(game, 'tick');
                 sinon.stub(game, 'render');
                 (<any>game).onTick();
@@ -293,7 +296,7 @@ describe('Game', () => {
             });
             it('should invoke .sendEvents, .tick, and .render if the resource loader is done loading', () => {
                 game.start();
-                (<any>game)._resourceLoader = { isDone: true, render: () => void (0) };
+                (<any>game)._resourceLoader = { isDone: true, render: () => void(0) };
                 sinon.stub(game.resourceLoader, 'render');
                 sinon.stub(game, 'sendEvents');
                 sinon.stub(game, 'tick');
@@ -390,18 +393,22 @@ describe('Game', () => {
             stubs.map(stub => stub.restore());
         });
 
+        it('should throw an error if no canvas is passed in', () => {
+            expect(() => (<any>game).render(null)).to.throw(/no rendering context/i);
+        });
         it('should invoke render on all game objects', () => {
             game.start();
-            (<any>game).render();
+            (<any>game).render((<any>game).context);
             expect(gobjs[0].render).to.have.been.calledOnce;
             expect(gobjs[1].render).to.have.been.calledOnce;
             expect(gobjs[2].render).to.have.been.calledOnce;
         });
         it('should not call GameObject.render if shouldRender is false', () => {
+            game.start();
             let gobj = new GameObject('name', { shouldRender: false });
             sinon.stub(gobj, 'render');
             game.addObject(gobj);
-            (<any>game).render(<any>void(0));
+            (<any>game).render((<any>game).context);
             expect(gobj.render).not.to.have.been.called;
         });
         it('should invoke push and pop on the camera, if there is one', () => {
@@ -409,7 +416,7 @@ describe('Game', () => {
             game.camera = new Camera(game);
             sinon.stub(game.camera, 'push');
             sinon.stub(game.camera, 'pop');
-            (<any>game).render();
+            (<any>game).render((<any>game).context);
             expect(game.camera.push).to.have.been.calledOnce.calledBefore(stubs[0]);
             expect(gobjs[0].render).to.have.been.calledOnce;
             expect(gobjs[1].render).to.have.been.calledOnce;
