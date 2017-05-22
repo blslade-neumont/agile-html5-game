@@ -52,8 +52,8 @@ export class Player extends GameObject {
 
         let nextMinX: number = nextX;
         let nextMinY: number = nextY;
-        let nextMaxX: number = (nextX + SIZE);
-        let nextMaxY: number = (nextY + SIZE);
+        let nextMaxX: number = (nextX + SIZE-1);
+        let nextMaxY: number = (nextY + SIZE-1);
 
         let minTX: number = Math.floor(nextMinX / TILE_SIZE) * TILE_SIZE;
         let maxTX: number = Math.floor(nextMaxX / TILE_SIZE) * TILE_SIZE;
@@ -63,21 +63,29 @@ export class Player extends GameObject {
         let game: AgileGame = <AgileGame>this.game;
 
         // right-left collisions
-        if ((nextMaxX > maxTX) && (game.world.getTileAt(maxTX / TILE_SIZE, minTY / TILE_SIZE).isSolid || game.world.getTileAt(maxTX / TILE_SIZE, maxTY / TILE_SIZE).isSolid)) {
-            this.x = OFFSET + minTX;
-            this.hspeed = 0.0;
-        } else if ((nextMinX <= maxTX) && (game.world.getTileAt(minTX / TILE_SIZE, minTY / TILE_SIZE).isSolid || game.world.getTileAt(minTX / TILE_SIZE, maxTY / TILE_SIZE).isSolid)) {
-            this.x = OFFSET + maxTX;
-            this.hspeed = 0.0;
+        if (this.hspeed > 0.0) {
+            if ((nextMaxX > maxTX) && (game.world.getTileAt(maxTX / TILE_SIZE, minTY / TILE_SIZE).isSolid || game.world.getTileAt(maxTX / TILE_SIZE, maxTY / TILE_SIZE).isSolid)) {
+                this.x = OFFSET + minTX;
+                this.hspeed = 0.0;
+            }
+        } else if (this.hspeed < 0.0) {
+            if ((nextMinX < maxTX) && (game.world.getTileAt(minTX / TILE_SIZE, minTY / TILE_SIZE).isSolid || game.world.getTileAt(minTX / TILE_SIZE, maxTY / TILE_SIZE).isSolid)) {
+                this.x = OFFSET + maxTX;
+                this.hspeed = 0.0;
+            }
         }
 
         // bottom-top collision
-        if ((nextMaxY > maxTY) && (game.world.getTileAt(minTX / TILE_SIZE, maxTY / TILE_SIZE).isSolid || game.world.getTileAt(maxTX / TILE_SIZE, maxTY / TILE_SIZE).isSolid)) {
-            this.y = OFFSET + minTY;
-            this.vspeed = 0.0;
-        } else if ((nextMinY < maxTY) && (game.world.getTileAt(minTX / TILE_SIZE, minTY / TILE_SIZE).isSolid || game.world.getTileAt(maxTX / TILE_SIZE, minTY / TILE_SIZE).isSolid)) {
-            this.y = OFFSET + maxTY;
-            this.vspeed = 0.0;
+        if (this.vspeed > 0.0) {
+            if ((nextMaxY > maxTY) && (game.world.getTileAt(minTX / TILE_SIZE, maxTY / TILE_SIZE).isSolid || game.world.getTileAt(maxTX / TILE_SIZE, maxTY / TILE_SIZE).isSolid)) {
+                this.y = OFFSET + minTY;
+                this.vspeed = 0.0;
+            }
+        } else if (this.vspeed < 0.0) {
+            if ((nextMinY < maxTY) && (game.world.getTileAt(minTX / TILE_SIZE, minTY / TILE_SIZE).isSolid || game.world.getTileAt(maxTX / TILE_SIZE, minTY / TILE_SIZE).isSolid)) {
+                this.y = OFFSET + maxTY;
+                this.vspeed = 0.0;
+            }
         }
 
         super.tick(delta);

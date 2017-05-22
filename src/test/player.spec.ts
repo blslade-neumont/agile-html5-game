@@ -25,7 +25,88 @@ describe('Player', () => {
 
     describe('.tick', () => {
         describe('physics', () => {
-            xit('should not allow the player to move into a blocked right tile', () => {
+            it('should allow the player to move upwards when next to a right blocked tile', () => {
+                player.addToGame(<any>{ eventQueue: new MockEventQueue('ArrowUp'), world: new MockWorld(' X',
+                                                                                                        ' X',
+                                                                                                        ' X')})
+                let [oldX, oldY] = [player.x = 0, player.y = 32];
+                player.tick(.02);
+                expect(player.x).to.be.eq(oldX);
+                expect(player.y).to.be.lessThan(oldY);
+            });
+
+            it('should allow the player to move downwards when next to a right blocked tile', () => {
+                player.addToGame(<any>{
+                    eventQueue: new MockEventQueue('ArrowDown'), world: new MockWorld(' X',
+                                                                                      ' X',
+                                                                                      ' X')
+                })
+                let [oldX, oldY] = [player.x = 0, player.y = 32];
+                player.tick(.02);
+                expect(player.x).to.be.eq(oldX);
+                expect(player.y).to.be.greaterThan(oldY);
+            });
+
+            it('should allow the player to move upwards when next to a left blocked tile', () => {
+                player.addToGame(<any>{
+                    eventQueue: new MockEventQueue('ArrowUp'), world: new MockWorld('X ',
+                                                                                    'X ',
+                                                                                    'X ')
+                })
+                let [oldX, oldY] = [player.x = 32, player.y = 32];
+                player.tick(.02);
+                expect(player.x).to.be.eq(oldX);
+                expect(player.y).to.be.lessThan(oldY);
+            });
+
+            it('should allow the player to move downwards when next to a left blocked tile', () => {
+                player.addToGame(<any>{
+                    eventQueue: new MockEventQueue('ArrowDown'), world: new MockWorld('X ',
+                                                                                      'X ',
+                                                                                      'X ')
+                })
+                let [oldX, oldY] = [player.x = 32, player.y = 32];
+                player.tick(.02);
+                expect(player.x).to.be.eq(oldX);
+                expect(player.y).to.be.greaterThan(oldY);
+            });
+
+            it('should allow the player to move right when next to a top blocked tile', () => {
+                player.addToGame(<any>{ eventQueue: new MockEventQueue('ArrowRight'), world: new MockWorld('XXX') })
+                let [oldX, oldY] = [player.x = 32, player.y = 32];
+                player.tick(.02);
+                expect(player.x).to.be.greaterThan(oldX);
+                expect(player.y).to.be.eq(oldY);
+            });
+
+            it('should allow the player to move left when next to a top blocked tile', () => {
+                player.addToGame(<any>{ eventQueue: new MockEventQueue('ArrowLeft'), world: new MockWorld('XXX') })
+                let [oldX, oldY] = [player.x = 32, player.y = 32];
+                player.tick(.02);
+                expect(player.x).to.be.lessThan(oldX);
+                expect(player.y).to.be.eq(oldY);
+            });
+
+            it('should allow the player to move right when next to a bottom blocked tile', () => {
+                player.addToGame(<any>{ eventQueue: new MockEventQueue('ArrowRight'), world: new MockWorld('   ', 
+                                                                                                           'XXX') })
+                let [oldX, oldY] = [player.x = 32, player.y = 0];
+                player.tick(.02);
+                expect(player.x).to.be.greaterThan(oldX);
+                console.log(player.x);
+                expect(player.y).to.be.eq(oldY);
+            });
+
+            it('should allow the player to move left when next to a bottom blocked tile', () => {
+                player.addToGame(<any>{ eventQueue: new MockEventQueue('ArrowLeft'), world: new MockWorld('   ', 
+                                                                                                          'XXX')})
+                let [oldX, oldY] = [player.x = 32, player.y = 0];
+                player.tick(.02);
+                expect(player.x).to.be.lessThan(oldX);
+                expect(player.y).to.be.eq(oldY);
+            });
+
+            it('should not allow the player to move into a blocked right tile', () => {
                 player.addToGame(<any>{ eventQueue: new MockEventQueue('ArrowRight'), world: new MockWorld(' X') })
                 let [oldX, oldY] = [player.x = 0, player.y = 0];
                 player.tick(.2);
@@ -40,7 +121,7 @@ describe('Player', () => {
                 expect(player.y).to.be.eq(oldY);
             });
 
-            xit('should not allow the player to move into a blocked left tile', () => {
+            it('should not allow the player to move into a blocked left tile', () => {
                 player.addToGame(<any>{ eventQueue: new MockEventQueue('ArrowLeft'), world: new MockWorld('X ') })
                 let [oldX, oldY] = [player.x = 32, player.y = 0];
                 player.tick(.2);
@@ -55,7 +136,7 @@ describe('Player', () => {
                 expect(player.y).to.be.eq(oldY);
             });
 
-            xit('should not allow the player to move into a blocked top tile', () => {
+            it('should not allow the player to move into a blocked top tile', () => {
                 player.addToGame(<any>{ eventQueue: new MockEventQueue('ArrowUp'), world: new MockWorld('X', ' ') })
                 let [oldX, oldY] = [player.x = 0, player.y = 32];
                 player.tick(.2);
@@ -70,7 +151,7 @@ describe('Player', () => {
                 expect(player.y).to.be.lessThan(oldY);
             });
 
-            xit('should not allow the player to move into a blocked bottom tile', () => {
+            it('should not allow the player to move into a blocked bottom tile', () => {
                 player.addToGame(<any>{ eventQueue: new MockEventQueue('ArrowDown'), world: new MockWorld('', 'X') })
                 let [oldX, oldY] = [player.x = 0, player.y = 0];
                 player.tick(.2);

@@ -283,7 +283,7 @@ describe('Game', () => {
                 (<any>game).onTick();
                 let subject = expect((<any>game).tick).to.have.been;
                 subject.calledOnce;
-                subject.calledWith(sinon.match(delta => delta >= .04 && delta <= .06));
+                subject.calledWith(sinon.match(delta => delta >= .03 && delta <= .07));
             });
             it('should invoke tick three times for every one time it calls render when the resource loader is done loading', () => {
                 game.start();
