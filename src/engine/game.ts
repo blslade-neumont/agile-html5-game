@@ -15,6 +15,7 @@ export class Game {
         this._eventQueue = new EventQueue();
         let body = document.getElementsByTagName('body')[0];
         this.initResize(body);
+        this.initCamera();
     }
     private initResize(body: HTMLBodyElement) {
         body.onresize = e => this.refreshCanvasSize();
@@ -23,6 +24,9 @@ export class Game {
         if (this.canvas) {
             [this.canvas.width, this.canvas.height] = this.canvasSize = [this.canvas.scrollWidth, this.canvas.scrollHeight];
         }
+    }
+    private initCamera() {
+        this.camera = new Camera(this);
     }
 
     protected canvas: HTMLCanvasElement = null;
@@ -149,6 +153,7 @@ export class Game {
         if (this.camera) this.camera.tick(delta);
     }
     protected render(context: CanvasRenderingContext2D) {
+        if (!context) throw new Error(`What the heck just happened? There is no rendering context!`);
         let camera = this.camera;
         if (camera) camera.push(context);
         for (let obj of this._objects) {
