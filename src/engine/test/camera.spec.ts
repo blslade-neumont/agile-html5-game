@@ -71,6 +71,12 @@ describe('Camera', () => {
             expect(camera.zoomScale).to.be.closeTo(.5, .00001);
         });
     });
+
+    describe('.enableSmoothing', () => {
+        it('should be enabled by default', () => {
+            expect(camera.enableSmoothing).to.be.true;
+        });
+    });
     
     describe('.bounds', () => {
         it('should be centered around the center position', () => {
