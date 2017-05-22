@@ -6,7 +6,6 @@ import * as sinonChai from 'sinon-chai';
 use(sinonChai);
 
 import { Player } from '../player';
-import { stubDocument, stubImage, stubCanvas } from '../engine/test';
 import { MockEventQueue } from './mock-event-queue';
 import { MockWorld } from './mock-world';
 import { alives } from '../dbs/alive-db';

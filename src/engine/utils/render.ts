@@ -1,4 +1,4 @@
-﻿import { SpriteT, SimpleSpriteT, SingleTileSpriteT, AnimationSpriteT, isSimpleSprite, isSingleTileSprite, isAnimationSprite } from './sprite';
+﻿import { SpriteT, SimpleSpriteT, SingleTileSpriteT, AnimationSpriteT, isSingleTileSprite, isAnimationSprite } from './sprite';
 import { ResourceLoader } from '../resource-loader';
 import { fmod } from '../utils/math';
 

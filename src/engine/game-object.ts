@@ -24,7 +24,7 @@ export interface GameObjectOptions {
 };
 
 export class GameObject {
-    constructor(name: string, opts: GameObjectOptions = {}, private readonly DEBUG_MOVEMENT = false) {
+    constructor(name: string, opts: GameObjectOptions = {}) {
         this._name = name;
 
         if (typeof opts.x != 'undefined') this.x = opts.x;
@@ -45,8 +45,10 @@ export class GameObject {
         else if (typeof opts.maxHealth != 'undefined' && typeof opts.currentHealth == 'undefined') this.currentHealth = opts.maxHealth;
     }
 
+    private DEBUG_MOVEMENT = false;
+
     private _name;
-    get name() {
+    get name(): string {
         return this._name;
     }
 
