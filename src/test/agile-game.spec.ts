@@ -7,23 +7,21 @@ use(sinonChai);
 
 import { AgileGame } from '../agile-game';
 import { GameObject, delay } from '../engine';
-import { stubDocument, stubImage, stubCanvas } from '../engine/test';
+import { stubDocument, stubImage } from '../engine/test';
 
 describe('AgileGame', () => {
     stubDocument();
     stubImage();
-    stubCanvas();
 
     let game: AgileGame;
     beforeEach(() => {
-        game = new AgileGame(30, new HTMLCanvasElement());
+        game = new AgileGame(30);
     });
     afterEach(() => {
         if (game.isRunning) game.stop();
     });
 
-    it('should start with no grid renderer or world', () => {
-        expect(game.gridRenderer).not.to.be.ok;
+    it('should start with no world', () => {
         expect(game.world).not.to.be.ok;
     });
 
@@ -42,7 +40,8 @@ describe('AgileGame', () => {
         });
         it('should create a new grid renderer', () => {
             game.start();
-            expect(game.gridRenderer).to.be.ok;
+            let gridRenderer = game.findObject('GridRenderer');
+            expect(gridRenderer).to.be.ok;
         });
     });
 
@@ -52,15 +51,6 @@ describe('AgileGame', () => {
             sinon.stub(game.world, 'tick');
             (<any>game).tick(.033);
             expect(game.world.tick).to.have.been.calledOnce;
-        });
-    });
-
-    describe('.render', () => {
-        it('should invoke gridRenderer.render', () => {
-            game.start();
-            sinon.stub(game.gridRenderer, 'render');
-            (<any>game).render((<any>game).context);
-            expect(game.gridRenderer.render).to.have.been.calledOnce;
         });
     });
 });

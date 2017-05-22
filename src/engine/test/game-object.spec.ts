@@ -7,10 +7,12 @@ use(sinonChai);
 
 import { GameObject } from '../game-object';
 import { Game } from '../game';
-import { stubCanvas } from './mock-canvas';
+import { stubDocument } from './mock-document';
 import * as renderUtils from '../utils/render';
 
 describe('GameObject', () => {
+    stubDocument();
+
     it('should start without a resourceLoader, eventQueue, or game', () => {
         let gobj = new GameObject('name');
         expect(gobj.game).not.to.be.ok;
@@ -55,14 +57,6 @@ describe('GameObject', () => {
             expect(gobj.hspeed).to.be.closeTo(0, .00001);
             expect(gobj.vspeed).to.be.closeTo(4, .00001);
         });
-        it('should not change if speed is set to 0', () => {
-            let gobj = new GameObject('name', { hspeed: -4, vspeed: 0 });
-            expect(gobj.direction).to.eq(180);
-            gobj.speed = 0;
-            expect(gobj.hspeed).to.be.closeTo(0, .00001);
-            expect(gobj.vspeed).to.be.closeTo(0, .00001);
-            expect(gobj.direction).to.be.closeTo(180, .00001);
-        });
         it('should normalize the value when it is less than 0 or greater than 360', () => {
             let gobj = new GameObject('name');
             gobj.direction = -20;
@@ -71,6 +65,17 @@ describe('GameObject', () => {
             expect(gobj.direction).to.be.closeTo(20, .00001);
             gobj.direction = 42 + (360 * 25);
             expect(gobj.direction).to.be.closeTo(42, .00001);
+        });
+        it('should invoke console.log when the setter is called if DEBUG_MOVEMENT is true', () => {
+            let stub: sinon.SinonStub;
+            try {
+                stub = sinon.stub(console, 'log');
+                let gobj = new GameObject('name');
+                (<any>gobj).DEBUG_MOVEMENT = true;
+                gobj.direction = 32;
+                expect(console.log).to.have.been.calledWith(sinon.match(/setting direction/i));
+                expect(console.log).to.have.been.calledWith(sinon.match(/hspeed:.*vspeed:/i));
+            } finally { if (stub) stub.restore(); }
         });
     });
     describe('.speed', () => {
@@ -85,6 +90,34 @@ describe('GameObject', () => {
             let gobj = new GameObject('name');
             expect(() => gobj.speed = -2).to.throw(/invalid speed/i);
         });
+        it('should not change direction if set to 0', () => {
+            let gobj = new GameObject('name', { hspeed: -4, vspeed: 0 });
+            expect(gobj.direction).to.be.closeTo(180, .00001);
+            expect(gobj.speed).to.be.closeTo(4, .00001);
+            gobj.speed = 0;
+            expect(gobj.hspeed).to.be.closeTo(0, .00001);
+            expect(gobj.vspeed).to.be.closeTo(0, .00001);
+            expect(gobj.direction).to.be.closeTo(180, .00001);
+        });
+        it('should not change hspeed and vspeed if set to the same value', () => {
+            let gobj = new GameObject('name', { hspeed: -4, vspeed: 0 });
+            (<any>gobj)._hspeed = 29;
+            (<any>gobj)._vspeed = 63;
+            gobj.speed = 4;
+            expect(gobj.hspeed).to.be.closeTo(29, .00001);
+            expect(gobj.vspeed).to.be.closeTo(63, .00001);
+        });
+        it('should invoke console.log when the setter is called if DEBUG_MOVEMENT is true', () => {
+            let stub: sinon.SinonStub;
+            try {
+                stub = sinon.stub(console, 'log');
+                let gobj = new GameObject('name');
+                (<any>gobj).DEBUG_MOVEMENT = true;
+                gobj.speed = 12;
+                expect(console.log).to.have.been.calledWith(sinon.match(/setting speed/i));
+                expect(console.log).to.have.been.calledWith(sinon.match(/hspeed:.*vspeed:/i));
+            } finally { if (stub) stub.restore(); }
+        });
     });
     describe('.hspeed', () => {
         it('should modify speed and direction when it changes', () => {
@@ -95,6 +128,25 @@ describe('GameObject', () => {
             expect(gobj.direction).to.be.closeTo(180, .00001);
             expect(gobj.speed).to.be.closeTo(2, .00001);
         });
+        it('should not change direction if set to 0 and vspeed is already 0', () => {
+            let gobj = new GameObject('name', { hspeed: -4, vspeed: 0 });
+            expect(gobj.direction).to.be.closeTo(180, .00001);
+            gobj.hspeed = 0;
+            expect(gobj.hspeed).to.be.closeTo(0, .00001);
+            expect(gobj.vspeed).to.be.closeTo(0, .00001);
+            expect(gobj.direction).to.be.closeTo(180, .00001);
+        });
+        it('should invoke console.log when the setter is called if DEBUG_MOVEMENT is true', () => {
+            let stub: sinon.SinonStub;
+            try {
+                stub = sinon.stub(console, 'log');
+                let gobj = new GameObject('name');
+                (<any>gobj).DEBUG_MOVEMENT = true;
+                gobj.hspeed = 12;
+                expect(console.log).to.have.been.calledWith(sinon.match(/setting hspeed/i));
+                expect(console.log).to.have.been.calledWith(sinon.match(/speed:.*direction:/i));
+            } finally { if (stub) stub.restore(); }
+        });
     });
     describe('.vspeed', () => {
         it('should modify speed and direction when it changes', () => {
@@ -104,6 +156,25 @@ describe('GameObject', () => {
             gobj.vspeed = -2;
             expect(gobj.direction).to.be.closeTo(270, .00001);
             expect(gobj.speed).to.be.closeTo(2, .00001);
+        });
+        it('should not change direction if set to 0 and hspeed is already 0', () => {
+            let gobj = new GameObject('name', { hspeed: 0, vspeed: 4 });
+            expect(gobj.direction).to.be.closeTo(90, .00001);
+            gobj.vspeed = 0;
+            expect(gobj.hspeed).to.be.closeTo(0, .00001);
+            expect(gobj.vspeed).to.be.closeTo(0, .00001);
+            expect(gobj.direction).to.be.closeTo(90, .00001);
+        });
+        it('should invoke console.log when the setter is called if DEBUG_MOVEMENT is true', () => {
+            let stub: sinon.SinonStub;
+            try {
+                stub = sinon.stub(console, 'log');
+                let gobj = new GameObject('name');
+                (<any>gobj).DEBUG_MOVEMENT = true;
+                gobj.vspeed = 12;
+                expect(console.log).to.have.been.calledWith(sinon.match(/setting vspeed/i));
+                expect(console.log).to.have.been.calledWith(sinon.match(/speed:.*direction:/i));
+            } finally { if (stub) stub.restore(); }
         });
     });
 
@@ -116,6 +187,11 @@ describe('GameObject', () => {
             expect(gobj.resources).to.deep.eq(testGame.resourceLoader);
             expect(gobj.events).to.deep.eq(testGame.eventQueue);
         });
+        it('should throw an error if the game object is already added to a game', () => {
+            let gobj = new GameObject('test');
+            gobj.addToGame(testGame);
+            expect(() => gobj.addToGame(testGame)).to.throw(/already added to a game/i);
+        });
     });
 
     describe('.removeFromGame', () => {
@@ -127,6 +203,13 @@ describe('GameObject', () => {
             expect(gobj.game).not.to.be.ok;
             expect(gobj.resources).not.to.be.ok;
             expect(gobj.events).not.to.be.ok;
+        });
+    });
+
+    describe('.handleEvent', () => {
+        it('should not throw an error', () => {
+            let gobj = new GameObject('name', { x: 0, y: 0, hspeed: 0, vspeed: 0 });
+            expect(gobj.handleEvent(<any>void(0))).not.to.throw;
         });
     });
 
@@ -156,8 +239,6 @@ describe('GameObject', () => {
     });
 
     describe('.render', () => {
-        stubCanvas();
-
         let context: CanvasRenderingContext2D;
         let drawSpriteStub: sinon.SinonStub;
         beforeEach(() => {

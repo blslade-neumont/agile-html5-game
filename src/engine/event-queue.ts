@@ -1,9 +1,13 @@
 ﻿import { GameEvent, MouseButton } from './utils/events';
 
 export class EventQueue {
-    constructor(private readonly DEBUG_KEYS = false, private readonly DEBUG_MOUSE = false) {
+    constructor() {
         this.init();
     }
+
+    private DEBUG_KEYS = false;
+    private DEBUG_MOUSE = false;
+
     private init() {
         let body = document.getElementsByTagName('body')[0];
         this.initKeyboard(body);
@@ -11,7 +15,7 @@ export class EventQueue {
     }
     private initKeyboard(body: HTMLBodyElement) {
         body.onkeydown = e => {
-            if (this.DEBUG_KEYS) console.log(`Pressed: ${e.key}; ${e.code}`);
+            if (this.DEBUG_KEYS) console.log(`Key Pressed: ${e.key}; ${e.code}`);
             if (!this.isKeyDown(e.code)) {
                 this.enqueue({
                     type: 'keyPressed',
@@ -32,7 +36,7 @@ export class EventQueue {
             });
         };
         body.onkeyup = e => {
-            if (this.DEBUG_KEYS) console.log(`Released: ${e.key}; ${e.code}`);
+            if (this.DEBUG_KEYS) console.log(`Key Released: ${e.key}; ${e.code}`);
             if (this.isKeyDown(e.code)) {
                 this.enqueue({
                     type: 'keyReleased',
@@ -88,13 +92,13 @@ export class EventQueue {
                 this._mouseButtons.set(e.button, false);
             }
         };
-        body.onmousewheel = e => {
-            if (this.DEBUG_MOUSE) console.log(`Mouse wheel. delta: ${e.wheelDelta}; Position: ${e.pageX}, ${e.pageY}`);
+        body.onwheel = e => {
+            if (this.DEBUG_MOUSE) console.log(`Mouse wheel. delta: ${e.deltaY}; Position: ${e.pageX}, ${e.pageY}`);
             if (typeof e.pageX !== 'undefined') this._pageX = e.pageX;
             if (typeof e.pageY !== 'undefined') this._pageY = e.pageY;
             this.enqueue({
                 type: 'mouseWheel',
-                delta: e.wheelDelta,
+                delta: e.deltaY,
                 pageX: this._pageX,
                 pageY: this._pageY
             });

@@ -12,7 +12,6 @@ import { delay } from '../utils/delay';
 
 import { Game } from '../game';
 import { stubImage } from './mock-image';
-import { stubCanvas } from './mock-canvas';
 
 describe('EventQueue', () => {
     stubDocument();
@@ -56,6 +55,16 @@ describe('EventQueue', () => {
                     shiftPressed: false
                 }]);
             });
+            it('should invoke console.log if DEBUG_KEYS is true', () => {
+                let stub: sinon.SinonStub;
+                try {
+                    stub = sinon.stub(console, 'log');
+                    (<any>events).DEBUG_KEYS = true;
+                    let body = document.getElementsByTagName('body')[0];
+                    body.onkeydown(<any>{ code: 'ArrowUp', key: 'ArrowUp' });
+                    expect(console.log).to.have.been.calledWith(sinon.match(/key pressed/i));
+                } finally { if (stub) stub.restore(); }
+            });
         });
 
         describe('onkeyup', () => {
@@ -79,6 +88,16 @@ describe('EventQueue', () => {
                 events.clearQueue();
                 body.onkeyup(<any>{ code: 'ArrowUp', key: 'ArrowUp' });
                 expect(events.clearQueue()).to.deep.eq([]);
+            });
+            it('should invoke console.log if DEBUG_KEYS is true', () => {
+                let stub: sinon.SinonStub;
+                try {
+                    stub = sinon.stub(console, 'log');
+                    (<any>events).DEBUG_KEYS = true;
+                    let body = document.getElementsByTagName('body')[0];
+                    body.onkeyup(<any>{ code: 'ArrowUp', key: 'ArrowUp' });
+                    expect(console.log).to.have.been.calledWith(sinon.match(/key released/i));
+                } finally { if (stub) stub.restore(); }
             });
         });
 
@@ -127,6 +146,26 @@ describe('EventQueue', () => {
                 }]);
                 expect(events.enqueue).to.have.been.calledTwice;
             });
+            it('should set the mouse position if one is defined', () => {
+                let body = document.getElementsByTagName('body')[0];
+                body.onmousemove(<any>{ button: 0, movementX: 999, movementY: 999, pageX: 97, pageY: 83 });
+                expect(events.mousePosition).to.deep.eq({ x: 97, y: 83 });
+            });
+            it('should infer the mouse position if only the movement vector is defined', () => {
+                let body = document.getElementsByTagName('body')[0];
+                body.onmousemove(<any>{ button: 0, movementX: -13, movementY: 79 });
+                expect(events.mousePosition).to.deep.eq({ x: -13, y: 79 });
+            });
+            it('should invoke console.log if DEBUG_MOUSE is true', () => {
+                let stub: sinon.SinonStub;
+                try {
+                    stub = sinon.stub(console, 'log');
+                    (<any>events).DEBUG_MOUSE = true;
+                    let body = document.getElementsByTagName('body')[0];
+                    body.onmousemove(<any>{ movementX: 0, movementY: 0 });
+                    expect(console.log).to.have.been.calledWith(sinon.match(/mouse moved/i));
+                } finally { if (stub) stub.restore(); }
+            });
         });
         
         describe('onmousedown', () => {
@@ -151,6 +190,16 @@ describe('EventQueue', () => {
                 let body = document.getElementsByTagName('body')[0];
                 body.onmousedown(<any>{ button: 0, pageX: 42, pageY: 13 });
                 expect(events.mousePosition).to.deep.eq({ x: 42, y: 13 });
+            });
+            it('should invoke console.log if DEBUG_MOUSE is true', () => {
+                let stub: sinon.SinonStub;
+                try {
+                    stub = sinon.stub(console, 'log');
+                    (<any>events).DEBUG_MOUSE = true;
+                    let body = document.getElementsByTagName('body')[0];
+                    body.onmousedown(<any>{ button: 0 });
+                    expect(console.log).to.have.been.calledWith(sinon.match(/mouse button pressed/i));
+                } finally { if (stub) stub.restore(); }
             });
         });
 
@@ -181,12 +230,22 @@ describe('EventQueue', () => {
                 body.onmouseup(<any>{ button: 0, pageX: 42, pageY: 13 });
                 expect(events.mousePosition).to.deep.eq({ x: 42, y: 13 });
             });
+            it('should invoke console.log if DEBUG_MOUSE is true', () => {
+                let stub: sinon.SinonStub;
+                try {
+                    stub = sinon.stub(console, 'log');
+                    (<any>events).DEBUG_MOUSE = true;
+                    let body = document.getElementsByTagName('body')[0];
+                    body.onmouseup(<any>{ button: 0 });
+                    expect(console.log).to.have.been.calledWith(sinon.match(/mouse button released/i));
+                } finally { if (stub) stub.restore(); }
+            });
         });
         
         describe('onmousewheel', () => {
             it('should emit a mouseWheel event when the wheel is moved', () => {
                 let body = document.getElementsByTagName('body')[0];
-                body.onmousewheel(<any>{ wheelDelta: -4 });
+                body.onwheel(<any>{ deltaY: -4 });
                 expect(events.clearQueue()).to.deep.eq([{
                     type: 'mouseWheel',
                     delta: -4,
@@ -197,8 +256,8 @@ describe('EventQueue', () => {
             it('should emit only one mouseWheel event per frame even if multiple are fired', () => {
                 sinon.spy(events, 'enqueue');
                 let body = document.getElementsByTagName('body')[0];
-                body.onmousewheel(<any>{ wheelDelta: -4 });
-                body.onmousewheel(<any>{ wheelDelta: -5 });
+                body.onwheel(<any>{ deltaY: -4 });
+                body.onwheel(<any>{ deltaY: -5 });
                 expect(events.clearQueue()).to.deep.eq([{
                     type: 'mouseWheel',
                     delta: -9,
@@ -206,6 +265,21 @@ describe('EventQueue', () => {
                     pageY: 0
                 }]);
                 expect(events.enqueue).to.have.been.calledTwice;
+            });
+            it('should set the mouse position if one is defined', () => {
+                let body = document.getElementsByTagName('body')[0];
+                body.onwheel(<any>{ button: 0, movementX: 999, movementY: 999, pageX: 97, pageY: 83 });
+                expect(events.mousePosition).to.deep.eq({ x: 97, y: 83 });
+            });
+            it('should invoke console.log if DEBUG_MOUSE is true', () => {
+                let stub: sinon.SinonStub;
+                try {
+                    stub = sinon.stub(console, 'log');
+                    (<any>events).DEBUG_MOUSE = true;
+                    let body = document.getElementsByTagName('body')[0];
+                    body.onwheel(<any>{ wheelDelta: 13 });
+                    expect(console.log).to.have.been.calledWith(sinon.match(/mouse wheel/i));
+                } finally { if (stub) stub.restore(); }
             });
         });
 
@@ -246,11 +320,10 @@ describe('EventQueue', () => {
 
     describe('canvas resize', () => {
         stubImage();
-        stubCanvas();
 
         let game: Game;
         beforeEach(() => {
-            game = new Game(30, new HTMLCanvasElement());
+            game = new Game(30);
             events = game.eventQueue;
         });
         afterEach(() => {
@@ -259,7 +332,7 @@ describe('EventQueue', () => {
 
         describe('onresize', () => {
             it('should emit a canvasResize event when the body is resized', () => {
-                let canvas = (<any>game).canvas;
+                let canvas = (<any>game).canvas = <any>new HTMLCanvasElement();
                 let body = document.getElementsByTagName('body')[0];
                 [canvas.scrollWidth, canvas.scrollHeight] = [123, 456];
                 body.onresize(<any>void(0));
@@ -271,7 +344,7 @@ describe('EventQueue', () => {
             });
             it('should emit only one canvasResize event per frame even if multiple are fired', () => {
                 sinon.spy(events, 'enqueue');
-                let canvas = (<any>game).canvas;
+                let canvas = (<any>game).canvas = <any>new HTMLCanvasElement();
                 let body = document.getElementsByTagName('body')[0];
                 [canvas.scrollWidth, canvas.scrollHeight] = [123, 456];
                 body.onresize(<any>void (0));

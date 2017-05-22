@@ -75,10 +75,11 @@ export class Player extends GameObject {
 
         super.tick(delta);
     }
-
-    render(context: CanvasRenderingContext2D) {
-        if (!this.shouldRender) return;
-        context.fillStyle = 'green';
-        context.fillRect(this.x, this.y, SIZE, SIZE);
+  
+    handleEvent(evt: GameEvent) {
+        if (evt.type == 'mouseWheel') {
+            let scale = Math.pow(2, -evt.delta / 30);
+            this.game.camera.zoomScale *= scale;
+        }
     }
 }
