@@ -93,7 +93,6 @@ describe('Player', () => {
                 let [oldX, oldY] = [player.x = 32, player.y = 0];
                 player.tick(.02);
                 expect(player.x).to.be.greaterThan(oldX);
-                console.log(player.x);
                 expect(player.y).to.be.eq(oldY);
             });
 
