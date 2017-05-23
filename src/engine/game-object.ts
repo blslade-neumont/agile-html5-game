@@ -3,7 +3,6 @@ import { Game } from './game';
 import { GameEvent } from './utils/events';
 import { SpriteT } from './utils/sprite';
 import { drawSprite } from './utils/render';
-import { clamp } from './utils/math';
 import { GameScene } from './game-scene';
 
 export interface GameObjectOptions {
@@ -42,10 +41,6 @@ export class GameObject {
         if (typeof opts.sprite != 'undefined') this.sprite = opts.sprite;
         if (typeof opts.animationAge != 'undefined') this.animationAge = opts.animationAge;
         if (typeof opts.animationSpeed != 'undefined') this.animationSpeed = opts.animationSpeed;
-        
-        if (typeof opts.maxHealth != 'undefined') this._maxHealth = opts.maxHealth;
-        if (typeof opts.currentHealth != 'undefined') this.currentHealth = opts.currentHealth;
-        else if (typeof opts.maxHealth != 'undefined' && typeof opts.currentHealth == 'undefined') this.currentHealth = opts.maxHealth;
     }
 
     private DEBUG_MOVEMENT = false;
@@ -216,16 +211,5 @@ export class GameObject {
         }
     }
     
-    private _maxHealth = 0;
-    get maxHealth() {
-        return this._maxHealth;
-    }
 
-    private _currentHealth = 0;
-    get currentHealth() {
-        return this._currentHealth;
-    }
-    set currentHealth(val) {
-        this._currentHealth = clamp(val, 0, this._maxHealth);
-    }
 }

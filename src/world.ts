@@ -38,6 +38,8 @@ export class World extends GameObject {
             for (let y: number = 0; y < this._tilesY; ++y) {
                 if (isWall(x, y)) this.tileNames.push('wallTop');
                 else if (isWall(x, y - 1)) this.tileNames.push('wallSide');
+                else if (x % 3 == 0) this.tileNames.push('lava_left');
+                else if (x % 3 == 1) this.tileNames.push('lava_right');
                 else this.tileNames.push('grass');
             }
         }
