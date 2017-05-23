@@ -1,6 +1,7 @@
 ﻿
 
 export * from './delay';
+export * from './event-emitter';
 export * from './events';
 export * from './math';
 export * from './preload-strategy';
