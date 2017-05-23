@@ -5,7 +5,7 @@ import * as sinon from 'sinon';
 import * as sinonChai from 'sinon-chai';
 use(sinonChai);
 
-import { fillText, drawSprite } from '../render';
+import { fillText, drawSprite, measureSprite } from '../render';
 import { stubDocument } from '../../test/mock-document';
 import { ResourceLoader } from '../../resource-loader';
 import * as _ from 'lodash';
@@ -35,6 +35,29 @@ describe('utils/fillText', () => {
     });
 });
 
+let simpleSprite = { src: 'blah' };
+let tiledSprite = {
+    src: 'blah',
+    tileset: {
+        width: 32,
+        height: 32,
+        tilex: 1,
+        tiley: 1
+    }
+};
+let animatedSprite = {
+    src: 'blah',
+    tileset: {
+        width: 32,
+        height: 32
+    },
+    frames: [
+        { tilex: 0, tiley: 0 },
+        { tilex: 1, tiley: 0 },
+        { tilex: 2, tiley: 0 }
+    ]
+};
+
 describe('utils/drawSprite', () => {
     stubDocument();
 
@@ -61,7 +84,7 @@ describe('utils/drawSprite', () => {
     });
 
     describe('with a simple sprite', () => {
-        let sprite = { src: 'blah' };
+        let sprite = simpleSprite;
 
         it('should render the image', () => {
             sinon.stub(context, 'drawImage');
@@ -81,15 +104,7 @@ describe('utils/drawSprite', () => {
     });
 
     describe('with a tiled sprite', () => {
-        let sprite = {
-            src: 'blah',
-            tileset: {
-                width: 32,
-                height: 32,
-                tilex: 1,
-                tiley: 1
-            }
-        };
+        let sprite = tiledSprite;
 
         it('should render the image', () => {
             sinon.stub(context, 'drawImage');
@@ -117,18 +132,7 @@ describe('utils/drawSprite', () => {
     });
 
     describe('with an animated sprite', () => {
-        let sprite = {
-            src: 'blah',
-            tileset: {
-                width: 32,
-                height: 32
-            },
-            frames: [
-                { tilex: 0, tiley: 0 },
-                { tilex: 1, tiley: 0 },
-                { tilex: 2, tiley: 0 }
-            ]
-        };
+        let sprite = animatedSprite;
 
         it('should render the image', () => {
             sinon.stub(context, 'drawImage');
@@ -184,6 +188,60 @@ describe('utils/drawSprite', () => {
             let subject = expect(context.drawImage).to.have.been;
             subject.calledOnce;
             subject.calledWithExactly(any, any, any, any, any, 8, 25, any, any);
+        });
+    });
+});
+
+describe('utils/measureSprite', () => {
+    stubDocument();
+    
+    let img = <any>{ width: 42, height: 64 };
+    let expectedDims = { width: img.width, height: img.height };
+    let loader: ResourceLoader = <any>{ loadImage: () => img };
+
+    describe('with an invalid resource loader', () => {
+        it('should not throw an error', () => {
+            expect(() => measureSprite(null, { src: 'some-source' })).not.to.throw;
+        });
+    });
+
+    describe('with an invalid sprite', () => {
+        it('should throw an error if sprite is falsey', () => {
+            expect(() => measureSprite(loader, <any>null)).to.throw(/invalid sprite/i);
+        });
+        it('should throw an error if sprite has no src', () => {
+            expect(() => measureSprite(loader, <any>{})).to.throw(/invalid sprite/i);
+        });
+    });
+
+    describe('with a simple sprite', () => {
+        let sprite = simpleSprite;
+
+        it(`should return the load image's dimensions`, () => {
+            let result = measureSprite(loader, sprite);
+            expect(result).to.deep.eq(expectedDims);
+        });
+        it(`should return { width: 0, height: 0 } if the image is not done loading`, () => {
+            let result = measureSprite(<any>{ loadImage: () => (<any>{ }) }, sprite);
+            expect(result).to.deep.eq({ width: 0, height: 0 });
+        });
+    });
+
+    describe('with a tiled sprite', () => {
+        let sprite = tiledSprite;
+
+        it('should return the tile width and height', () => {
+            let result = measureSprite(loader, sprite);
+            expect(result).to.deep.eq({ width: 32, height: 32 });
+        });
+    });
+
+    describe('with a animated sprite', () => {
+        let sprite = animatedSprite;
+
+        it('should return the tile width and height', () => {
+            let result = measureSprite(loader, sprite);
+            expect(result).to.deep.eq({ width: 32, height: 32 });
         });
     });
 });

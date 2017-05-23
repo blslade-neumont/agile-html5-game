@@ -46,6 +46,6 @@ export function measureSprite(loader: ResourceLoader, sprite: SpriteT) {
         return { width: width, height: height };
     }
     else {
-        return { width: img.width, height: img.height };
+        return { width: img.width || 0, height: img.height || 0 };
     }
 }
