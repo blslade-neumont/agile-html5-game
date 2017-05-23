@@ -1,4 +1,5 @@
 ﻿import { Game } from './game';
+import { clamp } from './utils/math';
 
 export class Camera {
     constructor(private readonly _game: Game) {
@@ -31,7 +32,29 @@ export class Camera {
     }
     set zoomScale(val) {
         if (val <= 0) throw new Error(`The zoom scale must be positive`);
-        this._zoomScale = val;
+        this._zoomScale = clamp(val, this.minZoomScale, this.maxZoomScale);
+    }
+
+    private _maxZoomScale = 4;
+    get maxZoomScale() {
+        return this._maxZoomScale;
+    }
+    set maxZoomScale(val) {
+        if (val <= 0) throw new Error(`The max zoom scale must be positive`);
+        if (val < this._minZoomScale) throw new Error(`The min zoom scale is greater than the max zoom scale.`);
+        this._maxZoomScale = val;
+        this.zoomScale = this.zoomScale;
+    }
+
+    private _minZoomScale = .25;
+    get minZoomScale() {
+        return this._minZoomScale;
+    }
+    set minZoomScale(val) {
+        if (val <= 0) throw new Error(`The min zoom scale must be positive`);
+        if (val > this._maxZoomScale) throw new Error(`The max zoom scale is less than the min zoom scale.`);
+        this._minZoomScale = val;
+        this.zoomScale = this.zoomScale;
     }
 
     private _smoothing = true;

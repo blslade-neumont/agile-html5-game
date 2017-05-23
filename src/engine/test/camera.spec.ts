@@ -60,14 +60,62 @@ describe('Camera', () => {
         });
     });
     describe('.zoomScale=', () => {
-        it('should throw an error if a negative value is passed in', () => {
+        it('should throw an error if a nonnegative value is passed in', () => {
             expect(() => camera.zoomScale = -25).to.throw(/must be positive/i);
-        });
-        it('should throw an error if zero is passed in', () => {
             expect(() => camera.zoomScale = 0).to.throw(/must be positive/i);
         });
         it('should update the zoom scale if a valid value is passed in', () => {
             camera.zoomScale = .5;
+            expect(camera.zoomScale).to.be.closeTo(.5, .00001);
+        });
+        it('should clamp the zoom scale to between the min and max zoom scales', () => {
+            camera.zoomScale = .1;
+            expect(camera.zoomScale).to.be.closeTo(.25, .00001);
+            camera.zoomScale = 5;
+            expect(camera.zoomScale).to.be.closeTo(4, .00001);
+        });
+    });
+
+    describe('.minZoomScale', () => {
+        it('should start at .25', () => {
+            expect(camera.minZoomScale).to.be.closeTo(.25, .00001);
+        });
+    });
+    describe('.minZoomScale=', () => {
+        it('should throw an error if a nonnegative value is passed in', () => {
+            expect(() => camera.minZoomScale = -25).to.throw(/must be positive/i);
+            expect(() => camera.minZoomScale = 0).to.throw(/must be positive/i);
+        });
+        it('should throw an error if the value passed in is greater than the max zoom scale', () => {
+            expect(() => camera.minZoomScale = 5).to.throw(/max zoom scale is less than .*min zoom scale/i);
+        });
+        it('should not throw an error if the value passed in is the max zoom scale', () => {
+            expect(() => camera.minZoomScale = 4).not.to.throw;
+        });
+        it('should clamp the zoom scale to the new min zoom scale', () => {
+            camera.minZoomScale = 2;
+            expect(camera.zoomScale).to.be.closeTo(2, .00001);
+        });
+    });
+
+    describe('.maxZoomScale', () => {
+        it('should start at 4', () => {
+            expect(camera.maxZoomScale).to.be.closeTo(4, .00001);
+        });
+    });
+    describe('.maxZoomScale=', () => {
+        it('should throw an error if a nonnegative value is passed in', () => {
+            expect(() => camera.maxZoomScale = -25).to.throw(/must be positive/i);
+            expect(() => camera.maxZoomScale = 0).to.throw(/must be positive/i);
+        });
+        it('should throw an error if the value passed in is less than the min zoom scale', () => {
+            expect(() => camera.maxZoomScale = .2).to.throw(/min zoom scale is greater than .*max zoom scale/i);
+        });
+        it('should not throw an error if the value passed in is the max zoom scale', () => {
+            expect(() => camera.maxZoomScale = .25).not.to.throw;
+        });
+        it('should clamp the zoom scale to the new max zoom scale', () => {
+            camera.maxZoomScale = .5;
             expect(camera.zoomScale).to.be.closeTo(.5, .00001);
         });
     });
