@@ -9,6 +9,7 @@ export interface GameObjectOptions {
     x?: number,
     y?: number,
 
+    shouldTick?: boolean,
     direction?: number,
     speed?: number,
     hspeed?: number,
@@ -30,6 +31,7 @@ export class GameObject {
         if (typeof opts.x != 'undefined') this.x = opts.x;
         if (typeof opts.y != 'undefined') this.y = opts.y;
 
+        if (typeof opts.shouldTick != 'undefined') this.shouldTick = opts.shouldTick;
         if (typeof opts.direction != 'undefined') this.direction = opts.direction;
         if (typeof opts.speed != 'undefined') this.speed = opts.speed;
         if (typeof opts.hspeed != 'undefined') this.hspeed = opts.hspeed;
@@ -65,6 +67,14 @@ export class GameObject {
     }
     set y(val) {
         this._y = val;
+    }
+
+    private _shouldTick = true;
+    get shouldTick() {
+        return this._shouldTick;
+    }
+    set shouldTick(val) {
+        this._shouldTick = val;
     }
 
     private _dir = 0;
@@ -181,6 +191,8 @@ export class GameObject {
     }
 
     tick(delta: number) {
+        if (!this.shouldTick) return;
+
         this.x += this.hspeed * delta;
         this.y += this.vspeed * delta;
         this.animationAge += this.animationSpeed * delta;

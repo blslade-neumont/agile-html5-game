@@ -20,6 +20,9 @@ export class GuiObject extends GameObject {
     handleEvent(evt: GameEvent) {
         if (evt.type === 'keyPressed' && evt.code == 'KeyE') {
             this.showInventory = !this.showInventory;
+            let game = <AgileGame>this.game;
+            if (this.showInventory) game.onPause.emit(void(0));
+            else game.onPlay.emit(void(0));
         }
     }
 

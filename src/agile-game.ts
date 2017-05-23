@@ -1,4 +1,4 @@
-﻿import { Game, FollowCamera } from './engine';
+﻿import { Game, FollowCamera, EventEmitter } from './engine';
 import { World } from './world';
 import { GridRenderer } from './grid-renderer';
 import { Player } from './player';
@@ -20,6 +20,15 @@ export class AgileGame extends Game {
     private _world: World = null;
     get world() {
         return this._world;
+    }
+
+    private _pause = new EventEmitter<void>();
+    get onPause() {
+        return this._pause;
+    }
+    private _play = new EventEmitter<void>();
+    get onPlay() {
+        return this._play;
     }
     
     start() {

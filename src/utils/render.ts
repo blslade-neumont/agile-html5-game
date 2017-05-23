@@ -3,11 +3,15 @@ import { GuiSpec } from '../dbs/gui-db';
 import { GameItem, items } from '../dbs/item-db';
 
 export function drawGUI(context: CanvasRenderingContext2D, game: Game, gui: GuiSpec, imageIndex = 0, defaultFps = 30) {
+    let [canvasWidth, canvasHeight] = game.canvasSize;
+    context.fillStyle = 'rgba(0, 0, 0, .4)';
+    context.fillRect(0, 0, canvasWidth, canvasHeight);
+
     let resources = game.resourceLoader;
     let imgSize = measureSprite(resources, gui.sprite);
     let offset = {
-        x: (game.canvasSize[0] / 2) - (imgSize.width / 2),
-        y: (game.canvasSize[1] / 2) - (imgSize.height / 2)
+        x: (canvasWidth / 2) - (imgSize.width / 2),
+        y: (canvasHeight / 2) - (imgSize.height / 2)
     };
     drawSprite(context, resources, gui.sprite, offset.x, offset.y, imageIndex, defaultFps);
 

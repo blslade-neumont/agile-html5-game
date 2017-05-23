@@ -1,8 +1,9 @@
 ﻿import { World } from './world';
 import { WorldTile, TILE_SIZE } from './dbs/tile-db';
 import { AgileGame } from './agile-game';
-import { ResourceLoader, GameObject, GameObjectOptions, GameEvent, fmod } from './engine';
+import { ResourceLoader, Game, GameObject, GameObjectOptions, GameEvent, fmod } from './engine';
 import { alives } from './dbs/alive-db';
+import { pauseWithGame } from './utils/pause-with-game';
 
 const MOVE_SPEED = 4 * 30;
 const SIZE = 32;
@@ -13,6 +14,11 @@ export class Player extends GameObject {
     constructor(opts: GameObjectOptions = { }) {
         super("Player", opts);
         if (!this.sprite) this.sprite = alives['katie_south'].sprite;
+    }
+
+    addToGame(game: Game) {
+        super.addToGame(game);
+        pauseWithGame(this);
     }
 
     tick(delta: number) {

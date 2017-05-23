@@ -3,6 +3,7 @@ import { WorldTile } from './dbs/tile-db';
 import { Game, GameObject, ResourceLoader, SingleTileSpriteT, drawSprite } from './engine';
 import { TILE_SIZE } from './dbs/tile-db';
 import { AgileGame } from './agile-game';
+import { pauseWithGame } from './utils/pause-with-game';
 
 export class GridRenderer extends GameObject {
     constructor() {
@@ -12,6 +13,7 @@ export class GridRenderer extends GameObject {
     addToGame(game: Game) {
         if (!game || !(game instanceof AgileGame)) throw new Error(`The GridRenderer can only be added to an AgileGame`);
         super.addToGame(game);
+        pauseWithGame(this);
     }
     
     get world() {

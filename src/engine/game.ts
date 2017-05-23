@@ -142,13 +142,13 @@ export class Game {
         let events = this._eventQueue.clearQueue();
         for (let evt of events) {
             for (let obj of this._objects) {
-                if (obj.handleEvent(evt)) break;
+                if (obj.shouldTick) if(obj.handleEvent(evt)) break;
             }
         }
     }
     protected tick(delta: number) {
         for (let obj of this._objects) {
-            obj.tick(delta);
+            if (obj.shouldTick) obj.tick(delta);
         }
         if (this.camera) this.camera.tick(delta);
     }
