@@ -1,16 +1,26 @@
-﻿import { GameObject } from './engine';
+﻿import { GameObject, GameEvent, drawSprite } from './engine';
 import { AgileGame } from './agile-game';
+import { gui } from './dbs/gui-db';
+import { drawGUI } from './utils/render';
 
 export class GuiObject extends GameObject {
-    constructor() {
+    constructor(private inventoryGui = gui['inventory']) {
         super('Gui');
     }
+
+    showInventory = false;
 
     get gameTimeString() {
         let gameTime = (<AgileGame>this.game).world.gameTime;
         let day = Math.floor(gameTime);
         let hour = Math.floor((gameTime - day) * 24);
         return `Day ${day + 1}, ${(hour + 23) % 12 + 1} ${hour < 12 ? 'AM' : 'PM'}`;
+    }
+
+    handleEvent(evt: GameEvent) {
+        if (evt.type === 'keyPressed' && evt.code == 'KeyE') {
+            this.showInventory = !this.showInventory;
+        }
     }
 
     render(context: CanvasRenderingContext2D) {
@@ -26,5 +36,10 @@ export class GuiObject extends GameObject {
         context.textAlign = 'right';
         context.textBaseline = 'top';
         context.fillText(timeText, canvasWidth - 4, 4);
+
+        if (this.showInventory) this.renderInventory(context);
+    }
+    private renderInventory(context: CanvasRenderingContext2D) {
+        drawGUI(context, this.game, this.inventoryGui);
     }
 }

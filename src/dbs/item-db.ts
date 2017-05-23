@@ -2,7 +2,7 @@
 
 export const ITEM_SIZE: number = 24;
 
-interface GameItem {
+export interface GameItem {
     sprite: SpriteT
 };
 
