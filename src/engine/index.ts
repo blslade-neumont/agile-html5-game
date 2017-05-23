@@ -10,3 +10,4 @@ export * from './game';
 export * from './game-object';
 
 export * from './utils';
+export * from './game-scene';

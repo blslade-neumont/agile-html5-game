@@ -1,4 +1,4 @@
-﻿import { ResourceLoader, Game, GameObject } from './engine';
+﻿import { ResourceLoader, Game, GameObject, GameScene } from './engine';
 import { tiles, TILE_SIZE, WorldTile } from './dbs/tile-db';
 import { pauseWithGame } from './utils/pause-with-game';
 
@@ -14,8 +14,8 @@ export class World extends GameObject {
     private tileNames: string[] = null;
     private _initialized = false;
 
-    addToGame(game: Game) {
-        super.addToGame(game);
+    addToScene(scene: GameScene) {
+        super.addToScene(scene);
         pauseWithGame(this);
     }
     

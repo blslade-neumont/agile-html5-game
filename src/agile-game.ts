@@ -7,6 +7,7 @@ import { TilePreloadStrategy } from './preload-strategies/tile-preload-strategy'
 import { ItemPreloadStrategy } from './preload-strategies/item-preload-strategy';
 import { AlivePreloadStrategy } from './preload-strategies/alive-preload-strategy';
 import { GuiPreloadStrategy } from './preload-strategies/gui-preload-strategy';
+import { GameScene } from './engine/game-scene';
 
 export class AgileGame extends Game {
     constructor(framesPerSecond = 30) {
@@ -36,14 +37,17 @@ export class AgileGame extends Game {
 
         if (!this._world) this._world = new World();
         this._world.start(this.canvas.width, this.canvas.height);
-        this.addObject(this.world);
 
-        this.addObject(new GridRenderer());
+        let scene: GameScene = new GameScene();
+        this.changeScene(scene);
+
+        scene.addObject(new GridRenderer());
         let player = new Player({ x: 64, y: 96 });
-        this.addObject(player);
-        this.addObject(new GuiObject());
+        scene.addObject(player);
+        scene.addObject(new GuiObject());
+        scene.addObject(this.world);
 
-        let camera = this.camera = new FollowCamera(this);
+        let camera = scene.camera = new FollowCamera(this);
         camera.follow = player;
         camera.enableSmoothing = false;
         camera.followOffset = [16, 16];

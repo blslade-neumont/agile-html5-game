@@ -11,6 +11,7 @@ import { Camera } from '../camera';
 import { stubDocument } from './mock-document';
 import { stubImage } from './mock-image';
 import { delay } from '../utils/delay';
+import { GameScene } from '../game-scene';
 
 describe('Game', () => {
     stubDocument();
@@ -19,11 +20,12 @@ describe('Game', () => {
     let game: Game;
     beforeEach(() => {
         game = new Game(30);
+        game.changeScene(new GameScene());
     });
     afterEach(() => {
         if (game.isRunning) game.stop();
     });
-    
+
     describe('.isRunning', () => {
         it('should start as false', () => {
             expect(game.isRunning).to.be.false;
@@ -74,13 +76,6 @@ describe('Game', () => {
         });
     });
 
-    describe('.camera', () => {
-        it('should start with a default camera', () => {
-            expect(game.camera).to.be.ok;
-            expect(game.camera).to.be.an.instanceof(Camera);
-        });
-    });
-
     describe('.refreshCanvasSize', () => {
         it(`should not modify canvasSize if the game hasn't been started yet`, () => {
             let [oldWidth, oldHeight] = game.canvasSize;
@@ -102,7 +97,7 @@ describe('Game', () => {
             let canvas = (<any>game).canvas = <any>new HTMLCanvasElement();
             [canvas.scrollWidth, canvas.scrollHeight] = [123, 456];
             expect(game.canvasSize).not.to.deep.eq([123, 456]);
-            document.getElementsByTagName('body')[0].onresize(<any>void(0));
+            document.getElementsByTagName('body')[0].onresize(<any>void (0));
             expect(game.canvasSize).to.deep.eq([123, 456]);
         });
     });
@@ -125,121 +120,7 @@ describe('Game', () => {
         });
     });
 
-    describe('.addObject', () => {
-        it('should invoke GameObject.addToGame()', () => {
-            let gobj = new GameObject('name');
-            sinon.stub(gobj, 'addToGame');
-            game.addObject(gobj);
-            expect(gobj.addToGame).to.have.been.calledOnce;
-        });
-        it('should invoke GameObject.tick and GameObject.render the next time onTick is called and the resource loader is done', () => {
-            let gobj = new GameObject('name');
-            sinon.stub(gobj, 'tick');
-            sinon.stub(gobj, 'render');
-            game.addObject(gobj);
-            game.start();
-            (<any>game)._resourceLoader = { isDone: true, render: () => void(0) };
-            (<any>game).onTick();
-            expect(gobj.tick).to.have.been.calledThrice;
-            expect(gobj.render).to.have.been.calledOnce;
-        });
-        it('should invoke GameObject.handleEvent the next time onTick is called, the resource loader is done, and there is an event', () => {
-            let gobj = new GameObject('name');
-            sinon.stub(gobj, 'handleEvent');
-            game.addObject(gobj);
-            game.start();
-            (<any>game)._resourceLoader = { isDone: true, render: () => void(0) };
-            let e: any = { type: 'fish!' };
-            game.eventQueue.enqueue(e);
-            (<any>game).onTick();
-            let subject = expect(gobj.handleEvent).to.have.been;
-            subject.calledOnce;
-            subject.calledWithExactly(e);
-        });
-    });
-    describe('.removeObject', () => {
-        it('should invoke GameObject.removeFromGame()', () => {
-            let gobj = new GameObject('name');
-            sinon.stub(gobj, 'removeFromGame');
-            game.addObject(gobj);
-            game.removeObject(gobj);
-            expect(gobj.removeFromGame).to.have.been.calledOnce;
-        });
-        it('should throw an error if the game object is not in the game', () => {
-            let gobj = new GameObject('name');
-            expect(() => game.removeObject(gobj)).to.throw(/not .*added/i);
-        });
-        it('should not invoke GameObject.tick or GameObject.render when onTick is called', () => {
-            let gobj = new GameObject('name');
-            sinon.stub(gobj, 'tick');
-            sinon.stub(gobj, 'render');
-            game.addObject(gobj);
-            game.removeObject(gobj);
-            game.start();
-            (<any>game)._resourceLoader = { isDone: true, render: () => void(0) };
-            (<any>game).onTick();
-            expect(gobj.tick).not.to.have.been.called;
-            expect(gobj.render).not.to.have.been.called;
-        });
-        it('should not invoke GameObject.handleEvent when onTick is called and there is an event', () => {
-            let gobj = new GameObject('name');
-            sinon.stub(gobj, 'handleEvent');
-            game.addObject(gobj);
-            game.removeObject(gobj);
-            game.start();
-            (<any>game)._resourceLoader = { isDone: true, render: () => void(0) };
-            game.eventQueue.enqueue(<any>{ type: 'fish!' });
-            (<any>game).onTick();
-            expect(gobj.handleEvent).not.to.have.been.called;
-        });
-    });
-    describe('.findObject', () => {
-        let names = ['one', 'two', 'three'];
-        let gobjs = names.map(name => new GameObject(name));
 
-        beforeEach(() => {
-            gobjs.map(gobj => game.addObject(gobj));
-        });
-        afterEach(() => {
-            gobjs.map(gobj => game.removeObject(gobj));
-        });
-
-        it('should return null if the specified object is not found in this game', () => {
-            expect(game.findObject(() => false)).to.be.null;
-        });
-        it('should allow the object name to be passed as an argument', () => {
-            expect(game.findObject('two')).to.eq(gobjs[1]);
-        });
-        it('should throw an error if a falsey value that is not a string is passed in', () => {
-            expect(() => game.findObject(<any>null)).to.throw(/invalid predicate/i);
-        });
-        it('should not throw an error if the empty string is passed in', () => {
-            expect(() => game.findObject('')).not.to.throw;
-        });
-    });
-    describe('.findObjects', () => {
-        let names = ['one', 'two', 'three'];
-        let gobjs = names.map(name => new GameObject(name));
-
-        beforeEach(() => {
-            gobjs.map(gobj => game.addObject(gobj));
-        });
-        afterEach(() => {
-            gobjs.map(gobj => game.removeObject(gobj));
-        });
-
-        it('should return an empty array if the specified object is not found in this game', () => {
-            expect(game.findObjects(() => false)).to.deep.eq([]);
-        });
-        it('should throw an error if a value that is not a function is passed in', () => {
-            expect(() => game.findObjects(<any>null)).to.throw(/invalid predicate/i);
-            expect(() => game.findObjects(<any>'')).to.throw(/invalid predicate/i);
-            expect(() => game.findObjects(<any>{})).to.throw(/invalid predicate/i);
-        });
-        it('should return all game objects for which the predicate returns true', () => {
-            expect(game.findObjects(obj => obj.name.indexOf('o') != -1)).to.deep.eq([gobjs[0], gobjs[1]]);
-        });
-    });
 
     describe('.onTick', () => {
         it(`should throw an error if the game hasn't been started yet`, () => {
@@ -249,7 +130,7 @@ describe('Game', () => {
         describe('when the resource loader is not done loading', () => {
             it('should invoke ResourceLoader.render', () => {
                 game.start();
-                (<any>game)._resourceLoader = { isDone: false, render: () => void(0) };
+                (<any>game)._resourceLoader = { isDone: false, render: () => void (0) };
                 sinon.stub(game.resourceLoader, 'render');
                 sinon.stub(game, 'tick');
                 sinon.stub(game, 'render');
@@ -264,7 +145,7 @@ describe('Game', () => {
             it('should use 0 as the delta if it is the first tick', () => {
                 game.start();
                 (<any>game).LOGIC_TICKS_PER_RENDER_TICK = 1;
-                (<any>game)._resourceLoader = { isDone: true, render: () => void(0) };
+                (<any>game)._resourceLoader = { isDone: true, render: () => void (0) };
                 sinon.stub(game, 'tick');
                 (<any>game).onTick();
                 let subject = expect((<any>game).tick).to.have.been;
@@ -273,7 +154,7 @@ describe('Game', () => {
             });
             it('should specify the delta based on the previous tick time if it is not the first tick', async () => {
                 (<any>game)._isRunning = true;
-                game.camera = null;
+                game.scene.camera = null;
                 (<any>game).LOGIC_TICKS_PER_RENDER_TICK = 1;
                 (<any>game)._resourceLoader = { isDone: true, render: () => void (0) };
                 (<any>game).context = new HTMLCanvasElement().getContext('2d');
@@ -287,7 +168,7 @@ describe('Game', () => {
             });
             it('should invoke tick three times for every one time it calls render when the resource loader is done loading', () => {
                 game.start();
-                (<any>game)._resourceLoader = { isDone: true, render: () => void(0) };
+                (<any>game)._resourceLoader = { isDone: true, render: () => void (0) };
                 sinon.stub(game, 'tick');
                 sinon.stub(game, 'render');
                 (<any>game).onTick();
@@ -296,7 +177,7 @@ describe('Game', () => {
             });
             it('should invoke .sendEvents, .tick, and .render if the resource loader is done loading', () => {
                 game.start();
-                (<any>game)._resourceLoader = { isDone: true, render: () => void(0) };
+                (<any>game)._resourceLoader = { isDone: true, render: () => void (0) };
                 sinon.stub(game.resourceLoader, 'render');
                 sinon.stub(game, 'sendEvents');
                 sinon.stub(game, 'tick');
@@ -311,133 +192,54 @@ describe('Game', () => {
     });
 
     describe('.sendEvents', () => {
-        let names = ['one', 'two', 'three'];
-        let gobjs: GameObject[];
-        let stubs: sinon.SinonStub[];
-
-        beforeEach(() => {
-            gobjs = names.map(name => new GameObject(name));
-            stubs = gobjs.map(gobj => {
-                game.addObject(gobj);
-                return sinon.stub(gobj, 'handleEvent');
-            });
-        });
-        afterEach(() => {
-            gobjs.map(gobj => game.removeObject(gobj));
-            stubs.map(stub => stub.restore());
-        });
-
-        it('should invoke handleEvent on all game objects if none of them handle the event', () => {
-            game.start();
-            game.eventQueue.enqueue(<any>{ type: 'fakeEvent' });
-            (<any>game).sendEvents();
-            expect(gobjs[0].handleEvent).to.have.been.calledOnce;
-            expect(gobjs[1].handleEvent).to.have.been.calledOnce;
-            expect(gobjs[2].handleEvent).to.have.been.calledOnce;
-        });
-        it('should not invoke GameObject.handleEvent if shouldTick = false', () => {
-            game.start();
-            game.eventQueue.enqueue(<any>{ type: 'fakeEvent' });
-            gobjs[0].shouldTick = false;
-            (<any>game).sendEvents();
-            expect(gobjs[0].handleEvent).not.to.have.been.called;
-        });
-        it('should short-circuit if a game object handles an event', () => {
-            stubs[1].returns(true);
-            game.start();
-            game.eventQueue.enqueue(<any>{ type: 'fakeEvent' });
-            (<any>game).sendEvents();
-            expect(gobjs[0].handleEvent).to.have.been.calledOnce;
-            expect(gobjs[1].handleEvent).to.have.been.calledOnce;
-            expect(gobjs[2].handleEvent).not.to.have.been.called;
+        xit('should tell the current scene about events', () => {
         });
     });
 
     describe('.tick', () => {
-        let names = ['one', 'two', 'three'];
-        let gobjs: GameObject[];
-        let stubs: sinon.SinonStub[];
-
-        beforeEach(() => {
-            gobjs = names.map(name => new GameObject(name));
-            stubs = gobjs.map(gobj => {
-                game.addObject(gobj);
-                return sinon.stub(gobj, 'tick');
-            });
-        });
-        afterEach(() => {
-            gobjs.map(gobj => game.removeObject(gobj));
-            stubs.map(stub => stub.restore());
-        });
-        
-        it('should invoke tick on all game objects', () => {
-            game.start();
-            (<any>game).tick();
-            expect((<any>gobjs[0]).tick).to.have.been.calledOnce;
-            expect((<any>gobjs[1]).tick).to.have.been.calledOnce;
-            expect((<any>gobjs[2]).tick).to.have.been.calledOnce;
-        });
-        it('should not invoke GameObject.tick if shouldTick = false', () => {
-            game.start();
-            game.eventQueue.enqueue(<any>{ type: 'fakeEvent' });
-            gobjs[0].shouldTick = true;
-            (<any>game).sendEvents();
-            expect(gobjs[0].tick).not.to.have.been.called;
-        });
-        it('should invoke tick on the camera, if there is one', () => {
-            game.start();
-            game.camera = new Camera(game);
-            sinon.stub(game.camera, 'tick');
-            (<any>game).tick(45);
-            expect(game.camera.tick).to.have.been.calledOnce.calledWith(45);
+        xit('should tell the current scene to tick', () => {
         });
     });
 
     describe('.render', () => {
-        let names = ['one', 'two', 'three'];
-        let gobjs = names.map(name => new GameObject(name));
-        let stubs: sinon.SinonStub[];
+        it('should tell its scene to render', () => {
 
-        beforeEach(() => {
-            stubs = gobjs.map(gobj => {
-                game.addObject(gobj);
-                return sinon.stub(gobj, 'render');
-            });
         });
-        afterEach(() => {
-            gobjs.map(gobj => game.removeObject(gobj));
-            stubs.map(stub => stub.restore());
+    });
+
+    describe('.changeScene', () => {
+        it('should throw an error if the scene is set more than once per tick', () => {
+            game.start();
+            game.changeScene(new GameScene());
+            expect(() => game.changeScene(new GameScene())).to.throw(/Scene cannot be set more than once per tick/i);
         });
 
-        it('should throw an error if no canvas is passed in', () => {
-            expect(() => (<any>game).render(null)).to.throw(/no rendering context/i);
-        });
-        it('should invoke render on all game objects', () => {
+        it('should not throw an error if the scene is set in two consecutive ticks', () => {
             game.start();
-            (<any>game).render((<any>game).context);
-            expect(gobjs[0].render).to.have.been.calledOnce;
-            expect(gobjs[1].render).to.have.been.calledOnce;
-            expect(gobjs[2].render).to.have.been.calledOnce;
+            expect(game.changeScene(new GameScene())).not.to.throw;
+            (<any>game).tick(0.2);
+            expect(game.changeScene(new GameScene())).not.to.throw;
         });
-        it('should not invoke GameObject.render if shouldRender is false', () => {
+
+        it('should set the scene\'s game reference to the game when the scene is changed', () => {
             game.start();
-            let gobj = new GameObject('name', { shouldRender: false });
-            sinon.stub(gobj, 'render');
-            game.addObject(gobj);
-            (<any>game).render((<any>game).context);
-            expect(gobj.render).not.to.have.been.called;
+            let scene: GameScene = new GameScene();
+            expect(game.changeScene(scene)).not.to.throw;
+            (<any>game).tick(0.2);
+            expect(scene.game).to.eql(game);
         });
-        it('should invoke push and pop on the camera, if there is one', () => {
+
+        it('should throw an error if trying to pass an invalid scene', () => {
             game.start();
-            game.camera = new Camera(game);
-            sinon.stub(game.camera, 'push');
-            sinon.stub(game.camera, 'pop');
-            (<any>game).render((<any>game).context);
-            expect(game.camera.push).to.have.been.calledOnce.calledBefore(stubs[0]);
-            expect(gobjs[0].render).to.have.been.calledOnce;
-            expect(gobjs[1].render).to.have.been.calledOnce;
-            expect(gobjs[2].render).to.have.been.calledOnce;
-            expect(game.camera.pop).to.have.been.calledOnce.calledAfter(stubs[2]);
+            expect(() => game.changeScene(null)).to.throw(/Bad Scene/i);
+        });
+
+        xit('should initialize the scene on swap', () => {
+
+        });
+
+        xit('should immediately change scenes if there is no current scene', () => {
+
         });
     });
 });

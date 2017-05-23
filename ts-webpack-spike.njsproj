@@ -54,6 +54,10 @@
       <SubType>Code</SubType>
     </Content>
     <Content Include="tsconfig.json" />
+    <TypeScriptCompile Include="src\engine\game-scene.ts" />
+    <TypeScriptCompile Include="src\engine\test\game-scene.spec.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="src\preload-strategies\alive-preload-strategy.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>

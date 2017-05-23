@@ -9,6 +9,7 @@ import { GameObject } from '../game-object';
 import { Game } from '../game';
 import { stubDocument } from './mock-document';
 import * as renderUtils from '../utils/render';
+import { GameScene } from '../game-scene';
 
 describe('GameObject', () => {
     stubDocument();
@@ -193,28 +194,29 @@ describe('GameObject', () => {
         });
     });
 
-    describe('.addToGame', () => {
-        let testGame: Game = <any>{ resourceLoader: 'fake resource loader!' };
+    describe('.addToScene', () => {
+        let testGame: Game = <any>{ resourceLoader: 'fake resource loader!', scene: new GameScene() };
         it(`should populate the 'game,' 'resources,' and 'events' helper properties`, () => {
             let gobj = new GameObject('test');
-            gobj.addToGame(testGame);
+            testGame.scene.game = testGame;
+            gobj.addToScene(testGame.scene);
             expect(gobj.game).to.deep.eq(testGame);
             expect(gobj.resources).to.deep.eq(testGame.resourceLoader);
             expect(gobj.events).to.deep.eq(testGame.eventQueue);
         });
         it('should throw an error if the game object is already added to a game', () => {
             let gobj = new GameObject('test');
-            gobj.addToGame(testGame);
-            expect(() => gobj.addToGame(testGame)).to.throw(/already added to a game/i);
+            gobj.addToScene(new GameScene());
+            expect(() => gobj.addToScene(new GameScene())).to.throw(/already added to a scene/i);
         });
     });
 
-    describe('.removeFromGame', () => {
+    describe('.removeFromScene', () => {
         let testGame: Game = <any>{ resourceLoader: 'fake resource loader!' };
         it(`should depopulate the 'game,' 'resources,' and 'events' helper properties`, () => {
             let gobj = new GameObject('test');
-            gobj.addToGame(testGame);
-            gobj.removeFromGame();
+            gobj.addToScene(new GameScene());
+            gobj.removeFromScene();
             expect(gobj.game).not.to.be.ok;
             expect(gobj.resources).not.to.be.ok;
             expect(gobj.events).not.to.be.ok;

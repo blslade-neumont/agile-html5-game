@@ -4,15 +4,16 @@ import { Game, GameObject, ResourceLoader, SingleTileSpriteT, drawSprite } from 
 import { TILE_SIZE } from './dbs/tile-db';
 import { AgileGame } from './agile-game';
 import { pauseWithGame } from './utils/pause-with-game';
+import { GameScene } from './engine/game-scene';
 
 export class GridRenderer extends GameObject {
     constructor() {
         super('GridRenderer');
     }
 
-    addToGame(game: Game) {
-        if (!game || !(game instanceof AgileGame)) throw new Error(`The GridRenderer can only be added to an AgileGame`);
-        super.addToGame(game);
+    addToScene(scene: GameScene) {
+        if (!scene || !(scene instanceof GameScene)) throw new Error(`The GridRenderer can only be added to a GameScene`);
+        super.addToScene(scene);
         pauseWithGame(this);
     }
     
@@ -27,7 +28,7 @@ export class GridRenderer extends GameObject {
 
         if (!this.shouldRender) return;
         
-        let bounds = this.game.camera.bounds;
+        let bounds = this.game.scene.camera.bounds;
         let startx = Math.floor(bounds.left / TILE_SIZE);
         let starty = Math.floor(bounds.bottom / TILE_SIZE);
         let endx = Math.floor(bounds.right / TILE_SIZE) + 1;

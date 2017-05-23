@@ -40,7 +40,7 @@ describe('AgileGame', () => {
         });
         it('should create a new grid renderer', () => {
             game.start();
-            let gridRenderer = game.findObject('GridRenderer');
+            let gridRenderer = game.scene.findObject('GridRenderer');
             expect(gridRenderer).to.be.ok;
         });
     });

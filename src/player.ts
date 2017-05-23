@@ -1,7 +1,7 @@
 ﻿import { World } from './world';
 import { WorldTile, TILE_SIZE } from './dbs/tile-db';
 import { AgileGame } from './agile-game';
-import { ResourceLoader, Game, GameObject, GameObjectOptions, GameEvent, fmod } from './engine';
+import { ResourceLoader, Game, GameObject, GameObjectOptions, GameEvent, fmod, GameScene } from './engine';
 import { alives } from './dbs/alive-db';
 import { pauseWithGame } from './utils/pause-with-game';
 
@@ -16,8 +16,8 @@ export class Player extends GameObject {
         if (!this.sprite) this.sprite = alives['katie_south'].sprite;
     }
 
-    addToGame(game: Game) {
-        super.addToGame(game);
+    addToScene(scene: GameScene) {
+        super.addToScene(scene);
         pauseWithGame(this);
     }
 
@@ -100,7 +100,7 @@ export class Player extends GameObject {
     handleEvent(evt: GameEvent) {
         if (evt.type == 'mouseWheel') {
             let scale = Math.pow(2, -evt.delta / 30);
-            this.game.camera.zoomScale *= scale;
+            this.game.scene.camera.zoomScale *= scale;
         }
     }
 }

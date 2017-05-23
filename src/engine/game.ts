@@ -1,11 +1,33 @@
-﻿import { GameObject } from './game-object';
-import { ResourceLoader } from './resource-loader';
+﻿import { ResourceLoader } from './resource-loader';
 import { EventQueue } from './event-queue';
-import { Camera } from './camera';
+import { GameScene } from './game-scene';
 
 export class Game {
     constructor(protected readonly framesPerSecond = 30) {
         this.init();
+    }
+
+    private _scene: GameScene = null;
+    private _nextScene: GameScene = null;
+
+    get scene() {
+        return this._scene;
+    }
+
+    public changeScene(newScene: GameScene) {
+        if (!newScene) { throw new Error("Tried to changeScene to a bad scene!"); }
+        if (this._nextScene) { throw new Error("Scene cannot be set more than once per tick!"); }
+        this._nextScene = newScene;
+        if (!this._scene) { this.handleSceneChange(); }
+    }
+
+    private handleSceneChange() {
+        if (this._nextScene) {
+            this._scene = this._nextScene;
+            this._nextScene = null;
+            this._scene.game = this;
+            this._scene.start();
+        }
     }
 
     private LOGIC_TICKS_PER_RENDER_TICK = 3;
@@ -15,8 +37,8 @@ export class Game {
         this._eventQueue = new EventQueue();
         let body = document.getElementsByTagName('body')[0];
         this.initResize(body);
-        this.initCamera();
     }
+
     private initResize(body: HTMLBodyElement) {
         body.onresize = e => this.refreshCanvasSize();
     }
@@ -25,9 +47,7 @@ export class Game {
             [this.canvas.width, this.canvas.height] = this.canvasSize = [this.canvas.scrollWidth, this.canvas.scrollHeight];
         }
     }
-    private initCamera() {
-        this.camera = new Camera(this);
-    }
+
 
     protected canvas: HTMLCanvasElement = null;
     private context: CanvasRenderingContext2D = null;
@@ -65,14 +85,6 @@ export class Game {
         this._isRunning = false;
     }
 
-    private _camera: Camera | null = null;
-    get camera(): Camera | null {
-        return this._camera;
-    }
-    set camera(val: Camera | null) {
-        this._camera = val;
-    }
-
     private _size: [number, number] = [640, 480];
     get canvasSize(): [number, number] {
         return [this._size[0], this._size[1]];
@@ -86,38 +98,6 @@ export class Game {
             previousSize: prevSize,
             size: [newWidth, newHeight]
         });
-    }
-
-    private _objects: GameObject[] = [];
-    addObject(obj: GameObject) {
-        this._objects.push(obj);
-        obj.addToGame(this);
-    }
-    removeObject(obj: GameObject) {
-        let idx = this._objects.indexOf(obj);
-        if (idx == -1) throw new Error(`Cannot remove game object '${obj.name}': it has not been added.`);
-        this._objects.splice(idx, 1);
-        obj.removeFromGame();
-    }
-    findObject(predicate: (obj: GameObject) => boolean): GameObject | null;
-    findObject<T extends GameObject>(predicate: (obj: GameObject) => obj is T): T | null;
-    findObject(name: string): GameObject | null;
-    findObject(predicate: string | ((obj: GameObject) => boolean)) {
-        if (typeof predicate == 'string') {
-            let name = predicate;
-            predicate = obj => obj.name == name;
-        }
-        else if (!predicate) throw new Error(`Invalid predicate: ${predicate}`);
-        for (let obj of this._objects) {
-            if (predicate(obj)) return obj;
-        }
-        return null;
-    }
-    findObjects(predicate: (obj: GameObject) => boolean): GameObject[];
-    findObjects<T extends GameObject>(predicate: (obj: GameObject) => obj is T): T[];
-    findObjects(predicate: (obj: GameObject) => boolean) {
-        if (typeof predicate !== 'function') throw new Error(`Invalid predicate: ${predicate}`);
-        return this._objects.filter(predicate);
     }
 
     private onTick() {
@@ -141,24 +121,15 @@ export class Game {
     protected sendEvents() {
         let events = this._eventQueue.clearQueue();
         for (let evt of events) {
-            for (let obj of this._objects) {
-                if (obj.shouldTick) if(obj.handleEvent(evt)) break;
-            }
+            if (this._scene) { this._scene.handleEvent(evt); }
         }
     }
     protected tick(delta: number) {
-        for (let obj of this._objects) {
-            if (obj.shouldTick) obj.tick(delta);
-        }
-        if (this.camera) this.camera.tick(delta);
+        this._scene.tick(delta);
+        if (this._scene) { this.handleSceneChange(); }
     }
     protected render(context: CanvasRenderingContext2D) {
         if (!context) throw new Error(`What the heck just happened? There is no rendering context!`);
-        let camera = this.camera;
-        if (camera) camera.push(context);
-        for (let obj of this._objects) {
-            if (obj.shouldRender) obj.render(context);
-        }
-        if (camera) camera.pop(context);
+        if (this._scene) { this._scene.render(context); }
     }
 }

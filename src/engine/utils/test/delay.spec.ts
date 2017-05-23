@@ -12,6 +12,6 @@ describe('utils/delay', () => {
         let startTime = new Date().valueOf();
         await delay(40);
         let difference = new Date().valueOf() - startTime;
-        expect(difference).to.be.closeTo(40, 15);
+        expect(difference).to.be.closeTo(40, 30);
     });
 });

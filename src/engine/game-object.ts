@@ -4,6 +4,7 @@ import { GameEvent } from './utils/events';
 import { SpriteT } from './utils/sprite';
 import { drawSprite } from './utils/render';
 import { clamp } from './utils/math';
+import { GameScene } from './game-scene';
 
 export interface GameObjectOptions {
     x?: number,
@@ -167,24 +168,25 @@ export class GameObject {
         this._animationSpeed = val;
     }
 
-    private _game: Game;
+    private _scene: GameScene;
     get game() {
-        return this._game;
+        if (!this._scene) return null;
+        return this._scene.game;
     }
     get resources() {
-        if (!this._game) return null;
+        if (!this.game) return null;
         return this.game.resourceLoader;
     }
     get events() {
-        if (!this._game) return null;
+        if (!this.game) return null;
         return this.game.eventQueue;
     }
-    addToGame(game: Game) {
-        if (this._game) throw new Error('This game object is already added to a game!');
-        this._game = game;
+    addToScene(scene: GameScene) {
+        if (this._scene) throw new Error('This game object is already added to a scene!');
+        this._scene = scene;
     }
-    removeFromGame() {
-        this._game = null;
+    removeFromScene() {
+        this._scene = null;
     }
 
     handleEvent(evt: GameEvent): boolean | void {
