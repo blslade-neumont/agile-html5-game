@@ -1,5 +1,5 @@
-﻿import { ResourceLoader, PreloadStrategy } from './engine';
-import { alives } from './dbs/alive-db';
+﻿import { ResourceLoader, PreloadStrategy } from '../engine';
+import { alives } from '../dbs/alive-db';
 
 export class AlivePreloadStrategy implements PreloadStrategy {
     preload(loader: ResourceLoader) {

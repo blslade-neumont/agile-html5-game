@@ -1,5 +1,5 @@
-﻿import { ResourceLoader, PreloadStrategy } from './engine';
-import { items } from './dbs/item-db';
+﻿import { ResourceLoader, PreloadStrategy } from '../engine';
+import { items } from '../dbs/item-db';
 
 export class ItemPreloadStrategy implements PreloadStrategy {
     preload(loader: ResourceLoader) {
