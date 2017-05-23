@@ -312,10 +312,11 @@ describe('Game', () => {
 
     describe('.sendEvents', () => {
         let names = ['one', 'two', 'three'];
-        let gobjs = names.map(name => new GameObject(name));
+        let gobjs: GameObject[];
         let stubs: sinon.SinonStub[];
 
         beforeEach(() => {
+            gobjs = names.map(name => new GameObject(name));
             stubs = gobjs.map(gobj => {
                 game.addObject(gobj);
                 return sinon.stub(gobj, 'handleEvent');
@@ -334,6 +335,13 @@ describe('Game', () => {
             expect(gobjs[1].handleEvent).to.have.been.calledOnce;
             expect(gobjs[2].handleEvent).to.have.been.calledOnce;
         });
+        it('should not invoke GameObject.handleEvent if shouldTick = false', () => {
+            game.start();
+            game.eventQueue.enqueue(<any>{ type: 'fakeEvent' });
+            gobjs[0].shouldTick = false;
+            (<any>game).sendEvents();
+            expect(gobjs[0].handleEvent).not.to.have.been.called;
+        });
         it('should short-circuit if a game object handles an event', () => {
             stubs[1].returns(true);
             game.start();
@@ -347,10 +355,11 @@ describe('Game', () => {
 
     describe('.tick', () => {
         let names = ['one', 'two', 'three'];
-        let gobjs = names.map(name => new GameObject(name));
+        let gobjs: GameObject[];
         let stubs: sinon.SinonStub[];
 
         beforeEach(() => {
+            gobjs = names.map(name => new GameObject(name));
             stubs = gobjs.map(gobj => {
                 game.addObject(gobj);
                 return sinon.stub(gobj, 'tick');
@@ -360,13 +369,20 @@ describe('Game', () => {
             gobjs.map(gobj => game.removeObject(gobj));
             stubs.map(stub => stub.restore());
         });
-
+        
         it('should invoke tick on all game objects', () => {
             game.start();
             (<any>game).tick();
             expect((<any>gobjs[0]).tick).to.have.been.calledOnce;
             expect((<any>gobjs[1]).tick).to.have.been.calledOnce;
             expect((<any>gobjs[2]).tick).to.have.been.calledOnce;
+        });
+        it('should not invoke GameObject.tick if shouldTick = false', () => {
+            game.start();
+            game.eventQueue.enqueue(<any>{ type: 'fakeEvent' });
+            gobjs[0].shouldTick = true;
+            (<any>game).sendEvents();
+            expect(gobjs[0].tick).not.to.have.been.called;
         });
         it('should invoke tick on the camera, if there is one', () => {
             game.start();
@@ -403,7 +419,7 @@ describe('Game', () => {
             expect(gobjs[1].render).to.have.been.calledOnce;
             expect(gobjs[2].render).to.have.been.calledOnce;
         });
-        it('should not call GameObject.render if shouldRender is false', () => {
+        it('should not invoke GameObject.render if shouldRender is false', () => {
             game.start();
             let gobj = new GameObject('name', { shouldRender: false });
             sinon.stub(gobj, 'render');

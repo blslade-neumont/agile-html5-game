@@ -25,9 +25,10 @@ describe('GameObject', () => {
             let gobj = new GameObject('my-name');
             expect(gobj.name).to.eq('my-name');
         });
-        it('should set x, y, direction, and speed based on the options passed in', () => {
-            let options = { x: 45, y: 12, direction: 195, speed: 4.5 };
+        it('should set shouldTick, x, y, direction, and speed based on the options passed in', () => {
+            let options = { shouldTick: false, x: 45, y: 12, direction: 195, speed: 4.5 };
             let gobj = new GameObject('my-name', options);
+            expect(gobj.shouldTick).to.eq(options.shouldTick);
             expect(gobj.x).to.eq(options.x);
             expect(gobj.y).to.eq(options.y);
             expect(gobj.direction).to.eq(options.direction);
@@ -46,6 +47,20 @@ describe('GameObject', () => {
             expect(gobj.sprite).to.eq(options.sprite);
             expect(gobj.animationAge).to.eq(options.animationAge);
             expect(gobj.animationSpeed).to.eq(options.animationSpeed);
+        });
+    });
+
+    describe('.shouldTick', () => {
+        it('should default to true', () => {
+            let gobj = new GameObject('name');
+            expect(gobj.shouldTick).to.be.true;
+        });
+    });
+
+    describe('.shouldRender', () => {
+        it('should default to true', () => {
+            let gobj = new GameObject('name');
+            expect(gobj.shouldRender).to.be.true;
         });
     });
 
@@ -220,6 +235,12 @@ describe('GameObject', () => {
             expect(gobj.x).to.eq(0);
             expect(gobj.y).to.eq(0);
         });
+        it('should not modify the position of the game object if shouldTick == false', () => {
+            let gobj = new GameObject('name', { x: 0, y: 0, hspeed: 10, vspeed: 10, shouldTick: false });
+            gobj.tick(1);
+            expect(gobj.x).to.eq(0);
+            expect(gobj.y).to.eq(0);
+        });
         it('should translate the game object by (hspeed, vspeed) * delta', () => {
             let gobj = new GameObject('name', { x: 0, y: 0, hspeed: 13, vspeed: -29 });
             gobj.tick(.5);
@@ -228,6 +249,11 @@ describe('GameObject', () => {
         });
         it('should not modify the animation age if animationSpeed == 0', () => {
             let gobj = new GameObject('name', { animationSpeed: 0 });
+            gobj.tick(1);
+            expect(gobj.animationAge).to.eq(0);
+        });
+        it('should not modify the animation age if shouldTick == false', () => {
+            let gobj = new GameObject('name', { shouldTick: false });
             gobj.tick(1);
             expect(gobj.animationAge).to.eq(0);
         });
