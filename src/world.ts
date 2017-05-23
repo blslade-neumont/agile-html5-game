@@ -1,13 +1,23 @@
-﻿import { ResourceLoader } from './engine';
+﻿import { ResourceLoader, Game, GameObject } from './engine';
 import { tiles, TILE_SIZE, WorldTile } from './dbs/tile-db';
+import { pauseWithGame } from './utils/pause-with-game';
 
 const TIME_SCALE = 1 / (60 * 5);
 
-export class World {
+export class World extends GameObject {
+    constructor() {
+        super('World', { shouldRender: false });
+    }
+
     private _tilesX: number = 0;
     private _tilesY: number = 0;
     private tileNames: string[] = null;
     private _initialized = false;
+
+    addToGame(game: Game) {
+        super.addToGame(game);
+        pauseWithGame(this);
+    }
     
     start(canvasWidth: number, canvasHeight: number) {
         if (this._initialized) throw new Error('This World has already been initialized');

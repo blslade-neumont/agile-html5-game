@@ -36,6 +36,7 @@ export class AgileGame extends Game {
 
         if (!this._world) this._world = new World();
         this._world.start(this.canvas.width, this.canvas.height);
+        this.addObject(this.world);
 
         this.addObject(new GridRenderer());
         let player = new Player({ x: 64, y: 96 });
@@ -46,10 +47,5 @@ export class AgileGame extends Game {
         camera.follow = player;
         camera.enableSmoothing = false;
         camera.followOffset = [16, 16];
-    }
-
-    protected tick(delta: number) {
-        this._world.tick(delta);
-        super.tick(delta);
     }
 }
