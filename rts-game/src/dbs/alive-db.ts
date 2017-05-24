@@ -56,7 +56,8 @@ export let alives: { [name: string]: Alive } =
         },
         bird: {
             sprite: {
-                src: 'images/bird.png'
+                src: 'images/bird.png',
+                pivot: { x: 3, y: 3 }
             }
         }
     };

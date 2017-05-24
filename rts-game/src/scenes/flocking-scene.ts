@@ -31,7 +31,7 @@ export class FlockingScene extends GameScene {
 
         let birdController = new BirdController();
         this.addObject(birdController);
-        birdController.addBirds(100);
+        birdController.addBirds(1000);
         
         let camera = this.camera = new FollowCamera(this);
         camera.follow = player;
