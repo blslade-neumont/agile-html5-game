@@ -1,10 +1,10 @@
 ﻿import { World } from './world';
 import { WorldTile } from './dbs/tile-db';
-import { Game, GameObject, ResourceLoader, SingleTileSpriteT, drawSprite } from './engine';
+import { Game, GameScene, GameObject, ResourceLoader, SingleTileSpriteT, drawSprite } from './engine';
 import { TILE_SIZE } from './dbs/tile-db';
 import { AgileGame } from './agile-game';
 import { pauseWithGame } from './utils/pause-with-game';
-import { GameScene } from './engine/game-scene';
+import { OverworldScene } from './scenes/overworld-scene';
 
 export class GridRenderer extends GameObject {
     constructor() {
@@ -12,13 +12,13 @@ export class GridRenderer extends GameObject {
     }
 
     addToScene(scene: GameScene) {
-        if (!scene || !(scene instanceof GameScene)) throw new Error(`The GridRenderer can only be added to a GameScene`);
+        if (!scene || !(scene instanceof OverworldScene)) throw new Error(`The GridRenderer can only be added to an OverworldScene`);
         super.addToScene(scene);
         pauseWithGame(this);
     }
     
     get world() {
-        if (this.game) return (<any>this.game).world;
+        if (this.scene) return (<any>this.scene).world;
         return null;
     }
     

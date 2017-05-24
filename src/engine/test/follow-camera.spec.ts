@@ -8,6 +8,7 @@ use(sinonChai);
 import { Camera } from '../camera';
 import { FollowCamera } from '../follow-camera';
 import { Game } from '../game';
+import { GameScene } from '../game-scene';
 import { GameObject } from '../game-object';
 import { stubDocument } from './mock-document';
 import { stubImage } from './mock-image';
@@ -17,10 +18,12 @@ describe('FollowCamera', () => {
     stubImage();
 
     let game: Game;
+    let scene: GameScene;
     let camera: FollowCamera;
     beforeEach(() => {
         game = <any>{ canvasSize: [100, 100] };
-        camera = new FollowCamera(game);
+        scene = <any>{ game: game };
+        camera = new FollowCamera(scene);
     });
 
     describe('.followOffset', () => {

@@ -1,5 +1,6 @@
 ﻿import { GameObject, GameEvent, drawSprite } from './engine';
 import { AgileGame } from './agile-game';
+import { OverworldScene } from './scenes/overworld-scene';
 import { gui } from './dbs/gui-db';
 import { drawGUI } from './utils/render';
 
@@ -11,7 +12,7 @@ export class GuiObject extends GameObject {
     showInventory = false;
 
     get gameTimeString() {
-        let gameTime = (<AgileGame>this.game).world.gameTime;
+        let gameTime = (<OverworldScene>this.scene).world.gameTime;
         let day = Math.floor(gameTime);
         let hour = Math.floor((gameTime - day) * 24);
         return `Day ${day + 1}, ${(hour + 23) % 12 + 1} ${hour < 12 ? 'AM' : 'PM'}`;

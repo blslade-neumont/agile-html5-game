@@ -1,7 +1,6 @@
 ﻿import { World } from './world';
 import { WorldTile, TILE_SIZE } from './dbs/tile-db';
-import { AgileGame } from './agile-game';
-
+import { OverworldScene } from './scenes/overworld-scene';
 import { ResourceLoader, Game, Entity, EntityOptions, GameEvent, fmod, GameScene, clamp } from './engine';
 import { alives } from './dbs/alive-db';
 import { pauseWithGame } from './utils/pause-with-game';
@@ -67,16 +66,16 @@ export class Player extends Entity {
         let minTY: number = Math.floor(nextMinY / TILE_SIZE) * TILE_SIZE;
         let maxTY: number = Math.floor(nextMaxY / TILE_SIZE) * TILE_SIZE;
 
-        let game: AgileGame = <AgileGame>this.game;
+        let scene = <OverworldScene>this.scene;
 
         // right-left collisions
         if (this.hspeed > 0.0) {
-            if ((nextMaxX > maxTX) && (game.world.getTileAt(maxTX / TILE_SIZE, minTY / TILE_SIZE).isSolid || game.world.getTileAt(maxTX / TILE_SIZE, maxTY / TILE_SIZE).isSolid)) {
+            if ((nextMaxX > maxTX) && (scene.world.getTileAt(maxTX / TILE_SIZE, minTY / TILE_SIZE).isSolid || scene.world.getTileAt(maxTX / TILE_SIZE, maxTY / TILE_SIZE).isSolid)) {
                 this.x = OFFSET + minTX;
                 this.hspeed = 0.0;
             }
         } else if (this.hspeed < 0.0) {
-            if ((nextMinX < maxTX) && (game.world.getTileAt(minTX / TILE_SIZE, minTY / TILE_SIZE).isSolid || game.world.getTileAt(minTX / TILE_SIZE, maxTY / TILE_SIZE).isSolid)) {
+            if ((nextMinX < maxTX) && (scene.world.getTileAt(minTX / TILE_SIZE, minTY / TILE_SIZE).isSolid || scene.world.getTileAt(minTX / TILE_SIZE, maxTY / TILE_SIZE).isSolid)) {
                 this.x = OFFSET + maxTX;
                 this.hspeed = 0.0;
             }
@@ -84,12 +83,12 @@ export class Player extends Entity {
 
         // bottom-top collision
         if (this.vspeed > 0.0) {
-            if ((nextMaxY > maxTY) && (game.world.getTileAt(minTX / TILE_SIZE, maxTY / TILE_SIZE).isSolid || game.world.getTileAt(maxTX / TILE_SIZE, maxTY / TILE_SIZE).isSolid)) {
+            if ((nextMaxY > maxTY) && (scene.world.getTileAt(minTX / TILE_SIZE, maxTY / TILE_SIZE).isSolid || scene.world.getTileAt(maxTX / TILE_SIZE, maxTY / TILE_SIZE).isSolid)) {
                 this.y = OFFSET + minTY;
                 this.vspeed = 0.0;
             }
         } else if (this.vspeed < 0.0) {
-            if ((nextMinY < maxTY) && (game.world.getTileAt(minTX / TILE_SIZE, minTY / TILE_SIZE).isSolid || game.world.getTileAt(maxTX / TILE_SIZE, minTY / TILE_SIZE).isSolid)) {
+            if ((nextMinY < maxTY) && (scene.world.getTileAt(minTX / TILE_SIZE, minTY / TILE_SIZE).isSolid || scene.world.getTileAt(maxTX / TILE_SIZE, minTY / TILE_SIZE).isSolid)) {
                 this.y = OFFSET + maxTY;
                 this.vspeed = 0.0;
             }

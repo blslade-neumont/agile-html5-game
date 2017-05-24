@@ -1,13 +1,18 @@
 ﻿import { Game } from './game';
+import { GameScene } from './game-scene';
 import { clamp } from './utils/math';
 
 export class Camera {
-    constructor(private readonly _game: Game) {
-        if (!this._game) throw new Error(`You must pass in a valid Game when you create a Camera.`);
+    constructor(private readonly _scene: GameScene) {
+        if (!this._scene) throw new Error(`You must pass in a valid Scene when you create a Camera.`);
     }
 
+    get scene(): GameScene {
+        return this._scene;
+    }
     get game() {
-        return this._game;
+        if (!this.scene) return null;
+        return this.scene.game;
     }
 
     private _clearColor: string | null = null;

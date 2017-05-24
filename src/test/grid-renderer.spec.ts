@@ -6,10 +6,12 @@ import * as sinonChai from 'sinon-chai';
 use(sinonChai);
 
 import { GridRenderer } from '../grid-renderer';
-import { AgileGame } from '../agile-game';
+//import { AgileGame } from '../agile-game';
+import { Game } from '../engine';
+import { OverworldScene } from '../scenes/overworld-scene';
 import { World } from '../world';
 import { ResourceLoader } from '../engine';
-import { stubDocument, stubImage } from '../engine/test';
+import { MockGame, stubDocument, stubImage } from '../engine/test';
 import { TILE_SIZE } from '../dbs/tile-db';
 import { GameScene } from '../engine';
 
@@ -31,33 +33,35 @@ describe('GridRenderer', () => {
             let renderer = new GridRenderer();
             expect(() => renderer.addToScene(<any>{ key: 'fish!' })).to.throw(/can only be added to .*Scene/i);
         });
-        it('should populate game and world if a valid Scene is passed in', () => {
+        it('should populate scene, game and world if a valid Scene is passed in', () => {
             let renderer = new GridRenderer();
-            let game: AgileGame = new AgileGame();
-            game.changeScene(new GameScene());
-            renderer.addToScene(game.scene);
+            let scene = new OverworldScene();
+            let game = scene.game = <any>new MockGame(scene);
+            scene.start();
+
+            renderer.addToScene(scene);
+            expect(renderer.scene).to.deep.equal(scene);
             expect(renderer.game).to.deep.equal(game);
-            expect(renderer.world).to.deep.equal(game.world);
+            expect(renderer.world).to.deep.equal(scene.world);
         });
     });
 
     describe('.render', () => {
         let context: CanvasRenderingContext2D;
-        
-        let game: AgileGame;
+
+        let game: Game;
+        let scene: OverworldScene;
         beforeEach(() => {
             context = (new HTMLCanvasElement()).getContext("2d");
-            game = new AgileGame();
-        });
-        afterEach(() => {
-            if (game.isRunning) game.stop();
+            scene = new OverworldScene();
+            scene.game = game = <any>new MockGame(scene);
         });
         
         it('should call drawImage once per tile in the world', () => {
-            game.start();
+            scene.start();
 
-            let world: World = game.world;
-            let renderer: GridRenderer = <GridRenderer>game.scene.findObject('GridRenderer');
+            let world: World = scene.world;
+            let renderer: GridRenderer = <GridRenderer>scene.findObject('GridRenderer');
 
             let stub = sinon.stub(context, "drawImage");
 

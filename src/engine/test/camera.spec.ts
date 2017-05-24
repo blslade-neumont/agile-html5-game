@@ -7,6 +7,7 @@ use(sinonChai);
 
 import { Camera } from '../camera';
 import { Game } from '../game';
+import { GameScene } from '../game-scene';
 import { stubDocument } from './mock-document';
 import { stubImage } from './mock-image';
 
@@ -15,10 +16,12 @@ describe('Camera', () => {
     stubImage();
 
     let game: Game;
+    let scene: GameScene;
     let camera: Camera;
     beforeEach(() => {
         game = <any>{ canvasSize: [100, 100] };
-        camera = new Camera(game);
+        scene = <any>{ game: game };
+        camera = new Camera(scene);
     });
 
     it('should start with no clear color', () => {
@@ -27,7 +30,7 @@ describe('Camera', () => {
 
     describe('.constructor', () => {
         it('should throw an error if game is falsey', () => {
-            expect(() => new Camera(<any>null)).to.throw(/pass in a valid Game/i);
+            expect(() => new Camera(<any>null)).to.throw(/pass in a valid Scene/i);
         });
         it('should populate the game property', () => {
             expect(camera.game).to.be.ok;

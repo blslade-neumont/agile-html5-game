@@ -1,10 +1,10 @@
 ﻿import { Camera } from './camera';
-import { Game } from './game';
+import { GameScene } from './game-scene';
 import { GameObject } from './game-object';
 
 export class FollowCamera extends Camera {
-    constructor(game: Game) {
-        super(game);
+    constructor(scene: GameScene) {
+        super(scene);
     }
 
     private _follow: GameObject = null;

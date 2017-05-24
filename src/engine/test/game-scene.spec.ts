@@ -22,8 +22,7 @@ describe('engine/game-scene', () => {
     beforeEach(() => {
         context = (new HTMLCanvasElement()).getContext("2d");
         game = new Game();
-        scene = new GameScene();
-        game.changeScene(scene);
+        game.changeScene(scene = new GameScene());
     });
     afterEach(() => {
         if (game.isRunning) game.stop();
@@ -223,7 +222,7 @@ describe('engine/game-scene', () => {
         });
         it('should invoke tick on the camera, if there is one', () => {
             game.start();
-            scene.camera = new Camera(game);
+            scene.camera = new Camera(scene);
             sinon.stub(scene.camera, 'tick');
             (<any>game).tick(45);
             expect(scene.camera.tick).to.have.been.calledOnce.calledWith(45);
@@ -266,7 +265,7 @@ describe('engine/game-scene', () => {
         });
         it('should invoke push and pop on the camera, if there is one', () => {
             game.start();
-            scene.camera = new Camera(game);
+            scene.camera = new Camera(scene);
             sinon.stub(scene.camera, 'push');
             sinon.stub(scene.camera, 'pop');
             (<any>game).render((<any>game).context);
@@ -277,5 +276,4 @@ describe('engine/game-scene', () => {
             expect(scene.camera.pop).to.have.been.calledOnce.calledAfter(stubs[2]);
         });
     });
-
 });

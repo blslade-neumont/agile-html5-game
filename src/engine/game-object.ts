@@ -164,9 +164,13 @@ export class GameObject {
     }
 
     private _scene: GameScene;
-    get game() {
+    get scene() {
         if (!this._scene) return null;
-        return this._scene.game;
+        return this._scene;
+    }
+    get game() {
+        if (!this.scene) return null;
+        return this.scene.game;
     }
     get resources() {
         if (!this.game) return null;
@@ -210,6 +214,4 @@ export class GameObject {
             context.fillText('?', this.x, this.y);
         }
     }
-    
-
 }

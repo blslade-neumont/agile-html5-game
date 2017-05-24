@@ -3,14 +3,14 @@ import { GameObject } from './game-object';
 import { Camera } from './camera';
 
 export class GameScene {
-    private _game: Game = null;
-
+    constructor(private _game: Game = null) {
+    }
+    
     get game() {
         return this._game;
     }
-
-    set game(newGame: Game) {
-        this._game = newGame;
+    set game(val: Game) {
+        this._game = val;
     }
 
     public start() {
@@ -73,7 +73,7 @@ export class GameScene {
 
 
     private initCamera() {
-        this.camera = new Camera(this._game);
+        this.camera = new Camera(this);
     }
 
     private _camera: Camera | null = null;
@@ -83,5 +83,4 @@ export class GameScene {
     set camera(val: Camera | null) {
         this._camera = val;
     }
-
-}
+};
