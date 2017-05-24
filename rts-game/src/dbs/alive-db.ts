@@ -53,5 +53,10 @@ export let alives: { [name: string]: Alive } =
                     { tilex: 1, tiley: 3 }
                 ]
             }
+        },
+        bird: {
+            sprite: {
+                src: 'images/bird.png'
+            }
         }
     };

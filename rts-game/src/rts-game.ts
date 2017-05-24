@@ -1,5 +1,4 @@
 import { Game, FollowCamera, GameScene } from './engine';
-import { World } from './world';
 import { TilePreloadStrategy } from './preload-strategies/tile-preload-strategy';
 import { AlivePreloadStrategy } from './preload-strategies/alive-preload-strategy';
 import { FlockingScene } from './scenes/flocking-scene';
