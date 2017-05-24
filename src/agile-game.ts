@@ -29,14 +29,14 @@ export class AgileGame extends Game {
         this._world.start(this.canvas.width, this.canvas.height);
 
         this.addObject(new GridRenderer());
-        let player = new Player({ x: 48, y: 48 });
+        let player = new Player({ x: 64, y: 96 });
         this.addObject(player);
         this.addObject(new GuiObject());
 
         let camera = this.camera = new FollowCamera(this);
-        camera.clearColor = 'black';
         camera.follow = player;
         camera.enableSmoothing = false;
+        camera.followOffset = [16, 16];
     }
 
     protected tick(delta: number) {

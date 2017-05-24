@@ -4,7 +4,7 @@ import { AgileGame } from './agile-game';
 import { ResourceLoader, GameObject, GameObjectOptions, GameEvent, fmod } from './engine';
 import { alives } from './dbs/alive-db';
 
-const MOVE_SPEED = 2 * 30;
+const MOVE_SPEED = 4 * 30;
 const SIZE = 32;
 const OFFSET: number = (TILE_SIZE - SIZE) / 2.0;
 const CLOSE_ENOUGH: number = 3.0;
