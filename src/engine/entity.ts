@@ -10,7 +10,11 @@ export class Entity extends GameObject {
     constructor(name: string, opts: EntityOptions) {
         super(name, opts);
         if (typeof opts.maxHealth != 'undefined') this._maxHealth = opts.maxHealth;
-        this.currentHealth = (typeof opts.currentHealth != 'undefined')? opts.currentHealth : this.maxHealth;
+        if (typeof opts.currentHealth != 'undefined' && opts.currentHealth > opts.maxHealth)
+        {
+            throw new Error("Attempting to set current health higher than max health");
+        }
+        this.currentHealth = (typeof opts.currentHealth != 'undefined') ? opts.currentHealth : this.maxHealth;
     }
 
     private _maxHealth = 0;

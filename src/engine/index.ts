@@ -8,6 +8,7 @@ export * from './follow-camera';
 
 export * from './game';
 export * from './game-object';
+export * from './entity';
 
 export * from './utils';
 export * from './game-scene';

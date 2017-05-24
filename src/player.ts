@@ -1,7 +1,8 @@
 ﻿import { World } from './world';
 import { WorldTile, TILE_SIZE } from './dbs/tile-db';
 import { AgileGame } from './agile-game';
-import { ResourceLoader, Game, GameObject, GameObjectOptions, GameEvent, fmod, GameScene, clamp } from './engine';
+
+import { ResourceLoader, Game, Entity, EntityOptions, GameEvent, fmod, GameScene, clamp } from './engine';
 import { alives } from './dbs/alive-db';
 import { pauseWithGame } from './utils/pause-with-game';
 
@@ -10,8 +11,8 @@ const SIZE = 32;
 const OFFSET: number = (TILE_SIZE - SIZE) / 2.0;
 const CLOSE_ENOUGH: number = 3.0;
 
-export class Player extends GameObject {
-    constructor(opts: GameObjectOptions = { }) {
+export class Player extends Entity {
+    constructor(opts: EntityOptions = { maxHealth: 10 }) {
         super("Player", opts);
         if (!this.sprite) this.sprite = alives['katie_south'].sprite;
     }
