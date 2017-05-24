@@ -23,7 +23,7 @@ export class FlockingScene extends GameScene {
 
         this._world = new World();
         this.addObject(this.world);
-        this.addObject(new GridRenderer());
+        this.addObject(new GridRenderer(this.world));
 
         let player = new Player();
         this.addObject(player);

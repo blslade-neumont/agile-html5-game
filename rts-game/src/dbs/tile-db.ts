@@ -11,7 +11,7 @@ export let tiles: { [name: string]: WorldTile } =
     {
         grass: {
             sprite: {
-                src: 'images/rts/tiles.png',
+                src: 'images/tiles.png',
                 tileset: { width: 48, height: 48, tilex: 0, tiley: 0 }
             },
             isSolid: false

@@ -4,26 +4,16 @@ import { WorldTile, TILE_SIZE } from './dbs/tile-db';
 import { RtsGame } from './rts-game';
 
 export class GridRenderer extends GameObject {
-    constructor() {
+    constructor(private readonly world: World) {
         super('GridRenderer');
     }
 
-    addToScene(scene: GameScene) {
-        if (!scene || !(<any>scene).world) throw new Error(`The GridRenderer can only be added to a game with a World`);
-        super.addToScene(scene);
-    }
-    
-    get world() {
-        if (this.scene) return (<any>this.scene).world;
-        return null;
-    }
-    
     render(context: CanvasRenderingContext2D) {
         if (!this.world) { throw new Error(`World not set! Cannot render grid!`); }
         if (!this.resources) { throw new Error(`Loader not set! Cannot render grid!`); }
 
         if (!this.shouldRender) return;
-
+        
         let bounds = this.scene.camera.bounds;
         let startx = Math.floor(bounds.left / TILE_SIZE);
         let starty = Math.floor(bounds.bottom / TILE_SIZE);

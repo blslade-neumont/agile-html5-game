@@ -8,7 +8,7 @@ export let alives: { [name: string]: Alive } =
     {
         katie_south: {
             sprite: {
-                src: 'images/rts/player.png',
+                src: 'images/player.png',
                 tileset: { width: 32, height: 32 },
                 frames: [
                     { tilex: 0, tiley: 0 },
@@ -20,7 +20,7 @@ export let alives: { [name: string]: Alive } =
         },
         katie_west: {
             sprite: {
-                src: 'images/rts/player.png',
+                src: 'images/player.png',
                 tileset: { width: 32, height: 32 },
                 frames: [
                     { tilex: 0, tiley: 1 },
@@ -32,7 +32,7 @@ export let alives: { [name: string]: Alive } =
         },
         katie_east: {
             sprite: {
-                src: 'images/rts/player.png',
+                src: 'images/player.png',
                 tileset: { width: 32, height: 32 },
                 frames: [
                     { tilex: 0, tiley: 2 },
@@ -44,7 +44,7 @@ export let alives: { [name: string]: Alive } =
         },
         katie_north: {
             sprite: {
-                src: 'images/rts/player.png',
+                src: 'images/player.png',
                 tileset: { width: 32, height: 32 },
                 frames: [
                     { tilex: 0, tiley: 3 },

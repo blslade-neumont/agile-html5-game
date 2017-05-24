@@ -128,7 +128,7 @@ exports.TILE_SIZE = 48;
 exports.tiles = {
     grass: {
         sprite: {
-            src: 'images/rts/tiles.png',
+            src: 'images/tiles.png',
             tileset: { width: 48, height: 48, tilex: 0, tiley: 0 }
         },
         isSolid: false
@@ -1052,7 +1052,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.alives = {
     katie_south: {
         sprite: {
-            src: 'images/rts/player.png',
+            src: 'images/player.png',
             tileset: { width: 32, height: 32 },
             frames: [
                 { tilex: 0, tiley: 0 },
@@ -1064,7 +1064,7 @@ exports.alives = {
     },
     katie_west: {
         sprite: {
-            src: 'images/rts/player.png',
+            src: 'images/player.png',
             tileset: { width: 32, height: 32 },
             frames: [
                 { tilex: 0, tiley: 1 },
@@ -1076,7 +1076,7 @@ exports.alives = {
     },
     katie_east: {
         sprite: {
-            src: 'images/rts/player.png',
+            src: 'images/player.png',
             tileset: { width: 32, height: 32 },
             frames: [
                 { tilex: 0, tiley: 2 },
@@ -1088,7 +1088,7 @@ exports.alives = {
     },
     katie_north: {
         sprite: {
-            src: 'images/rts/player.png',
+            src: 'images/player.png',
             tileset: { width: 32, height: 32 },
             frames: [
                 { tilex: 0, tiley: 3 },
@@ -1702,23 +1702,11 @@ var engine_1 = __webpack_require__(0);
 var tile_db_1 = __webpack_require__(2);
 var GridRenderer = (function (_super) {
     __extends(GridRenderer, _super);
-    function GridRenderer() {
-        return _super.call(this, 'GridRenderer') || this;
+    function GridRenderer(world) {
+        var _this = _super.call(this, 'GridRenderer') || this;
+        _this.world = world;
+        return _this;
     }
-    GridRenderer.prototype.addToScene = function (scene) {
-        if (!scene || !scene.world)
-            throw new Error("The GridRenderer can only be added to a game with a World");
-        _super.prototype.addToScene.call(this, scene);
-    };
-    Object.defineProperty(GridRenderer.prototype, "world", {
-        get: function () {
-            if (this.scene)
-                return this.scene.world;
-            return null;
-        },
-        enumerable: true,
-        configurable: true
-    });
     GridRenderer.prototype.render = function (context) {
         if (!this.world) {
             throw new Error("World not set! Cannot render grid!");
@@ -1777,7 +1765,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var engine_1 = __webpack_require__(0);
 var tile_db_1 = __webpack_require__(2);
 var alive_db_1 = __webpack_require__(10);
-var MOVE_SPEED = 2 * 30;
+var MOVE_SPEED = 4 * 30;
 var SIZE = 32;
 var OFFSET = (tile_db_1.TILE_SIZE - SIZE) / 2.0;
 var CLOSE_ENOUGH = 3.0;
@@ -1792,22 +1780,22 @@ var Player = (function (_super) {
     }
     Player.prototype.tick = function (delta) {
         var h = 0.0;
-        if (this.events.isKeyDown('ArrowLeft') && (Math.abs(this.vspeed) < CLOSE_ENOUGH)) {
+        if (this.events.isKeyDown('ArrowLeft')) {
             h -= MOVE_SPEED;
         }
-        if (this.events.isKeyDown('ArrowRight') && (Math.abs(this.vspeed) < CLOSE_ENOUGH)) {
+        if (this.events.isKeyDown('ArrowRight')) {
             h += MOVE_SPEED;
         }
         var v = 0.0;
-        if (this.events.isKeyDown('ArrowUp') && (Math.abs(this.hspeed) < CLOSE_ENOUGH)) {
+        if (this.events.isKeyDown('ArrowUp')) {
             v -= MOVE_SPEED;
         }
-        if (this.events.isKeyDown('ArrowDown') && (Math.abs(this.hspeed) < CLOSE_ENOUGH)) {
+        if (this.events.isKeyDown('ArrowDown')) {
             v += MOVE_SPEED;
         }
         var thisTileX = engine_1.fmod(this.x, tile_db_1.TILE_SIZE);
         var thisTileY = engine_1.fmod(this.y, tile_db_1.TILE_SIZE);
-        if ((Math.abs(h) < CLOSE_ENOUGH) && (Math.abs(thisTileX - OFFSET) < CLOSE_ENOUGH)) {
+        if (Math.abs(h) < CLOSE_ENOUGH) {
             this.x = OFFSET + Math.floor(this.x / tile_db_1.TILE_SIZE) * tile_db_1.TILE_SIZE;
             this.hspeed = 0.0;
         }
@@ -1815,7 +1803,7 @@ var Player = (function (_super) {
             this.hspeed = ((Math.abs(h) < CLOSE_ENOUGH) ? this.hspeed : h);
             ;
         }
-        if ((Math.abs(v) < CLOSE_ENOUGH) && (Math.abs(thisTileY - OFFSET) < CLOSE_ENOUGH)) {
+        if (Math.abs(v) < CLOSE_ENOUGH) {
             this.vspeed = 0.0;
             this.y = OFFSET + Math.floor(this.y / tile_db_1.TILE_SIZE) * tile_db_1.TILE_SIZE;
         }
@@ -1964,7 +1952,7 @@ var FlockingScene = (function (_super) {
         this._initialized = true;
         this._world = new world_1.World();
         this.addObject(this.world);
-        this.addObject(new grid_renderer_1.GridRenderer());
+        this.addObject(new grid_renderer_1.GridRenderer(this.world));
         var player = new player_1.Player();
         this.addObject(player);
         var camera = this.camera = new engine_1.FollowCamera(this);
