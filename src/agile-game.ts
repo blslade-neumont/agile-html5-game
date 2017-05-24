@@ -42,7 +42,7 @@ export class AgileGame extends Game {
         this.changeScene(scene);
 
         scene.addObject(new GridRenderer());
-        let player = new Player({ x: 64, y: 96 });
+        let player = new Player({ maxHealth: 10, x: 64, y: 96 });
         scene.addObject(player);
         scene.addObject(new GuiObject());
         scene.addObject(this.world);
