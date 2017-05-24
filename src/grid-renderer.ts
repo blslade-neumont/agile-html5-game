@@ -24,11 +24,17 @@ export class GridRenderer extends GameObject {
         if (!this.resources) { throw new Error(`Loader not set! Cannot render grid!`); }
 
         if (!this.shouldRender) return;
+        
+        let bounds = this.game.camera.bounds;
+        let startx = Math.floor(bounds.left / TILE_SIZE);
+        let starty = Math.floor(bounds.bottom / TILE_SIZE);
+        let endx = Math.floor(bounds.right / TILE_SIZE) + 1;
+        let endy = Math.floor(bounds.top / TILE_SIZE) + 1;
 
-        for (let x: number = 0; x < this.world.tilesX; ++x) {
-            for (let y: number = 0; y < this.world.tilesY; ++y) {
+        for (let x = startx; x < endx; x++) {
+            for (let y = starty; y < endy; y++) {
                 let tile: WorldTile = this.world.getTileAt(x, y);
-                drawSprite(context, this.resources, tile.sprite, x * TILE_SIZE, y * TILE_SIZE, this.animationSpeed);
+                drawSprite(context, this.resources, tile.sprite, x * TILE_SIZE, y * TILE_SIZE, this.animationAge);
             }
         }
     }

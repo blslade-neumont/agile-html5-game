@@ -8,7 +8,7 @@ export class World {
     private _tilesY: number = 0;
     private tileNames: string[] = null;
     private _initialized = false;
-
+    
     start(canvasWidth: number, canvasHeight: number) {
         if (this._initialized) throw new Error('This World has already been initialized');
         this._initialized = true;
@@ -17,13 +17,18 @@ export class World {
         this._tilesX = Math.ceil(canvasWidth / TILE_SIZE);
         this._tilesY = Math.ceil(canvasHeight / TILE_SIZE);
 
+        let isWall = (x, y) => {
+            if ((x == 0 || x == this._tilesX - 1) && y != this._tilesY - 1) return y < 4 || y > this._tilesY - 6;
+            if (y == 0 || y == this._tilesY - 2) return x < 4 || x > this._tilesX - 5;
+            return false;
+        };
+
         this.tileNames = [];
         for (let x: number = 0; x < this._tilesX; ++x) {
             for (let y: number = 0; y < this._tilesY; ++y) {
-                let tileIndex = (y === 0 || y === this._tilesY - 2 || (y < this._tilesY - 1 && (x === 0 || x === this._tilesX - 1))) ? "wallTop" :
-                                                                                                 (y === 1 || y === this._tilesY - 1) ? "wallSide" :
-                                                                                                                                       "grass";
-                this.tileNames.push(tileIndex);
+                if (isWall(x, y)) this.tileNames.push('wallTop');
+                else if (isWall(x, y - 1)) this.tileNames.push('wallSide');
+                else this.tileNames.push('grass');
             }
         }
     }
@@ -51,7 +56,7 @@ export class World {
 
     getTileAt(x: number, y: number): WorldTile {
         if (!this._initialized) throw new Error('This World has not been initialized');
-        if (x < 0 || y < 0 || x >= this.tilesX || y >= this.tilesY) throw new Error(`Position ${x}, ${y} is not in world.`);
+        if (x < 0 || y < 0 || x >= this.tilesX || y >= this.tilesY) return tiles['grass'];
         return tiles[this.tileNames[x * this.tilesY + y]];
     }
 }

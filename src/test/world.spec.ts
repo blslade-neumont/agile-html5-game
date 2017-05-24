@@ -57,12 +57,12 @@ describe('World', () => {
         it('should throw an error if the world has not been initialized', () => {
             expect(() => world.getTileAt(0, 0)).to.throw(/not been initialized/i);
         });
-        it('should throw an error if you try to get a tile outside of the world', () => {
+        it('should not throw an error if you try to get a tile outside of the world', () => {
             world.start(32, 32);
-            expect(() => world.getTileAt(-1, 0)).to.throw(/not in world/i);
-            expect(() => world.getTileAt(1, 0)).to.throw(/not in world/i);
-            expect(() => world.getTileAt(0, -1)).to.throw(/not in world/i);
-            expect(() => world.getTileAt(0, 1)).to.throw(/not in world/i);
+            expect(() => world.getTileAt(-1, 0)).not.to.throw;
+            expect(() => world.getTileAt(1, 0)).not.to.throw;
+            expect(() => world.getTileAt(0, -1)).not.to.throw;
+            expect(() => world.getTileAt(0, 1)).not.to.throw;
         });
         it('should return a valid WorldTile', () => {
             world.start(32, 32);
