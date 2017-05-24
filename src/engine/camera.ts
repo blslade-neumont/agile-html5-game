@@ -44,7 +44,7 @@ export class Camera {
 
     get bounds() {
         let [cvWidth, cvHeight] = this.game.canvasSize;
-        let [hoff, voff] = [(cvWidth / 2) * this._zoomScale, (cvHeight / 2) * this._zoomScale];
+        let [hoff, voff] = [(cvWidth / 2) / this._zoomScale, (cvHeight / 2) / this._zoomScale];
         return {
             left: this._center[0] - hoff,
             right: this._center[0] + hoff,

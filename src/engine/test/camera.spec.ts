@@ -100,12 +100,19 @@ describe('Camera', () => {
             expect(bounds.right - bounds.left).to.be.closeTo(game.canvasSize[0], .00001);
             expect(bounds.top - bounds.bottom).to.be.closeTo(game.canvasSize[1], .00001);
         });
-        it('should be half the size of the canvas if zoomScale is .5', () => {
+        it('should be half the size of the canvas if zoomScale is 2', () => {
             camera.center = [10, -10];
-            camera.zoomScale = .5;
+            camera.zoomScale = 2;
             let bounds = camera.bounds;
             expect(bounds.right - bounds.left).to.be.closeTo(game.canvasSize[0] * .5, .00001);
             expect(bounds.top - bounds.bottom).to.be.closeTo(game.canvasSize[1] * .5, .00001);
+        });
+        it('should be twice the size of the canvas if zoomScale is .5', () => {
+            camera.center = [10, -10];
+            camera.zoomScale = .5;
+            let bounds = camera.bounds;
+            expect(bounds.right - bounds.left).to.be.closeTo(game.canvasSize[0] * 2, .00001);
+            expect(bounds.top - bounds.bottom).to.be.closeTo(game.canvasSize[1] * 2, .00001);
         });
     });
 
