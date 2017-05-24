@@ -3925,6 +3925,7 @@ var BirdController = (function (_super) {
     function BirdController() {
         var _this = _super.call(this, "BirdController", { shouldRender: false }) || this;
         _this._birds = [];
+        _this.renderMode = 'none';
         return _this;
     }
     Object.defineProperty(BirdController.prototype, "birds", {
@@ -3937,6 +3938,7 @@ var BirdController = (function (_super) {
     BirdController.prototype.addBirds = function (count) {
         for (var q = 0; q < count; q++)
             this.addBird();
+        this.updateRenderDebugInfo();
     };
     BirdController.prototype.addBird = function () {
         var opts = {
@@ -3948,6 +3950,22 @@ var BirdController = (function (_super) {
         var bird = new bird_1.Bird(this, opts);
         this._birds.push(bird);
         this.game.scene.addObject(bird);
+    };
+    BirdController.prototype.handleEvent = function (evt) {
+        if (evt.type == 'keyPressed' && evt.code == 'KeyF') {
+            this.renderMode = (this.renderMode == 'none') ? 'single' :
+                (this.renderMode == 'single') ? 'all' :
+                    'none';
+            this.updateRenderDebugInfo();
+        }
+    };
+    BirdController.prototype.updateRenderDebugInfo = function () {
+        for (var _i = 0, _a = this._birds; _i < _a.length; _i++) {
+            var bird = _a[_i];
+            bird.renderDebugInfo = this.renderMode == 'all';
+        }
+        if (this.renderMode == 'single' && this._birds.length)
+            this._birds[0].renderDebugInfo = true;
     };
     return BirdController;
 }(engine_1.GameObject));
@@ -3990,7 +4008,7 @@ var Bird = (function (_super) {
         _this.controller = controller;
         _this.originGravitation = 1 / (1000 + Math.random() * 5000);
         _this.originGravitationDistance = 1000 + Math.random() * 2000;
-        _this.renderDebugInfo = true;
+        _this.renderDebugInfo = false;
         _this.neighborDistance = 100 + Math.random() * 100;
         _this.attentionSpan = 3 + Math.floor(Math.random() * 5);
         _this.independence = .2 + Math.random() * 4;
@@ -4026,6 +4044,7 @@ var Bird = (function (_super) {
             this.env = this.controller.birds
                 .map(function (bird) { return ({ bird: bird, dist: pointDistance2(_this.x, _this.y, bird.x, bird.y) }); })
                 .filter(function (bird) { return bird.bird != _this && bird.dist < nbdist2_1; })
+                .sort(function (lhs, rhs) { return lhs.dist - rhs.dist; })
                 .slice(0, this.attentionSpan)
                 .map(function (bird) { return bird.bird; });
             this.timeSinceLastEnv = 0;

@@ -19,7 +19,7 @@ export class Bird extends GameObject {
 
     originGravitation = 1 / (1000 + Math.random() * 5000);
     originGravitationDistance = 1000 + Math.random() * 2000;
-    renderDebugInfo = true;
+    renderDebugInfo = false;
 
     neighborDistance = 100 + Math.random() * 100;
     attentionSpan = 3 + Math.floor(Math.random() * 5);
@@ -59,6 +59,7 @@ export class Bird extends GameObject {
             this.env = this.controller.birds
                 .map(bird => ({ bird: bird, dist: pointDistance2(this.x, this.y, bird.x, bird.y) }))
                 .filter(bird => bird.bird != this && bird.dist < nbdist2)
+                .sort((lhs, rhs) => lhs.dist - rhs.dist)
                 .slice(0, this.attentionSpan)
                 .map(bird => bird.bird);
             this.timeSinceLastEnv = 0;
