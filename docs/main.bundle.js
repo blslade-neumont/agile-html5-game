@@ -1796,7 +1796,6 @@ var Player = (function (_super) {
         var thisTileX = engine_1.fmod(this.x, tile_db_1.TILE_SIZE);
         var thisTileY = engine_1.fmod(this.y, tile_db_1.TILE_SIZE);
         if (Math.abs(h) < CLOSE_ENOUGH) {
-            this.x = OFFSET + Math.floor(this.x / tile_db_1.TILE_SIZE) * tile_db_1.TILE_SIZE;
             this.hspeed = 0.0;
         }
         else {
@@ -1805,7 +1804,6 @@ var Player = (function (_super) {
         }
         if (Math.abs(v) < CLOSE_ENOUGH) {
             this.vspeed = 0.0;
-            this.y = OFFSET + Math.floor(this.y / tile_db_1.TILE_SIZE) * tile_db_1.TILE_SIZE;
         }
         else {
             this.vspeed = ((Math.abs(v) < CLOSE_ENOUGH) ? this.vspeed : v);
