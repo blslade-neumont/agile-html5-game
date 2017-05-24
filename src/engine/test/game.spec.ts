@@ -12,6 +12,7 @@ import { stubDocument } from './mock-document';
 import { stubImage } from './mock-image';
 import { delay } from '../utils/delay';
 import { GameScene } from '../game-scene';
+import { MockEventQueue } from '../../test/mock-event-queue';
 
 describe('Game', () => {
     stubDocument();
@@ -192,18 +193,30 @@ describe('Game', () => {
     });
 
     describe('.sendEvents', () => {
-        xit('should tell the current scene about events', () => {
+        it('should tell the current scene about events', () => {
+            game.start();
+            game.eventQueue.enqueue({ type: 'canvasResize', previousSize: [0, 0], size: [0, 0] });
+            sinon.stub(game.scene, "handleEvent");
+            (<any>game).sendEvents();
+            expect(game.scene.handleEvent).to.be.calledOnce;
         });
     });
 
     describe('.tick', () => {
-        xit('should tell the current scene to tick', () => {
+        it('should tell the current scene to tick', () => {
+            game.start();
+            sinon.stub(game.scene, "tick");
+            (<any>game).tick(0.2);
+            expect(game.scene.tick).to.be.calledOnce;
         });
     });
 
     describe('.render', () => {
         it('should tell its scene to render', () => {
-
+            game.start();
+            sinon.stub(game.scene, "render");
+            (<any>game).onTick();
+            expect(game.scene.render).to.be.calledOnce;
         });
     });
 
@@ -234,12 +247,13 @@ describe('Game', () => {
             expect(() => game.changeScene(null)).to.throw(/Bad Scene/i);
         });
 
-        xit('should initialize the scene on swap', () => {
-
-        });
-
-        xit('should immediately change scenes if there is no current scene', () => {
-
+        it('should initialize the scene on swap', () => {
+            game.start();
+            let scene: GameScene = new GameScene();
+            game.changeScene(scene);
+            sinon.stub(scene, "start");
+            (<any>game).tick(0.2);
+            expect(scene.start).to.be.calledOnce;
         });
     });
 });

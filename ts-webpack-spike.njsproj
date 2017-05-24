@@ -232,6 +232,7 @@
     <TypeScriptCompile Include="src\engine\utils\test\render.spec.ts">
       <TestFramework>Mocha</TestFramework>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="src\utils\pause-with-game.ts" />
     <TypeScriptCompile Include="src\utils\render.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
