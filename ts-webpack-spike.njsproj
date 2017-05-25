@@ -60,6 +60,12 @@
       <SubType>Code</SubType>
     </Content>
     <Content Include="tsconfig.json" />
+    <TypeScriptCompile Include="src\dbs\test\gui-db.spec.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="src\dbs\test\tile-db.spec.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="src\dead-player.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
@@ -71,6 +77,9 @@
     <TypeScriptCompile Include="src\engine\test\game-scene.spec.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="src\engine\test\mock-game.ts" />
+    <TypeScriptCompile Include="src\engine\utils\event-emitter.ts" />
+    <TypeScriptCompile Include="src\engine\utils\test\event-emitter.spec.ts" />
     <TypeScriptCompile Include="src\menu-gui-object.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
@@ -170,9 +179,7 @@
       <SubType>Code</SubType>
       <TestFramework>Mocha</TestFramework>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="src\test\dead-player.spec.ts">
-      <SubType>Code</SubType>
-    </TypeScriptCompile>
+    <TypeScriptCompile Include="src\test\dead-player.spec.ts" />
     <TypeScriptCompile Include="src\test\in-game-gui-object.spec.ts">
       <TestFramework>Mocha</TestFramework>
     </TypeScriptCompile>
@@ -182,6 +189,9 @@
     <TypeScriptCompile Include="src\preload-strategies\test\item-preload-strategy.spec.ts">
       <SubType>Code</SubType>
       <TestFramework>Mocha</TestFramework>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="src\test\menu-gui-object.spec.ts">
+      <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="src\test\mock-event-queue.ts">
       <TestFramework>Mocha</TestFramework>
@@ -271,6 +281,7 @@
     <TypeScriptCompile Include="src\utils\gui.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="src\utils\test\pause-with-game.spec.ts" />
     <TypeScriptCompile Include="src\world.ts" />
   </ItemGroup>
   <ItemGroup>
@@ -281,6 +292,7 @@
     <Folder Include="images\GUI\" />
     <Folder Include="images\Icons\" />
     <Folder Include="images\Tiles\" />
+    <Folder Include="src\dbs\test\" />
     <Folder Include="src\engine\" />
     <Folder Include="src\engine\test\" />
     <Folder Include="src\engine\utils\test\" />
@@ -293,6 +305,7 @@
     <Folder Include="src\" />
     <Folder Include="src\dbs\" />
     <Folder Include="src\engine\utils\" />
+    <Folder Include="src\utils\test\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="config\development.js">
