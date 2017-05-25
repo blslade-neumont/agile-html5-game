@@ -1,7 +1,7 @@
 ﻿import { GameScene } from '../engine';
 import { MenuGuiObject } from '../menu-gui-object';
 
-export class TitleScene extends GameScene {
+export class GameOverScene extends GameScene {
     constructor() {
         super();
     }

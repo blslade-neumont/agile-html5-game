@@ -1,6 +1,7 @@
 ﻿import { World } from './world';
 import { WorldTile, TILE_SIZE } from './dbs/tile-db';
 import { OverworldScene } from './scenes/overworld-scene';
+import { DeadPlayer } from './dead-player';
 import { ResourceLoader, Game, Entity, EntityOptions, GameEvent, fmod, GameScene, clamp } from './engine';
 import { alives } from './dbs/alive-db';
 import { pauseWithGame } from './utils/pause-with-game';
@@ -13,12 +14,19 @@ const CLOSE_ENOUGH: number = 3.0;
 export class Player extends Entity {
     constructor(opts: EntityOptions = { maxHealth: 10 }) {
         super("Player", opts);
-        if (!this.sprite) this.sprite = alives['katie_south'].sprite;
+        if (!this.sprite) this.sprite = alives['player-south'].sprite;
     }
 
     addToScene(scene: GameScene) {
         super.addToScene(scene);
         pauseWithGame(this);
+    }
+
+    handleEvent(evt: GameEvent) {
+        if (evt.type == 'mouseWheel') {
+            let scale = Math.pow(2, -clamp(evt.delta, -1, 1) / 7);
+            this.game.scene.camera.zoomScale *= scale;
+        }
     }
 
     tick(delta: number) {
@@ -48,10 +56,10 @@ export class Player extends Entity {
         }
 
         this.animationSpeed = this.speed > 0 ? .2 : 0;
-        if (this.hspeed > 0) this.sprite = alives['katie_east'].sprite;
-        else if (this.hspeed < 0) this.sprite = alives['katie_west'].sprite;
-        else if (this.vspeed > 0) this.sprite = alives['katie_south'].sprite;
-        else if (this.vspeed < 0) this.sprite = alives['katie_north'].sprite;
+        if (this.hspeed > 0) this.sprite = alives['player-east'].sprite;
+        else if (this.hspeed < 0) this.sprite = alives['player-west'].sprite;
+        else if (this.vspeed > 0) this.sprite = alives['player-south'].sprite;
+        else if (this.vspeed < 0) this.sprite = alives['player-north'].sprite;
 
         let nextX: number = this.x + delta * this.hspeed;
         let nextY: number = this.y + delta * this.vspeed;
@@ -97,10 +105,11 @@ export class Player extends Entity {
         super.tick(delta);
     }
 
-    handleEvent(evt: GameEvent) {
-        if (evt.type == 'mouseWheel') {
-            let scale = Math.pow(2, -clamp(evt.delta, -1, 1) / 7);
-            this.game.scene.camera.zoomScale *= scale;
-        }
+    kill() {
+        this.scene.addObject(new DeadPlayer({
+            x: this.x,
+            y: this.y
+        }));
+        super.kill();
     }
 }

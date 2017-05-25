@@ -19,8 +19,8 @@ describe('Player', () => {
     it('should be named Player', () => {
         expect(player.name).to.be.eq('Player');
     });
-    it('should start with katie_south as the sprite', () => {
-        expect(player.sprite).to.deep.eq(alives['katie_south'].sprite);
+    it('should start with player-south as the sprite', () => {
+        expect(player.sprite).to.deep.eq(alives['player-south'].sprite);
     });
 
     describe('.tick', () => {
@@ -288,7 +288,7 @@ describe('Player', () => {
                 player.tick(.02);
                 expect(player.sprite).to.deep.eq(sprite);
             });
-            it('should change the sprite to katie_north if the player is moving north', () => {
+            it('should change the sprite to player-north if the player is moving north', () => {
                 player.addToScene(<any>{
                     game: {
                         eventQueue: new MockEventQueue('ArrowUp')
@@ -297,9 +297,9 @@ describe('Player', () => {
                 });
                 player.sprite = <any>'I like chocolate milk!';
                 player.tick(.02);
-                expect(player.sprite).to.deep.eq(alives['katie_north'].sprite);
+                expect(player.sprite).to.deep.eq(alives['player-north'].sprite);
             });
-            it('should change the sprite to katie_south if the player is moving south', () => {
+            it('should change the sprite to player-south if the player is moving south', () => {
                 player.addToScene(<any>{
                     game: {
                         eventQueue: new MockEventQueue('ArrowDown')
@@ -308,9 +308,9 @@ describe('Player', () => {
                 });
                 player.sprite = <any>'I like chocolate milk!';
                 player.tick(.02);
-                expect(player.sprite).to.deep.eq(alives['katie_south'].sprite);
+                expect(player.sprite).to.deep.eq(alives['player-south'].sprite);
             });
-            it('should change the sprite to katie_east if the player is moving east', () => {
+            it('should change the sprite to player-east if the player is moving east', () => {
                 player.addToScene(<any>{
                     game: {
                         eventQueue: new MockEventQueue('ArrowRight')
@@ -319,9 +319,9 @@ describe('Player', () => {
                 });
                 player.sprite = <any>'I like chocolate milk!';
                 player.tick(.02);
-                expect(player.sprite).to.deep.eq(alives['katie_east'].sprite);
+                expect(player.sprite).to.deep.eq(alives['player-east'].sprite);
             });
-            it('should change the sprite to katie_west if the player is moving west', () => {
+            it('should change the sprite to player-west if the player is moving west', () => {
                 player.addToScene(<any>{
                     game: {
                         eventQueue: new MockEventQueue('ArrowLeft')
@@ -330,7 +330,7 @@ describe('Player', () => {
                 });
                 player.sprite = <any>'I like chocolate milk!';
                 player.tick(.02);
-                expect(player.sprite).to.deep.eq(alives['katie_west'].sprite);
+                expect(player.sprite).to.deep.eq(alives['player-west'].sprite);
             });
             it('should set animationSpeed to 0 if the player is not moving', () => {
                 player.addToScene(<any>{

@@ -6,7 +6,7 @@ export interface Alive {
 
 export let alives: { [name: string]: Alive } =
     {
-        katie_south: {
+        'player-south': {
             sprite: {
                 src: 'images/Alive/Katie.png',
                 tileset: { width: 32, height: 32 },
@@ -18,7 +18,7 @@ export let alives: { [name: string]: Alive } =
                 ]
             }
         },
-        katie_west: {
+        'player-west': {
             sprite: {
                 src: 'images/Alive/Katie.png',
                 tileset: { width: 32, height: 32 },
@@ -30,7 +30,7 @@ export let alives: { [name: string]: Alive } =
                 ]
             }
         },
-        katie_east: {
+        'player-east': {
             sprite: {
                 src: 'images/Alive/Katie.png',
                 tileset: { width: 32, height: 32 },
@@ -42,7 +42,7 @@ export let alives: { [name: string]: Alive } =
                 ]
             }
         },
-        katie_north: {
+        'player-north': {
             sprite: {
                 src: 'images/Alive/Katie.png',
                 tileset: { width: 32, height: 32 },
@@ -52,6 +52,12 @@ export let alives: { [name: string]: Alive } =
                     { tilex: 2, tiley: 3 },
                     { tilex: 1, tiley: 3 }
                 ]
+            }
+        },
+        'dead-player': {
+            sprite: {
+                src: 'images/Alive/Katie.png',
+                tileset: { width: 32, height: 32, tilex: 0, tiley: 4 }
             }
         }
     };
