@@ -25,7 +25,7 @@ describe('dbs/tiles', () => {
     });
 
     describe('lava_left', () => {
-        it('should invoke Entity.takeDamage when an entity lands', () => {
+        it('should invoke Entity.takeDamage when an entity ticks', () => {
             let ent = new Entity('name', { maxHealth: 10, x: 0, y: 0 });
             scene.addObject(ent);
             sinon.spy(ent, 'takeDamage');
@@ -36,7 +36,7 @@ describe('dbs/tiles', () => {
     });
 
     describe('lava_right', () => {
-        it('should invoke Entity.takeDamage when an entity lands', () => {
+        it('should invoke Entity.takeDamage when an entity ticks', () => {
             let ent = new Entity('name', { maxHealth: 10, x: 0, y: 0 });
             scene.addObject(ent);
             sinon.spy(ent, 'takeDamage');

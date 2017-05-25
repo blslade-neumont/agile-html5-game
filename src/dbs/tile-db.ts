@@ -93,7 +93,7 @@ export let tiles: { [name: string]: WorldTile } =
                 tileset: { width: 32, height: 32, tilex: 10, tiley: 10 }
             },
             isSolid: false,
-            onLand: (entity) => {
+            onTick: (delta, entity) => {
                 let scene = <any>entity.scene;
                 scene.dungeon.enter(scene, entity.x, entity.y);
             }
@@ -105,7 +105,7 @@ export let tiles: { [name: string]: WorldTile } =
                 tileset: { width: 32, height: 32, tilex: 10, tiley: 10 }
             },
             isSolid: false,
-            onLand: (entity) => {
+            onTick: (delta, entity) => {
                 let scene = <any>entity.scene;
                 scene.exit();
             }
