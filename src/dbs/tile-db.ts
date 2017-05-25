@@ -70,4 +70,19 @@ export let tiles: { [name: string]: WorldTile } =
             //onTick: null,
             //onLand: null,
         },
+
+        dungeonGrass: {
+            sprite: {
+                src: 'images/Tiles/Dungeon_A2.png',
+                tileset: { width: 32, height: 32, tilex: 2, tiley: 6 }
+            },
+            isSolid: false,
+        },
+        dungeonSand: {
+            sprite: {
+                src: 'images/Tiles/Dungeon_A2.png',
+                tileset: { width: 32, height: 32, tilex: 4, tiley: 6 }
+            },
+            isSolid: false,
+        }
     };

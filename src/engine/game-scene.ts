@@ -14,7 +14,7 @@ export class GameScene {
     }
 
     public start() {
-        this.initCamera();
+        if (!this.camera) this.initCamera();
     }
 
     public handleEvent(evt) {

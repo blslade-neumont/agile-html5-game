@@ -122,6 +122,9 @@
     <TypeScriptCompile Include="src\player.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="src\scenes\dungeon-scene.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="src\scenes\game-over-scene.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>

@@ -1,8 +1,9 @@
-﻿import { GameScene, FollowCamera } from '../engine';
+﻿import { GameScene, GameEvent, FollowCamera } from '../engine';
 import { World } from '../world';
 import { GridRenderer } from '../grid-renderer';
 import { Player } from '../player';
 import { InGameGuiObject } from '../in-game-gui-object';
+import { DungeonScene } from './dungeon-scene';
 
 export class OverworldScene extends GameScene {
     constructor() {
@@ -14,16 +15,28 @@ export class OverworldScene extends GameScene {
         return this._world;
     }
 
+    private _dungeon = new DungeonScene();
+
+    public handleEvent(evt: GameEvent) {
+        if (super.handleEvent(evt)) return true;
+        if (evt.type == 'keyPressed' && evt.code == 'KeyI') {
+            this._dungeon.enter(this, 64, 64);
+        }
+    }
+
+    private _initialized = false;
+
     start() {
         super.start();
 
-        let [canvasWidth, canvasHeight] = this.game.canvasSize;
-
+        if (this._initialized) return;
+        this._initialized = true;
+        
         this._world = new World();
         this.addObject(this.world);
         this.addObject(new GridRenderer());
 
-        let player = new Player({ maxHealth: 10, x: 64, y: 96 });
+        let player = new Player({ maxHealth: 10 });
         this.addObject(player);
 
         this.addObject(new InGameGuiObject());
