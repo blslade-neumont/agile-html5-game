@@ -10,5 +10,6 @@ export * from './game';
 export * from './game-object';
 export * from './entity';
 
-export * from './utils';
 export * from './game-scene';
+
+export * from './utils';

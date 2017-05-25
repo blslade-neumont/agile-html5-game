@@ -31,12 +31,23 @@ export class GameScene {
     }
 
     public render(context: CanvasRenderingContext2D) {
-        let camera = this.camera;
-        if (camera) camera.push(context);
+        let defaultCamera = this.camera;
+        let lastRenderCamera = null;
+        
         for (let obj of this._objects) {
-            if (obj.shouldRender) obj.render(context);
+            if (obj.shouldRender) {
+                let renderCamera = obj.renderCamera === 'default' ? defaultCamera :
+                                      obj.renderCamera !== 'none' ? obj.renderCamera :
+                                                                    null;
+                if (lastRenderCamera != renderCamera) {
+                    if (lastRenderCamera) lastRenderCamera.pop(context);
+                    lastRenderCamera = renderCamera;
+                    if (lastRenderCamera) lastRenderCamera.push(context);
+                }
+                obj.render(context);
+            }
         }
-        if (camera) camera.pop(context);
+        if (lastRenderCamera) lastRenderCamera.pop(context);
     }
 
     private _objects: GameObject[] = [];
@@ -70,7 +81,6 @@ export class GameScene {
         if (typeof predicate !== 'function') throw new Error(`Invalid predicate: ${predicate}`);
         return this._objects.filter(predicate);
     }
-
 
     private initCamera() {
         this.camera = new Camera(this);

@@ -4,6 +4,9 @@ import { GameEvent } from './utils/events';
 import { SpriteT } from './utils/sprite';
 import { drawSprite } from './utils/render';
 import { GameScene } from './game-scene';
+import { Camera } from './camera';
+
+export type RenderCameraT = 'default' | 'none' | Camera;
 
 export interface GameObjectOptions {
     x?: number,
@@ -16,12 +19,10 @@ export interface GameObjectOptions {
     vspeed?: number,
 
     shouldRender?: boolean,
+    renderCamera?: RenderCameraT,
     sprite?: SpriteT,
     animationAge?: number,
-    animationSpeed?: number,
-
-    maxHealth?: number,
-    currentHealth?: number,
+    animationSpeed?: number
 };
 
 export class GameObject {
@@ -38,6 +39,7 @@ export class GameObject {
         if (typeof opts.vspeed != 'undefined') this.vspeed = opts.vspeed;
 
         if (typeof opts.shouldRender != 'undefined') this.shouldRender = opts.shouldRender;
+        if (typeof opts.renderCamera != 'undefined') this.renderCamera = opts.renderCamera;
         if (typeof opts.sprite != 'undefined') this.sprite = opts.sprite;
         if (typeof opts.animationAge != 'undefined') this.animationAge = opts.animationAge;
         if (typeof opts.animationSpeed != 'undefined') this.animationSpeed = opts.animationSpeed;
@@ -140,6 +142,14 @@ export class GameObject {
         this._shouldRender = val;
     }
 
+    private _renderCamera: RenderCameraT = 'default';
+    get renderCamera(): RenderCameraT {
+        return this._renderCamera;
+    }
+    set renderCamera(val: RenderCameraT) {
+        this._renderCamera = val;
+    }
+
     private _sprite: SpriteT = null;
     get sprite() {
         return this._sprite;
@@ -209,9 +219,11 @@ export class GameObject {
             context.fillStyle = 'red';
             context.fillRect(this.x, this.y, 16, 16);
 
-            context.fillStyle = 'blue';
+            context.fillStyle = 'white';
             context.font = '16px Consolas';
-            context.fillText('?', this.x, this.y);
+            context.textAlign = 'center';
+            context.textBaseline = 'middle';
+            context.fillText('?', this.x + 8, this.y + 8);
         }
     }
 }

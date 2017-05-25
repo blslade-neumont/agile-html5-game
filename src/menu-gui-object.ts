@@ -7,7 +7,7 @@ export class MenuGuiObject extends GameObject {
     constructor(guiName: string);
     constructor(gui: GuiSpec);
     constructor(gui: GuiSpec | string) {
-        super("MenuGuiObject");
+        super("MenuGuiObject", { renderCamera: 'none' });
         this.gui = typeof gui === 'string' ? guiDb[gui] : gui;
     }
 

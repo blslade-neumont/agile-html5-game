@@ -22,9 +22,11 @@ export class TitleScene extends GameScene {
 
         this.addObject(new MenuGuiObject('title'));
 
-        let cameraFollowObject = new GameObject("CameraFollowObject");
-        cameraFollowObject.direction = -30;
-        cameraFollowObject.speed = 4 * 30;
+        let cameraFollowObject = new GameObject("CameraFollowObject", {
+            direction: -30,
+            speed: 4 * 30,
+            shouldRender: false
+        });
         this.addObject(cameraFollowObject);
 
         let camera = this.camera = new FollowCamera(this);

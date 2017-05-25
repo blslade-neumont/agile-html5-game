@@ -3,7 +3,7 @@ import { clamp } from './utils/math';
 
 export interface EntityOptions extends GameObjectOptions{
     maxHealth: number,
-    currentHealth?: number,
+    currentHealth?: number
 }
 
 export class Entity extends GameObject {
