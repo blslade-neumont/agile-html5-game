@@ -1,4 +1,4 @@
-﻿import { ResourceLoader, Game, GameObject, GameScene, fmod } from './engine';
+﻿import { ResourceLoader, Game, GameObject, GameScene, fmod, Entity } from './engine';
 import { tiles, TILE_SIZE, WorldTile } from './dbs/tile-db';
 import { pauseWithGame } from './utils/pause-with-game';
 import { generateNoise } from './utils/noise';
@@ -11,7 +11,8 @@ type TileDefaultsT = {
     grass?: string,
     sand?: string,
     wallSide?: string,
-    wallTop?: string
+    wallTop?: string,
+    teleporter?: string
 };
 
 export class World extends GameObject {
@@ -40,6 +41,14 @@ export class World extends GameObject {
     tick(delta: number) {
         if (!this._initialized) throw new Error('This World has not been initialized');
         this._gameTime += delta * TIME_SCALE;
+
+        for (let entity of <Entity[]>this.scene.findObjects((obj) => obj instanceof Entity)) {
+            let tileUnder: WorldTile = this.getTileAt(Math.floor(entity.x / TILE_SIZE), Math.floor(entity.y / TILE_SIZE));
+            if (tileUnder.onTick) { tileUnder.onTick(); }
+            if (tileUnder.onLand && Math.abs(entity.hspeed - 0.0005) <= 0.001 && Math.abs(entity.vspeed - 0.0005) <= 0.001) {
+                tileUnder.onLand(entity);
+            }
+        }
     }
 
     getTileAt(x: number, y: number): WorldTile {
@@ -58,8 +67,9 @@ export class World extends GameObject {
     private generateChunk(x: number, y: number): WorldTile[][] {
         let noise = generateNoise(this.seed, x, y);
         let chunk: WorldTile[][] = [];
+        let chunkNames: string[][] = [];
         for (let q = 0; q < 64; q++) {
-            let column: WorldTile[] = [];
+            let names: string[] = [];
             for (let w = 0; w < 64; w++) {
                 let num = noise[q][w];
                 let lavaTile = fmod((q - 8) / 2, 16) * 2;
@@ -69,10 +79,32 @@ export class World extends GameObject {
                       num < .5 || w == 63 || (noise[q][w + 1] < .5 && (w == 0 || noise[q][w - 1] < .5)) ? this.tileDefaults.sand       || 'sand' :
                                                                         noise[q][w + 1] < .5 || w == 62 ? this.tileDefaults.wallSide   || 'wallSide' :
                                                                                                           this.tileDefaults.wallTop    || 'wallTop';
-                column.push(tiles[name]);
+
+                
+                names.push(name);
             }
+
+            chunkNames.push(names);
+        }
+
+        for (let q = 0; q < 64; q++) {
+            let column: WorldTile[] = [];
+            for (let w = 0; w < 64; w++) {
+                if (q > 0 && q < 63 && w > 0 && w < 63) {
+                // TODO: REFACTOR DON'T NEED ORS
+                    if ((chunkNames[q][w] == 'wallSide' || chunkNames[q][w] == this.tileDefaults.wallSide)
+                        && (chunkNames[q - 1][w] == 'wallSide' || chunkNames[q + 1][w] == this.tileDefaults.wallSide)
+                        && (chunkNames[q + 1][w] == 'wallSide' || chunkNames[q + 1][w] == this.tileDefaults.wallSide)) {
+                        chunkNames[q][w] = this.tileDefaults.teleporter || 'teleporter';
+                    }
+                }
+
+                column.push(tiles[chunkNames[q][w]]);
+            }
+
             chunk.push(column);
         }
+
         return chunk;
     }
 }

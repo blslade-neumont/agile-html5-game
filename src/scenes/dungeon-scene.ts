@@ -17,7 +17,7 @@ export class DungeonScene extends GameScene {
     enter(fromScene: GameScene, portalx: number, portaly: number) {
         this._returnScene = fromScene;
         this._returnX = portalx;
-        this._returnY = portaly + 1;
+        this._returnY = portaly + 33;
         fromScene.game.changeScene(this);
 
         let otherPlayer = <Player>fromScene.findObject('Player');
@@ -43,7 +43,7 @@ export class DungeonScene extends GameScene {
     private _returnX: number;
     private _returnY: number;
 
-    private player: Player;
+    private player: Player = new Player({ maxHealth: 10 });
 
     public handleEvent(evt: GameEvent) {
         if (super.handleEvent(evt)) return true;
@@ -54,6 +54,7 @@ export class DungeonScene extends GameScene {
 
     private _initialized = false;
 
+    // scene enter
     start() {
         super.start();
 
@@ -62,12 +63,12 @@ export class DungeonScene extends GameScene {
 
         this._world = new World(Math.random(), {
             grass: 'dungeonGrass',
-            sand: 'dungeonSand'
+            sand: 'dungeonSand',
+            teleporter: 'dungeonTeleporter'
         });
         this.addObject(this.world);
         this.addObject(new GridRenderer());
 
-        this.player = new Player({ maxHealth: 10 });
         this.addObject(this.player);
 
         this.addObject(new InGameGuiObject());

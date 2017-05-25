@@ -1,5 +1,4 @@
-﻿import { SpriteT } from '../engine';
-import { GameObject } from '../engine/game-object';
+﻿import { SpriteT, Entity } from '../engine';
 
 export const TILE_SIZE: number = 32;
 
@@ -7,7 +6,7 @@ export interface WorldTile {
     sprite: SpriteT,
     isSolid: boolean,
     onTick?: () => void,
-    onLand?: (gameObject: GameObject) => void,
+    onLand?: (entity: Entity) => void,
 };
 
 export let tiles: { [name: string]: WorldTile } =
@@ -53,7 +52,9 @@ export let tiles: { [name: string]: WorldTile } =
             },
             isSolid: false,
             //onTick: null,
-            //onLand: null,
+            onLand: (entity) => {
+                entity.takeDamage(1);
+            }
         },
         lava_right: {
             sprite: {
@@ -68,7 +69,9 @@ export let tiles: { [name: string]: WorldTile } =
             },
             isSolid: false,
             //onTick: null,
-            //onLand: null,
+            onLand: (entity) => {
+                entity.takeDamage(1);
+            }
         },
 
         dungeonGrass: {
@@ -84,5 +87,29 @@ export let tiles: { [name: string]: WorldTile } =
                 tileset: { width: 32, height: 32, tilex: 4, tiley: 6 }
             },
             isSolid: false,
+        },
+
+        teleporter: {
+            sprite: {
+                src: 'images/Tiles/Outside_A2.png',
+                tileset: { width: 32, height: 32, tilex: 10, tiley: 10 }
+            },
+            isSolid: false,
+            onLand: (entity) => {
+                let scene = <any>entity.scene;
+                scene.dungeon.enter(scene, entity.x, entity.y);
+            }
+        },
+
+        dungeonTeleporter: {
+            sprite: {
+                src: 'images/Tiles/Outside_A2.png',
+                tileset: { width: 32, height: 32, tilex: 10, tiley: 10 }
+            },
+            isSolid: false,
+            onLand: (entity) => {
+                let scene = <any>entity.scene;
+                scene.exit();
+            }
         }
     };

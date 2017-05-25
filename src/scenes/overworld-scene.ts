@@ -16,6 +16,9 @@ export class OverworldScene extends GameScene {
     }
 
     private _dungeon = new DungeonScene();
+    get dungeon() {
+        return this._dungeon;
+    }
 
     public handleEvent(evt: GameEvent) {
         if (super.handleEvent(evt)) return true;

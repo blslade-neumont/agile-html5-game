@@ -16,7 +16,9 @@ export class Game {
 
     public changeScene(newScene: GameScene) {
         if (!newScene) { throw new Error("Tried to changeScene to a bad scene!"); }
+        console.log(this._nextScene);
         if (this._nextScene) { throw new Error("Scene cannot be set more than once per tick!"); }
+
         this._nextScene = newScene;
         if (!this._scene) { this.handleSceneChange(); }
     }
@@ -125,8 +127,11 @@ export class Game {
         }
     }
     protected tick(delta: number) {
-        this._scene.tick(delta);
-        if (this._scene) { this.handleSceneChange(); }
+        if (this._scene) {
+            this._scene.tick(delta);
+            this.handleSceneChange();
+
+        }
     }
     protected render(context: CanvasRenderingContext2D) {
         if (!context) throw new Error(`What the heck just happened? There is no rendering context!`);
