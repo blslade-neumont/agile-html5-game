@@ -16,7 +16,6 @@ export class Game {
 
     public changeScene(newScene: GameScene) {
         if (!newScene) { throw new Error("Tried to changeScene to a bad scene!"); }
-        console.log(this._nextScene);
         if (this._nextScene) { throw new Error("Scene cannot be set more than once per tick!"); }
 
         this._nextScene = newScene;
