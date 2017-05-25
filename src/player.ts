@@ -23,12 +23,12 @@ export class Player extends Entity {
 
     tick(delta: number) {
         let h: number = 0.0;
-        if (this.events.isKeyDown('ArrowLeft') && (Math.abs(this.vspeed) < CLOSE_ENOUGH)) { h -= MOVE_SPEED; }
-        if (this.events.isKeyDown('ArrowRight') && (Math.abs(this.vspeed) < CLOSE_ENOUGH)) { h += MOVE_SPEED; }
+        if ((this.events.isKeyDown('ArrowLeft') || this.events.isKeyDown('KeyA')) && (Math.abs(this.vspeed) < CLOSE_ENOUGH)) { h -= MOVE_SPEED; }
+        if ((this.events.isKeyDown('ArrowRight') || this.events.isKeyDown('KeyD')) && (Math.abs(this.vspeed) < CLOSE_ENOUGH)) { h += MOVE_SPEED; }
 
         let v: number = 0.0;
-        if (this.events.isKeyDown('ArrowUp') && (Math.abs(this.hspeed) < CLOSE_ENOUGH)) { v -= MOVE_SPEED; }
-        if (this.events.isKeyDown('ArrowDown') && (Math.abs(this.hspeed) < CLOSE_ENOUGH)) { v += MOVE_SPEED; }
+        if ((this.events.isKeyDown('ArrowUp') || this.events.isKeyDown('KeyW')) && (Math.abs(this.hspeed) < CLOSE_ENOUGH)) { v -= MOVE_SPEED; }
+        if ((this.events.isKeyDown('ArrowDown') || this.events.isKeyDown('KeyS')) && (Math.abs(this.hspeed) < CLOSE_ENOUGH)) { v += MOVE_SPEED; }
 
         let thisTileX: number = fmod(this.x, TILE_SIZE);
         let thisTileY: number = fmod(this.y, TILE_SIZE);
