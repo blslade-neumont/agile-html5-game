@@ -11,6 +11,7 @@ import { stubDocument } from '../engine/test/mock-document';
 import { stubImage } from '../engine/test/mock-image';
 import { GameObject, GameScene } from '../engine';
 import { alives } from '../dbs/alive-db';
+import { GameOverScene } from '../scenes/game-over-scene';
 
 describe('Dead Player', () => {
     stubDocument();
@@ -32,7 +33,8 @@ describe('Dead Player', () => {
         game.scene.addObject(deadPlayer);
         sinon.stub(game, 'changeScene');
         deadPlayer.tick(2.01);
-        expect(game.changeScene).to.have.been.calledOnce;
+        expect(game.changeScene).to.be.calledWith(sinon.match((x) => x instanceof GameOverScene));
+
     });
 
     it('should not call game.changeScene after less than two seconds', () => {
