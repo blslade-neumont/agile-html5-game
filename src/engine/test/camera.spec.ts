@@ -24,17 +24,27 @@ describe('Camera', () => {
         camera = new Camera(scene);
     });
 
-    it('should start with no clear color', () => {
-        expect(camera.clearColor).to.be.null;
-    });
-
     describe('.constructor', () => {
         it('should throw an error if game is falsey', () => {
             expect(() => new Camera(<any>null)).to.throw(/pass in a valid Scene/i);
         });
-        it('should populate the game property', () => {
-            expect(camera.game).to.be.ok;
+    });
+
+    describe('.scene', () => {
+        it('should start as the scene you passed in to the constructor', () => {
+            expect(camera.scene).to.eq(scene);
+        });
+    });
+
+    describe('.game', () => {
+        it('should start as the game of the scene you passed in to the constructor', () => {
             expect(camera.game).to.eq(game);
+        });
+    });
+
+    describe('.clearColor', () => {
+        it('should start as null', () => {
+            expect(camera.clearColor).to.be.null;
         });
     });
 

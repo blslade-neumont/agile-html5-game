@@ -11,7 +11,6 @@ export class Camera {
         return this._scene;
     }
     get game() {
-        if (!this.scene) return null;
         return this.scene.game;
     }
 

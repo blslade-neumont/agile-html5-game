@@ -11,24 +11,36 @@ export interface EntityOptions extends GameObjectOptions {
 export class Entity extends GameObject {
     constructor(name: string, opts: EntityOptions) {
         super(name, opts);
-        if (typeof opts.maxHealth != 'undefined') this._maxHealth = opts.maxHealth;
+
+        if (opts.maxHealth <= 0) throw new Error(`Max health must be positive. The passed-in value: ${opts.maxHealth}`);
+        this._maxHealth = opts.maxHealth;
+
+        if (typeof opts.currentHealth !== 'undefined') {
+            if (opts.currentHealth <= 0) throw new Error(`Current health must be positive. The passed-in value: ${opts.currentHealth}`);
+            if (opts.currentHealth > this.maxHealth) throw new Error("Attempting to set current health higher than max health");
+            this.currentHealth = opts.currentHealth;
+        }
+        else this.currentHealth = this.maxHealth;
+
         if (typeof opts.damageImmunity != 'undefined') this._damageImmunity = opts.damageImmunity;
         if (typeof opts.damageImmunityTimer != 'undefined') this._damageImmunityTimer = opts.damageImmunityTimer;
-        if (typeof opts.currentHealth != 'undefined' && opts.currentHealth > this.maxHealth) throw new Error("Attempting to set current health higher than max health");
-        this.currentHealth = (typeof opts.currentHealth != 'undefined') ? opts.currentHealth : this.maxHealth;
     }
 
-    private _maxHealth = 0;
+    private _maxHealth = 1;
     get maxHealth() {
         return this._maxHealth;
     }
 
-    private _currentHealth = 0;
+    private _currentHealth = 1;
     get currentHealth() {
         return this._currentHealth;
     }
     set currentHealth(val) {
-        this._currentHealth = clamp(val, 0, this._maxHealth);
+        if (this.isDead) throw new Error(`This entity is dead! You can't set currentHealth on a dead entity!`);
+        val = clamp(val, 0, this._maxHealth);
+        if (val == this._currentHealth) return;
+        this._currentHealth = val;
+        if (val == 0) this.kill();
     }
 
     private _damageImmunity = 0;
@@ -66,10 +78,10 @@ export class Entity extends GameObject {
 
     takeDamage(amt: number) {
         if (!this.isAlive) throw new Error('This entity is already dead!');
+        if (amt < 0) throw new Error(`Cannot take negative damage`);
         if (this.isImmuneToDamage) return false;
         this.currentHealth -= amt;
-        if (this.currentHealth == 0) this.kill();
-        else this.damageImmunity = this.damageImmunityTimer;
+        this.damageImmunity = this.damageImmunityTimer;
         return true;
     }
 
