@@ -1,4 +1,6 @@
-﻿import { SpriteT } from '../engine';
+﻿import { SpriteT, GameScene } from '../engine';
+import { OverworldScene } from '../scenes/overworld-scene';
+import { TitleScene } from '../scenes/title-scene';
 
 export interface ItemSlotSpec {
     x: number,
@@ -6,9 +8,14 @@ export interface ItemSlotSpec {
     allowItem?: (item: any) => boolean
 }
 
+export interface NavigationSpec {
+    (): GameScene
+}
+
 export interface GuiSpec {
     sprite: SpriteT,
-    itemSlots?: ItemSlotSpec[]
+    itemSlots?: ItemSlotSpec[],
+    navigation?: { [keyCode: string]: NavigationSpec }
 };
 
 export let gui: { [name: string]: GuiSpec } =
@@ -46,5 +53,18 @@ export let gui: { [name: string]: GuiSpec } =
                 { x: 11 + (36 * 7), y: 51 + (36 * 2) },
                 { x: 11 + (36 * 8), y: 51 + (36 * 2) }
             ]
+        },
+        title: {
+            sprite: { src: 'images/GUI/title.png' },
+            navigation: {
+                'Enter': () => new OverworldScene()
+            }
+        },
+        'game-over': {
+            sprite: { src: 'images/GUI/game-over.png' },
+            navigation: {
+                'Enter': () => new TitleScene(),
+                'Escape': () => new TitleScene()
+            }
         }
     };

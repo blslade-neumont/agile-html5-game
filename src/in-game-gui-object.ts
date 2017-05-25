@@ -1,12 +1,12 @@
-﻿import { GameObject, GameEvent, drawSprite } from './engine';
+﻿import { GameEvent, drawSprite } from './engine';
 import { AgileGame } from './agile-game';
 import { OverworldScene } from './scenes/overworld-scene';
 import { gui } from './dbs/gui-db';
-import { drawGUI } from './utils/render';
+import { MenuGuiObject } from './menu-gui-object';
 
-export class GuiObject extends GameObject {
-    constructor(private inventoryGui = gui['inventory']) {
-        super('Gui');
+export class InGameGuiObject extends MenuGuiObject {
+    constructor() {
+        super(gui['inventory']);
     }
 
     showInventory = false;
@@ -19,12 +19,18 @@ export class GuiObject extends GameObject {
     }
 
     handleEvent(evt: GameEvent) {
-        if (evt.type === 'keyPressed' && evt.code == 'KeyE') {
+        if (evt.type === 'keyPressed' && (evt.code == 'KeyE' || (evt.code == 'Escape' && this.showInventory))) {
             this.showInventory = !this.showInventory;
             let game = <AgileGame>this.game;
             if (this.showInventory) game.onPause.emit(void(0));
-            else game.onPlay.emit(void(0));
+            else game.onPlay.emit(void (0));
+            return true;
         }
+        return this.showInventory && super.handleEvent(evt);
+    }
+
+    tick(delta: number) {
+        if (this.showInventory) super.tick(delta);
     }
 
     render(context: CanvasRenderingContext2D) {
@@ -41,9 +47,6 @@ export class GuiObject extends GameObject {
         context.textBaseline = 'top';
         context.fillText(timeText, canvasWidth - 4, 4);
 
-        if (this.showInventory) this.renderInventory(context);
-    }
-    private renderInventory(context: CanvasRenderingContext2D) {
-        drawGUI(context, this.game, this.inventoryGui);
+        if (this.showInventory) super.render(context);
     }
 }

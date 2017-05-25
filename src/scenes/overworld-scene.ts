@@ -2,7 +2,7 @@
 import { World } from '../world';
 import { GridRenderer } from '../grid-renderer';
 import { Player } from '../player';
-import { GuiObject } from '../gui-object';
+import { InGameGuiObject } from '../in-game-gui-object';
 
 export class OverworldScene extends GameScene {
     constructor() {
@@ -19,15 +19,14 @@ export class OverworldScene extends GameScene {
 
         let [canvasWidth, canvasHeight] = this.game.canvasSize;
 
-        if (!this._world) this._world = new World();
-        this._world.start(canvasWidth, canvasHeight);
+        this._world = new World();
         this.addObject(this.world);
         this.addObject(new GridRenderer());
 
         let player = new Player({ maxHealth: 10, x: 64, y: 96 });
         this.addObject(player);
 
-        this.addObject(new GuiObject());
+        this.addObject(new InGameGuiObject());
 
         let camera = this.camera = new FollowCamera(this);
         camera.follow = player;

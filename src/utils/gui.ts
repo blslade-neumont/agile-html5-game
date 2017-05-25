@@ -1,6 +1,20 @@
-﻿import { Game, measureSprite, drawSprite } from '../engine';
+﻿import { Game, GameEvent, measureSprite, drawSprite } from '../engine';
 import { GuiSpec } from '../dbs/gui-db';
 import { GameItem, items } from '../dbs/item-db';
+
+export function handleGUIEvent(evt: GameEvent, game: Game, gui: GuiSpec): boolean {
+    if (evt.type == 'keyPressed') {
+        if (gui.navigation && gui.navigation[evt.code]) {
+            game.changeScene(gui.navigation[evt.code]());
+            return true;
+        }
+    }
+    return false;
+}
+
+export function tickGUI(delta: number, game: Game, gui: GuiSpec) {
+
+}
 
 export function drawGUI(context: CanvasRenderingContext2D, game: Game, gui: GuiSpec, imageIndex = 0, defaultFps = 30) {
     let [canvasWidth, canvasHeight] = game.canvasSize;

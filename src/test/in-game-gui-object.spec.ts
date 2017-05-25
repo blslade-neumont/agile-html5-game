@@ -5,15 +5,15 @@ import * as sinon from 'sinon';
 import * as sinonChai from 'sinon-chai';
 use(sinonChai);
 
-import { GuiObject } from '../gui-object';
+import { InGameGuiObject } from '../in-game-gui-object';
 import { stubDocument } from '../engine/test';
 
-describe('GuiObject', () => {
+describe('InGameGuiObject', () => {
     stubDocument();
 
-    let guiObject: GuiObject;
+    let guiObject: InGameGuiObject;
     beforeEach(() => {
-        guiObject = new GuiObject();
+        guiObject = new InGameGuiObject();
     });
 
     describe('.gameTimeString', () => {

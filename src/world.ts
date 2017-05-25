@@ -15,13 +15,13 @@ export class World extends GameObject {
     private _initialized = false;
 
     addToScene(scene: GameScene) {
-        super.addToScene(scene);
-        pauseWithGame(this);
-    }
-    
-    start(canvasWidth: number, canvasHeight: number) {
         if (this._initialized) throw new Error('This World has already been initialized');
         this._initialized = true;
+
+        super.addToScene(scene);
+        pauseWithGame(this);
+
+        let [canvasWidth, canvasHeight] = this.game.canvasSize;
 
         // TODO: TEMPORARY DEBUG MAP HERE
         this._tilesX = Math.ceil(canvasWidth / TILE_SIZE);

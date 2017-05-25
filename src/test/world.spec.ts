@@ -6,10 +6,19 @@ import * as sinonChai from 'sinon-chai';
 use(sinonChai);
 
 import { World } from '../world';
+import { Game, GameScene } from '../engine';
+import { MockGame, stubDocument, stubImage } from '../engine/test';
 
 describe('World', () => {
+    stubDocument();
+    stubImage();
+
+    let game: Game;
+    let scene: GameScene;
     let world: World;
     beforeEach(() => {
+        game = <any>new MockGame();
+        scene = new GameScene(game);
         world = new World();
     });
 
@@ -17,18 +26,20 @@ describe('World', () => {
         expect(world.gameTime).to.eq(8/24);
     });
     
-    describe('.start', () => {
+    describe('.addToScene', () => {
         it('should set tilesX and tilesY', () => {
-            world.start(32 * 5, 32 * 7);
+            game.canvasSize = [32 * 5, 32 * 7];
+            scene.addObject(world);
             expect(world.tilesX).to.eq(5);
             expect(world.tilesY).to.eq(7);
         });
         it('should throw an error if you try to call it twice', () => {
-            world.start(32, 32);
-            expect(() => world.start(32, 32)).to.throw(/already been initialized/i);
+            scene.addObject(world);
+            expect(() => scene.addObject(world)).to.throw(/already been initialized/i);
         });
         it('should round up if the canvas size does not divide evenly', () => {
-            world.start(33, 33);
+            game.canvasSize = [33, 33];
+            scene.addObject(world);
             expect(world.tilesX).to.eq(2);
             expect(world.tilesY).to.eq(2);
         });
@@ -39,12 +50,13 @@ describe('World', () => {
             expect(() => world.tick(.1)).to.throw(/not been initialized/i);
         });
         it('should update the game time', () => {
-            world.start(32, 32);
-            expect(world.gameTime).to.change;
+            scene.addObject(world);
+            let prevGameTime = world.gameTime;
             world.tick(.02);
+            expect(world.gameTime).to.be.greaterThan(prevGameTime);
         });
         it('should use the scale 5 minutes = one day when updating the game time', () => {
-            world.start(32, 32);
+            scene.addObject(world);
             let origGameTime = world.gameTime;
             world.tick(60 * 5);
             expect(world.gameTime).to.be.closeTo(origGameTime + 1, .0001);
@@ -58,14 +70,14 @@ describe('World', () => {
             expect(() => world.getTileAt(0, 0)).to.throw(/not been initialized/i);
         });
         it('should not throw an error if you try to get a tile outside of the world', () => {
-            world.start(32, 32);
+            scene.addObject(world);
             expect(() => world.getTileAt(-1, 0)).not.to.throw;
             expect(() => world.getTileAt(1, 0)).not.to.throw;
             expect(() => world.getTileAt(0, -1)).not.to.throw;
             expect(() => world.getTileAt(0, 1)).not.to.throw;
         });
         it('should return a valid WorldTile', () => {
-            world.start(32, 32);
+            scene.addObject(world);
             expect(world.getTileAt(0, 0)).to.be.ok;
         });
     });

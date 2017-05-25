@@ -4,7 +4,7 @@ import { TilePreloadStrategy } from './preload-strategies/tile-preload-strategy'
 import { ItemPreloadStrategy } from './preload-strategies/item-preload-strategy';
 import { AlivePreloadStrategy } from './preload-strategies/alive-preload-strategy';
 import { GuiPreloadStrategy } from './preload-strategies/gui-preload-strategy';
-import { OverworldScene } from './scenes/overworld-scene';
+import { TitleScene } from './scenes/title-scene';
 
 export class AgileGame extends Game {
     constructor(framesPerSecond = 30) {
@@ -26,6 +26,6 @@ export class AgileGame extends Game {
 
     start() {
         super.start();
-        this.changeScene(new OverworldScene());
+        this.changeScene(new TitleScene());
     }
 }

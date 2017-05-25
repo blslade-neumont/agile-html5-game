@@ -12,7 +12,7 @@ export class GridRenderer extends GameObject {
     }
 
     addToScene(scene: GameScene) {
-        if (!scene || !(scene instanceof OverworldScene)) throw new Error(`The GridRenderer can only be added to an OverworldScene`);
+        if (!scene || !(<any>scene).world) throw new Error(`The GridRenderer can only be added to a scene with a World`);
         super.addToScene(scene);
         pauseWithGame(this);
     }
