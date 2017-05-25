@@ -21,7 +21,8 @@
             "*": [ "node_modules/*", "src/*", "public/assets/*" ]
         },
         "types": [
-            "core-js"
+            "core-js",
+            "noisejs"
         ]
     },
     "exclude": [

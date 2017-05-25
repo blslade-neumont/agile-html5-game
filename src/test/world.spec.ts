@@ -27,21 +27,9 @@ describe('World', () => {
     });
     
     describe('.addToScene', () => {
-        it('should set tilesX and tilesY', () => {
-            game.canvasSize = [32 * 5, 32 * 7];
-            scene.addObject(world);
-            expect(world.tilesX).to.eq(5);
-            expect(world.tilesY).to.eq(7);
-        });
         it('should throw an error if you try to call it twice', () => {
             scene.addObject(world);
             expect(() => scene.addObject(world)).to.throw(/already been initialized/i);
-        });
-        it('should round up if the canvas size does not divide evenly', () => {
-            game.canvasSize = [33, 33];
-            scene.addObject(world);
-            expect(world.tilesX).to.eq(2);
-            expect(world.tilesY).to.eq(2);
         });
     });
 

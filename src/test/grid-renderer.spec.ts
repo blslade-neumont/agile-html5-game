@@ -57,16 +57,18 @@ describe('GridRenderer', () => {
             scene.game = game = <any>new MockGame(scene);
         });
         
-        it('should call drawImage once per tile in the world', () => {
+        it('should call drawImage once per tile that can be rendered on the canvas', () => {
             scene.start();
 
             let world: World = scene.world;
             let renderer: GridRenderer = <GridRenderer>scene.findObject('GridRenderer');
+            let [canvasWidth, canvasHeight] = game.canvasSize;
+            let [tilesX, tilesY] = [Math.ceil(canvasWidth / TILE_SIZE), Math.ceil(canvasHeight / TILE_SIZE)];
 
             let stub = sinon.stub(context, "drawImage");
 
             renderer.render(context);
-            expect(stub.callCount).to.be.within((world.tilesX * world.tilesY), ((world.tilesX+1) * (world.tilesY + 1)));
+            expect(stub.callCount).to.be.within((tilesX * tilesY), ((tilesX + 1) * (tilesY + 1)));
         });
     });
 });

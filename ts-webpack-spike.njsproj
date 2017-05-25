@@ -47,7 +47,9 @@
     <Content Include=".gitignore" />
     <Content Include=".travis.yml" />
     <Content Include="images\Alive\Katie.png" />
+    <Content Include="images\GUI\game-over.png" />
     <Content Include="images\GUI\inventory.png" />
+    <Content Include="images\GUI\title.png" />
     <Content Include="images\Icons\IconSet.png" />
     <Content Include="images\Tiles\Dungeon_A1.png" />
     <Content Include="images\Tiles\Dungeon_A2.png" />
@@ -58,12 +60,18 @@
       <SubType>Code</SubType>
     </Content>
     <Content Include="tsconfig.json" />
+    <TypeScriptCompile Include="src\dead-player.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="src\engine\entity.ts" />
     <TypeScriptCompile Include="src\engine\game-scene.ts" />
     <TypeScriptCompile Include="src\engine\test\entity.spec.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="src\engine\test\game-scene.spec.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="src\menu-gui-object.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="src\preload-strategies\alive-preload-strategy.ts">
@@ -102,7 +110,7 @@
     <TypeScriptCompile Include="src\engine\utils\test\sprite.spec.ts">
       <TestFramework>Mocha</TestFramework>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="src\gui-object.ts">
+    <TypeScriptCompile Include="src\in-game-gui-object.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="src\preload-strategies\gui-preload-strategy.ts">
@@ -114,7 +122,13 @@
     <TypeScriptCompile Include="src\player.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="src\scenes\game-over-scene.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="src\scenes\overworld-scene.ts" />
+    <TypeScriptCompile Include="src\scenes\test\game-over-scene.spec.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="src\scenes\test\overworld-scene.spec.ts" />
     <TypeScriptCompile Include="src\scenes\test\title-scene.spec.ts" />
     <TypeScriptCompile Include="src\scenes\title-scene.ts" />
@@ -153,7 +167,7 @@
       <SubType>Code</SubType>
       <TestFramework>Mocha</TestFramework>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="src\test\gui-object.spec.ts">
+    <TypeScriptCompile Include="src\test\in-game-gui-object.spec.ts">
       <TestFramework>Mocha</TestFramework>
     </TypeScriptCompile>
     <TypeScriptCompile Include="src\preload-strategies\test\gui-preload-strategy.spec.ts">
@@ -244,8 +258,11 @@
     <TypeScriptCompile Include="src\engine\utils\test\render.spec.ts">
       <TestFramework>Mocha</TestFramework>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="src\utils\noise.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="src\utils\pause-with-game.ts" />
-    <TypeScriptCompile Include="src\utils\render.ts">
+    <TypeScriptCompile Include="src\utils\gui.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="src\world.ts" />
