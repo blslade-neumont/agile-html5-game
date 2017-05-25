@@ -170,6 +170,9 @@
       <SubType>Code</SubType>
       <TestFramework>Mocha</TestFramework>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="src\test\dead-player.spec.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="src\test\in-game-gui-object.spec.ts">
       <TestFramework>Mocha</TestFramework>
     </TypeScriptCompile>

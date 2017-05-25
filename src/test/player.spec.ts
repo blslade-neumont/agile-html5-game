@@ -9,6 +9,12 @@ import { Player } from '../player';
 import { MockEventQueue } from './mock-event-queue';
 import { MockWorld } from './mock-world';
 import { alives } from '../dbs/alive-db';
+import { Entity, GameScene } from '../engine';
+import { AgileGame } from '../agile-game';
+import { Game } from '../engine';
+import { stubDocument } from '../engine/test/mock-document';
+import { stubImage } from '../engine/test/mock-image';
+import { DeadPlayer } from '../dead-player';
 
 describe('Player', () => {
     let player: Player;
@@ -273,6 +279,38 @@ describe('Player', () => {
                 let [oldX, oldY] = [player.x = 0, player.y = 0];
                 player.tick(.02);
                 expect([oldX, oldY]).to.deep.eq([player.x, player.y]);
+            });
+        });
+
+        describe('.kill', () => {
+            stubDocument();
+            stubImage();
+
+            let game: Game;
+            beforeEach(() => {
+                game = new Game(30);
+                game.changeScene(new GameScene());
+            });
+            afterEach(() => {
+                if (game.isRunning) game.stop();
+            });
+
+            it('should create a dead player object', () => {
+                game.scene.addObject(player);
+                sinon.stub(game.scene, 'addObject');
+                player.kill();
+                expect(game.scene.addObject).to.be.calledWith(sinon.match((x) => x instanceof DeadPlayer));
+
+            });
+
+            it('should call super.kill', () => {
+                game.scene.addObject(player);
+                let stub: sinon.SinonStub;
+                try {
+                    stub = sinon.stub(Entity.prototype, 'kill');
+                    player.kill();
+                    expect(Entity.prototype.kill).to.have.been.calledOnce;
+                } finally { if (stub) stub.restore(); }
             });
         });
 
