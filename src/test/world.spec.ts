@@ -6,8 +6,9 @@ import * as sinonChai from 'sinon-chai';
 use(sinonChai);
 
 import { World } from '../world';
-import { Game, GameScene } from '../engine';
+import { Game, GameScene, Entity } from '../engine';
 import { MockGame, stubDocument, stubImage } from '../engine/test';
+import { tiles } from '../dbs/tile-db';
 
 describe('World', () => {
     stubDocument();

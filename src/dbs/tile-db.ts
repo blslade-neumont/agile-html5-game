@@ -5,7 +5,6 @@ export const TILE_SIZE: number = 32;
 export interface WorldTile {
     sprite: SpriteT,
     isSolid: boolean,
-    onTick?: () => void,
     onLand?: (entity: Entity) => void,
 };
 
@@ -51,7 +50,6 @@ export let tiles: { [name: string]: WorldTile } =
                 framesPerSecond: 4,
             },
             isSolid: false,
-            //onTick: null,
             onLand: (entity) => {
                 entity.takeDamage(1);
             }
@@ -68,7 +66,6 @@ export let tiles: { [name: string]: WorldTile } =
                 framesPerSecond: 4,
             },
             isSolid: false,
-            //onTick: null,
             onLand: (entity) => {
                 entity.takeDamage(1);
             }
