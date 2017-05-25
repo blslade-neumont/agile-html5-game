@@ -1,4 +1,4 @@
-﻿import { GameEvent, drawSprite } from './engine';
+﻿import { GameEvent, Entity, drawSprite } from './engine';
 import { AgileGame } from './agile-game';
 import { OverworldScene } from './scenes/overworld-scene';
 import { gui } from './dbs/gui-db';
@@ -19,12 +19,18 @@ export class InGameGuiObject extends MenuGuiObject {
     }
 
     handleEvent(evt: GameEvent) {
-        if (evt.type === 'keyPressed' && (evt.code == 'KeyE' || (evt.code == 'Escape' && this.showInventory))) {
-            this.showInventory = !this.showInventory;
-            let game = <AgileGame>this.game;
-            if (this.showInventory) game.onPause.emit(void(0));
-            else game.onPlay.emit(void (0));
-            return true;
+        if (evt.type === 'keyPressed') {
+            if (evt.code == 'KeyE' || (evt.code == 'Escape' && this.showInventory)) {
+                this.showInventory = !this.showInventory;
+                let game = <AgileGame>this.game;
+                if (this.showInventory) game.onPause.emit(void (0));
+                else game.onPlay.emit(void (0));
+                return true;
+            }
+            else if (evt.code == 'KeyK') {
+                let player = this.scene.findObject('Player');
+                if (player && player instanceof Entity) player.takeDamage(3);
+            }
         }
         return this.showInventory && super.handleEvent(evt);
     }
