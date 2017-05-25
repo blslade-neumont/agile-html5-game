@@ -47,9 +47,13 @@
     <Content Include=".gitignore" />
     <Content Include=".travis.yml" />
     <Content Include="images\Alive\Katie.png" />
+    <Content Include="images\GUI\inventory.png" />
     <Content Include="images\Icons\IconSet.png" />
+    <Content Include="images\Tiles\Dungeon_A1.png" />
+    <Content Include="images\Tiles\Dungeon_A2.png" />
     <Content Include="images\Tiles\Outside_A2.png" />
     <Content Include="images\Tiles\Outside_Tiles.png" />
+    <Content Include="images\Tiles\World_A1.png" />
     <Content Include="styles.css">
       <SubType>Code</SubType>
     </Content>
@@ -110,6 +114,10 @@
     <TypeScriptCompile Include="src\player.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="src\scenes\overworld-scene.ts" />
+    <TypeScriptCompile Include="src\scenes\test\overworld-scene.spec.ts" />
+    <TypeScriptCompile Include="src\scenes\test\title-scene.spec.ts" />
+    <TypeScriptCompile Include="src\scenes\title-scene.ts" />
     <TypeScriptCompile Include="src\test\agile-game.spec.ts">
       <SubType>Code</SubType>
       <TestFramework>Mocha</TestFramework>
@@ -236,6 +244,7 @@
     <TypeScriptCompile Include="src\engine\utils\test\render.spec.ts">
       <TestFramework>Mocha</TestFramework>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="src\utils\pause-with-game.ts" />
     <TypeScriptCompile Include="src\utils\render.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
@@ -246,6 +255,7 @@
     <Folder Include="config\webpack\" />
     <Folder Include="images\" />
     <Folder Include="images\Alive\" />
+    <Folder Include="images\GUI\" />
     <Folder Include="images\Icons\" />
     <Folder Include="images\Tiles\" />
     <Folder Include="src\engine\" />
@@ -253,6 +263,8 @@
     <Folder Include="src\engine\utils\test\" />
     <Folder Include="src\preload-strategies\" />
     <Folder Include="src\preload-strategies\test\" />
+    <Folder Include="src\scenes\" />
+    <Folder Include="src\scenes\test\" />
     <Folder Include="src\utils\" />
     <Folder Include="src\test\" />
     <Folder Include="src\" />
