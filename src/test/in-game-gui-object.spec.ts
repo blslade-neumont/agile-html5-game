@@ -6,7 +6,9 @@ import * as sinonChai from 'sinon-chai';
 use(sinonChai);
 
 import { InGameGuiObject } from '../in-game-gui-object';
-import { stubDocument } from '../engine/test';
+import { AgileGame } from '../agile-game';
+import { GameObject, delay } from '../engine';
+import { stubDocument, stubImage } from '../engine/test';
 
 describe('InGameGuiObject', () => {
     stubDocument();
@@ -36,6 +38,55 @@ describe('InGameGuiObject', () => {
         it('should prefer 12 PM to 0 PM', () => {
             guiObject.addToScene(<any>{ world: { gameTime: 12 / 24 } });
             expect(guiObject.gameTimeString).to.eq('Day 1, 12 PM');
+        });
+    });
+
+    describe('.handleEvent', () => {
+        stubImage();
+
+        let game: AgileGame;
+        beforeEach(() => {
+            game = new AgileGame(30);
+        });
+
+        afterEach(() => {
+            if (game.isRunning) game.stop();
+        });
+
+        it('should pause the game when e is pressed if it is not paused', () => {
+            game.start();
+            game.scene.addObject(guiObject);
+            sinon.stub(game.onPause, 'emit');
+            guiObject.handleEvent(<any>{ type: 'keyPressed', code: 'KeyE' });
+            expect(game.onPause.emit).to.be.calledOnce;
+        });
+
+        it('should un-pause the game when e is pressed if it is paused', () => {
+            game.start();
+            game.scene.addObject(guiObject);
+            guiObject.handleEvent(<any>{ type: 'keyPressed', code: 'KeyE' });
+
+            sinon.stub(game.onPlay, 'emit');
+            guiObject.handleEvent(<any>{ type: 'keyPressed', code: 'KeyE' });
+            expect(game.onPlay.emit).to.be.calledOnce;
+        });
+
+        it('should not pause the game when escape is pressed', () => {
+            game.start();
+            game.scene.addObject(guiObject);
+            sinon.stub(game.onPause, 'emit');
+            guiObject.handleEvent(<any>{ type: 'keyPressed', code: 'Escape' });
+            expect(game.onPause.emit).not.to.be.called;
+        });
+
+        it('should un-pause the game when escape is pressed if it is paused', () => {
+            game.start();
+            game.scene.addObject(guiObject);
+            guiObject.handleEvent(<any>{ type: 'keyPressed', code: 'KeyE' });
+
+            sinon.stub(game.onPlay, 'emit');
+            guiObject.handleEvent(<any>{ type: 'keyPressed', code: 'Escape' });
+            expect(game.onPlay.emit).to.be.calledOnce;
         });
     });
 
