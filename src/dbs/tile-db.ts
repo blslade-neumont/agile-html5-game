@@ -51,7 +51,7 @@ export let tiles: { [name: string]: WorldTile } =
                 framesPerSecond: 4,
             },
             isSolid: false,
-            onLand: (entity) => {
+            onTick: (delta, entity) => {
                 entity.takeDamage(1);
             }
         },
@@ -67,7 +67,7 @@ export let tiles: { [name: string]: WorldTile } =
                 framesPerSecond: 4,
             },
             isSolid: false,
-            onLand: (entity) => {
+            onTick: (delta, entity) => {
                 entity.takeDamage(1);
             }
         },
