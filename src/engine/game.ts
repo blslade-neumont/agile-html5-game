@@ -130,7 +130,6 @@ export class Game {
         if (this._scene) {
             this._scene.tick(delta);
             this.handleSceneChange();
-
         }
     }
     protected render(context: CanvasRenderingContext2D) {
