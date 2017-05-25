@@ -1,4 +1,4 @@
-﻿import { ResourceLoader, GameObject, GameObjectOptions, GameEvent, fmod } from './engine';
+import { ResourceLoader, GameObject, GameObjectOptions, GameEvent, fmod, clamp } from './engine';
 import { World } from './world';
 import { WorldTile, TILE_SIZE } from './dbs/tile-db';
 import { RtsGame } from './rts-game';
@@ -12,17 +12,24 @@ const CLOSE_ENOUGH: number = 3.0;
 export class Player extends GameObject {
     constructor(opts: GameObjectOptions = {}) {
         super("Player", opts);
-        if (!this.sprite) this.sprite = alives['katie_south'].sprite;
+        if (!this.sprite) this.sprite = alives['player-south'].sprite;
+    }
+
+    handleEvent(evt: GameEvent) {
+        if (evt.type == 'mouseWheel') {
+            let scale = Math.pow(2, -clamp(evt.delta, -1, 1) / 7);
+            this.scene.camera.zoomScale *= scale;
+        }
     }
 
     tick(delta: number) {
         let h: number = 0.0;
-        if (this.events.isKeyDown('ArrowLeft')) { h -= MOVE_SPEED; }
-        if (this.events.isKeyDown('ArrowRight')) { h += MOVE_SPEED; }
+        if (this.events.isKeyDown('ArrowLeft') || this.events.isKeyDown('KeyA')) { h -= MOVE_SPEED; }
+        if (this.events.isKeyDown('ArrowRight') || this.events.isKeyDown('KeyD')) { h += MOVE_SPEED; }
 
         let v: number = 0.0;
-        if (this.events.isKeyDown('ArrowUp')) { v -= MOVE_SPEED; }
-        if (this.events.isKeyDown('ArrowDown')) { v += MOVE_SPEED; }
+        if (this.events.isKeyDown('ArrowUp') || this.events.isKeyDown('KeyW')) { v -= MOVE_SPEED; }
+        if (this.events.isKeyDown('ArrowDown') || this.events.isKeyDown('KeyS')) { v += MOVE_SPEED; }
 
         let thisTileX: number = fmod(this.x, TILE_SIZE);
         let thisTileY: number = fmod(this.y, TILE_SIZE);
@@ -40,10 +47,10 @@ export class Player extends GameObject {
         }
 
         this.animationSpeed = this.speed > 0 ? .2 : 0;
-        if (this.hspeed > 0) this.sprite = alives['katie_east'].sprite;
-        else if (this.hspeed < 0) this.sprite = alives['katie_west'].sprite;
-        else if (this.vspeed > 0) this.sprite = alives['katie_south'].sprite;
-        else if (this.vspeed < 0) this.sprite = alives['katie_north'].sprite;
+        if (this.hspeed > 0) this.sprite = alives['player-east'].sprite;
+        else if (this.hspeed < 0) this.sprite = alives['player-west'].sprite;
+        else if (this.vspeed > 0) this.sprite = alives['player-south'].sprite;
+        else if (this.vspeed < 0) this.sprite = alives['player-north'].sprite;
 
         let nextX: number = this.x + delta * this.hspeed;
         let nextY: number = this.y + delta * this.vspeed;
@@ -87,12 +94,5 @@ export class Player extends GameObject {
         }
 
         super.tick(delta);
-    }
-
-    handleEvent(evt: GameEvent) {
-        if (evt.type == 'mouseWheel') {
-            let scale = Math.pow(2, -evt.delta / 30);
-            this.scene.camera.zoomScale *= scale;
-        }
     }
 }

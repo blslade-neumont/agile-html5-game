@@ -352,7 +352,7 @@ exports.measureSprite = measureSprite;
 Object.defineProperty(exports, "__esModule", { value: true });
 ;
 exports.alives = {
-    katie_south: {
+    'player-south': {
         sprite: {
             src: 'images/player.png',
             tileset: { width: 32, height: 32 },
@@ -364,7 +364,7 @@ exports.alives = {
             ]
         }
     },
-    katie_west: {
+    'player-west': {
         sprite: {
             src: 'images/player.png',
             tileset: { width: 32, height: 32 },
@@ -376,7 +376,7 @@ exports.alives = {
             ]
         }
     },
-    katie_east: {
+    'player-east': {
         sprite: {
             src: 'images/player.png',
             tileset: { width: 32, height: 32 },
@@ -388,7 +388,7 @@ exports.alives = {
             ]
         }
     },
-    katie_north: {
+    'player-north': {
         sprite: {
             src: 'images/player.png',
             tileset: { width: 32, height: 32 },
@@ -4195,22 +4195,28 @@ var Player = (function (_super) {
         if (opts === void 0) { opts = {}; }
         var _this = _super.call(this, "Player", opts) || this;
         if (!_this.sprite)
-            _this.sprite = alive_db_1.alives['katie_south'].sprite;
+            _this.sprite = alive_db_1.alives['player-south'].sprite;
         return _this;
     }
+    Player.prototype.handleEvent = function (evt) {
+        if (evt.type == 'mouseWheel') {
+            var scale = Math.pow(2, -engine_1.clamp(evt.delta, -1, 1) / 7);
+            this.scene.camera.zoomScale *= scale;
+        }
+    };
     Player.prototype.tick = function (delta) {
         var h = 0.0;
-        if (this.events.isKeyDown('ArrowLeft')) {
+        if (this.events.isKeyDown('ArrowLeft') || this.events.isKeyDown('KeyA')) {
             h -= MOVE_SPEED;
         }
-        if (this.events.isKeyDown('ArrowRight')) {
+        if (this.events.isKeyDown('ArrowRight') || this.events.isKeyDown('KeyD')) {
             h += MOVE_SPEED;
         }
         var v = 0.0;
-        if (this.events.isKeyDown('ArrowUp')) {
+        if (this.events.isKeyDown('ArrowUp') || this.events.isKeyDown('KeyW')) {
             v -= MOVE_SPEED;
         }
-        if (this.events.isKeyDown('ArrowDown')) {
+        if (this.events.isKeyDown('ArrowDown') || this.events.isKeyDown('KeyS')) {
             v += MOVE_SPEED;
         }
         var thisTileX = engine_1.fmod(this.x, tile_db_1.TILE_SIZE);
@@ -4230,13 +4236,13 @@ var Player = (function (_super) {
         }
         this.animationSpeed = this.speed > 0 ? .2 : 0;
         if (this.hspeed > 0)
-            this.sprite = alive_db_1.alives['katie_east'].sprite;
+            this.sprite = alive_db_1.alives['player-east'].sprite;
         else if (this.hspeed < 0)
-            this.sprite = alive_db_1.alives['katie_west'].sprite;
+            this.sprite = alive_db_1.alives['player-west'].sprite;
         else if (this.vspeed > 0)
-            this.sprite = alive_db_1.alives['katie_south'].sprite;
+            this.sprite = alive_db_1.alives['player-south'].sprite;
         else if (this.vspeed < 0)
-            this.sprite = alive_db_1.alives['katie_north'].sprite;
+            this.sprite = alive_db_1.alives['player-north'].sprite;
         var nextX = this.x + delta * this.hspeed;
         var nextY = this.y + delta * this.vspeed;
         var nextMinX = nextX;
@@ -4273,12 +4279,6 @@ var Player = (function (_super) {
             }
         }
         _super.prototype.tick.call(this, delta);
-    };
-    Player.prototype.handleEvent = function (evt) {
-        if (evt.type == 'mouseWheel') {
-            var scale = Math.pow(2, -evt.delta / 30);
-            this.scene.camera.zoomScale *= scale;
-        }
     };
     return Player;
 }(engine_1.GameObject));
