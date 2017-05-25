@@ -5,7 +5,8 @@ export const TILE_SIZE: number = 32;
 export interface WorldTile {
     sprite: SpriteT,
     isSolid: boolean,
-    onLand?: (entity: Entity) => void,
+    onTick?: (delta: number, entity: Entity) => void,
+    onLand?: (entity: Entity) => void
 };
 
 export let tiles: { [name: string]: WorldTile } =

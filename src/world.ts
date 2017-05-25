@@ -44,7 +44,7 @@ export class World extends GameObject {
 
         for (let entity of <Entity[]>this.scene.findObjects((obj) => obj instanceof Entity)) {
             let tileUnder: WorldTile = this.getTileAt(Math.floor(entity.x / TILE_SIZE), Math.floor(entity.y / TILE_SIZE));
-            if (tileUnder.onTick) { tileUnder.onTick(); }
+            if (tileUnder.onTick) { tileUnder.onTick(delta, entity); }
             if (tileUnder.onLand && Math.abs(entity.hspeed - 0.0005) <= 0.001 && Math.abs(entity.vspeed - 0.0005) <= 0.001) {
                 tileUnder.onLand(entity);
             }
