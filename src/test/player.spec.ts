@@ -11,7 +11,7 @@ import { MockWorld } from './mock-world';
 import { alives } from '../dbs/alive-db';
 import { Entity, GameScene } from '../engine';
 import { AgileGame } from '../agile-game';
-import { Game } from '../engine';
+import { Game, MouseWheelEvent } from '../engine';
 import { stubDocument } from '../engine/test/mock-document';
 import { stubImage } from '../engine/test/mock-image';
 import { DeadPlayer } from '../dead-player';
@@ -27,6 +27,35 @@ describe('Player', () => {
     });
     it('should start with player-south as the sprite', () => {
         expect(player.sprite).to.deep.eq(alives['player-south'].sprite);
+    });
+
+    describe('.handleEvent', () => {
+        stubDocument();
+        stubImage();
+
+        let game: AgileGame;
+        beforeEach(() => {
+            game = new AgileGame(30);
+        });
+        afterEach(() => {
+            if (game.isRunning) game.stop();
+        });
+
+        it('should ___ the camera zoom scale when passed a positive delta', () => {
+            game.start();
+            game.scene.addObject(player);
+            let lastZoom = game.scene.camera.zoomScale;
+            player.handleEvent(<any>{type: 'mouseWheel', delta: 10});
+            expect(game.scene.camera.zoomScale).to.be.lessThan(lastZoom);
+        });
+
+        it('should ___ the camera zoom scale when passed a negative delta', () => {
+            game.start();
+            game.scene.addObject(player);
+            let lastZoom = game.scene.camera.zoomScale;
+            player.handleEvent(<any>{ type: 'mouseWheel', delta: -10 });
+            expect(game.scene.camera.zoomScale).to.be.greaterThan(lastZoom);
+        });
     });
 
     describe('.tick', () => {
