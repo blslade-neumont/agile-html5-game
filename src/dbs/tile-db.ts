@@ -71,6 +71,38 @@ export let tiles: { [name: string]: WorldTile } =
                 entity.takeDamage(1);
             }
         },
+        water_left: {
+            sprite: {
+                src: 'images/Tiles/Dungeon_A1.png',
+                tileset: { width: 32, height: 32, tilex: 0, tiley: 2 },
+                frames: [
+                    { tilex: 14, tiley: 6 },
+                    { tilex: 14, tiley: 7 },
+                    { tilex: 14, tiley: 8 },
+                ],
+                framesPerSecond: 4,
+            },
+            isSolid: false,
+            onTick: (delta, entity) => {
+                entity.takeDamage(1);
+            }
+        },
+        water_right: {
+            sprite: {
+                src: 'images/Tiles/Dungeon_A1.png',
+                tileset: { width: 32, height: 32, tilex: 0, tiley: 2 },
+                frames: [
+                    { tilex: 15, tiley: 6 },
+                    { tilex: 15, tiley: 7 },
+                    { tilex: 15, tiley: 8 },
+                ],
+                framesPerSecond: 4,
+            },
+            isSolid: false,
+            onTick: (delta, entity) => {
+                entity.takeDamage(1);
+            }
+        },
 
         dungeonGrass: {
             sprite: {
