@@ -121,19 +121,19 @@ describe('MenuGuiObject', () => {
         });
     });
 
-    describe('.render', () => {
+    describe('.renderImpl', () => {
         let context: CanvasRenderingContext2D;
         beforeEach(() => {
             context = new HTMLCanvasElement().getContext('2d');
         });
 
-        it('should not call MenuGuiObject.render', () => {
+        it('should not call MenuGuiObject.renderImpl', () => {
             let stub: sinon.SinonStub;
             try {
-                stub = sinon.stub(GameObject.prototype, 'render');
+                stub = sinon.stub(GameObject.prototype, 'renderImpl');
                 let guiObj = new MenuGuiObject(sampleGui);
                 guiObj.tick(.02);
-                expect(GameObject.prototype.render).not.to.have.been.called;
+                expect((<any>GameObject.prototype).renderImpl).not.to.have.been.called;
             } finally { if (stub) stub.restore(); }
         });
         it('should call drawGUI', () => {

@@ -12,7 +12,7 @@ import * as renderUtils from '../utils/render';
 import { GameScene } from '../game-scene';
 import { Rect } from '../utils/rect';
 
-describe('GameObject', () => {
+describe.only('GameObject', () => {
     stubDocument();
 
     it('should start without a resourceLoader, eventQueue, or game', () => {
@@ -47,13 +47,14 @@ describe('GameObject', () => {
             expect(gobj.hspeed).to.eq(options.hspeed);
             expect(gobj.vspeed).to.eq(options.vspeed);
         });
-        it('should set shouldRender, sprite, andimationAge, and animationSpeed based on the options passed in', () => {
-            let options = <any>{ shouldRender: 'aaa', sprite: 'bbb', animationAge: 'ccc', animationSpeed: 'ddd' };
+        it('should set shouldRender, sprite, animationAge, animationSpeed, and imageAngle based on the options passed in', () => {
+            let options = <any>{ shouldRender: 'aaa', sprite: 'bbb', animationAge: 'ccc', animationSpeed: 'ddd', imageAngle: 'eee' };
             let gobj = new GameObject('my-name', options);
             expect(gobj.shouldRender).to.eq(options.shouldRender);
             expect(gobj.sprite).to.eq(options.sprite);
             expect(gobj.animationAge).to.eq(options.animationAge);
             expect(gobj.animationSpeed).to.eq(options.animationSpeed);
+            expect(gobj.imageAngle).to.eq(options.imageAngle);
         });
     });
 
@@ -363,22 +364,59 @@ describe('GameObject', () => {
             sinon.stub(context, 'fillRect');
             sinon.stub(context, 'fillText');
             let gobj = new GameObject('name', { shouldRender: false });
+            sinon.stub(gobj, 'renderImpl');
             gobj.render(context);
             expect(renderUtils.drawSprite).not.to.have.been.called;
             expect(context.fillRect).not.to.have.been.called;
             expect(context.fillText).not.to.have.been.called;
+            expect((<any>gobj).renderImpl).not.to.have.been.called;
         });
+        it('should invoke renderImpl', () => {
+            let gobj = new GameObject('name');
+            sinon.stub(gobj, 'renderImpl');
+            gobj.render(context);
+            expect((<any>gobj).renderImpl).to.have.been.calledOnce.calledWith(context);
+        });
+        it('should save and restore the context state', () => {
+            let gobj = new GameObject('name');
+            sinon.stub(context, 'save');
+            sinon.stub(context, 'restore');
+            gobj.render(context);
+            expect(context.save).to.have.been.calledOnce;
+            expect(context.restore).to.have.been.calledOnce.calledAfter(<any>context.save);
+        });
+        it('should translate and rotate the image based on x, y, and imageAngle', () => {
+            sinon.stub(context, 'translate');
+            sinon.stub(context, 'rotate');
+            let gobj = new GameObject('name', { x: 13, y: -27, imageAngle: 180 });
+            gobj.render(context);
+            expect(context.translate).to.have.been.calledOnce.calledWith(13, -27);
+            expect(context.rotate).to.have.been.calledOnce.calledWith(Math.PI);
+        });
+    });
+
+    describe('.renderImpl', () => {
+        let context: CanvasRenderingContext2D;
+        let drawSpriteStub: sinon.SinonStub;
+        beforeEach(() => {
+            context = new HTMLCanvasElement().getContext('2d');
+            drawSpriteStub = sinon.stub(renderUtils, 'drawSprite');
+        });
+        afterEach(() => {
+            drawSpriteStub.restore();
+        });
+
         it('should render the sprite if the game object has one', () => {
             let sprite = { src: 'blah' };
             let gobj = new GameObject('name', { sprite: sprite, animationAge: 14.3 });
-            gobj.render(context);
+            (<any>gobj).renderImpl(context);
             expect(renderUtils.drawSprite).to.have.been.calledWith(context, sinon.match.any, sprite, 0, 0, 14.3);
         });
         it('should render a rect and a question mark if the game object has no sprite', () => {
             sinon.stub(context, 'fillRect');
             sinon.stub(context, 'fillText');
             let gobj = new GameObject('name');
-            gobj.render(context);
+            (<any>gobj).renderImpl(context);
             expect(context.fillRect).to.have.been.calledOnce;
             expect(context.fillText).to.have.been.calledWith('?');
         });

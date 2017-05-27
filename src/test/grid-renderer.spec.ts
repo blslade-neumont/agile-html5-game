@@ -46,7 +46,7 @@ describe('GridRenderer', () => {
         });
     });
 
-    describe('.render', () => {
+    describe('.renderImpl', () => {
         let context: CanvasRenderingContext2D;
 
         let game: Game;

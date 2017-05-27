@@ -203,7 +203,7 @@ describe('Entity', () => {
         });
     });
 
-    describe('.render', () => {
+    describe('.renderImpl', () => {
         let context: CanvasRenderingContext2D;
         beforeEach(() => {
             context = new HTMLCanvasElement().getContext('2d');

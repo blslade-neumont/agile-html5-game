@@ -39,7 +39,7 @@ export class InGameGuiObject extends MenuGuiObject {
         if (this.showInventory) super.tick(delta);
     }
 
-    render(context: CanvasRenderingContext2D) {
+    renderImpl(context: CanvasRenderingContext2D) {
         let [canvasWidth, canvasHeight] = this.game.canvasSize;
         let timeText = this.gameTimeString;
         context.font = '24px Verdana';

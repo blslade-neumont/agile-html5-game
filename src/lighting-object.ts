@@ -11,7 +11,7 @@ export class LightingObject extends GameObject {
     private compositeCanvas: HTMLCanvasElement;
     private compositeContext: CanvasRenderingContext2D;
 
-    render(context: CanvasRenderingContext2D) {
+    renderImpl(context: CanvasRenderingContext2D) {
         let world = <World | null>(<any>this.scene).world;
 
         let darkness = 0;

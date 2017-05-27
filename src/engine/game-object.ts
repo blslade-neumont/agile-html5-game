@@ -24,7 +24,8 @@ export interface GameObjectOptions {
     renderCamera?: RenderCameraT,
     sprite?: SpriteT,
     animationAge?: number,
-    animationSpeed?: number
+    animationSpeed?: number,
+    imageAngle?: number
 };
 
 export class GameObject {
@@ -46,6 +47,7 @@ export class GameObject {
         if (typeof opts.sprite != 'undefined') this.sprite = opts.sprite;
         if (typeof opts.animationAge != 'undefined') this.animationAge = opts.animationAge;
         if (typeof opts.animationSpeed != 'undefined') this.animationSpeed = opts.animationSpeed;
+        if (typeof opts.imageAngle != 'undefined') this.imageAngle = opts.imageAngle;
     }
 
     private DEBUG_MOVEMENT = false;
@@ -190,6 +192,14 @@ export class GameObject {
         this._animationSpeed = val;
     }
 
+    private _imageAngle = 1;
+    get imageAngle() {
+        return this._imageAngle;
+    }
+    set imageAngle(val) {
+        this._imageAngle = val;
+    }
+
     private _scene: GameScene;
     get scene() {
         if (!this._scene) return null;
@@ -229,18 +239,27 @@ export class GameObject {
     render(context: CanvasRenderingContext2D) {
         if (!this.shouldRender) return;
 
+        context.save();
+        context.translate(this.x, this.y);
+        context.rotate(degToRad(this.imageAngle));
+
+        this.renderImpl(context);
+        
+        context.restore();
+    }
+    protected renderImpl(context: CanvasRenderingContext2D) {
         if (this.sprite) {
-            drawSprite(context, this.resources, this.sprite, this.x, this.y, this.animationAge);
+            drawSprite(context, this.resources, this.sprite, 0, 0, this.animationAge);
         }
         else {
             context.fillStyle = 'red';
-            context.fillRect(this.x, this.y, 16, 16);
+            context.fillRect(0, 0, 16, 16);
 
             context.fillStyle = 'white';
             context.font = '16px Consolas';
             context.textAlign = 'center';
             context.textBaseline = 'middle';
-            context.fillText('?', this.x + 8, this.y + 8);
+            context.fillText('?', 0 + 8, 0 + 8);
         }
     }
 }

@@ -24,7 +24,7 @@ export class MenuGuiObject extends GameObject {
         tickGUI(delta, this.game, this.gui);
     }
 
-    render(context: CanvasRenderingContext2D) {
+    renderImpl(context: CanvasRenderingContext2D) {
         drawGUI(context, this.game, this.gui, this.animationAge);
     }
 }

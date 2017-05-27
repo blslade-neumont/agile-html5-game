@@ -93,7 +93,7 @@ describe('InGameGuiObject', () => {
         });
     });
 
-    describe('.render', () => {
+    describe('.renderImpl', () => {
         let context: CanvasRenderingContext2D;
         let game: Game;
         let scene: OverworldScene;

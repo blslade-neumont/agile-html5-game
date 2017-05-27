@@ -22,7 +22,7 @@ export class GridRenderer extends GameObject {
         return null;
     }
     
-    render(context: CanvasRenderingContext2D) {
+    renderImpl(context: CanvasRenderingContext2D) {
         if (!this.world) { throw new Error(`World not set! Cannot render grid!`); }
         if (!this.resources) { throw new Error(`Loader not set! Cannot render grid!`); }
 
