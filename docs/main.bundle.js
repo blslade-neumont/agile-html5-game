@@ -4080,6 +4080,7 @@ var Bat = (function (_super) {
         }
         this.speed = engine_1.clamp(this.speed, this.minSpeed, this.maxSpeed);
         this.animationSpeed = .5 + (1 * (this.maxSpeed - this.minSpeed) / (this.maxSpeed - this.minSpeed));
+        this.imageAngle = this.direction + 90;
     };
     Bat.prototype.render = function (context) {
         _super.prototype.render.call(this, context);

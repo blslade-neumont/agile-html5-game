@@ -95,6 +95,14 @@ export class Bat extends GameObject {
 
         this.speed = clamp(this.speed, this.minSpeed, this.maxSpeed);
         this.animationSpeed = .5 + (1 * (this.maxSpeed - this.minSpeed) / (this.maxSpeed - this.minSpeed));
+
+        this.imageAngle = this.direction + 90;
+        // let clampDist = 0;
+        // let dir = this.direction >= 180 ? 360 - this.direction : this.direction;
+        // if (dir < clampDist) this.imageAngle = clampDist;
+        // else if (dir > 180 - clampDist) this.imageAngle = 180 - clampDist;
+        // else this.imageAngle = dir;
+        // this.imageAngle = -this.imageAngle + 90;
     }
 
     render(context: CanvasRenderingContext2D) {
