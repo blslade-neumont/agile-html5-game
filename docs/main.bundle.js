@@ -400,10 +400,16 @@ exports.alives = {
             ]
         }
     },
-    bird: {
+    bat: {
         sprite: {
-            src: 'images/bird.png',
-            pivot: { x: 3, y: 3 }
+            src: 'images/bat.png',
+            pivot: { x: 5, y: 1.5 },
+            tileset: { width: 10, height: 3 },
+            frames: [
+                { tilex: 0, tiley: 0 },
+                { tilex: 0, tiley: 1 }
+            ],
+            framesPerSecond: 4
         }
     }
 };
@@ -3919,39 +3925,39 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var engine_1 = __webpack_require__(0);
-var bird_1 = __webpack_require__(23);
-var BirdController = (function (_super) {
-    __extends(BirdController, _super);
-    function BirdController() {
+var bat_1 = __webpack_require__(23);
+var BatController = (function (_super) {
+    __extends(BatController, _super);
+    function BatController() {
         var _this = _super.call(this, "BirdController", { shouldRender: false }) || this;
-        _this._birds = [];
+        _this._bats = [];
         _this.renderMode = 'none';
         return _this;
     }
-    Object.defineProperty(BirdController.prototype, "birds", {
+    Object.defineProperty(BatController.prototype, "bats", {
         get: function () {
-            return this._birds;
+            return this._bats;
         },
         enumerable: true,
         configurable: true
     });
-    BirdController.prototype.addBirds = function (count) {
+    BatController.prototype.addBats = function (count) {
         for (var q = 0; q < count; q++)
-            this.addBird();
+            this.addBat();
         this.updateRenderDebugInfo();
     };
-    BirdController.prototype.addBird = function () {
+    BatController.prototype.addBat = function () {
         var opts = {
             direction: Math.random() * 360,
             speed: (2 + Math.random() * 4) * 30,
             x: (-.5 + Math.random()) * 3000,
             y: (-.5 + Math.random()) * 3000
         };
-        var bird = new bird_1.Bird(this, opts);
-        this._birds.push(bird);
+        var bird = new bat_1.Bat(this, opts);
+        this._bats.push(bird);
         this.game.scene.addObject(bird);
     };
-    BirdController.prototype.handleEvent = function (evt) {
+    BatController.prototype.handleEvent = function (evt) {
         if (evt.type == 'keyPressed' && evt.code == 'KeyF') {
             this.renderMode = (this.renderMode == 'none') ? 'single' :
                 (this.renderMode == 'single') ? 'all' :
@@ -3959,17 +3965,17 @@ var BirdController = (function (_super) {
             this.updateRenderDebugInfo();
         }
     };
-    BirdController.prototype.updateRenderDebugInfo = function () {
-        for (var _i = 0, _a = this._birds; _i < _a.length; _i++) {
+    BatController.prototype.updateRenderDebugInfo = function () {
+        for (var _i = 0, _a = this._bats; _i < _a.length; _i++) {
             var bird = _a[_i];
             bird.renderDebugInfo = this.renderMode == 'all';
         }
-        if (this.renderMode == 'single' && this._birds.length)
-            this._birds[0].renderDebugInfo = true;
+        if (this.renderMode == 'single' && this._bats.length)
+            this._bats[0].renderDebugInfo = true;
     };
-    return BirdController;
+    return BatController;
 }(engine_1.GameObject));
-exports.BirdController = BirdController;
+exports.BatController = BatController;
 
 
 /***/ }),
@@ -3998,12 +4004,13 @@ function pointDistance2(x1, y1, x2, y2) {
 function pointDistance(x1, y1, x2, y2) {
     return Math.sqrt(pointDistance2(x1, y1, x2, y2));
 }
-var Bird = (function (_super) {
-    __extends(Bird, _super);
-    function Bird(controller, opts) {
+var Bat = (function (_super) {
+    __extends(Bat, _super);
+    function Bat(controller, opts) {
         if (opts === void 0) { opts = {}; }
-        var _this = _super.call(this, "Bird", merge(opts, {
-            sprite: alive_db_1.alives['bird'].sprite
+        var _this = _super.call(this, "Bat", merge(opts, {
+            sprite: alive_db_1.alives['bat'].sprite,
+            animationAge: Math.random() * 1000
         })) || this;
         _this.controller = controller;
         _this.originGravitation = 1 / (1000 + Math.random() * 5000);
@@ -4026,7 +4033,7 @@ var Bird = (function (_super) {
         _this.envCalcThreshold = .25 + Math.random() * .5;
         return _this;
     }
-    Bird.prototype.tick = function (delta) {
+    Bat.prototype.tick = function (delta) {
         var _this = this;
         _super.prototype.tick.call(this, delta);
         if (this.x > this.originGravitationDistance || this.x < -this.originGravitationDistance) {
@@ -4041,7 +4048,7 @@ var Bird = (function (_super) {
         this.direction += rotAdd * delta;
         if (this.timeSinceLastEnv > this.envCalcThreshold) {
             var nbdist2_1 = this.neighborDistance * this.neighborDistance;
-            this.env = this.controller.birds
+            this.env = this.controller.bats
                 .map(function (bird) { return ({ bird: bird, dist: pointDistance2(_this.x, _this.y, bird.x, bird.y) }); })
                 .filter(function (bird) { return bird.bird != _this && bird.dist < nbdist2_1; })
                 .sort(function (lhs, rhs) { return lhs.dist - rhs.dist; })
@@ -4072,8 +4079,9 @@ var Bird = (function (_super) {
             this.vspeed = (this.vspeed * this.independence + gravHVSpeed[1] * delta) / (delta + this.independence);
         }
         this.speed = engine_1.clamp(this.speed, this.minSpeed, this.maxSpeed);
+        this.animationSpeed = .5 + (1 * (this.maxSpeed - this.minSpeed) / (this.maxSpeed - this.minSpeed));
     };
-    Bird.prototype.render = function (context) {
+    Bat.prototype.render = function (context) {
         _super.prototype.render.call(this, context);
         if (!this.renderDebugInfo)
             return;
@@ -4096,9 +4104,9 @@ var Bird = (function (_super) {
         context.closePath();
         context.stroke();
     };
-    return Bird;
+    return Bat;
 }(engine_1.GameObject));
-exports.Bird = Bird;
+exports.Bat = Bat;
 
 
 /***/ }),
@@ -4348,7 +4356,7 @@ var engine_1 = __webpack_require__(0);
 var world_1 = __webpack_require__(30);
 var grid_renderer_1 = __webpack_require__(24);
 var player_1 = __webpack_require__(26);
-var bird_controller_1 = __webpack_require__(22);
+var bat_controller_1 = __webpack_require__(22);
 var FlockingScene = (function (_super) {
     __extends(FlockingScene, _super);
     function FlockingScene() {
@@ -4374,9 +4382,9 @@ var FlockingScene = (function (_super) {
         this.addObject(new grid_renderer_1.GridRenderer(this.world));
         var player = new player_1.Player();
         this.addObject(player);
-        var birdController = new bird_controller_1.BirdController();
-        this.addObject(birdController);
-        birdController.addBirds(1000);
+        var batController = new bat_controller_1.BatController();
+        this.addObject(batController);
+        batController.addBats(1000);
         var camera = this.camera = new engine_1.FollowCamera(this);
         camera.follow = player;
         camera.enableSmoothing = false;

@@ -1,32 +1,32 @@
 import { GameObject, GameObjectOptions, GameEvent } from '../engine';
-import { Bird } from './bird';
+import { Bat } from './bat';
 
 type FlockingRenderMode = 'none' | 'single' | 'all';
 
-export class BirdController extends GameObject {
+export class BatController extends GameObject {
     constructor() {
         super("BirdController", { shouldRender: false });
     }
 
-    private _birds: Bird[] = [];
-    get birds() {
-        return this._birds;
+    private _bats: Bat[] = [];
+    get bats() {
+        return this._bats;
     }
 
-    addBirds(count: number) {
+    addBats(count: number) {
         for (let q = 0; q < count; q++)
-            this.addBird();
+            this.addBat();
         this.updateRenderDebugInfo();
     }
-    private addBird() {
+    private addBat() {
         let opts: GameObjectOptions = {
             direction: Math.random() * 360,
             speed: (2 + Math.random() * 4) * 30,
             x: (-.5 + Math.random()) * 3000,
             y: (-.5 + Math.random()) * 3000
         };
-        let bird = new Bird(this, opts);
-        this._birds.push(bird);
+        let bird = new Bat(this, opts);
+        this._bats.push(bird);
         this.game.scene.addObject(bird);
     }
 
@@ -41,9 +41,9 @@ export class BirdController extends GameObject {
         }
     }
     private updateRenderDebugInfo() {
-        for (let bird of this._birds) {
+        for (let bird of this._bats) {
             bird.renderDebugInfo = this.renderMode == 'all';
         }
-        if (this.renderMode == 'single' && this._birds.length) this._birds[0].renderDebugInfo = true;
+        if (this.renderMode == 'single' && this._bats.length) this._bats[0].renderDebugInfo = true;
     }
 }

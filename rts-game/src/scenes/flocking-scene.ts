@@ -2,7 +2,7 @@
 import { World } from '../world';
 import { GridRenderer } from '../grid-renderer';
 import { Player } from '../player';
-import { BirdController } from '../flocking/bird-controller';
+import { BatController } from '../flocking/bat-controller';
 
 export class FlockingScene extends GameScene {
     constructor() {
@@ -29,9 +29,9 @@ export class FlockingScene extends GameScene {
         let player = new Player();
         this.addObject(player);
 
-        let birdController = new BirdController();
-        this.addObject(birdController);
-        birdController.addBirds(1000);
+        let batController = new BatController();
+        this.addObject(batController);
+        batController.addBats(1000);
         
         let camera = this.camera = new FollowCamera(this);
         camera.follow = player;

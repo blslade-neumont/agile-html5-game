@@ -54,10 +54,16 @@ export let alives: { [name: string]: Alive } =
                 ]
             }
         },
-        bird: {
+        bat: {
             sprite: {
-                src: 'images/bird.png',
-                pivot: { x: 3, y: 3 }
+                src: 'images/bat.png',
+                pivot: { x: 5, y: 1.5 },
+                tileset: { width: 10, height: 3 },
+                frames: [
+                    { tilex: 0, tiley: 0 },
+                    { tilex: 0, tiley: 1 }
+                ],
+                framesPerSecond: 4
             }
         }
     };

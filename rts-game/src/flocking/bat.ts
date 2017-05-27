@@ -1,5 +1,5 @@
 ﻿import { GameObject, GameObjectOptions, fmod, degToRad, clamp } from '../engine';
-import { BirdController } from './bird-controller';
+import { BatController } from './bat-controller';
 import { alives } from '../dbs/alive-db';
 import merge = require('lodash.merge');
 
@@ -10,10 +10,11 @@ function pointDistance(x1: number, y1: number, x2: number, y2: number) {
     return Math.sqrt(pointDistance2(x1, y1, x2, y2));
 }
 
-export class Bird extends GameObject {
-    constructor(private controller: BirdController, opts: GameObjectOptions = {}) {
-        super("Bird", merge(opts, {
-            sprite: alives['bird'].sprite
+export class Bat extends GameObject {
+    constructor(private controller: BatController, opts: GameObjectOptions = {}) {
+        super("Bat", merge(opts, {
+            sprite: alives['bat'].sprite,
+            animationAge: Math.random() * 1000
         }));
     }
 
@@ -36,7 +37,7 @@ export class Bird extends GameObject {
     alignmentForce = (2 + Math.random() * 5) * .2;
     cohesionForce = (2 + Math.random() * 5) * .2;
     
-    private env: Bird[] = [];
+    private env: Bat[] = [];
     private timeSinceLastEnv = Infinity;
     private envCalcThreshold = .25 + Math.random() * .5;
     
@@ -56,7 +57,7 @@ export class Bird extends GameObject {
 
         if (this.timeSinceLastEnv > this.envCalcThreshold) {
             let nbdist2 = this.neighborDistance * this.neighborDistance;
-            this.env = this.controller.birds
+            this.env = this.controller.bats
                 .map(bird => ({ bird: bird, dist: pointDistance2(this.x, this.y, bird.x, bird.y) }))
                 .filter(bird => bird.bird != this && bird.dist < nbdist2)
                 .sort((lhs, rhs) => lhs.dist - rhs.dist)
@@ -93,6 +94,7 @@ export class Bird extends GameObject {
         }
 
         this.speed = clamp(this.speed, this.minSpeed, this.maxSpeed);
+        this.animationSpeed = .5 + (1 * (this.maxSpeed - this.minSpeed) / (this.maxSpeed - this.minSpeed));
     }
 
     render(context: CanvasRenderingContext2D) {
