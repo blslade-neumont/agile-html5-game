@@ -1,4 +1,5 @@
-﻿import { SpriteT } from '../engine';
+import { SpriteT } from '../engine';
+import merge = require('lodash.merge');
 
 export const TILE_SIZE: number = 48;
 
@@ -7,13 +8,30 @@ export interface WorldTile {
     isSolid: boolean
 };
 
-export let tiles: { [name: string]: WorldTile } =
-    {
-        grass: {
+export let tiles: { [name: string]: WorldTile } = { };
+
+function addDecorationTiles(name: string, count: number, def: WorldTile) {
+    for (let q = 0; q < count; q++) {
+        let indName = `${name}${(q && q + 1) || ''}`;
+        tiles[indName] = merge({}, def, {
             sprite: {
-                src: 'images/tiles.png',
-                tileset: { width: 48, height: 48, tilex: 0, tiley: 0 }
-            },
-            isSolid: false
-        }
-    };
+                tileset: { tilex: q }
+            }
+        });
+        console.log(indName, tiles[indName]);
+    }
+}
+addDecorationTiles('rock', 7, {
+    sprite: {
+        src: 'images/cave_floor.png',
+        tileset: { width: 48, height: 48, tilex: 0, tiley: 0 }
+    },
+    isSolid: false
+});
+addDecorationTiles('water', 4, {
+    sprite: {
+        src: 'images/water_tiles.png',
+        tileset: { width: 48, height: 48, tilex: 0, tiley: 0 }
+    },
+    isSolid: true
+});

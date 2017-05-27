@@ -123,17 +123,35 @@ exports.pointDirection = pointDirection;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+var merge = __webpack_require__(6);
 exports.TILE_SIZE = 48;
 ;
-exports.tiles = {
-    grass: {
-        sprite: {
-            src: 'images/tiles.png',
-            tileset: { width: 48, height: 48, tilex: 0, tiley: 0 }
-        },
-        isSolid: false
+exports.tiles = {};
+function addDecorationTiles(name, count, def) {
+    for (var q = 0; q < count; q++) {
+        var indName = "" + name + ((q && q + 1) || '');
+        exports.tiles[indName] = merge({}, def, {
+            sprite: {
+                tileset: { tilex: q }
+            }
+        });
+        console.log(indName, exports.tiles[indName]);
     }
-};
+}
+addDecorationTiles('rock', 7, {
+    sprite: {
+        src: 'images/cave_floor.png',
+        tileset: { width: 48, height: 48, tilex: 0, tiley: 0 }
+    },
+    isSolid: false
+});
+addDecorationTiles('water', 4, {
+    sprite: {
+        src: 'images/water_tiles.png',
+        tileset: { width: 48, height: 48, tilex: 0, tiley: 0 }
+    },
+    isSolid: true
+});
 
 
 /***/ }),
@@ -286,7 +304,7 @@ exports.Camera = Camera;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var sprite_1 = __webpack_require__(10);
+var sprite_1 = __webpack_require__(11);
 var math_1 = __webpack_require__(1);
 var LINE_HEIGHT = 12;
 function fillText(context, text, x, y) {
@@ -417,704 +435,6 @@ exports.alives = {
 
 /***/ }),
 /* 6 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var EventQueue = (function () {
-    function EventQueue() {
-        this.DEBUG_KEYS = false;
-        this.DEBUG_MOUSE = false;
-        this._events = [];
-        this._keys = new Map();
-        this._mouseButtons = new Map();
-        this._pageX = 0;
-        this._pageY = 0;
-        this.init();
-    }
-    EventQueue.prototype.init = function () {
-        var body = document.getElementsByTagName('body')[0];
-        this.initKeyboard(body);
-        this.initMouse(body);
-    };
-    EventQueue.prototype.initKeyboard = function (body) {
-        var _this = this;
-        body.onkeydown = function (e) {
-            if (_this.DEBUG_KEYS)
-                console.log("Key Pressed: " + e.key + "; " + e.code);
-            if (!_this.isKeyDown(e.code)) {
-                _this.enqueue({
-                    type: 'keyPressed',
-                    code: e.code,
-                    altPressed: !!e.altKey,
-                    ctrlPressed: !!e.ctrlKey,
-                    shiftPressed: !!e.shiftKey
-                });
-                _this._keys.set(e.code, true);
-            }
-            _this.enqueue({
-                type: 'keyTyped',
-                key: e.key,
-                code: e.code,
-                altPressed: !!e.altKey,
-                ctrlPressed: !!e.ctrlKey,
-                shiftPressed: !!e.shiftKey
-            });
-        };
-        body.onkeyup = function (e) {
-            if (_this.DEBUG_KEYS)
-                console.log("Key Released: " + e.key + "; " + e.code);
-            if (_this.isKeyDown(e.code)) {
-                _this.enqueue({
-                    type: 'keyReleased',
-                    code: e.code,
-                    altPressed: !!e.altKey,
-                    ctrlPressed: !!e.ctrlKey,
-                    shiftPressed: !!e.shiftKey
-                });
-                _this._keys.set(e.code, false);
-            }
-        };
-    };
-    EventQueue.prototype.initMouse = function (body) {
-        var _this = this;
-        body.onmousemove = function (e) {
-            if (_this.DEBUG_MOUSE)
-                console.log("Mouse moved. Movement: " + e.movementX + ", " + e.movementY + "; Position: " + e.pageX + ", " + e.pageY);
-            if (typeof e.pageX !== 'undefined')
-                _this._pageX = e.pageX;
-            else
-                _this._pageX += e.movementX;
-            if (typeof e.pageY !== 'undefined')
-                _this._pageY = e.pageY;
-            else
-                _this._pageY += e.movementY;
-            _this.enqueue({
-                type: 'mouseMoved',
-                movementX: e.movementX,
-                movementY: e.movementY,
-                pageX: _this._pageX,
-                pageY: _this._pageY
-            });
-        };
-        body.onmousedown = function (e) {
-            if (_this.DEBUG_MOUSE)
-                console.log("Mouse button pressed. Button: " + e.button + "; Position: " + e.pageX + ", " + e.pageY);
-            if (!_this.isMouseButtonDown(e.button)) {
-                if (typeof e.pageX !== 'undefined')
-                    _this._pageX = e.pageX;
-                if (typeof e.pageY !== 'undefined')
-                    _this._pageY = e.pageY;
-                _this.enqueue({
-                    type: 'mouseButtonPressed',
-                    button: e.button,
-                    pageX: _this._pageX,
-                    pageY: _this._pageY
-                });
-                _this._mouseButtons.set(e.button, true);
-            }
-        };
-        body.onmouseup = function (e) {
-            if (_this.DEBUG_MOUSE)
-                console.log("Mouse button released. Button: " + e.button + "; Position: " + e.pageX + ", " + e.pageY);
-            if (_this.isMouseButtonDown(e.button)) {
-                if (typeof e.pageX !== 'undefined')
-                    _this._pageX = e.pageX;
-                if (typeof e.pageY !== 'undefined')
-                    _this._pageY = e.pageY;
-                _this.enqueue({
-                    type: 'mouseButtonReleased',
-                    button: e.button,
-                    pageX: _this._pageX,
-                    pageY: _this._pageY
-                });
-                _this._mouseButtons.set(e.button, false);
-            }
-        };
-        body.onwheel = function (e) {
-            if (_this.DEBUG_MOUSE)
-                console.log("Mouse wheel. delta: " + e.deltaY + "; Position: " + e.pageX + ", " + e.pageY);
-            if (typeof e.pageX !== 'undefined')
-                _this._pageX = e.pageX;
-            if (typeof e.pageY !== 'undefined')
-                _this._pageY = e.pageY;
-            _this.enqueue({
-                type: 'mouseWheel',
-                delta: e.deltaY,
-                pageX: _this._pageX,
-                pageY: _this._pageY
-            });
-        };
-    };
-    EventQueue.prototype.isKeyDown = function (code) {
-        if (!this._keys.has(code))
-            return false;
-        return this._keys.get(code);
-    };
-    EventQueue.prototype.isMouseButtonDown = function (button) {
-        if (!this._mouseButtons.has(button))
-            return false;
-        return this._mouseButtons.get(button);
-    };
-    Object.defineProperty(EventQueue.prototype, "mousePosition", {
-        get: function () {
-            return { x: this._pageX, y: this._pageY };
-        },
-        enumerable: true,
-        configurable: true
-    });
-    EventQueue.prototype.enqueue = function (e) {
-        var lastEvent = this._events[this._events.length - 1];
-        if (lastEvent && lastEvent.type == e.type) {
-            switch (e.type) {
-                case 'mouseMoved':
-                    lastEvent.movementX += e.movementX;
-                    lastEvent.movementY += e.movementY;
-                    lastEvent.pageX = e.pageX;
-                    lastEvent.pageY = e.pageY;
-                    return;
-                case 'mouseWheel':
-                    lastEvent.delta += e.delta;
-                    return;
-                case 'canvasResize':
-                    lastEvent.size = e.size;
-                    return;
-            }
-        }
-        this._events.push(e);
-    };
-    EventQueue.prototype.clearQueue = function () {
-        return this._events.splice(0);
-    };
-    return EventQueue;
-}());
-exports.EventQueue = EventQueue;
-//# sourceMappingURL=event-queue.js.map
-
-/***/ }),
-/* 7 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var math_1 = __webpack_require__(1);
-var rect_1 = __webpack_require__(9);
-var render_1 = __webpack_require__(4);
-;
-var GameObject = (function () {
-    function GameObject(name, opts) {
-        if (opts === void 0) { opts = {}; }
-        this.DEBUG_MOVEMENT = false;
-        this._x = 0;
-        this._y = 0;
-        this._shouldTick = true;
-        this._dir = 0;
-        this._speed = 0;
-        this._hspeed = 0;
-        this._vspeed = 0;
-        this._shouldRender = true;
-        this._renderCamera = 'default';
-        this._sprite = null;
-        this._animationAge = 0;
-        this._animationSpeed = 1;
-        this._imageAngle = 0;
-        this._name = name;
-        if (typeof opts.x != 'undefined')
-            this.x = opts.x;
-        if (typeof opts.y != 'undefined')
-            this.y = opts.y;
-        if (typeof opts.collisionBounds != 'undefined')
-            this.collisionBounds = opts.collisionBounds;
-        if (typeof opts.shouldTick != 'undefined')
-            this.shouldTick = opts.shouldTick;
-        if (typeof opts.direction != 'undefined')
-            this.direction = opts.direction;
-        if (typeof opts.speed != 'undefined')
-            this.speed = opts.speed;
-        if (typeof opts.hspeed != 'undefined')
-            this.hspeed = opts.hspeed;
-        if (typeof opts.vspeed != 'undefined')
-            this.vspeed = opts.vspeed;
-        if (typeof opts.shouldRender != 'undefined')
-            this.shouldRender = opts.shouldRender;
-        if (typeof opts.renderCamera != 'undefined')
-            this.renderCamera = opts.renderCamera;
-        if (typeof opts.sprite != 'undefined')
-            this.sprite = opts.sprite;
-        if (typeof opts.animationAge != 'undefined')
-            this.animationAge = opts.animationAge;
-        if (typeof opts.animationSpeed != 'undefined')
-            this.animationSpeed = opts.animationSpeed;
-        if (typeof opts.imageAngle != 'undefined')
-            this.imageAngle = opts.imageAngle;
-    }
-    Object.defineProperty(GameObject.prototype, "name", {
-        get: function () {
-            return this._name;
-        },
-        set: function (val) {
-            this._name = val;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(GameObject.prototype, "x", {
-        get: function () {
-            return this._x;
-        },
-        set: function (val) {
-            this._x = val;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(GameObject.prototype, "y", {
-        get: function () {
-            return this._y;
-        },
-        set: function (val) {
-            this._y = val;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(GameObject.prototype, "collisionBounds", {
-        get: function () {
-            if (!this._collisionBounds) {
-                if (!this.sprite)
-                    return rect_1.Rect.zero;
-                var pivot = this.sprite.pivot || { x: 0, y: 0 };
-                var spriteSize = render_1.measureSprite(this.resources, this.sprite);
-                return new rect_1.Rect(-pivot.x, spriteSize.width - pivot.x, -pivot.y, spriteSize.height - pivot.y);
-            }
-            return this._collisionBounds;
-        },
-        set: function (val) {
-            this._collisionBounds = val;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(GameObject.prototype, "shouldTick", {
-        get: function () {
-            return this._shouldTick;
-        },
-        set: function (val) {
-            this._shouldTick = val;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(GameObject.prototype, "direction", {
-        get: function () {
-            return this._dir;
-        },
-        set: function (val) {
-            if (this.DEBUG_MOVEMENT)
-                console.log("setting direction: " + val);
-            val = math_1.fmod(val, 360);
-            if (this._dir == val)
-                return;
-            this._dir = val;
-            this.updateHVSpeed();
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(GameObject.prototype, "speed", {
-        get: function () {
-            return this._speed;
-        },
-        set: function (val) {
-            if (this.DEBUG_MOVEMENT)
-                console.log("setting speed: " + val);
-            if (val < 0)
-                throw new Error("Invalid speed: " + val + ". Must be >= 0");
-            if (this._speed == val)
-                return;
-            this._speed = val;
-            this.updateHVSpeed();
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(GameObject.prototype, "hspeed", {
-        get: function () {
-            return this._hspeed;
-        },
-        set: function (val) {
-            if (this.DEBUG_MOVEMENT)
-                console.log("setting hspeed: " + val);
-            if (this._hspeed == val)
-                return;
-            this._hspeed = val;
-            this.updateDirectionAndSpeed();
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(GameObject.prototype, "vspeed", {
-        get: function () {
-            return this._vspeed;
-        },
-        set: function (val) {
-            if (this.DEBUG_MOVEMENT)
-                console.log("setting vspeed: " + val);
-            if (this._vspeed == val)
-                return;
-            this._vspeed = val;
-            this.updateDirectionAndSpeed();
-        },
-        enumerable: true,
-        configurable: true
-    });
-    GameObject.prototype.updateHVSpeed = function () {
-        var radians = math_1.degToRad(this._dir);
-        this._vspeed = -Math.sin(radians) * this._speed;
-        this._hspeed = Math.cos(radians) * this._speed;
-        if (this.DEBUG_MOVEMENT)
-            console.log("  hspeed: " + this._hspeed + "; vspeed: " + this._vspeed);
-    };
-    GameObject.prototype.updateDirectionAndSpeed = function () {
-        this._speed = Math.sqrt(this._hspeed * this._hspeed + this._vspeed * this._vspeed);
-        if (this._speed == 0)
-            return;
-        this._dir = math_1.pointDirection(0, 0, this._hspeed, this._vspeed);
-        if (this._dir < 0)
-            this._dir += 360;
-        if (this.DEBUG_MOVEMENT)
-            console.log("  speed: " + this._speed + "; direction: " + this._dir);
-    };
-    Object.defineProperty(GameObject.prototype, "shouldRender", {
-        get: function () {
-            return this._shouldRender;
-        },
-        set: function (val) {
-            this._shouldRender = val;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(GameObject.prototype, "renderCamera", {
-        get: function () {
-            return this._renderCamera;
-        },
-        set: function (val) {
-            this._renderCamera = val;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(GameObject.prototype, "sprite", {
-        get: function () {
-            return this._sprite;
-        },
-        set: function (val) {
-            this._sprite = val;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(GameObject.prototype, "animationAge", {
-        get: function () {
-            return this._animationAge;
-        },
-        set: function (val) {
-            this._animationAge = val;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(GameObject.prototype, "animationSpeed", {
-        get: function () {
-            return this._animationSpeed;
-        },
-        set: function (val) {
-            this._animationSpeed = val;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(GameObject.prototype, "imageAngle", {
-        get: function () {
-            return this._imageAngle;
-        },
-        set: function (val) {
-            this._imageAngle = val;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(GameObject.prototype, "scene", {
-        get: function () {
-            if (!this._scene)
-                return null;
-            return this._scene;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(GameObject.prototype, "game", {
-        get: function () {
-            if (!this.scene)
-                return null;
-            return this.scene.game;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(GameObject.prototype, "resources", {
-        get: function () {
-            if (!this.game)
-                return null;
-            return this.game.resourceLoader;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(GameObject.prototype, "events", {
-        get: function () {
-            if (!this.game)
-                return null;
-            return this.game.eventQueue;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    GameObject.prototype.addToScene = function (scene) {
-        if (this._scene)
-            throw new Error('This game object is already added to a scene!');
-        this._scene = scene;
-    };
-    GameObject.prototype.removeFromScene = function () {
-        this._scene = null;
-    };
-    GameObject.prototype.onSceneEnter = function () { };
-    GameObject.prototype.onSceneExit = function () { };
-    GameObject.prototype.handleEvent = function (evt) {
-    };
-    GameObject.prototype.tick = function (delta) {
-        if (!this.shouldTick)
-            return;
-        this.x += this.hspeed * delta;
-        this.y += this.vspeed * delta;
-        this.animationAge += this.animationSpeed * delta;
-    };
-    GameObject.prototype.render = function (context) {
-        if (!this.shouldRender)
-            return;
-        context.save();
-        try {
-            context.translate(this.x, this.y);
-            context.rotate(-math_1.degToRad(this.imageAngle));
-            this.renderImpl(context);
-        }
-        finally {
-            context.restore();
-        }
-    };
-    GameObject.prototype.renderImpl = function (context) {
-        if (this.sprite) {
-            render_1.drawSprite(context, this.resources, this.sprite, 0, 0, this.animationAge);
-        }
-        else {
-            context.fillStyle = 'red';
-            context.fillRect(0, 0, 16, 16);
-            context.fillStyle = 'white';
-            context.font = '16px Consolas';
-            context.textAlign = 'center';
-            context.textBaseline = 'middle';
-            context.fillText('?', 0 + 8, 0 + 8);
-        }
-    };
-    return GameObject;
-}());
-exports.GameObject = GameObject;
-//# sourceMappingURL=game-object.js.map
-
-/***/ }),
-/* 8 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var render_1 = __webpack_require__(4);
-var ResourceLoader = (function () {
-    function ResourceLoader() {
-        this.DEBUG_RESOURCES = false;
-        this._resourcesLoaded = 0;
-        this._resourcesLoading = 0;
-        this._errors = [];
-        this._images = new Map();
-        this._audio = new Map();
-        var pathParts = window.location.pathname.split('/');
-        this._baseUrl = window.location.origin + (pathParts[pathParts.length - 1] == 'index.html' ? pathParts.slice(0, pathParts.length - 1) : pathParts).join('/');
-        if (this._baseUrl.startsWith('null/'))
-            this._baseUrl = 'file:///' + this._baseUrl.slice(5);
-    }
-    ResourceLoader.prototype.addPreloadStrategy = function (strategy) {
-        strategy.preload(this);
-    };
-    Object.defineProperty(ResourceLoader.prototype, "baseUrl", {
-        get: function () {
-            return this._baseUrl;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(ResourceLoader.prototype, "resourcesLoaded", {
-        get: function () {
-            return this._resourcesLoaded;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(ResourceLoader.prototype, "totalResources", {
-        get: function () {
-            return this._resourcesLoading;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(ResourceLoader.prototype, "error", {
-        get: function () {
-            return this._errors.join('\n');
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(ResourceLoader.prototype, "isDone", {
-        get: function () {
-            return this.totalResources == this.resourcesLoaded && !this.error;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    ResourceLoader.prototype.loadImage = function (src) {
-        var _this = this;
-        src = this.resolvePath(src);
-        if (this._images.has(src))
-            return this._images.get(src);
-        this._resourcesLoading++;
-        if (this.DEBUG_RESOURCES)
-            console.log("Loading image: '" + src + "'");
-        var img = document.createElement('img');
-        this._images.set(src, img);
-        img.onload = function () {
-            _this._resourcesLoaded++;
-        };
-        img.onerror = function (e) {
-            _this._errors.push("ERROR: Could not load " + src);
-        };
-        img.src = src;
-        return img;
-    };
-    ResourceLoader.prototype.loadAudio = function (src) {
-        var _this = this;
-        src = this.resolvePath(src);
-        if (this._audio.has(src))
-            return this._audio.get(src);
-        this._resourcesLoading++;
-        if (this.DEBUG_RESOURCES)
-            console.log("Loading audio: '" + src + "'");
-        var aud = document.createElement('audio');
-        this._audio.set(src, aud);
-        aud.onloadeddata = function () {
-            _this._resourcesLoaded++;
-        };
-        aud.onerror = function (e) {
-            _this._errors.push("ERROR: Could not load " + src);
-        };
-        aud.src = src;
-        return aud;
-    };
-    ResourceLoader.prototype.resolvePath = function (src) {
-        if (src.match(/^[a-z]:\/\//i))
-            return src;
-        if (src.startsWith('/'))
-            return "" + this.baseUrl + src;
-        else
-            return this.baseUrl + "/" + src;
-    };
-    ResourceLoader.prototype.render = function (context) {
-        context.fillStyle = 'grey';
-        context.fillRect(0, 0, context.canvas.scrollWidth, context.canvas.scrollHeight);
-        if (this.totalResources > 0) {
-            context.fillStyle = 'white';
-            context.fillRect(4, 4, 100, 4);
-            context.fillStyle = 'black';
-            context.fillRect(4, 4, 100 * (this.resourcesLoaded / this.totalResources), 4);
-        }
-        var msg = this.resourcesLoaded + "/" + this.totalResources;
-        if (this._errors.length)
-            msg += '\n' + this.error;
-        context.textBaseline = 'top';
-        context.textAlign = 'left';
-        context.fillStyle = 'black';
-        render_1.fillText(context, msg, 4, 12);
-    };
-    return ResourceLoader;
-}());
-exports.ResourceLoader = ResourceLoader;
-//# sourceMappingURL=resource-loader.js.map
-
-/***/ }),
-/* 9 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var Rect = (function () {
-    function Rect(left, right, bottom, top) {
-        this.left = left;
-        this.right = right;
-        this.bottom = bottom;
-        this.top = top;
-    }
-    Object.defineProperty(Rect.prototype, "width", {
-        get: function () {
-            return this.right - this.left;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(Rect.prototype, "height", {
-        get: function () {
-            return this.top - this.bottom;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    return Rect;
-}());
-Rect.zero = new Rect(0, 0, 0, 0);
-exports.Rect = Rect;
-;
-//# sourceMappingURL=rect.js.map
-
-/***/ }),
-/* 10 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-function isSingleTileSprite(sprite) {
-    return !!sprite.tileset && !sprite.frames;
-}
-exports.isSingleTileSprite = isSingleTileSprite;
-function isAnimationSprite(sprite) {
-    return !!sprite.frames;
-}
-exports.isAnimationSprite = isAnimationSprite;
-//# sourceMappingURL=sprite.js.map
-
-/***/ }),
-/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global, module) {/**
@@ -3325,7 +2645,705 @@ function stubFalse() {
 
 module.exports = merge;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(31), __webpack_require__(32)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(33), __webpack_require__(34)(module)))
+
+/***/ }),
+/* 7 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var EventQueue = (function () {
+    function EventQueue() {
+        this.DEBUG_KEYS = false;
+        this.DEBUG_MOUSE = false;
+        this._events = [];
+        this._keys = new Map();
+        this._mouseButtons = new Map();
+        this._pageX = 0;
+        this._pageY = 0;
+        this.init();
+    }
+    EventQueue.prototype.init = function () {
+        var body = document.getElementsByTagName('body')[0];
+        this.initKeyboard(body);
+        this.initMouse(body);
+    };
+    EventQueue.prototype.initKeyboard = function (body) {
+        var _this = this;
+        body.onkeydown = function (e) {
+            if (_this.DEBUG_KEYS)
+                console.log("Key Pressed: " + e.key + "; " + e.code);
+            if (!_this.isKeyDown(e.code)) {
+                _this.enqueue({
+                    type: 'keyPressed',
+                    code: e.code,
+                    altPressed: !!e.altKey,
+                    ctrlPressed: !!e.ctrlKey,
+                    shiftPressed: !!e.shiftKey
+                });
+                _this._keys.set(e.code, true);
+            }
+            _this.enqueue({
+                type: 'keyTyped',
+                key: e.key,
+                code: e.code,
+                altPressed: !!e.altKey,
+                ctrlPressed: !!e.ctrlKey,
+                shiftPressed: !!e.shiftKey
+            });
+        };
+        body.onkeyup = function (e) {
+            if (_this.DEBUG_KEYS)
+                console.log("Key Released: " + e.key + "; " + e.code);
+            if (_this.isKeyDown(e.code)) {
+                _this.enqueue({
+                    type: 'keyReleased',
+                    code: e.code,
+                    altPressed: !!e.altKey,
+                    ctrlPressed: !!e.ctrlKey,
+                    shiftPressed: !!e.shiftKey
+                });
+                _this._keys.set(e.code, false);
+            }
+        };
+    };
+    EventQueue.prototype.initMouse = function (body) {
+        var _this = this;
+        body.onmousemove = function (e) {
+            if (_this.DEBUG_MOUSE)
+                console.log("Mouse moved. Movement: " + e.movementX + ", " + e.movementY + "; Position: " + e.pageX + ", " + e.pageY);
+            if (typeof e.pageX !== 'undefined')
+                _this._pageX = e.pageX;
+            else
+                _this._pageX += e.movementX;
+            if (typeof e.pageY !== 'undefined')
+                _this._pageY = e.pageY;
+            else
+                _this._pageY += e.movementY;
+            _this.enqueue({
+                type: 'mouseMoved',
+                movementX: e.movementX,
+                movementY: e.movementY,
+                pageX: _this._pageX,
+                pageY: _this._pageY
+            });
+        };
+        body.onmousedown = function (e) {
+            if (_this.DEBUG_MOUSE)
+                console.log("Mouse button pressed. Button: " + e.button + "; Position: " + e.pageX + ", " + e.pageY);
+            if (!_this.isMouseButtonDown(e.button)) {
+                if (typeof e.pageX !== 'undefined')
+                    _this._pageX = e.pageX;
+                if (typeof e.pageY !== 'undefined')
+                    _this._pageY = e.pageY;
+                _this.enqueue({
+                    type: 'mouseButtonPressed',
+                    button: e.button,
+                    pageX: _this._pageX,
+                    pageY: _this._pageY
+                });
+                _this._mouseButtons.set(e.button, true);
+            }
+        };
+        body.onmouseup = function (e) {
+            if (_this.DEBUG_MOUSE)
+                console.log("Mouse button released. Button: " + e.button + "; Position: " + e.pageX + ", " + e.pageY);
+            if (_this.isMouseButtonDown(e.button)) {
+                if (typeof e.pageX !== 'undefined')
+                    _this._pageX = e.pageX;
+                if (typeof e.pageY !== 'undefined')
+                    _this._pageY = e.pageY;
+                _this.enqueue({
+                    type: 'mouseButtonReleased',
+                    button: e.button,
+                    pageX: _this._pageX,
+                    pageY: _this._pageY
+                });
+                _this._mouseButtons.set(e.button, false);
+            }
+        };
+        body.onwheel = function (e) {
+            if (_this.DEBUG_MOUSE)
+                console.log("Mouse wheel. delta: " + e.deltaY + "; Position: " + e.pageX + ", " + e.pageY);
+            if (typeof e.pageX !== 'undefined')
+                _this._pageX = e.pageX;
+            if (typeof e.pageY !== 'undefined')
+                _this._pageY = e.pageY;
+            _this.enqueue({
+                type: 'mouseWheel',
+                delta: e.deltaY,
+                pageX: _this._pageX,
+                pageY: _this._pageY
+            });
+        };
+    };
+    EventQueue.prototype.isKeyDown = function (code) {
+        if (!this._keys.has(code))
+            return false;
+        return this._keys.get(code);
+    };
+    EventQueue.prototype.isMouseButtonDown = function (button) {
+        if (!this._mouseButtons.has(button))
+            return false;
+        return this._mouseButtons.get(button);
+    };
+    Object.defineProperty(EventQueue.prototype, "mousePosition", {
+        get: function () {
+            return { x: this._pageX, y: this._pageY };
+        },
+        enumerable: true,
+        configurable: true
+    });
+    EventQueue.prototype.enqueue = function (e) {
+        var lastEvent = this._events[this._events.length - 1];
+        if (lastEvent && lastEvent.type == e.type) {
+            switch (e.type) {
+                case 'mouseMoved':
+                    lastEvent.movementX += e.movementX;
+                    lastEvent.movementY += e.movementY;
+                    lastEvent.pageX = e.pageX;
+                    lastEvent.pageY = e.pageY;
+                    return;
+                case 'mouseWheel':
+                    lastEvent.delta += e.delta;
+                    return;
+                case 'canvasResize':
+                    lastEvent.size = e.size;
+                    return;
+            }
+        }
+        this._events.push(e);
+    };
+    EventQueue.prototype.clearQueue = function () {
+        return this._events.splice(0);
+    };
+    return EventQueue;
+}());
+exports.EventQueue = EventQueue;
+//# sourceMappingURL=event-queue.js.map
+
+/***/ }),
+/* 8 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var math_1 = __webpack_require__(1);
+var rect_1 = __webpack_require__(10);
+var render_1 = __webpack_require__(4);
+;
+var GameObject = (function () {
+    function GameObject(name, opts) {
+        if (opts === void 0) { opts = {}; }
+        this.DEBUG_MOVEMENT = false;
+        this._x = 0;
+        this._y = 0;
+        this._shouldTick = true;
+        this._dir = 0;
+        this._speed = 0;
+        this._hspeed = 0;
+        this._vspeed = 0;
+        this._shouldRender = true;
+        this._renderCamera = 'default';
+        this._sprite = null;
+        this._animationAge = 0;
+        this._animationSpeed = 1;
+        this._imageAngle = 0;
+        this._name = name;
+        if (typeof opts.x != 'undefined')
+            this.x = opts.x;
+        if (typeof opts.y != 'undefined')
+            this.y = opts.y;
+        if (typeof opts.collisionBounds != 'undefined')
+            this.collisionBounds = opts.collisionBounds;
+        if (typeof opts.shouldTick != 'undefined')
+            this.shouldTick = opts.shouldTick;
+        if (typeof opts.direction != 'undefined')
+            this.direction = opts.direction;
+        if (typeof opts.speed != 'undefined')
+            this.speed = opts.speed;
+        if (typeof opts.hspeed != 'undefined')
+            this.hspeed = opts.hspeed;
+        if (typeof opts.vspeed != 'undefined')
+            this.vspeed = opts.vspeed;
+        if (typeof opts.shouldRender != 'undefined')
+            this.shouldRender = opts.shouldRender;
+        if (typeof opts.renderCamera != 'undefined')
+            this.renderCamera = opts.renderCamera;
+        if (typeof opts.sprite != 'undefined')
+            this.sprite = opts.sprite;
+        if (typeof opts.animationAge != 'undefined')
+            this.animationAge = opts.animationAge;
+        if (typeof opts.animationSpeed != 'undefined')
+            this.animationSpeed = opts.animationSpeed;
+        if (typeof opts.imageAngle != 'undefined')
+            this.imageAngle = opts.imageAngle;
+    }
+    Object.defineProperty(GameObject.prototype, "name", {
+        get: function () {
+            return this._name;
+        },
+        set: function (val) {
+            this._name = val;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(GameObject.prototype, "x", {
+        get: function () {
+            return this._x;
+        },
+        set: function (val) {
+            this._x = val;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(GameObject.prototype, "y", {
+        get: function () {
+            return this._y;
+        },
+        set: function (val) {
+            this._y = val;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(GameObject.prototype, "collisionBounds", {
+        get: function () {
+            if (!this._collisionBounds) {
+                if (!this.sprite)
+                    return rect_1.Rect.zero;
+                var pivot = this.sprite.pivot || { x: 0, y: 0 };
+                var spriteSize = render_1.measureSprite(this.resources, this.sprite);
+                return new rect_1.Rect(-pivot.x, spriteSize.width - pivot.x, -pivot.y, spriteSize.height - pivot.y);
+            }
+            return this._collisionBounds;
+        },
+        set: function (val) {
+            this._collisionBounds = val;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(GameObject.prototype, "shouldTick", {
+        get: function () {
+            return this._shouldTick;
+        },
+        set: function (val) {
+            this._shouldTick = val;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(GameObject.prototype, "direction", {
+        get: function () {
+            return this._dir;
+        },
+        set: function (val) {
+            if (this.DEBUG_MOVEMENT)
+                console.log("setting direction: " + val);
+            val = math_1.fmod(val, 360);
+            if (this._dir == val)
+                return;
+            this._dir = val;
+            this.updateHVSpeed();
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(GameObject.prototype, "speed", {
+        get: function () {
+            return this._speed;
+        },
+        set: function (val) {
+            if (this.DEBUG_MOVEMENT)
+                console.log("setting speed: " + val);
+            if (val < 0)
+                throw new Error("Invalid speed: " + val + ". Must be >= 0");
+            if (this._speed == val)
+                return;
+            this._speed = val;
+            this.updateHVSpeed();
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(GameObject.prototype, "hspeed", {
+        get: function () {
+            return this._hspeed;
+        },
+        set: function (val) {
+            if (this.DEBUG_MOVEMENT)
+                console.log("setting hspeed: " + val);
+            if (this._hspeed == val)
+                return;
+            this._hspeed = val;
+            this.updateDirectionAndSpeed();
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(GameObject.prototype, "vspeed", {
+        get: function () {
+            return this._vspeed;
+        },
+        set: function (val) {
+            if (this.DEBUG_MOVEMENT)
+                console.log("setting vspeed: " + val);
+            if (this._vspeed == val)
+                return;
+            this._vspeed = val;
+            this.updateDirectionAndSpeed();
+        },
+        enumerable: true,
+        configurable: true
+    });
+    GameObject.prototype.updateHVSpeed = function () {
+        var radians = math_1.degToRad(this._dir);
+        this._vspeed = -Math.sin(radians) * this._speed;
+        this._hspeed = Math.cos(radians) * this._speed;
+        if (this.DEBUG_MOVEMENT)
+            console.log("  hspeed: " + this._hspeed + "; vspeed: " + this._vspeed);
+    };
+    GameObject.prototype.updateDirectionAndSpeed = function () {
+        this._speed = Math.sqrt(this._hspeed * this._hspeed + this._vspeed * this._vspeed);
+        if (this._speed == 0)
+            return;
+        this._dir = math_1.pointDirection(0, 0, this._hspeed, this._vspeed);
+        if (this._dir < 0)
+            this._dir += 360;
+        if (this.DEBUG_MOVEMENT)
+            console.log("  speed: " + this._speed + "; direction: " + this._dir);
+    };
+    Object.defineProperty(GameObject.prototype, "shouldRender", {
+        get: function () {
+            return this._shouldRender;
+        },
+        set: function (val) {
+            this._shouldRender = val;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(GameObject.prototype, "renderCamera", {
+        get: function () {
+            return this._renderCamera;
+        },
+        set: function (val) {
+            this._renderCamera = val;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(GameObject.prototype, "sprite", {
+        get: function () {
+            return this._sprite;
+        },
+        set: function (val) {
+            this._sprite = val;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(GameObject.prototype, "animationAge", {
+        get: function () {
+            return this._animationAge;
+        },
+        set: function (val) {
+            this._animationAge = val;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(GameObject.prototype, "animationSpeed", {
+        get: function () {
+            return this._animationSpeed;
+        },
+        set: function (val) {
+            this._animationSpeed = val;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(GameObject.prototype, "imageAngle", {
+        get: function () {
+            return this._imageAngle;
+        },
+        set: function (val) {
+            this._imageAngle = val;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(GameObject.prototype, "scene", {
+        get: function () {
+            if (!this._scene)
+                return null;
+            return this._scene;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(GameObject.prototype, "game", {
+        get: function () {
+            if (!this.scene)
+                return null;
+            return this.scene.game;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(GameObject.prototype, "resources", {
+        get: function () {
+            if (!this.game)
+                return null;
+            return this.game.resourceLoader;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(GameObject.prototype, "events", {
+        get: function () {
+            if (!this.game)
+                return null;
+            return this.game.eventQueue;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    GameObject.prototype.addToScene = function (scene) {
+        if (this._scene)
+            throw new Error('This game object is already added to a scene!');
+        this._scene = scene;
+    };
+    GameObject.prototype.removeFromScene = function () {
+        this._scene = null;
+    };
+    GameObject.prototype.onSceneEnter = function () { };
+    GameObject.prototype.onSceneExit = function () { };
+    GameObject.prototype.handleEvent = function (evt) {
+    };
+    GameObject.prototype.tick = function (delta) {
+        if (!this.shouldTick)
+            return;
+        this.x += this.hspeed * delta;
+        this.y += this.vspeed * delta;
+        this.animationAge += this.animationSpeed * delta;
+    };
+    GameObject.prototype.render = function (context) {
+        if (!this.shouldRender)
+            return;
+        context.save();
+        try {
+            context.translate(this.x, this.y);
+            context.rotate(-math_1.degToRad(this.imageAngle));
+            this.renderImpl(context);
+        }
+        finally {
+            context.restore();
+        }
+    };
+    GameObject.prototype.renderImpl = function (context) {
+        if (this.sprite) {
+            render_1.drawSprite(context, this.resources, this.sprite, 0, 0, this.animationAge);
+        }
+        else {
+            context.fillStyle = 'red';
+            context.fillRect(0, 0, 16, 16);
+            context.fillStyle = 'white';
+            context.font = '16px Consolas';
+            context.textAlign = 'center';
+            context.textBaseline = 'middle';
+            context.fillText('?', 0 + 8, 0 + 8);
+        }
+    };
+    return GameObject;
+}());
+exports.GameObject = GameObject;
+//# sourceMappingURL=game-object.js.map
+
+/***/ }),
+/* 9 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var render_1 = __webpack_require__(4);
+var ResourceLoader = (function () {
+    function ResourceLoader() {
+        this.DEBUG_RESOURCES = false;
+        this._resourcesLoaded = 0;
+        this._resourcesLoading = 0;
+        this._errors = [];
+        this._images = new Map();
+        this._audio = new Map();
+        var pathParts = window.location.pathname.split('/');
+        this._baseUrl = window.location.origin + (pathParts[pathParts.length - 1] == 'index.html' ? pathParts.slice(0, pathParts.length - 1) : pathParts).join('/');
+        if (this._baseUrl.startsWith('null/'))
+            this._baseUrl = 'file:///' + this._baseUrl.slice(5);
+    }
+    ResourceLoader.prototype.addPreloadStrategy = function (strategy) {
+        strategy.preload(this);
+    };
+    Object.defineProperty(ResourceLoader.prototype, "baseUrl", {
+        get: function () {
+            return this._baseUrl;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(ResourceLoader.prototype, "resourcesLoaded", {
+        get: function () {
+            return this._resourcesLoaded;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(ResourceLoader.prototype, "totalResources", {
+        get: function () {
+            return this._resourcesLoading;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(ResourceLoader.prototype, "error", {
+        get: function () {
+            return this._errors.join('\n');
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(ResourceLoader.prototype, "isDone", {
+        get: function () {
+            return this.totalResources == this.resourcesLoaded && !this.error;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    ResourceLoader.prototype.loadImage = function (src) {
+        var _this = this;
+        src = this.resolvePath(src);
+        if (this._images.has(src))
+            return this._images.get(src);
+        this._resourcesLoading++;
+        if (this.DEBUG_RESOURCES)
+            console.log("Loading image: '" + src + "'");
+        var img = document.createElement('img');
+        this._images.set(src, img);
+        img.onload = function () {
+            _this._resourcesLoaded++;
+        };
+        img.onerror = function (e) {
+            _this._errors.push("ERROR: Could not load " + src);
+        };
+        img.src = src;
+        return img;
+    };
+    ResourceLoader.prototype.loadAudio = function (src) {
+        var _this = this;
+        src = this.resolvePath(src);
+        if (this._audio.has(src))
+            return this._audio.get(src);
+        this._resourcesLoading++;
+        if (this.DEBUG_RESOURCES)
+            console.log("Loading audio: '" + src + "'");
+        var aud = document.createElement('audio');
+        this._audio.set(src, aud);
+        aud.onloadeddata = function () {
+            _this._resourcesLoaded++;
+        };
+        aud.onerror = function (e) {
+            _this._errors.push("ERROR: Could not load " + src);
+        };
+        aud.src = src;
+        return aud;
+    };
+    ResourceLoader.prototype.resolvePath = function (src) {
+        if (src.match(/^[a-z]:\/\//i))
+            return src;
+        if (src.startsWith('/'))
+            return "" + this.baseUrl + src;
+        else
+            return this.baseUrl + "/" + src;
+    };
+    ResourceLoader.prototype.render = function (context) {
+        context.fillStyle = 'grey';
+        context.fillRect(0, 0, context.canvas.scrollWidth, context.canvas.scrollHeight);
+        if (this.totalResources > 0) {
+            context.fillStyle = 'white';
+            context.fillRect(4, 4, 100, 4);
+            context.fillStyle = 'black';
+            context.fillRect(4, 4, 100 * (this.resourcesLoaded / this.totalResources), 4);
+        }
+        var msg = this.resourcesLoaded + "/" + this.totalResources;
+        if (this._errors.length)
+            msg += '\n' + this.error;
+        context.textBaseline = 'top';
+        context.textAlign = 'left';
+        context.fillStyle = 'black';
+        render_1.fillText(context, msg, 4, 12);
+    };
+    return ResourceLoader;
+}());
+exports.ResourceLoader = ResourceLoader;
+//# sourceMappingURL=resource-loader.js.map
+
+/***/ }),
+/* 10 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var Rect = (function () {
+    function Rect(left, right, bottom, top) {
+        this.left = left;
+        this.right = right;
+        this.bottom = bottom;
+        this.top = top;
+    }
+    Object.defineProperty(Rect.prototype, "width", {
+        get: function () {
+            return this.right - this.left;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Rect.prototype, "height", {
+        get: function () {
+            return this.top - this.bottom;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    return Rect;
+}());
+Rect.zero = new Rect(0, 0, 0, 0);
+exports.Rect = Rect;
+;
+//# sourceMappingURL=rect.js.map
+
+/***/ }),
+/* 11 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+function isSingleTileSprite(sprite) {
+    return !!sprite.tileset && !sprite.frames;
+}
+exports.isSingleTileSprite = isSingleTileSprite;
+function isAnimationSprite(sprite) {
+    return !!sprite.frames;
+}
+exports.isAnimationSprite = isAnimationSprite;
+//# sourceMappingURL=sprite.js.map
 
 /***/ }),
 /* 12 */
@@ -3383,8 +3401,8 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-var game_object_1 = __webpack_require__(7);
-var merge = __webpack_require__(11);
+var game_object_1 = __webpack_require__(8);
+var merge = __webpack_require__(6);
 var AudioSourceObject = (function (_super) {
     __extends(AudioSourceObject, _super);
     function AudioSourceObject(name, audio, opts) {
@@ -3640,8 +3658,8 @@ exports.GameScene = GameScene;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var resource_loader_1 = __webpack_require__(8);
-var event_queue_1 = __webpack_require__(6);
+var resource_loader_1 = __webpack_require__(9);
+var event_queue_1 = __webpack_require__(7);
 var Game = (function () {
     function Game(framesPerSecond) {
         if (framesPerSecond === void 0) { framesPerSecond = 30; }
@@ -3813,12 +3831,12 @@ function __export(m) {
     for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
 }
 Object.defineProperty(exports, "__esModule", { value: true });
-__export(__webpack_require__(6));
-__export(__webpack_require__(8));
+__export(__webpack_require__(7));
+__export(__webpack_require__(9));
 __export(__webpack_require__(3));
 __export(__webpack_require__(14));
 __export(__webpack_require__(16));
-__export(__webpack_require__(7));
+__export(__webpack_require__(8));
 __export(__webpack_require__(13));
 __export(__webpack_require__(15));
 __export(__webpack_require__(21));
@@ -3902,9 +3920,9 @@ __export(__webpack_require__(18));
 __export(__webpack_require__(19));
 __export(__webpack_require__(20));
 __export(__webpack_require__(1));
-__export(__webpack_require__(9));
-__export(__webpack_require__(4));
 __export(__webpack_require__(10));
+__export(__webpack_require__(4));
+__export(__webpack_require__(11));
 //# sourceMappingURL=index.js.map
 
 /***/ }),
@@ -3997,7 +4015,7 @@ var __extends = (this && this.__extends) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var engine_1 = __webpack_require__(0);
 var alive_db_1 = __webpack_require__(5);
-var merge = __webpack_require__(11);
+var merge = __webpack_require__(6);
 function pointDistance2(x1, y1, x2, y2) {
     return Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2);
 }
@@ -4354,7 +4372,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var engine_1 = __webpack_require__(0);
-var world_1 = __webpack_require__(30);
+var world_1 = __webpack_require__(31);
 var grid_renderer_1 = __webpack_require__(24);
 var player_1 = __webpack_require__(26);
 var bat_controller_1 = __webpack_require__(22);
@@ -4402,6 +4420,32 @@ exports.FlockingScene = FlockingScene;
 
 "use strict";
 
+Object.defineProperty(exports, "__esModule", { value: true });
+var nnn = __webpack_require__(32);
+var Noise = nnn.Noise;
+var cache = new Map();
+function generateNoise(seed, chunkx, chunky) {
+    !cache.has(seed) && cache.set(seed, new Noise(seed));
+    var noise = cache.get(seed);
+    var columns = [];
+    for (var q = 0; q < 64; q++) {
+        var column = [];
+        for (var w = 0; w < 64; w++) {
+            column.push(noise.perlin2((chunkx * 64 + q) / 12, (chunky * 64 + w) / 12));
+        }
+        columns.push(column);
+    }
+    return columns;
+}
+exports.generateNoise = generateNoise;
+
+
+/***/ }),
+/* 31 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -4415,12 +4459,16 @@ var __extends = (this && this.__extends) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var engine_1 = __webpack_require__(0);
 var tile_db_1 = __webpack_require__(2);
+var noise_1 = __webpack_require__(30);
 var TIME_SCALE = 1 / (60 * 5);
 var World = (function (_super) {
     __extends(World, _super);
-    function World() {
+    function World(seed) {
+        if (seed === void 0) { seed = Math.random(); }
         var _this = _super.call(this, "World") || this;
+        _this.seed = seed;
         _this._gameTime = 8 / 24;
+        _this._chunks = new Map();
         return _this;
     }
     Object.defineProperty(World.prototype, "gameTime", {
@@ -4437,7 +4485,37 @@ var World = (function (_super) {
         this._gameTime += delta * TIME_SCALE;
     };
     World.prototype.getTileAt = function (x, y) {
-        return tile_db_1.tiles['grass'];
+        var chunk = this.getChunk(Math.floor(x / 64), Math.floor(y / 64));
+        var _a = [engine_1.fmod(x, 64), engine_1.fmod(y, 64)], relativex = _a[0], relativey = _a[1];
+        return chunk[relativex][relativey];
+    };
+    World.prototype.getChunk = function (x, y) {
+        var key = x + ", " + y;
+        !this._chunks.has(key) && this._chunks.set(key, this.generateChunk(x, y));
+        return this._chunks.get(key);
+    };
+    World.prototype.generateChunk = function (x, y) {
+        var noise = noise_1.generateNoise(this.seed, x, y);
+        var chunk = [];
+        for (var q = 0; q < 64; q++) {
+            var column = [];
+            for (var w = 0; w < 64; w++) {
+                var num = noise[q][w];
+                var name_1 = num < .2 ? "rock" + this.decorateNum(q, w, 7) :
+                    "water" + this.decorateNum(w, q, 4);
+                column.push(tile_db_1.tiles[name_1]);
+            }
+            chunk.push(column);
+        }
+        return chunk;
+    };
+    World.prototype.decorateNum = function (x, y, num) {
+        for (var q = num; q > 1; q--) {
+            var n = Math.random() * Math.pow(q, 6 - (num / 3));
+            if (n < 1)
+                return "" + q;
+        }
+        return '';
     };
     return World;
 }(engine_1.GameObject));
@@ -4445,7 +4523,340 @@ exports.World = World;
 
 
 /***/ }),
-/* 31 */
+/* 32 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/*
+ * A speed-improved perlin and simplex noise algorithms for 2D.
+ *
+ * Based on example code by Stefan Gustavson (stegu@itn.liu.se).
+ * Optimisations by Peter Eastman (peastman@drizzle.stanford.edu).
+ * Better rank ordering method by Stefan Gustavson in 2012.
+ * Converted to Javascript by Joseph Gentle.
+ *
+ * Version 2012-03-09
+ *
+ * This code was placed in the public domain by its original author,
+ * Stefan Gustavson. You may use it as you see fit, but
+ * attribution is appreciated.
+ *
+ */
+
+(function(global){
+
+  // Passing in seed will seed this Noise instance
+  function Noise(seed) {
+    function Grad(x, y, z) {
+      this.x = x; this.y = y; this.z = z;
+    }
+
+    Grad.prototype.dot2 = function(x, y) {
+      return this.x*x + this.y*y;
+    };
+
+    Grad.prototype.dot3 = function(x, y, z) {
+      return this.x*x + this.y*y + this.z*z;
+    };
+
+    this.grad3 = [new Grad(1,1,0),new Grad(-1,1,0),new Grad(1,-1,0),new Grad(-1,-1,0),
+                 new Grad(1,0,1),new Grad(-1,0,1),new Grad(1,0,-1),new Grad(-1,0,-1),
+                 new Grad(0,1,1),new Grad(0,-1,1),new Grad(0,1,-1),new Grad(0,-1,-1)];
+
+    this.p = [151,160,137,91,90,15,
+    131,13,201,95,96,53,194,233,7,225,140,36,103,30,69,142,8,99,37,240,21,10,23,
+    190, 6,148,247,120,234,75,0,26,197,62,94,252,219,203,117,35,11,32,57,177,33,
+    88,237,149,56,87,174,20,125,136,171,168, 68,175,74,165,71,134,139,48,27,166,
+    77,146,158,231,83,111,229,122,60,211,133,230,220,105,92,41,55,46,245,40,244,
+    102,143,54, 65,25,63,161, 1,216,80,73,209,76,132,187,208, 89,18,169,200,196,
+    135,130,116,188,159,86,164,100,109,198,173,186, 3,64,52,217,226,250,124,123,
+    5,202,38,147,118,126,255,82,85,212,207,206,59,227,47,16,58,17,182,189,28,42,
+    223,183,170,213,119,248,152, 2,44,154,163, 70,221,153,101,155,167, 43,172,9,
+    129,22,39,253, 19,98,108,110,79,113,224,232,178,185, 112,104,218,246,97,228,
+    251,34,242,193,238,210,144,12,191,179,162,241, 81,51,145,235,249,14,239,107,
+    49,192,214, 31,181,199,106,157,184, 84,204,176,115,121,50,45,127, 4,150,254,
+    138,236,205,93,222,114,67,29,24,72,243,141,128,195,78,66,215,61,156,180];
+    // To remove the need for index wrapping, double the permutation table length
+    this.perm = new Array(512);
+    this.gradP = new Array(512);
+
+    this.seed(seed || 0);
+  }
+
+  // This isn't a very good seeding function, but it works ok. It supports 2^16
+  // different seed values. Write something better if you need more seeds.
+  Noise.prototype.seed = function(seed) {
+    if(seed > 0 && seed < 1) {
+      // Scale the seed out
+      seed *= 65536;
+    }
+
+    seed = Math.floor(seed);
+    if(seed < 256) {
+      seed |= seed << 8;
+    }
+
+    var p = this.p;
+    for(var i = 0; i < 256; i++) {
+      var v;
+      if (i & 1) {
+        v = p[i] ^ (seed & 255);
+      } else {
+        v = p[i] ^ ((seed>>8) & 255);
+      }
+
+      var perm = this.perm;
+      var gradP = this.gradP;
+      perm[i] = perm[i + 256] = v;
+      gradP[i] = gradP[i + 256] = this.grad3[v % 12];
+    }
+  };
+
+  /*
+  for(var i=0; i<256; i++) {
+    perm[i] = perm[i + 256] = p[i];
+    gradP[i] = gradP[i + 256] = grad3[perm[i] % 12];
+  }*/
+
+  // Skewing and unskewing factors for 2, 3, and 4 dimensions
+  var F2 = 0.5*(Math.sqrt(3)-1);
+  var G2 = (3-Math.sqrt(3))/6;
+
+  var F3 = 1/3;
+  var G3 = 1/6;
+
+  // 2D simplex noise
+  Noise.prototype.simplex2 = function(xin, yin) {
+    var n0, n1, n2; // Noise contributions from the three corners
+    // Skew the input space to determine which simplex cell we're in
+    var s = (xin+yin)*F2; // Hairy factor for 2D
+    var i = Math.floor(xin+s);
+    var j = Math.floor(yin+s);
+    var t = (i+j)*G2;
+    var x0 = xin-i+t; // The x,y distances from the cell origin, unskewed.
+    var y0 = yin-j+t;
+    // For the 2D case, the simplex shape is an equilateral triangle.
+    // Determine which simplex we are in.
+    var i1, j1; // Offsets for second (middle) corner of simplex in (i,j) coords
+    if(x0>y0) { // lower triangle, XY order: (0,0)->(1,0)->(1,1)
+      i1=1; j1=0;
+    } else {    // upper triangle, YX order: (0,0)->(0,1)->(1,1)
+      i1=0; j1=1;
+    }
+    // A step of (1,0) in (i,j) means a step of (1-c,-c) in (x,y), and
+    // a step of (0,1) in (i,j) means a step of (-c,1-c) in (x,y), where
+    // c = (3-sqrt(3))/6
+    var x1 = x0 - i1 + G2; // Offsets for middle corner in (x,y) unskewed coords
+    var y1 = y0 - j1 + G2;
+    var x2 = x0 - 1 + 2 * G2; // Offsets for last corner in (x,y) unskewed coords
+    var y2 = y0 - 1 + 2 * G2;
+    // Work out the hashed gradient indices of the three simplex corners
+    i &= 255;
+    j &= 255;
+
+    var perm = this.perm;
+    var gradP = this.gradP;
+    var gi0 = gradP[i+perm[j]];
+    var gi1 = gradP[i+i1+perm[j+j1]];
+    var gi2 = gradP[i+1+perm[j+1]];
+    // Calculate the contribution from the three corners
+    var t0 = 0.5 - x0*x0-y0*y0;
+    if(t0<0) {
+      n0 = 0;
+    } else {
+      t0 *= t0;
+      n0 = t0 * t0 * gi0.dot2(x0, y0);  // (x,y) of grad3 used for 2D gradient
+    }
+    var t1 = 0.5 - x1*x1-y1*y1;
+    if(t1<0) {
+      n1 = 0;
+    } else {
+      t1 *= t1;
+      n1 = t1 * t1 * gi1.dot2(x1, y1);
+    }
+    var t2 = 0.5 - x2*x2-y2*y2;
+    if(t2<0) {
+      n2 = 0;
+    } else {
+      t2 *= t2;
+      n2 = t2 * t2 * gi2.dot2(x2, y2);
+    }
+    // Add contributions from each corner to get the final noise value.
+    // The result is scaled to return values in the interval [-1,1].
+    return 70 * (n0 + n1 + n2);
+  };
+
+  // 3D simplex noise
+  Noise.prototype.simplex3 = function(xin, yin, zin) {
+    var n0, n1, n2, n3; // Noise contributions from the four corners
+
+    // Skew the input space to determine which simplex cell we're in
+    var s = (xin+yin+zin)*F3; // Hairy factor for 2D
+    var i = Math.floor(xin+s);
+    var j = Math.floor(yin+s);
+    var k = Math.floor(zin+s);
+
+    var t = (i+j+k)*G3;
+    var x0 = xin-i+t; // The x,y distances from the cell origin, unskewed.
+    var y0 = yin-j+t;
+    var z0 = zin-k+t;
+
+    // For the 3D case, the simplex shape is a slightly irregular tetrahedron.
+    // Determine which simplex we are in.
+    var i1, j1, k1; // Offsets for second corner of simplex in (i,j,k) coords
+    var i2, j2, k2; // Offsets for third corner of simplex in (i,j,k) coords
+    if(x0 >= y0) {
+      if(y0 >= z0)      { i1=1; j1=0; k1=0; i2=1; j2=1; k2=0; }
+      else if(x0 >= z0) { i1=1; j1=0; k1=0; i2=1; j2=0; k2=1; }
+      else              { i1=0; j1=0; k1=1; i2=1; j2=0; k2=1; }
+    } else {
+      if(y0 < z0)      { i1=0; j1=0; k1=1; i2=0; j2=1; k2=1; }
+      else if(x0 < z0) { i1=0; j1=1; k1=0; i2=0; j2=1; k2=1; }
+      else             { i1=0; j1=1; k1=0; i2=1; j2=1; k2=0; }
+    }
+    // A step of (1,0,0) in (i,j,k) means a step of (1-c,-c,-c) in (x,y,z),
+    // a step of (0,1,0) in (i,j,k) means a step of (-c,1-c,-c) in (x,y,z), and
+    // a step of (0,0,1) in (i,j,k) means a step of (-c,-c,1-c) in (x,y,z), where
+    // c = 1/6.
+    var x1 = x0 - i1 + G3; // Offsets for second corner
+    var y1 = y0 - j1 + G3;
+    var z1 = z0 - k1 + G3;
+
+    var x2 = x0 - i2 + 2 * G3; // Offsets for third corner
+    var y2 = y0 - j2 + 2 * G3;
+    var z2 = z0 - k2 + 2 * G3;
+
+    var x3 = x0 - 1 + 3 * G3; // Offsets for fourth corner
+    var y3 = y0 - 1 + 3 * G3;
+    var z3 = z0 - 1 + 3 * G3;
+
+    // Work out the hashed gradient indices of the four simplex corners
+    i &= 255;
+    j &= 255;
+    k &= 255;
+
+    var perm = this.perm;
+    var gradP = this.gradP;
+    var gi0 = gradP[i+   perm[j+   perm[k   ]]];
+    var gi1 = gradP[i+i1+perm[j+j1+perm[k+k1]]];
+    var gi2 = gradP[i+i2+perm[j+j2+perm[k+k2]]];
+    var gi3 = gradP[i+ 1+perm[j+ 1+perm[k+ 1]]];
+
+    // Calculate the contribution from the four corners
+    var t0 = 0.5 - x0*x0-y0*y0-z0*z0;
+    if(t0<0) {
+      n0 = 0;
+    } else {
+      t0 *= t0;
+      n0 = t0 * t0 * gi0.dot3(x0, y0, z0);  // (x,y) of grad3 used for 2D gradient
+    }
+    var t1 = 0.5 - x1*x1-y1*y1-z1*z1;
+    if(t1<0) {
+      n1 = 0;
+    } else {
+      t1 *= t1;
+      n1 = t1 * t1 * gi1.dot3(x1, y1, z1);
+    }
+    var t2 = 0.5 - x2*x2-y2*y2-z2*z2;
+    if(t2<0) {
+      n2 = 0;
+    } else {
+      t2 *= t2;
+      n2 = t2 * t2 * gi2.dot3(x2, y2, z2);
+    }
+    var t3 = 0.5 - x3*x3-y3*y3-z3*z3;
+    if(t3<0) {
+      n3 = 0;
+    } else {
+      t3 *= t3;
+      n3 = t3 * t3 * gi3.dot3(x3, y3, z3);
+    }
+    // Add contributions from each corner to get the final noise value.
+    // The result is scaled to return values in the interval [-1,1].
+    return 32 * (n0 + n1 + n2 + n3);
+
+  };
+
+  // ##### Perlin noise stuff
+
+  function fade(t) {
+    return t*t*t*(t*(t*6-15)+10);
+  }
+
+  function lerp(a, b, t) {
+    return (1-t)*a + t*b;
+  }
+
+  // 2D Perlin Noise
+  Noise.prototype.perlin2 = function(x, y) {
+    // Find unit grid cell containing point
+    var X = Math.floor(x), Y = Math.floor(y);
+    // Get relative xy coordinates of point within that cell
+    x = x - X; y = y - Y;
+    // Wrap the integer cells at 255 (smaller integer period can be introduced here)
+    X = X & 255; Y = Y & 255;
+
+    // Calculate noise contributions from each of the four corners
+    var perm = this.perm;
+    var gradP = this.gradP;
+    var n00 = gradP[X+perm[Y]].dot2(x, y);
+    var n01 = gradP[X+perm[Y+1]].dot2(x, y-1);
+    var n10 = gradP[X+1+perm[Y]].dot2(x-1, y);
+    var n11 = gradP[X+1+perm[Y+1]].dot2(x-1, y-1);
+
+    // Compute the fade curve value for x
+    var u = fade(x);
+
+    // Interpolate the four results
+    return lerp(
+        lerp(n00, n10, u),
+        lerp(n01, n11, u),
+       fade(y));
+  };
+
+  // 3D Perlin Noise
+  Noise.prototype.perlin3 = function(x, y, z) {
+    // Find unit grid cell containing point
+    var X = Math.floor(x), Y = Math.floor(y), Z = Math.floor(z);
+    // Get relative xyz coordinates of point within that cell
+    x = x - X; y = y - Y; z = z - Z;
+    // Wrap the integer cells at 255 (smaller integer period can be introduced here)
+    X = X & 255; Y = Y & 255; Z = Z & 255;
+
+    // Calculate noise contributions from each of the eight corners
+    var perm = this.perm;
+    var gradP = this.gradP;
+    var n000 = gradP[X+  perm[Y+  perm[Z  ]]].dot3(x,   y,     z);
+    var n001 = gradP[X+  perm[Y+  perm[Z+1]]].dot3(x,   y,   z-1);
+    var n010 = gradP[X+  perm[Y+1+perm[Z  ]]].dot3(x,   y-1,   z);
+    var n011 = gradP[X+  perm[Y+1+perm[Z+1]]].dot3(x,   y-1, z-1);
+    var n100 = gradP[X+1+perm[Y+  perm[Z  ]]].dot3(x-1,   y,   z);
+    var n101 = gradP[X+1+perm[Y+  perm[Z+1]]].dot3(x-1,   y, z-1);
+    var n110 = gradP[X+1+perm[Y+1+perm[Z  ]]].dot3(x-1, y-1,   z);
+    var n111 = gradP[X+1+perm[Y+1+perm[Z+1]]].dot3(x-1, y-1, z-1);
+
+    // Compute the fade curve value for x, y, z
+    var u = fade(x);
+    var v = fade(y);
+    var w = fade(z);
+
+    // Interpolate
+    return lerp(
+        lerp(
+          lerp(n000, n100, u),
+          lerp(n001, n101, u), w),
+        lerp(
+          lerp(n010, n110, u),
+          lerp(n011, n111, u), w),
+       v);
+  };
+
+  global.Noise = Noise;
+
+})( false ? this : module.exports);
+
+
+/***/ }),
+/* 33 */
 /***/ (function(module, exports) {
 
 var g;
@@ -4472,7 +4883,7 @@ module.exports = g;
 
 
 /***/ }),
-/* 32 */
+/* 34 */
 /***/ (function(module, exports) {
 
 module.exports = function(module) {
