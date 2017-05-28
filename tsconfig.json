@@ -22,6 +22,7 @@
         },
         "types": [
             "core-js",
+            "lodash.merge",
             "noisejs"
         ]
     },
