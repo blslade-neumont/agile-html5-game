@@ -52,7 +52,7 @@ export let tiles: { [name: string]: WorldTile } =
             },
             isSolid: false,
             onTick: (delta, entity) => {
-                entity.takeDamage(1);
+                entity.takeDamage(3);
             }
         },
         lava_right: {
@@ -68,7 +68,7 @@ export let tiles: { [name: string]: WorldTile } =
             },
             isSolid: false,
             onTick: (delta, entity) => {
-                entity.takeDamage(1);
+                entity.takeDamage(3);
             }
         },
         water_left: {

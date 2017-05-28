@@ -79,6 +79,9 @@
     </TypeScriptCompile>
     <TypeScriptCompile Include="src\engine\test\mock-game.ts" />
     <TypeScriptCompile Include="src\engine\utils\event-emitter.ts" />
+    <TypeScriptCompile Include="src\engine\utils\rect.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="src\engine\utils\test\event-emitter.spec.ts" />
     <TypeScriptCompile Include="src\menu-gui-object.ts">
       <SubType>Code</SubType>

@@ -64,7 +64,9 @@ export class DungeonScene extends GameScene {
         this._world = new World(Math.random(), {
             grass: 'dungeonGrass',
             sand: 'dungeonSand',
-            teleporter: 'dungeonTeleporter'
+            teleporter: 'dungeonTeleporter',
+            water_left: 'lava_left',
+            water_right: 'lava_right'
         });
         this.addObject(this.world);
         this.addObject(new GridRenderer());

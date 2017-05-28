@@ -6,8 +6,8 @@ import { generateNoise } from './utils/noise';
 const TIME_SCALE = 1 / (60 * 5);
 
 type TileDefaultsT = {
-    lava_left?: string,
-    lava_right?: string,
+    water_left?: string,
+    water_right?: string,
     grass?: string,
     sand?: string,
     wallSide?: string,
@@ -46,8 +46,6 @@ export class World extends GameObject {
             let bounds = entity.collisionBounds;
             let [fromx, fromy] = [Math.floor((entity.x - bounds.left + 1) / TILE_SIZE), Math.floor((entity.y - bounds.bottom + 1) / TILE_SIZE)];
             let [tox, toy] = [Math.floor((entity.x + bounds.right - 1) / TILE_SIZE), Math.floor((entity.y + bounds.top - 1) / TILE_SIZE)];
-            console.log('bounds', bounds);
-            console.log('fromx', fromx, 'fromy', fromy, 'tox', tox, 'toy', toy);
             for (let tlx = fromx; tlx <= tox; tlx++) {
                 for (let tly = fromy; tly <= toy; tly++) {
                     let tileUnder: WorldTile = this.getTileAt(tlx, tly);
@@ -83,13 +81,13 @@ export class World extends GameObject {
             let names: string[] = [];
             for (let w = 0; w < 64; w++) {
                 let num = noise[q][w];
-                let lavaTile = fmod((q - 8) / 2, 16) * 2;
-                let name =                                                    num < .2 && lavaTile == 0 ? this.tileDefaults.lava_left  || 'lava_left' :
-                                                                              num < .2 && lavaTile == 1 ? this.tileDefaults.lava_right || 'lava_right' :
-                                                                               num < .2 && lavaTile > 1 ? this.tileDefaults.grass      || 'grass' :
-                      num < .5 || w == 63 || (noise[q][w + 1] < .5 && (w == 0 || noise[q][w - 1] < .5)) ? this.tileDefaults.sand       || 'sand' :
-                                                                        noise[q][w + 1] < .5 || w == 62 ? this.tileDefaults.wallSide   || 'wallSide' :
-                                                                                                          this.tileDefaults.wallTop    || 'wallTop';
+                let waterTile = fmod((q - 8) / 2, 16) * 2;
+                let name =                                                   num < .2 && waterTile == 0 ? this.tileDefaults.water_left  || 'water_left' :
+                                                                             num < .2 && waterTile == 1 ? this.tileDefaults.water_right || 'water_right' :
+                                                                              num < .2 && waterTile > 1 ? this.tileDefaults.grass       || 'grass' :
+                      num < .5 || w == 63 || (noise[q][w + 1] < .5 && (w == 0 || noise[q][w - 1] < .5)) ? this.tileDefaults.sand        || 'sand' :
+                                                                        noise[q][w + 1] < .5 || w == 62 ? this.tileDefaults.wallSide    || 'wallSide' :
+                                                                                                          this.tileDefaults.wallTop     || 'wallTop';
 
                 
                 names.push(name);
