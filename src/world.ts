@@ -43,10 +43,21 @@ export class World extends GameObject {
         this._gameTime += delta * TIME_SCALE;
 
         for (let entity of <Entity[]>this.scene.findObjects((obj) => obj instanceof Entity)) {
-            let tileUnder: WorldTile = this.getTileAt(Math.floor(entity.x / TILE_SIZE), Math.floor(entity.y / TILE_SIZE));
-            if (tileUnder.onTick) { tileUnder.onTick(delta, entity); }
-            if (tileUnder.onLand && Math.abs(entity.hspeed - 0.0005) <= 0.001 && Math.abs(entity.vspeed - 0.0005) <= 0.001) {
-                tileUnder.onLand(entity);
+            let bounds = entity.collisionBounds;
+            let [fromx, fromy] = [Math.floor((entity.x - bounds.left + 1) / TILE_SIZE), Math.floor((entity.y - bounds.bottom + 1) / TILE_SIZE)];
+            let [tox, toy] = [Math.floor((entity.x + bounds.right - 1) / TILE_SIZE), Math.floor((entity.y + bounds.top - 1) / TILE_SIZE)];
+            console.log('bounds', bounds);
+            console.log('fromx', fromx, 'fromy', fromy, 'tox', tox, 'toy', toy);
+            for (let tlx = fromx; tlx <= tox; tlx++) {
+                for (let tly = fromy; tly <= toy; tly++) {
+                    let tileUnder: WorldTile = this.getTileAt(tlx, tly);
+                    if (tileUnder.onTick) {
+                        tileUnder.onTick(delta, entity);
+                    }
+                    if (tileUnder.onLand && Math.abs(entity.hspeed - 0.0005) <= 0.001 && Math.abs(entity.vspeed - 0.0005) <= 0.001) {
+                        tileUnder.onLand(entity);
+                    }
+                }
             }
         }
     }

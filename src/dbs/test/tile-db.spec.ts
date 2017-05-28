@@ -6,7 +6,7 @@ import * as sinonChai from 'sinon-chai';
 use(sinonChai);
 
 import { World } from '../../world';
-import { Game, GameScene, Entity } from '../../engine';
+import { Game, GameScene, Entity, Rect } from '../../engine';
 import { MockGame, stubDocument, stubImage } from '../../engine/test';
 import { tiles } from '../tile-db';
 import { DungeonScene } from '../../scenes/dungeon-scene';
@@ -28,7 +28,7 @@ describe('dbs/tiles', () => {
 
     describe('lava_left', () => {
         it('should invoke Entity.takeDamage when an entity ticks', () => {
-            let ent = new Entity('name', { maxHealth: 10, x: 0, y: 0 });
+            let ent = new Entity('name', { maxHealth: 10, x: 0, y: 0, collisionBounds: new Rect(0, 32, 0, 32) });
             scene.addObject(ent);
             sinon.spy(ent, 'takeDamage');
             sinon.stub(world, 'getTileAt').withArgs(0, 0).returns(tiles['lava_left']);
@@ -39,7 +39,7 @@ describe('dbs/tiles', () => {
 
     describe('lava_right', () => {
         it('should invoke Entity.takeDamage when an entity ticks', () => {
-            let ent = new Entity('name', { maxHealth: 10, x: 0, y: 0 });
+            let ent = new Entity('name', { maxHealth: 10, x: 0, y: 0, collisionBounds: new Rect(0, 32, 0, 32) });
             scene.addObject(ent);
             sinon.spy(ent, 'takeDamage');
             sinon.stub(world, 'getTileAt').withArgs(0, 0).returns(tiles['lava_right']);
@@ -51,7 +51,7 @@ describe('dbs/tiles', () => {
     describe('teleporter', () => {
         it('should navigate to an DungeonScene when a player lands', () => {
             (<any>scene).dungeon = new DungeonScene();
-            let ent = new Entity('Player', { maxHealth: 10, x: 0, y: 0 });
+            let ent = new Entity('Player', { maxHealth: 10, x: 0, y: 0, collisionBounds: new Rect(0, 32, 0, 32) });
             scene.addObject(ent);
             sinon.spy(game, 'changeScene');
             sinon.stub(world, 'getTileAt').withArgs(0, 0).returns(tiles['teleporter']);
@@ -75,7 +75,7 @@ describe('dbs/tiles', () => {
             };
             dungScene.enter(returnScene, 0, 0);
 
-            let ent = new Entity('Player', { maxHealth: 10, x: 0, y: 0 });
+            let ent = new Entity('Player', { maxHealth: 10, x: 0, y: 0, collisionBounds: new Rect(0, 32, 0, 32) });
             scene.addObject(ent);
             sinon.spy(game, 'changeScene');
             sinon.stub(world, 'getTileAt').withArgs(0, 0).returns(tiles['dungeonTeleporter']);

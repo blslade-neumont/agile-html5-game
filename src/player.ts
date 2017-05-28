@@ -2,9 +2,10 @@
 import { WorldTile, TILE_SIZE } from './dbs/tile-db';
 import { OverworldScene } from './scenes/overworld-scene';
 import { DeadPlayer } from './dead-player';
-import { ResourceLoader, Game, Entity, EntityOptions, GameEvent, fmod, GameScene, clamp } from './engine';
+import { ResourceLoader, Game, Entity, EntityOptions, GameEvent, fmod, GameScene, clamp, Rect } from './engine';
 import { alives } from './dbs/alive-db';
 import { pauseWithGame } from './utils/pause-with-game';
+import merge = require('lodash.merge');
 
 const MOVE_SPEED = 4 * 30;
 const SIZE = 32;
@@ -13,8 +14,10 @@ const CLOSE_ENOUGH: number = 3.0;
 
 export class Player extends Entity {
     constructor(opts: EntityOptions = { maxHealth: 10 }) {
-        super("Player", opts);
-        if (!this.sprite) this.sprite = alives['player-south'].sprite;
+        super("Player", merge({}, opts, {
+            sprite: alives['player-south'].sprite,
+            collisionBounds: new Rect(0, SIZE, 0, SIZE)
+        }));
     }
 
     addToScene(scene: GameScene) {
