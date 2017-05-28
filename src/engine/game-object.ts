@@ -1,8 +1,9 @@
 ﻿import { degToRad, radToDeg, fmod } from './utils/math';
+import { Rect } from './utils/rect';
 import { Game } from './game';
 import { GameEvent } from './utils/events';
 import { SpriteT } from './utils/sprite';
-import { drawSprite } from './utils/render';
+import { drawSprite, measureSprite } from './utils/render';
 import { GameScene } from './game-scene';
 import { Camera } from './camera';
 
@@ -11,6 +12,7 @@ export type RenderCameraT = 'default' | 'none' | Camera;
 export interface GameObjectOptions {
     x?: number,
     y?: number,
+    collisionBounds?: Rect,
 
     shouldTick?: boolean,
     direction?: number,
@@ -31,6 +33,7 @@ export class GameObject {
 
         if (typeof opts.x != 'undefined') this.x = opts.x;
         if (typeof opts.y != 'undefined') this.y = opts.y;
+        if (typeof opts.collisionBounds != 'undefined') this.collisionBounds = opts.collisionBounds;
 
         if (typeof opts.shouldTick != 'undefined') this.shouldTick = opts.shouldTick;
         if (typeof opts.direction != 'undefined') this.direction = opts.direction;
@@ -65,6 +68,20 @@ export class GameObject {
     }
     set y(val) {
         this._y = val;
+    }
+
+    private _collisionBounds: Rect | null;
+    get collisionBounds(): Rect {
+        if (!this._collisionBounds) {
+            if (!this.sprite) return Rect.zero;
+            let pivot = this.sprite.pivot || { x: 0, y: 0 };
+            let spriteSize = measureSprite(this.resources, this.sprite);
+            return new Rect(-pivot.x, spriteSize.width - pivot.x, -pivot.y, spriteSize.height - pivot.y);
+        }
+        return this._collisionBounds;
+    }
+    set collisionBounds(val: Rect) {
+        this._collisionBounds = val;
     }
 
     private _shouldTick = true;

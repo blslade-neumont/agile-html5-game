@@ -10,6 +10,7 @@ import { Game } from '../game';
 import { stubDocument } from './mock-document';
 import * as renderUtils from '../utils/render';
 import { GameScene } from '../game-scene';
+import { Rect } from '../utils/rect';
 
 describe('GameObject', () => {
     stubDocument();
@@ -27,11 +28,16 @@ describe('GameObject', () => {
             expect(gobj.name).to.eq('my-name');
         });
         it('should set shouldTick, x, y, direction, and speed based on the options passed in', () => {
-            let options = { shouldTick: false, x: 45, y: 12, direction: 195, speed: 4.5 };
+            let options = { shouldTick: false, x: 45, y: 12, collisionBounds: new Rect(-2, 3.14159, -3, 4) };
             let gobj = new GameObject('my-name', options);
             expect(gobj.shouldTick).to.eq(options.shouldTick);
             expect(gobj.x).to.eq(options.x);
             expect(gobj.y).to.eq(options.y);
+            expect(gobj.collisionBounds).to.eq(options.collisionBounds);
+        });
+        it('should set direction and speed based on the options passed in', () => {
+            let options = { direction: 195, speed: 4.5 };
+            let gobj = new GameObject('my-name', options);
             expect(gobj.direction).to.eq(options.direction);
             expect(gobj.speed).to.eq(options.speed);
         });
@@ -62,6 +68,82 @@ describe('GameObject', () => {
         it('should default to true', () => {
             let gobj = new GameObject('name');
             expect(gobj.shouldRender).to.be.true;
+        });
+    });
+
+    describe('.collisionBounds', () => {
+        it('should result in the zero rect if the object has no sprite', () => {
+            let gobj = new GameObject('name');
+            let bounds = gobj.collisionBounds;
+            expect(bounds).to.be.ok;
+            expect(bounds.left).to.eq(0);
+            expect(bounds.bottom).to.eq(0);
+            expect(bounds.width).to.eq(0);
+            expect(bounds.height).to.eq(0);
+        });
+        it('should calculate the collision bounds based on the sprite size if it has one', () => {
+            let gobj = new GameObject('name', {
+                sprite: {
+                    src: 'chocolate.milk',
+                    tileset: { width: 32, height: 66.2, tilex: 0, tiley: 0 }
+                }
+            });
+            let bounds = gobj.collisionBounds;
+            expect(bounds).to.be.ok;
+            expect(bounds.width).to.be.closeTo(32, .00001);
+            expect(bounds.height).to.be.closeTo(66.2, .00001);
+        });
+        it('should offset the collision bounds if the sprite has a pivot', () => {
+            let gobj = new GameObject('name', {
+                sprite: {
+                    src: 'chocolate.milk',
+                    pivot: { x: 6, y: 4 },
+                    tileset: {
+                        width: 32, height: 66.2, tilex: 0, tiley: 0
+                    }
+                }
+            });
+            let bounds = gobj.collisionBounds;
+            expect(bounds).to.be.ok;
+            expect(bounds.left).to.be.closeTo(-6, .00001);
+            expect(bounds.bottom).to.be.closeTo(-4, .00001);
+        });
+        it('should recalculate the collision bounds when the sprite changes', () => {
+            let gobj = new GameObject('name', {
+                sprite: {
+                    src: 'chocolate.milk',
+                    tileset: { width: 32, height: 66.2, tilex: 0, tiley: 0 }
+                }
+            });
+            let bounds = gobj.collisionBounds;
+            expect(bounds).to.be.ok;
+
+            gobj.sprite = {
+                src: 'chocolate.milk',
+                tileset: { width: 13, height: 27, tilex: 0, tiley: 0 }
+            };
+            let newBounds = gobj.collisionBounds;
+            expect(newBounds).to.be.ok;
+            expect(newBounds).not.to.eq(bounds);
+            expect(newBounds.width).to.be.closeTo(13, .00001);
+            expect(newBounds.height).to.be.closeTo(27, .00001);
+        });
+    });
+    describe('.collisionBounds=', () => {
+        it('should override the default behavior of collisionBounds', () => {
+            let gobj = new GameObject('name', {
+                sprite: {
+                    src: 'chocolate.milk',
+                    tileset: { width: 32, height: 66.2, tilex: 0, tiley: 0 }
+                }
+            });
+            gobj.collisionBounds = new Rect(-2, 2, -2, 2);
+            let bounds = gobj.collisionBounds;
+            expect(bounds).to.be.ok;
+            expect(bounds.left).to.be.closeTo(-2, .00001);
+            expect(bounds.bottom).to.be.closeTo(-2, .00001);
+            expect(bounds.width).to.be.closeTo(4, .00001);
+            expect(bounds.height).to.be.closeTo(4, .00001);
         });
     });
 
