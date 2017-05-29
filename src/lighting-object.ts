@@ -13,9 +13,10 @@ export class LightingObject extends GameObject {
 
     protected renderImpl(context: CanvasRenderingContext2D) {
         let world = <World | null>(<any>this.scene).world;
+        if (!world && this.dayNightCycle) throw new Error(`Unsupported state: no world, no game time; but dayNightCycle is true!`);
 
         let darkness = 0;
-        let gameTime = (world && fmod(world.gameTime, 1)) || (8 / 24);
+        let gameTime = world && (world.gameTime - Math.floor(world.gameTime));
         if (this.dayNightCycle && (gameTime <= 7 / 24 || gameTime >= 19 / 24)) {
             darkness = 1;
             if (gameTime <= 7 / 24 && gameTime > 5.5 / 24) darkness = 1 - ((gameTime * 24) - 5.5) / 1.5;
@@ -23,6 +24,7 @@ export class LightingObject extends GameObject {
             darkness *= .95;
         }
         darkness = Math.max(1 - this.ambient, darkness);
+        if (darkness == 0) return;
 
         this.createCompositeImage(darkness);
 
@@ -48,8 +50,8 @@ export class LightingObject extends GameObject {
         if (camera) camera.push(ctx);
         try {
             ctx.globalCompositeOperation = 'lighten';
-            let objects = this.scene.findObjects(obj => typeof (<any>obj).renderLight === 'function');
-            for (let obj of objects) {
+            let objects = this.scene.findObjects();
+            for (let obj of objects.filter(obj => typeof (<any>obj).renderLight === 'function')) {
                 (<any>obj).renderLight(ctx);
             }
         }

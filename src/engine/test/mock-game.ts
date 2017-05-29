@@ -3,9 +3,11 @@ import { EventQueue } from '../event-queue';
 import { ResourceLoader } from '../resource-loader';
 
 export class MockGame {
-    constructor(private scene: GameScene = null) {
+    constructor(scene: GameScene = null) {
+        if (scene) this.changeScene(scene);
     }
 
+    scene = null;
     changeScene(scene: GameScene) {
         this.scene = scene;
         scene.game = <any>this;

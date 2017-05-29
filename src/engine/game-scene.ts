@@ -75,9 +75,11 @@ export class GameScene {
         }
         return null;
     }
+    findObjects(): GameObject[];
     findObjects(predicate: (obj: GameObject) => boolean): GameObject[];
     findObjects<T extends GameObject>(predicate: (obj: GameObject) => obj is T): T[];
-    findObjects(predicate: (obj: GameObject) => boolean) {
+    findObjects(predicate?: (obj: GameObject) => boolean) {
+        if (!predicate) return [...this._objects];
         if (typeof predicate !== 'function') throw new Error(`Invalid predicate: ${predicate}`);
         return this._objects.filter(predicate);
     }

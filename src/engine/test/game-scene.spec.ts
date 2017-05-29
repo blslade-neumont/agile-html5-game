@@ -149,12 +149,20 @@ describe('engine/game-scene', () => {
             gobjs.map(gobj => scene.removeObject(gobj));
         });
 
+        it('should return a clone of the objects array if no predicate is passed in', () => {
+            expect(scene.findObjects()).to.deep.eq(gobjs);
+        });
+        it('should not return an array that breaks encapsulation', () => {
+            let objs = scene.findObjects();
+            objs.length = 0;
+            expect(scene.findObjects()).to.deep.eq(gobjs);
+        });
         it('should return an empty array if the specified object is not found in this game', () => {
             expect(scene.findObjects(() => false)).to.deep.eq([]);
         });
         it('should throw an error if a value that is not a function is passed in', () => {
-            expect(() => scene.findObjects(<any>null)).to.throw(/invalid predicate/i);
-            expect(() => scene.findObjects(<any>'')).to.throw(/invalid predicate/i);
+            expect(() => scene.findObjects(<any>'fish')).to.throw(/invalid predicate/i);
+            expect(() => scene.findObjects(<any>3295)).to.throw(/invalid predicate/i);
             expect(() => scene.findObjects(<any>{})).to.throw(/invalid predicate/i);
         });
         it('should return all game objects for which the predicate returns true', () => {
