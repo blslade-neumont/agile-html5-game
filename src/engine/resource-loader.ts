@@ -3,14 +3,22 @@ import { PreloadStrategy } from './utils/preload-strategy';
 
 export class ResourceLoader {
     constructor() {
+        let pathParts = window.location.pathname.split('/');
+        this._baseUrl = window.location.origin + (pathParts[pathParts.length - 1] == 'index.html' ? pathParts.slice(0, pathParts.length - 1) : pathParts).join('/');
+        if (this._baseUrl.startsWith('null/')) this._baseUrl = 'file:///' + this._baseUrl.slice(5);
     }
 
     private DEBUG_RESOURCES = false;
-
+    
     addPreloadStrategy(strategy: PreloadStrategy) {
         strategy.preload(this);
     }
-    
+
+    private _baseUrl: string;
+    get baseUrl() {
+        return this._baseUrl;
+    }
+
     private _resourcesLoaded = 0;
     get resourcesLoaded() {
         return this._resourcesLoaded;
@@ -31,6 +39,7 @@ export class ResourceLoader {
     private _images = new Map<string, HTMLImageElement>();
 
     loadImage(src: string) {
+        src = this.resolvePath(src);
         if (this._images.has(src)) return this._images.get(src);
 
         this._resourcesLoading++;
@@ -45,6 +54,11 @@ export class ResourceLoader {
         };
         img.src = src;
         return img;
+    }
+    private resolvePath(src: string) {
+        if (src.match(/^[a-z]:\/\//i)) return src;
+        if (src.startsWith('/')) return `${this.baseUrl}${src}`;
+        else return `${this.baseUrl}/${src}`;
     }
 
     render(context: CanvasRenderingContext2D) {
