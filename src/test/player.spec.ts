@@ -13,8 +13,6 @@ import { GameScene } from '../engine';
 import { AgileGame } from '../agile-game';
 import { Game, MouseWheelEvent } from '../engine';
 import { Entity } from '../entity';
-import { stubDocument } from '../engine/test/mock-document';
-import { stubImage } from '../engine/test/mock-image';
 import { DeadPlayer } from '../dead-player';
 
 describe('Player', () => {
@@ -31,9 +29,6 @@ describe('Player', () => {
     });
 
     describe('.handleEvent', () => {
-        stubDocument();
-        stubImage();
-
         let game: AgileGame;
         beforeEach(() => {
             game = new AgileGame(30);
@@ -312,38 +307,6 @@ describe('Player', () => {
             });
         });
 
-        describe('.kill', () => {
-            stubDocument();
-            stubImage();
-
-            let game: Game;
-            beforeEach(() => {
-                game = new Game(30);
-                game.changeScene(new GameScene());
-            });
-            afterEach(() => {
-                if (game.isRunning) game.stop();
-            });
-
-            it('should create a dead player object', () => {
-                game.scene.addObject(player);
-                sinon.stub(game.scene, 'addObject');
-                player.kill();
-                expect(game.scene.addObject).to.be.calledWith(sinon.match((x) => x instanceof DeadPlayer));
-
-            });
-
-            it('should call super.kill', () => {
-                game.scene.addObject(player);
-                let stub: sinon.SinonStub;
-                try {
-                    stub = sinon.stub(Entity.prototype, 'kill');
-                    player.kill();
-                    expect(Entity.prototype.kill).to.have.been.calledOnce;
-                } finally { if (stub) stub.restore(); }
-            });
-        });
-
         describe('animation', () => {
             it('should not change the sprite if the player is not moving', () => {
                 player.addToScene(<any>{
@@ -422,6 +385,35 @@ describe('Player', () => {
                 player.tick(.02);
                 expect(player.animationSpeed).to.eq(.2);
             });
+        });
+    });
+
+    describe('.kill', () => {
+        let game: Game;
+        beforeEach(() => {
+            game = new Game(30);
+            game.changeScene(new GameScene());
+        });
+        afterEach(() => {
+            if (game.isRunning) game.stop();
+        });
+
+        it('should create a dead player object', () => {
+            game.scene.addObject(player);
+            sinon.stub(game.scene, 'addObject');
+            player.kill();
+            expect(game.scene.addObject).to.be.calledWith(sinon.match((x) => x instanceof DeadPlayer));
+
+        });
+
+        it('should call super.kill', () => {
+            game.scene.addObject(player);
+            let stub: sinon.SinonStub;
+            try {
+                stub = sinon.stub(Entity.prototype, 'kill');
+                player.kill();
+                expect(Entity.prototype.kill).to.have.been.calledOnce;
+            } finally { if (stub) stub.restore(); }
         });
     });
 });

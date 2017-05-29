@@ -7,12 +7,8 @@ use(sinonChai);
 
 import { AgileGame } from '../agile-game';
 import { GameObject, delay } from '../engine';
-import { stubDocument, stubImage } from '../engine/test';
 
 describe('AgileGame', () => {
-    stubDocument();
-    stubImage();
-
     let game: AgileGame;
     beforeEach(() => {
         game = new AgileGame(30);

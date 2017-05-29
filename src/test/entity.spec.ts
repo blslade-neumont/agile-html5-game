@@ -7,11 +7,8 @@ use(sinonChai);
 
 import { Entity } from '../entity';
 import { GameObject } from '../engine';
-import { stubDocument } from '../engine/test';
 
 describe('Entity', () => {
-    stubDocument();
-
     let ent: Entity;
     beforeEach(() => {
         ent = new Entity('name', { maxHealth: 10 });

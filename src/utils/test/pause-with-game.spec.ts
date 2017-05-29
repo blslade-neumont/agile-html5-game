@@ -9,12 +9,8 @@ import { GameScene } from '../../engine/game-scene';
 import { pauseWithGame } from '../pause-with-game';
 import { GameObject } from '../../engine/game-object';
 import { AgileGame } from '../../agile-game';
-import { stubDocument, stubImage } from '../../engine/test';
 
 describe('pauseWithGame', () => {
-    stubDocument();
-    stubImage();
-
     let context: CanvasRenderingContext2D;
 
     let game: AgileGame;

@@ -7,15 +7,11 @@ use(sinonChai);
 
 import { LightingObject } from '../lighting-object';
 import { Game, GameScene, Camera } from '../engine';
-import { stubDocument, stubImage } from '../engine/test';
 import { MockAgileGame } from './mock-agile-game';
 
 let matchCloseTo = val => sinon.match(v => v >= val - .00001 && v <= val + .00001);
 
 describe('LightingObject', () => {
-    stubDocument();
-    stubImage();
-
     describe('.renderImpl', () => {
         let context: CanvasRenderingContext2D;
         let game: Game;

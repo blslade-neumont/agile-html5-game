@@ -7,12 +7,9 @@ use(sinonChai);
 
 import { OverworldScene } from '../overworld-scene';
 import { Game } from '../../engine';
-import { MockGame, stubDocument, stubImage } from '../../engine/test';
+import { MockGame } from '../../engine/test';
 
 describe('OverworldScene', () => {
-    stubDocument();
-    stubImage();
-
     let game: Game;
     let scene: OverworldScene;
     beforeEach(() => {

@@ -10,13 +10,8 @@ import { FollowCamera } from '../follow-camera';
 import { Game } from '../game';
 import { GameScene } from '../game-scene';
 import { GameObject } from '../game-object';
-import { stubDocument } from './mock-document';
-import { stubImage } from './mock-image';
 
 describe('FollowCamera', () => {
-    stubDocument();
-    stubImage();
-
     let game: Game;
     let scene: GameScene;
     let camera: FollowCamera;

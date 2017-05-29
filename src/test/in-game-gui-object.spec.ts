@@ -10,15 +10,11 @@ import { AgileGame } from '../agile-game';
 import { OverworldScene } from '../scenes/overworld-scene';
 import { Game, GameObject, delay } from '../engine';
 import renderUtils = require('../engine');
-import { stubDocument, stubImage } from '../engine/test';
 import { MockAgileGame } from './mock-agile-game';
 import { MenuGuiObject } from '../menu-gui-object';
 import { gui } from '../dbs/gui-db';
 
 describe('InGameGuiObject', () => {
-    stubDocument();
-    stubImage();
-
     let guiObject: InGameGuiObject;
     beforeEach(() => {
         guiObject = new InGameGuiObject();

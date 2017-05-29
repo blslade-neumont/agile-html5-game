@@ -6,12 +6,8 @@ import * as sinonChai from 'sinon-chai';
 use(sinonChai);
 
 import { ResourceLoader } from '../resource-loader';
-import { stubImage } from './mock-image';
-import { stubDocument } from './mock-document';
 
 describe('ResourceLoader', () => {
-    stubImage();
-
     let loader: ResourceLoader;
     beforeEach(() => {
         loader = new ResourceLoader();
@@ -77,8 +73,6 @@ describe('ResourceLoader', () => {
     });
 
     describe('.render', () => {
-        stubDocument();
-
         let any = sinon.match.any;
 
         let context: CanvasRenderingContext2D;

@@ -11,14 +11,11 @@ import { Game } from '../engine';
 import { OverworldScene } from '../scenes/overworld-scene';
 import { World } from '../world';
 import { ResourceLoader } from '../engine';
-import { MockGame, stubDocument, stubImage } from '../engine/test';
+import { MockGame } from '../engine/test';
 import { TILE_SIZE } from '../dbs/tile-db';
 import { GameScene } from '../engine';
 
 describe('GridRenderer', () => {
-    stubDocument();
-    stubImage();
-
     it('should start without a world', () =>{
         let renderer: GridRenderer = new GridRenderer();
         expect(renderer.world).not.to.be.ok;

@@ -8,16 +8,11 @@ use(sinonChai);
 import { Game } from '../game';
 import { GameObject } from '../game-object';
 import { Camera } from '../camera';
-import { stubDocument } from './mock-document';
-import { stubImage } from './mock-image';
 import { delay } from '../utils/delay';
 import { GameScene } from '../game-scene';
 import { MockEventQueue } from '../../test/mock-event-queue';
 
 describe('Game', () => {
-    stubDocument();
-    stubImage();
-
     let game: Game;
     beforeEach(() => {
         game = new Game(30);

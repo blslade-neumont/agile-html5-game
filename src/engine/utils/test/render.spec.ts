@@ -6,14 +6,11 @@ import * as sinonChai from 'sinon-chai';
 use(sinonChai);
 
 import { fillText, drawSprite, measureSprite } from '../render';
-import { stubDocument } from '../../test/mock-document';
 import { ResourceLoader } from '../../resource-loader';
 import * as _ from 'lodash';
 let any = sinon.match.any;
 
 describe('utils/fillText', () => {
-    stubDocument();
-
     let context: CanvasRenderingContext2D;
     beforeEach(() => {
         context = new HTMLCanvasElement().getContext("2d");
@@ -59,8 +56,6 @@ let animatedSprite = {
 };
 
 describe('utils/drawSprite', () => {
-    stubDocument();
-
     let context: CanvasRenderingContext2D;
     let img = <any>'this is my image!';
     let loader: ResourceLoader = <any>{ loadImage: () => img };
@@ -193,8 +188,6 @@ describe('utils/drawSprite', () => {
 });
 
 describe('utils/measureSprite', () => {
-    stubDocument();
-    
     let img = <any>{ width: 42, height: 64 };
     let expectedDims = { width: img.width, height: img.height };
     let loader: ResourceLoader = <any>{ loadImage: () => img };

@@ -8,7 +8,6 @@ use(sinonChai);
 import { Game, GameScene, GameObject } from '../engine';
 import { MenuGuiObject } from '../menu-gui-object';
 import { MockGame } from '../engine/test';
-import { stubDocument, stubImage } from '../engine/test';
 import * as guiUtils from '../utils/gui';
 
 let sampleGui = {
@@ -18,9 +17,6 @@ let sampleGui = {
 };
 
 describe('MenuGuiObject', () => {
-    stubDocument();
-    stubImage();
-
     let game: Game;
     let scene: GameScene;
     beforeEach(() => {

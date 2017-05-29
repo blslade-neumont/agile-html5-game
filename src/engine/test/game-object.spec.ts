@@ -7,14 +7,11 @@ use(sinonChai);
 
 import { GameObject } from '../game-object';
 import { Game } from '../game';
-import { stubDocument } from './mock-document';
 import * as renderUtils from '../utils/render';
 import { GameScene } from '../game-scene';
 import { Rect } from '../utils/rect';
 
 describe('GameObject', () => {
-    stubDocument();
-
     it('should start without a resourceLoader, eventQueue, or game', () => {
         let gobj = new GameObject('name');
         expect(gobj.game).not.to.be.ok;

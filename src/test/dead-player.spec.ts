@@ -7,16 +7,11 @@ use(sinonChai);
 
 import { DeadPlayer } from '../dead-player';
 import { Game } from '../engine';
-import { stubDocument } from '../engine/test/mock-document';
-import { stubImage } from '../engine/test/mock-image';
 import { GameObject, GameScene } from '../engine';
 import { alives } from '../dbs/alive-db';
 import { GameOverScene } from '../scenes/game-over-scene';
 
 describe('Dead Player', () => {
-    stubDocument();
-    stubImage();
-
     let deadPlayer: DeadPlayer;
     let game: Game;
     beforeEach(() => {

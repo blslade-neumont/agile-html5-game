@@ -8,13 +8,8 @@ use(sinonChai);
 import { Camera } from '../camera';
 import { Game } from '../game';
 import { GameScene } from '../game-scene';
-import { stubDocument } from './mock-document';
-import { stubImage } from './mock-image';
 
 describe('Camera', () => {
-    stubDocument();
-    stubImage();
-
     let game: Game;
     let scene: GameScene;
     let camera: Camera;

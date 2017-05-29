@@ -7,14 +7,10 @@ use(sinonChai);
 
 import { GameScene } from '../game-scene';
 import { Game } from '../game';
-import { stubDocument, stubImage } from '../test';
 import { Camera } from '../camera';
 import { GameObject } from '../game-object';
 
 describe('engine/game-scene', () => {
-    stubDocument();
-    stubImage();
-
     let context: CanvasRenderingContext2D;
 
     let game: Game;

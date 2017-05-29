@@ -7,14 +7,11 @@ use(sinonChai);
 
 import { World } from '../world';
 import { Game, GameScene } from '../engine';
-import { MockGame, stubDocument, stubImage } from '../engine/test';
+import { MockGame } from '../engine/test';
 import { Entity } from '../entity';
 import { tiles } from '../dbs/tile-db';
 
 describe('World', () => {
-    stubDocument();
-    stubImage();
-
     let game: Game;
     let scene: GameScene;
     let world: World;

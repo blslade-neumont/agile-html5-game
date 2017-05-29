@@ -7,15 +7,10 @@ use(sinonChai);
 
 import { EventQueue } from '../event-queue';
 import { MouseButton } from '../utils/events';
-import { stubDocument } from './mock-document';
 import { delay } from '../utils/delay';
-
 import { Game } from '../game';
-import { stubImage } from './mock-image';
 
 describe('EventQueue', () => {
-    stubDocument();
-
     let events: EventQueue;
     beforeEach(() => {
         events = new EventQueue();
@@ -319,8 +314,6 @@ describe('EventQueue', () => {
     });
 
     describe('canvas resize', () => {
-        stubImage();
-
         let game: Game;
         beforeEach(() => {
             game = new Game(30);
