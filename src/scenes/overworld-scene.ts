@@ -4,6 +4,7 @@ import { GridRenderer } from '../grid-renderer';
 import { Player } from '../player';
 import { InGameGuiObject } from '../in-game-gui-object';
 import { DungeonScene } from './dungeon-scene';
+import { DayNightCycleObject } from '../day-night-cycle-object';
 
 export class OverworldScene extends GameScene {
     constructor() {
@@ -41,6 +42,8 @@ export class OverworldScene extends GameScene {
 
         let player = new Player({ maxHealth: 10 });
         this.addObject(player);
+
+        this.addObject(new DayNightCycleObject());
 
         this.addObject(new InGameGuiObject());
 

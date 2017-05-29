@@ -7,6 +7,8 @@ export class MockDocument {
 
     private element = new MockElement();
 
+    createElement() { return this.element; }
+
     getElementById() { return this.element; }
     getElementsByClassName() { return [this.element]; }
     getElementsByName() { return [this.element]; }

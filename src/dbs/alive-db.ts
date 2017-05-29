@@ -59,5 +59,11 @@ export let alives: { [name: string]: Alive } =
                 src: 'images/Alive/Katie.png',
                 tileset: { width: 32, height: 32, tilex: 0, tiley: 4 }
             }
+        },
+        'dim-light-source': {
+            sprite: {
+                src: 'images/Alive/dim-light-source.png',
+                pivot: { x: 80, y: 80 }
+            }
         }
     };

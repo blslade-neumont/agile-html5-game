@@ -2,7 +2,7 @@
 import { WorldTile, TILE_SIZE } from './dbs/tile-db';
 import { OverworldScene } from './scenes/overworld-scene';
 import { DeadPlayer } from './dead-player';
-import { ResourceLoader, Game, Entity, EntityOptions, GameEvent, fmod, GameScene, clamp, Rect } from './engine';
+import { ResourceLoader, Game, Entity, EntityOptions, GameEvent, fmod, GameScene, clamp, Rect, SpriteT, drawSprite } from './engine';
 import { alives } from './dbs/alive-db';
 import { pauseWithGame } from './utils/pause-with-game';
 import merge = require('lodash.merge');
@@ -18,6 +18,7 @@ export class Player extends Entity {
             sprite: alives['player-south'].sprite,
             collisionBounds: new Rect(0, SIZE, 0, SIZE)
         }));
+        this._lightSourceSprite = alives['dim-light-source'].sprite;
     }
 
     addToScene(scene: GameScene) {
@@ -106,6 +107,11 @@ export class Player extends Entity {
         }
 
         super.tick(delta);
+    }
+
+    private _lightSourceSprite: SpriteT;
+    renderLight(context: CanvasRenderingContext2D) {
+        drawSprite(context, this.resources, this._lightSourceSprite, this.x + (SIZE / 2), this.y + (SIZE / 2), this.animationAge);
     }
 
     kill() {

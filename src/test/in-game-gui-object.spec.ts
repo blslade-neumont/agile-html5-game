@@ -93,7 +93,7 @@ describe('InGameGuiObject', () => {
         });
     });
 
-    describe.only('.render', () => {
+    describe('.render', () => {
         let context: CanvasRenderingContext2D;
         let game: Game;
         let scene: OverworldScene;
@@ -125,7 +125,7 @@ describe('InGameGuiObject', () => {
         });
     });
 
-    describe.only('.renderHealth', () => {
+    describe('.renderHealth', () => {
         let context: CanvasRenderingContext2D;
         let game: Game;
         let scene: OverworldScene;

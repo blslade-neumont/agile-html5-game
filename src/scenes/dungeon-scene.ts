@@ -3,6 +3,7 @@ import { World } from '../world';
 import { GridRenderer } from '../grid-renderer';
 import { Player } from '../player';
 import { InGameGuiObject } from '../in-game-gui-object';
+import { DayNightCycleObject } from '../day-night-cycle-object';
 
 export class DungeonScene extends GameScene {
     constructor() {
@@ -72,6 +73,8 @@ export class DungeonScene extends GameScene {
         this.addObject(new GridRenderer());
 
         this.addObject(this.player);
+
+        this.addObject(new DayNightCycleObject());
 
         this.addObject(new InGameGuiObject());
 
