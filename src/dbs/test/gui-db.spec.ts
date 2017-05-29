@@ -5,10 +5,11 @@ import * as sinon from 'sinon';
 import * as sinonChai from 'sinon-chai';
 use(sinonChai);
 
-import { Game, GameScene, Entity } from '../../engine';
+import { Game, GameScene } from '../../engine';
 import { MockGame, stubDocument, stubImage } from '../../engine/test';
 import { gui } from '../gui-db';
 import { handleGUIEvent } from '../../utils/gui';
+import { Entity } from '../../entity';
 import { OverworldScene } from '../../scenes/overworld-scene';
 import { TitleScene } from '../../scenes/title-scene';
 

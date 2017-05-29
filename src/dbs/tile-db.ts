@@ -1,4 +1,5 @@
-﻿import { SpriteT, Entity } from '../engine';
+﻿import { SpriteT } from '../engine';
+import { Entity } from '../entity';
 
 export const TILE_SIZE: number = 32;
 

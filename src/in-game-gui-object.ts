@@ -1,8 +1,9 @@
-﻿import { GameEvent, Entity, drawSprite } from './engine';
+﻿import { GameEvent, drawSprite } from './engine';
 import { AgileGame } from './agile-game';
 import { OverworldScene } from './scenes/overworld-scene';
 import { gui } from './dbs/gui-db';
 import { MenuGuiObject } from './menu-gui-object';
+import { Entity } from './entity';
 
 export class InGameGuiObject extends MenuGuiObject {
     constructor() {

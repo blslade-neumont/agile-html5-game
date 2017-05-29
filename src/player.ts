@@ -2,7 +2,8 @@
 import { WorldTile, TILE_SIZE } from './dbs/tile-db';
 import { OverworldScene } from './scenes/overworld-scene';
 import { DeadPlayer } from './dead-player';
-import { ResourceLoader, Game, Entity, EntityOptions, GameEvent, fmod, GameScene, clamp, Rect, SpriteT, drawSprite } from './engine';
+import { ResourceLoader, Game, GameEvent, fmod, GameScene, clamp, Rect, SpriteT, drawSprite } from './engine';
+import { Entity, EntityOptions } from './entity';
 import { alives } from './dbs/alive-db';
 import { pauseWithGame } from './utils/pause-with-game';
 import merge = require('lodash.merge');

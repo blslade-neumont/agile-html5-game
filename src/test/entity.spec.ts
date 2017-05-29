@@ -5,9 +5,9 @@ import * as sinon from 'sinon';
 import * as sinonChai from 'sinon-chai';
 use(sinonChai);
 
-import { stubDocument } from './mock-document';
 import { Entity } from '../entity';
-import { GameObject } from '../game-object';
+import { GameObject } from '../engine';
+import { stubDocument } from '../engine/test';
 
 describe('Entity', () => {
     stubDocument();

@@ -1,5 +1,4 @@
-﻿import { GameObject, GameObjectOptions } from './game-object';
-import { clamp } from './utils/math';
+﻿import { GameObject, GameObjectOptions, clamp } from './engine';
 
 export interface EntityOptions extends GameObjectOptions {
     maxHealth: number,

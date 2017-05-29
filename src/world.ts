@@ -1,7 +1,8 @@
-﻿import { ResourceLoader, Game, GameObject, GameScene, fmod, Entity, SpriteT } from './engine';
+﻿import { ResourceLoader, Game, GameObject, GameScene, fmod, SpriteT } from './engine';
 import { tiles, TILE_SIZE, WorldTile } from './dbs/tile-db';
 import { pauseWithGame } from './utils/pause-with-game';
 import { generateNoise } from './utils/noise';
+import { Entity } from './entity';
 
 const TIME_SCALE = 1 / (60 * 5);
 

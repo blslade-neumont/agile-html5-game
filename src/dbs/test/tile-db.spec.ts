@@ -6,10 +6,11 @@ import * as sinonChai from 'sinon-chai';
 use(sinonChai);
 
 import { World } from '../../world';
-import { Game, GameScene, Entity, Rect } from '../../engine';
+import { Game, GameScene, Rect } from '../../engine';
 import { MockGame, stubDocument, stubImage } from '../../engine/test';
 import { tiles } from '../tile-db';
 import { DungeonScene } from '../../scenes/dungeon-scene';
+import { Entity } from '../../entity';
 
 describe('dbs/tiles', () => {
     stubDocument();
