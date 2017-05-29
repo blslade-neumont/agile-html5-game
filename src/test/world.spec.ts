@@ -35,9 +35,6 @@ describe('World', () => {
     });
 
     describe('.tick', () => {
-        it('should throw an error if the world has not been initialized', () => {
-            expect(() => world.tick(.1)).to.throw(/not been initialized/i);
-        });
         it('should update the game time', () => {
             scene.addObject(world);
             let prevGameTime = world.gameTime;
@@ -55,9 +52,6 @@ describe('World', () => {
     });
 
     describe('.getTileAt', () => {
-        it('should throw an error if the world has not been initialized', () => {
-            expect(() => world.getTileAt(0, 0)).to.throw(/not been initialized/i);
-        });
         it('should not throw an error if you try to get a tile outside of the world', () => {
             scene.addObject(world);
             expect(() => world.getTileAt(-1, 0)).not.to.throw;

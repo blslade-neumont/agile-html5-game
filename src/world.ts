@@ -39,7 +39,6 @@ export class World extends GameObject {
     }
 
     tick(delta: number) {
-        if (!this._initialized) throw new Error('This World has not been initialized');
         this._gameTime += delta * TIME_SCALE;
 
         for (let entity of <Entity[]>this.scene.findObjects((obj) => obj instanceof Entity)) {
@@ -61,7 +60,6 @@ export class World extends GameObject {
     }
 
     getTileAt(x: number, y: number): WorldTile {
-        if (!this._initialized) throw new Error('This World has not been initialized');
         let chunk = this.getChunk(Math.floor(x / 64), Math.floor(y / 64));
         let [relativex, relativey] = [fmod(x, 64), fmod(y, 64)];
         return chunk[relativex][relativey];

@@ -10,7 +10,13 @@ export class DungeonScene extends GameScene {
         super();
     }
 
-    private _world: World = null;
+    private _world: World = new World(Math.random(), {
+        grass: 'dungeonGrass',
+        sand: 'dungeonSand',
+        teleporter: 'dungeonTeleporter',
+        water_left: 'lava_left',
+        water_right: 'lava_right'
+    });
     get world() {
         return this._world;
     }
@@ -28,6 +34,9 @@ export class DungeonScene extends GameScene {
         this.player.hspeed = 0;
         this.player.vspeed = 0;
         this.player.currentHealth = otherPlayer.currentHealth;
+
+        let otherWorld = <World>(fromScene.findObject('World') || (<any>fromScene).world);
+        if (otherWorld) this.world.gameTime = otherWorld.gameTime;
     }
     exit() {
         this.game.changeScene(this._returnScene);
@@ -39,6 +48,9 @@ export class DungeonScene extends GameScene {
         otherPlayer.hspeed = 0;
         otherPlayer.vspeed = 0;
         otherPlayer.currentHealth = this.player.currentHealth;
+
+        let otherWorld = <World>(this._returnScene.findObject('World') || (<any>this._returnScene).world);
+        if (otherWorld) otherWorld.gameTime = this.world.gameTime;
     }
     private _returnScene: GameScene;
     private _returnX: number;
@@ -61,14 +73,7 @@ export class DungeonScene extends GameScene {
 
         if (this._initialized) return;
         this._initialized = true;
-
-        this._world = new World(Math.random(), {
-            grass: 'dungeonGrass',
-            sand: 'dungeonSand',
-            teleporter: 'dungeonTeleporter',
-            water_left: 'lava_left',
-            water_right: 'lava_right'
-        });
+        
         this.addObject(this.world);
         this.addObject(new GridRenderer());
 

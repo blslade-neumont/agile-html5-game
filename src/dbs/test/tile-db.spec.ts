@@ -80,29 +80,64 @@ describe('dbs/tiles', () => {
             world.tick(.02);
             expect(game.changeScene).to.have.been.calledOnce.calledWith(sinon.match.instanceOf(DungeonScene));
         });
+        it('should preserve the game time when it navigates to a DungeonScene', () => {
+            let dung = (<any>scene).dungeon = new DungeonScene();
+            let ent = new Entity('Player', { maxHealth: 10, x: 0, y: 0, collisionBounds: new Rect(0, 32, 0, 32) });
+            scene.addObject(ent);
+            sinon.spy(game, 'changeScene');
+            sinon.stub(world, 'getTileAt').withArgs(0, 0).returns(tiles['teleporter']);
+            world.gameTime = 2953;
+            world.tick(.02);
+            expect(dung.world.gameTime).to.be.closeTo(world.gameTime, .00001);
+        });
     });
 
     describe('dungeonTeleporter', () => {
-        it('should navigate to the previous scene when a player lands', () => {
+        it('should navigate to the previous scene when the player lands', () => {
             let dungScene = scene = new DungeonScene();
-            scene.game = game;
             game.changeScene(scene);
-            world = new World();
-            scene.addObject(world);
+            scene.start();
 
+            let player: any = {};
+            let returnWorld: any = { gameTime: 0 };
             let returnScene: GameScene = <any>{
-                findObject: () => ({}),
+                findObject: name => (name == 'Player') ? player :
+                                     (name == 'World') ? returnWorld :
+                                                         {},
                 currentHealth: 5,
                 game: game
             };
             dungScene.enter(returnScene, 0, 0);
 
-            let ent = new Entity('Player', { maxHealth: 10, x: 0, y: 0, collisionBounds: new Rect(0, 32, 0, 32) });
-            scene.addObject(ent);
+            let ent = <Entity>dungScene.findObject('Player');
             sinon.spy(game, 'changeScene');
-            sinon.stub(world, 'getTileAt').withArgs(0, 0).returns(tiles['dungeonTeleporter']);
-            world.tick(.02);
+            sinon.stub(dungScene.world, 'getTileAt').withArgs(0, 0).returns(tiles['dungeonTeleporter']);
+            dungScene.world.tick(.02);
             expect(game.changeScene).to.have.been.calledOnce.calledWith(returnScene);
+        });
+        it('should preserve the game time when it navigates to the previous scene', () => {
+            let dungScene = scene = new DungeonScene();
+            game.changeScene(scene);
+            scene.start();
+
+            let player: any = {};
+            let returnWorld: any = { gameTime: 0 };
+            let returnScene: GameScene = <any>{
+                findObject: name => (name == 'Player') ? player :
+                                     (name == 'World') ? returnWorld :
+                                                         {},
+                currentHealth: 5,
+                game: game,
+                world: returnWorld
+            };
+            dungScene.enter(returnScene, 0, 0);
+
+            let ent = <Entity>dungScene.findObject('Player');
+            sinon.spy(game, 'changeScene');
+            sinon.stub(dungScene.world, 'getTileAt').withArgs(0, 0).returns(tiles['dungeonTeleporter']);
+            dungScene.world.gameTime = 28582.5;
+            dungScene.world.tick(.02);
+            expect((<any>returnScene).world.gameTime).to.be.closeTo(dungScene.world.gameTime, .00001);
         });
     });
 });

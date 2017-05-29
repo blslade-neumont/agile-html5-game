@@ -8,6 +8,7 @@ export class MockGame {
 
     changeScene(scene: GameScene) {
         this.scene = scene;
+        scene.game = <any>this;
     }
 
     resourceLoader = new ResourceLoader();
