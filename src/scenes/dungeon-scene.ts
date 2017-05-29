@@ -14,8 +14,7 @@ export class DungeonScene extends GameScene {
         grass: 'dungeonGrass',
         sand: 'dungeonSand',
         teleporter: 'dungeonTeleporter',
-        water_left: 'lava_left',
-        water_right: 'lava_right'
+        water: 'lava'
     });
     get world() {
         return this._world;

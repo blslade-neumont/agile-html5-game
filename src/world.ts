@@ -7,8 +7,7 @@ import { Entity } from './entity';
 const TIME_SCALE = 1 / (60 * 5);
 
 type TileDefaultsT = {
-    water_left?: string,
-    water_right?: string,
+    water?: string,
     grass?: string,
     sand?: string,
     wallSide?: string,
@@ -92,14 +91,11 @@ export class World extends GameObject {
             let names: string[] = [];
             for (let w = 0; w < 64; w++) {
                 let num = noise[q][w];
-                let waterTile = fmod((q - 8) / 2, 16) * 2;
-                let name =                                                   num < .2 && waterTile == 0 ? this.tileDefaults.water_left  || 'water_left' :
-                                                                             num < .2 && waterTile == 1 ? this.tileDefaults.water_right || 'water_right' :
-                                                                              num < .2 && waterTile > 1 ? this.tileDefaults.grass       || 'grass' :
-                      num < .5 || w == 63 || (noise[q][w + 1] < .5 && (w == 0 || noise[q][w - 1] < .5)) ? this.tileDefaults.sand        || 'sand' :
-                                                                        noise[q][w + 1] < .5 || w == 62 ? this.tileDefaults.wallSide    || 'wallSide' :
-                                                                                                          this.tileDefaults.wallTop     || 'wallTop';
-
+                let name =                                                                   num < -.2 ? this.tileDefaults.water    || 'water' :
+                                                                                             num < .35 ? this.tileDefaults.grass    || 'grass' :
+                     num < .5 || w == 63 || (noise[q][w + 1] < .5 && (w == 0 || noise[q][w - 1] < .5)) ? this.tileDefaults.sand     || 'sand' :
+                                                                       noise[q][w + 1] < .5 || w == 62 ? this.tileDefaults.wallSide || 'wallSide' :
+                                                                                                         this.tileDefaults.wallTop  || 'wallTop';
                 
                 names.push(name);
             }
@@ -111,10 +107,8 @@ export class World extends GameObject {
             let column: WorldTile[] = [];
             for (let w = 0; w < 64; w++) {
                 if (q > 0 && q < 63 && w > 0 && w < 63) {
-                // TODO: REFACTOR DON'T NEED ORS
-                    if ((chunkNames[q][w] == 'wallSide' || chunkNames[q][w] == this.tileDefaults.wallSide)
-                        && (chunkNames[q - 1][w] == 'wallSide' || chunkNames[q + 1][w] == this.tileDefaults.wallSide)
-                        && (chunkNames[q + 1][w] == 'wallSide' || chunkNames[q + 1][w] == this.tileDefaults.wallSide)) {
+                    let wallSideName = this.tileDefaults.wallSide || 'wallSide';
+                    if ((chunkNames[q][w] == wallSideName) && (chunkNames[q - 1][w] == wallSideName) && (chunkNames[q + 1][w] == wallSideName)) {
                         chunkNames[q][w] = this.tileDefaults.teleporter || 'teleporter';
                     }
                 }
