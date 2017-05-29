@@ -28,10 +28,6 @@ export class InGameGuiObject extends MenuGuiObject {
                 else game.onPlay.emit(void (0));
                 return true;
             }
-            else if (evt.code == 'KeyK') {
-                let player = this.scene.findObject('Player');
-                if (player && player instanceof Entity) player.takeDamage(3);
-            }
         }
         return this.showInventory && super.handleEvent(evt);
     }
@@ -56,7 +52,7 @@ export class InGameGuiObject extends MenuGuiObject {
 
         this.renderHealth(context);
 
-        if (this.showInventory) super.render(context);
+        if (this.showInventory) super.renderImpl(context);
     }
     private renderHealth(context: CanvasRenderingContext2D) {
         const HEART_SIZE = 24;
