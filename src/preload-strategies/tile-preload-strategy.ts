@@ -3,8 +3,12 @@ import { tiles } from '../dbs/tile-db';
 
 export class TilePreloadStrategy implements PreloadStrategy {
     preload(loader: ResourceLoader) {
-        for (let tile in tiles) {
-            loader.loadImage(tiles[tile].sprite.src)
+        for (let name in tiles) {
+            let tile = tiles[name];
+            loader.loadImage(tile.sprite.src)
+            for (let variant of tile.variants || []) {
+                loader.loadImage(variant.src);
+            }
         }
     }
 }

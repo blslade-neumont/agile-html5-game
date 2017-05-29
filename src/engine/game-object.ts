@@ -192,7 +192,7 @@ export class GameObject {
         this._animationSpeed = val;
     }
 
-    private _imageAngle = 1;
+    private _imageAngle = 0;
     get imageAngle() {
         return this._imageAngle;
     }

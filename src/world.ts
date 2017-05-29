@@ -1,4 +1,4 @@
-﻿import { ResourceLoader, Game, GameObject, GameScene, fmod, Entity } from './engine';
+﻿import { ResourceLoader, Game, GameObject, GameScene, fmod, Entity, SpriteT } from './engine';
 import { tiles, TILE_SIZE, WorldTile } from './dbs/tile-db';
 import { pauseWithGame } from './utils/pause-with-game';
 import { generateNoise } from './utils/noise';
@@ -59,6 +59,18 @@ export class World extends GameObject {
         }
     }
 
+    private _variantCache = new Map<string, number>();
+    getSpriteAt(x: number, y: number): SpriteT {
+        let tile = this.getTileAt(x, y);
+        if (!tile.variants) return tile.sprite;
+        let key = `${x}_${y}`;
+        if (!this._variantCache.has(key)) {
+            this._variantCache.set(key, this.variantNumber(x, y, tile.variants.length + 1));
+        }
+        let v = this._variantCache.get(key);
+        if (!v) return tile.sprite;
+        return tile.variants[v - 1];
+    }
     getTileAt(x: number, y: number): WorldTile {
         let chunk = this.getChunk(Math.floor(x / 64), Math.floor(y / 64));
         let [relativex, relativey] = [fmod(x, 64), fmod(y, 64)];
@@ -113,5 +125,13 @@ export class World extends GameObject {
         }
 
         return chunk;
+    }
+    private variantNumber(x: number, y: number, variantCount: number) {
+        for (let q = variantCount; q > 1; q--) {
+            // let n = fmod(this.seed ^ x * 7 ^ (y + 29587) * 4 ^ q, Math.pow(q, 3));
+            let n = Math.random() * Math.pow(q, 6 - (variantCount / 3));
+            if (n < 1) return q - 1;
+        }
+        return 0;
     }
 }

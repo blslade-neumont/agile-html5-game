@@ -12,7 +12,7 @@ import * as renderUtils from '../utils/render';
 import { GameScene } from '../game-scene';
 import { Rect } from '../utils/rect';
 
-describe.only('GameObject', () => {
+describe('GameObject', () => {
     stubDocument();
 
     it('should start without a resourceLoader, eventQueue, or game', () => {

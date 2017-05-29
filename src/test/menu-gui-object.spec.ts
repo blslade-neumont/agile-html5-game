@@ -141,7 +141,7 @@ describe('MenuGuiObject', () => {
             try {
                 stub = sinon.stub(guiUtils, 'drawGUI');
                 let guiObj = new MenuGuiObject(sampleGui);
-                guiObj.render(<any>null);
+                (<any>guiObj).renderImpl(<any>null);
                 expect(guiUtils.drawGUI).to.have.been.calledOnce;
             } finally { if (stub) stub.restore(); }
         });

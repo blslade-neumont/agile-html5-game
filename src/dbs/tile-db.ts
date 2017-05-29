@@ -4,6 +4,7 @@ export const TILE_SIZE: number = 32;
 
 export interface WorldTile {
     sprite: SpriteT,
+    variants?: SpriteT[],
     isSolid: boolean,
     onTick?: (delta: number, entity: Entity) => void,
     onLand?: (entity: Entity) => void
@@ -16,6 +17,22 @@ export let tiles: { [name: string]: WorldTile } =
                 src: 'images/Tiles/Outside_A2.png',
                 tileset: { width: 32, height: 32, tilex: 0, tiley: 0 }
             },
+            variants: [{
+                src: 'images/Tiles/Outside_A2.png',
+                tileset: { width: 32, height: 32, tilex: 1, tiley: 0 }
+            }, {
+                src: 'images/Tiles/Outside_A2.png',
+                tileset: { width: 32, height: 32, tilex: 0, tiley: 1 }
+            }, {
+                src: 'images/Tiles/Outside_A2.png',
+                tileset: { width: 32, height: 32, tilex: 1, tiley: 1 }
+            }, {
+                src: 'images/Tiles/Outside_A2.png',
+                tileset: { width: 32, height: 32, tilex: 0, tiley: 2 }
+            }, {
+                src: 'images/Tiles/Outside_A2.png',
+                tileset: { width: 32, height: 32, tilex: 1, tiley: 2 }
+            }],
             isSolid: false,
         },
         sand: {
@@ -23,6 +40,22 @@ export let tiles: { [name: string]: WorldTile } =
                 src: 'images/Tiles/Outside_A2.png',
                 tileset: { width: 32, height: 32, tilex: 0, tiley: 3 }
             },
+            variants: [{
+                src: 'images/Tiles/Outside_A2.png',
+                tileset: { width: 32, height: 32, tilex: 1, tiley: 3 }
+            }, {
+                src: 'images/Tiles/Outside_A2.png',
+                tileset: { width: 32, height: 32, tilex: 0, tiley: 4 }
+            }, {
+                src: 'images/Tiles/Outside_A2.png',
+                tileset: { width: 32, height: 32, tilex: 1, tiley: 4 }
+            }, {
+                src: 'images/Tiles/Outside_A2.png',
+                tileset: { width: 32, height: 32, tilex: 0, tiley: 5 }
+            }, {
+                src: 'images/Tiles/Outside_A2.png',
+                tileset: { width: 32, height: 32, tilex: 1, tiley: 5 }
+            }],
             isSolid: false,
         },
         wallSide: {
@@ -39,10 +72,36 @@ export let tiles: { [name: string]: WorldTile } =
             },
             isSolid: true,
         },
+        lava: {
+            sprite: {
+                src: 'images/Tiles/World_A1.png',
+                tileset: { width: 32, height: 32, tilex: 14, tiley: 3 }
+            },
+            variants: [{
+                src: 'images/Tiles/World_A1.png',
+                tileset: { width: 32, height: 32, tilex: 15, tiley: 3 }
+            }, {
+                src: 'images/Tiles/World_A1.png',
+                tileset: { width: 32, height: 32, tilex: 14, tiley: 4 }
+            }, {
+                src: 'images/Tiles/World_A1.png',
+                tileset: { width: 32, height: 32, tilex: 15, tiley: 4 }
+            }, {
+                src: 'images/Tiles/World_A1.png',
+                tileset: { width: 32, height: 32, tilex: 14, tiley: 5 }
+            }, {
+                src: 'images/Tiles/World_A1.png',
+                tileset: { width: 32, height: 32, tilex: 15, tiley: 5 }
+            }],
+            isSolid: false,
+            onTick: (delta, entity) => {
+                entity.takeDamage(3);
+            }
+        },
         lava_left: {
             sprite: {
                 src: 'images/Tiles/Dungeon_A1.png',
-                tileset: { width: 32, height: 32, tilex: 0, tiley: 2 },
+                tileset: { width: 32, height: 32 },
                 frames: [
                     { tilex: 14, tiley: 0 },
                     { tilex: 14, tiley: 1 },
@@ -58,7 +117,7 @@ export let tiles: { [name: string]: WorldTile } =
         lava_right: {
             sprite: {
                 src: 'images/Tiles/Dungeon_A1.png',
-                tileset: { width: 32, height: 32, tilex: 0, tiley: 2 },
+                tileset: { width: 32, height: 32 },
                 frames: [
                     { tilex: 15, tiley: 0 },
                     { tilex: 15, tiley: 1 },
@@ -71,10 +130,20 @@ export let tiles: { [name: string]: WorldTile } =
                 entity.takeDamage(3);
             }
         },
+        water: {
+            sprite: {
+                src: 'images/Tiles/World_A1.png',
+                tileset: { width: 32, height: 32, tilex: 9, tiley: 0 }
+            },
+            isSolid: false,
+            onTick: (delta, entity) => {
+                entity.takeDamage(1);
+            }
+        },
         water_left: {
             sprite: {
                 src: 'images/Tiles/Dungeon_A1.png',
-                tileset: { width: 32, height: 32, tilex: 0, tiley: 2 },
+                tileset: { width: 32, height: 32 },
                 frames: [
                     { tilex: 14, tiley: 6 },
                     { tilex: 14, tiley: 7 },
@@ -90,7 +159,7 @@ export let tiles: { [name: string]: WorldTile } =
         water_right: {
             sprite: {
                 src: 'images/Tiles/Dungeon_A1.png',
-                tileset: { width: 32, height: 32, tilex: 0, tiley: 2 },
+                tileset: { width: 32, height: 32 },
                 frames: [
                     { tilex: 15, tiley: 6 },
                     { tilex: 15, tiley: 7 },

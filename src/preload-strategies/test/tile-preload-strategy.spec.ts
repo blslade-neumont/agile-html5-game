@@ -17,9 +17,13 @@ describe('TilePreloadStrategy', () => {
         preloadStrategy = new TilePreloadStrategy();
     });
 
-    it('should call loadImage once per tile in the database', () => {
+    it('should call loadImage once per tile and variant in the database', () => {
         sinon.stub(resources, 'loadImage');
         preloadStrategy.preload(resources);
-        expect(resources.loadImage).callCount(Object.keys(tiles).length);
+        let totalSprites = Object.keys(tiles)
+            .map(name => tiles[name])
+            .map(tile => 1 + ((tile.variants && tile.variants.length) || 0))
+            .reduce((prev, curr) => prev + curr, 0);
+        expect(resources.loadImage).callCount(totalSprites);
     });
 });

@@ -209,22 +209,22 @@ describe('Entity', () => {
             context = new HTMLCanvasElement().getContext('2d');
         });
 
-        it('should invoke GameObject.render if the entity is not immune to damage', () => {
+        it('should invoke GameObject.renderImpl if the entity is not immune to damage', () => {
             let stub: sinon.SinonStub;
             try {
-                stub = sinon.stub(GameObject.prototype, 'render');
+                stub = sinon.stub(GameObject.prototype, 'renderImpl');
                 ent.render(context);
-                expect(GameObject.prototype.render).to.have.been.calledOnce.calledWithExactly(context);
+                expect((<any>GameObject.prototype).renderImpl).to.have.been.calledOnce.calledWithExactly(context);
             }
             finally { if (stub) stub.restore(); }
         });
-        it('should invoke GameObject.render about half the time if the entity is immune to damage', () => {
+        it('should invoke GameObject.renderImpl about half the time if the entity is immune to damage', () => {
             let stub: sinon.SinonStub;
             try {
-                stub = sinon.stub(GameObject.prototype, 'render');
+                stub = sinon.stub(GameObject.prototype, 'renderImpl');
                 for (let q = 2; q > 0; q -= .01) {
                     ent.damageImmunity = q;
-                    ent.render(context);
+                    (<any>ent).renderImpl(context);
                 }
                 let callCount = stub.callCount;
                 expect(callCount).to.be.closeTo((2 / .01) / 2, 5);

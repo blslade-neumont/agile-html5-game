@@ -1,6 +1,6 @@
 ﻿import { World } from './world';
 import { WorldTile } from './dbs/tile-db';
-import { Game, GameScene, GameObject, ResourceLoader, SingleTileSpriteT, drawSprite } from './engine';
+import { Game, GameScene, GameObject, ResourceLoader, SpriteT, SingleTileSpriteT, drawSprite } from './engine';
 import { TILE_SIZE } from './dbs/tile-db';
 import { AgileGame } from './agile-game';
 import { pauseWithGame } from './utils/pause-with-game';
@@ -36,8 +36,8 @@ export class GridRenderer extends GameObject {
 
         for (let x = startx; x < endx; x++) {
             for (let y = starty; y < endy; y++) {
-                let tile: WorldTile = this.world.getTileAt(x, y);
-                drawSprite(context, this.resources, tile.sprite, x * TILE_SIZE, y * TILE_SIZE, this.animationAge);
+                let sprite: SpriteT = this.world.getSpriteAt(x, y);
+                drawSprite(context, this.resources, sprite, x * TILE_SIZE, y * TILE_SIZE, this.animationAge);
             }
         }
     }

@@ -52,7 +52,7 @@ describe('World', () => {
     });
 
     describe('.getTileAt', () => {
-        it('should not throw an error if you try to get a tile outside of the world', () => {
+        it('should not throw an error if you try to get a tile', () => {
             scene.addObject(world);
             expect(() => world.getTileAt(-1, 0)).not.to.throw;
             expect(() => world.getTileAt(1, 0)).not.to.throw;
@@ -62,6 +62,30 @@ describe('World', () => {
         it('should return a valid WorldTile', () => {
             scene.addObject(world);
             expect(world.getTileAt(0, 0)).to.be.ok;
+        });
+    });
+
+    describe('.getSpriteAt', () => {
+        it('should not throw an error if you try to get a sprite', () => {
+            scene.addObject(world);
+            expect(() => world.getSpriteAt(-1, 0)).not.to.throw;
+            expect(() => world.getSpriteAt(1, 0)).not.to.throw;
+            expect(() => world.getSpriteAt(0, -1)).not.to.throw;
+            expect(() => world.getSpriteAt(0, 1)).not.to.throw;
+        });
+        it('should return a valid SpriteT', () => {
+            scene.addObject(world);
+            expect(world.getSpriteAt(0, 0)).to.be.ok;
+        });
+        it('should return the same sprite for the same coordinates consistently', () => {
+            scene.addObject(world);
+            for (let q = 0; q < 30; q++) {
+                let x = Math.floor(Math.random() * 1000) - 500;
+                let y = Math.floor(Math.random() * 1000) - 500;
+                let sprite = world.getSpriteAt(x, y);
+                expect(world.getSpriteAt(x, y)).to.eq(sprite);
+            }
+            expect(world.getSpriteAt(0, 0)).to.be.ok;
         });
     });
 });
