@@ -27,50 +27,27 @@ describe('dbs/tiles', () => {
         scene.addObject(world);
     });
 
-    describe('water_left', () => {
-        it('should invoke Entity.takeDamage with 1 damage when an entity ticks', () => {
-            let ent = new Entity('name', { maxHealth: 10, x: 0, y: 0, collisionBounds: new Rect(0, 32, 0, 32) });
-            scene.addObject(ent);
-            sinon.spy(ent, 'takeDamage');
-            sinon.stub(world, 'getTileAt').withArgs(0, 0).returns(tiles['water_left']);
-            world.tick(.02);
-            expect(ent.takeDamage).to.have.been.calledOnce.calledWith(1);
+    let damageTiles: [string, number][] = [
+        ['water_left', 1],
+        ['water_right', 1],
+        ['water', 1],
+        ['lava_left', 3],
+        ['lava_right', 3],
+        ['lava', 3]
+    ];
+    damageTiles.forEach(([tileType, damageAmount]) => {
+        describe(tileType, () => {
+            it(`should invoke Entity.takeDamage with ${damageAmount} damage when an entity ticks`, () => {
+                let ent = new Entity('name', { maxHealth: 10, x: 0, y: 0, collisionBounds: new Rect(0, 32, 0, 32) });
+                scene.addObject(ent);
+                sinon.spy(ent, 'takeDamage');
+                sinon.stub(world, 'getTileAt').withArgs(0, 0).returns(tiles[tileType]);
+                world.tick(.02);
+                expect(ent.takeDamage).to.have.been.calledOnce.calledWith(damageAmount);
+            });
         });
     });
-
-    describe('water_right', () => {
-        it('should invoke Entity.takeDamage with 1 damage when an entity ticks', () => {
-            let ent = new Entity('name', { maxHealth: 10, x: 0, y: 0, collisionBounds: new Rect(0, 32, 0, 32) });
-            scene.addObject(ent);
-            sinon.spy(ent, 'takeDamage');
-            sinon.stub(world, 'getTileAt').withArgs(0, 0).returns(tiles['water_right']);
-            world.tick(.02);
-            expect(ent.takeDamage).to.have.been.calledOnce.calledWith(1);
-        });
-    });
-
-    describe('lava_left', () => {
-        it('should invoke Entity.takeDamage with 3 damage when an entity ticks', () => {
-            let ent = new Entity('name', { maxHealth: 10, x: 0, y: 0, collisionBounds: new Rect(0, 32, 0, 32) });
-            scene.addObject(ent);
-            sinon.spy(ent, 'takeDamage');
-            sinon.stub(world, 'getTileAt').withArgs(0, 0).returns(tiles['lava_left']);
-            world.tick(.02);
-            expect(ent.takeDamage).to.have.been.calledOnce.calledWith(3);
-        });
-    });
-
-    describe('lava_right', () => {
-        it('should invoke Entity.takeDamage with 3 damage when an entity ticks', () => {
-            let ent = new Entity('name', { maxHealth: 10, x: 0, y: 0, collisionBounds: new Rect(0, 32, 0, 32) });
-            scene.addObject(ent);
-            sinon.spy(ent, 'takeDamage');
-            sinon.stub(world, 'getTileAt').withArgs(0, 0).returns(tiles['lava_right']);
-            world.tick(.02);
-            expect(ent.takeDamage).to.have.been.calledOnce.calledWith(3);
-        });
-    });
-
+    
     describe('teleporter', () => {
         it('should navigate to an DungeonScene when a player lands', () => {
             (<any>scene).dungeon = new DungeonScene();
