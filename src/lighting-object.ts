@@ -1,9 +1,9 @@
 ﻿import { GameObject, fmod } from './engine';
 import { World } from './world';
 
-export class DayNightCycleObject extends GameObject {
-    constructor() {
-        super('DayNightCycle', { renderCamera: 'none' });
+export class LightingObject extends GameObject {
+    constructor(private ambient = 1, private dayNightCycle = true) {
+        super('LightingObject', { renderCamera: 'none' });
         this.compositeCanvas = document.createElement('canvas');
         this.compositeContext = this.compositeCanvas.getContext('2d');
     }
@@ -13,14 +13,16 @@ export class DayNightCycleObject extends GameObject {
 
     render(context: CanvasRenderingContext2D) {
         let world = <World | null>(<any>this.scene).world;
-        if (!world) return;
 
-        let gameTime = fmod(world.gameTime, 1);
-        if (gameTime > 7 / 24 && gameTime < 19 / 24) return; //Don't darken screen during the day
-        let darkness = 1;
-        if (gameTime <= 7 / 24 && gameTime > 5.5 / 24) darkness = 1 - ((gameTime * 24) - 5.5) / 1.5;
-        if (gameTime >= 19 / 24 && gameTime < 20.5 / 24) darkness = ((gameTime * 24) - 19) / 1.5;
-        darkness *= .95;
+        let darkness = 0;
+        let gameTime = (world && fmod(world.gameTime, 1)) || (8 / 24);
+        if (this.dayNightCycle && (gameTime <= 7 / 24 || gameTime >= 19 / 24)) {
+            darkness = 1;
+            if (gameTime <= 7 / 24 && gameTime > 5.5 / 24) darkness = 1 - ((gameTime * 24) - 5.5) / 1.5;
+            if (gameTime >= 19 / 24 && gameTime < 20.5 / 24) darkness = ((gameTime * 24) - 19) / 1.5;
+            darkness *= .95;
+        }
+        darkness = Math.max(1 - this.ambient, darkness);
 
         this.createCompositeImage(darkness);
 
