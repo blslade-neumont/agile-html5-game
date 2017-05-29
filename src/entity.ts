@@ -90,7 +90,7 @@ export class Entity extends GameObject {
         this.scene.removeObject(this);
     }
 
-    renderImpl(context: CanvasRenderingContext2D) {
+    protected renderImpl(context: CanvasRenderingContext2D) {
         if (this.damageImmunity <= 0 || this.damageImmunity % .2 > .1) super.renderImpl(context);
     }
 }

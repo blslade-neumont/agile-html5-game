@@ -56,7 +56,26 @@ describe('GridRenderer', () => {
             scene = new OverworldScene();
             scene.game = game = <any>new MockGame(scene);
         });
-        
+
+        it('should throw an Error if there is no world', () => {
+            let test = (<any>GridRenderer.prototype).renderImpl.bind({});
+            expect(() => test(context)).to.throw(/world not set/i);
+        });
+        it('should throw an Error if there is no resource loader', () => {
+            let test = (<any>GridRenderer.prototype).renderImpl.bind({ world: {} });
+            expect(() => test(context)).to.throw(/resource loader not set/i);
+        });
+        it('should not drawImage if shouldRender is false', () => {
+            scene.start();
+
+            let world: World = scene.world;
+            let renderer: GridRenderer = <GridRenderer>scene.findObject('GridRenderer');
+            renderer.shouldRender = false;
+
+            let stub = sinon.stub(context, "drawImage");
+            (<any>renderer).renderImpl(context);
+            expect(context.drawImage).not.to.have.been.called;
+        });
         it('should call drawImage once per tile that can be rendered on the canvas', () => {
             scene.start();
 
@@ -67,7 +86,7 @@ describe('GridRenderer', () => {
 
             let stub = sinon.stub(context, "drawImage");
 
-            renderer.render(context);
+            (<any>renderer).renderImpl(context);
             expect(stub.callCount).to.be.within((tilesX * tilesY), ((tilesX + 1) * (tilesY + 1)));
         });
     });

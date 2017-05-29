@@ -16,15 +16,15 @@ export class GridRenderer extends GameObject {
         super.addToScene(scene);
         pauseWithGame(this);
     }
-    
+
     get world() {
         if (this.scene) return (<any>this.scene).world;
         return null;
     }
-    
-    renderImpl(context: CanvasRenderingContext2D) {
+
+    protected renderImpl(context: CanvasRenderingContext2D) {
         if (!this.world) { throw new Error(`World not set! Cannot render grid!`); }
-        if (!this.resources) { throw new Error(`Loader not set! Cannot render grid!`); }
+        if (!this.resources) { throw new Error(`Resource loader not set! Cannot render grid!`); }
 
         if (!this.shouldRender) return;
         
