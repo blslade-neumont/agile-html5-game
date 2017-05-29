@@ -53,6 +53,30 @@ export class InGameGuiObject extends MenuGuiObject {
         context.textBaseline = 'top';
         context.fillText(timeText, canvasWidth - 4, 4);
 
+        this.renderHealth(context);
+
         if (this.showInventory) super.render(context);
+    }
+    private renderHealth(context: CanvasRenderingContext2D) {
+        const HEART_SIZE = 24;
+        const OFFSET_FROM_BOTTOM = 8;
+        const DEFAULT_MAX_HEARTS = 10;
+
+        let p = <Entity>this.scene.findObject('Player');
+        let total = (p && p.maxHealth) || DEFAULT_MAX_HEARTS;
+        let hearts = (p && p.currentHealth) || 0;
+
+        let [xx, yy] = this.game.canvasSize;
+        xx /= 2;
+        xx -= (HEART_SIZE * (total - 1)) / 2;
+        yy -= OFFSET_FROM_BOTTOM;
+
+        let fullHeartSprite = gui['full-health-heart'].sprite;
+        let emptyHeartSprite = gui['empty-health-heart'].sprite;
+
+        for (let q = 0; q < total; q++) {
+            let spr = (q < hearts) ? fullHeartSprite : emptyHeartSprite;
+            drawSprite(context, this.resources, spr, xx + (q * HEART_SIZE), yy, this.animationAge);
+        }
     }
 }

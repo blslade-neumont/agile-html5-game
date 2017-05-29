@@ -66,5 +66,19 @@ export let gui: { [name: string]: GuiSpec } =
                 'Enter': () => new TitleScene(),
                 'Escape': () => new TitleScene()
             }
+        },
+        'full-health-heart': {
+            sprite: {
+                src: 'images/GUI/hearts.png',
+                pivot: { x: 12, y: 24 },
+                tileset: { width: 24, height: 24, tilex: 0, tiley: 0 }
+            }
+        },
+        'empty-health-heart': {
+            sprite: {
+                src: 'images/GUI/hearts.png',
+                pivot: { x: 12, y: 24 },
+                tileset: { width: 24, height: 24, tilex: 1, tiley: 0 }
+            }
         }
     };

@@ -7,11 +7,14 @@ use(sinonChai);
 
 import { InGameGuiObject } from '../in-game-gui-object';
 import { AgileGame } from '../agile-game';
-import { GameObject, delay } from '../engine';
-import { stubDocument, stubImage } from '../engine/test';
+import { OverworldScene } from '../scenes/overworld-scene';
+import { Game, GameObject, delay } from '../engine';
+import renderUtils = require('../engine');
+import { stubDocument, stubImage, MockGame } from '../engine/test';
 
 describe('InGameGuiObject', () => {
     stubDocument();
+    stubImage();
 
     let guiObject: InGameGuiObject;
     beforeEach(() => {
@@ -90,23 +93,70 @@ describe('InGameGuiObject', () => {
         });
     });
 
-    describe('.render', () => {
+    describe.only('.render', () => {
         let context: CanvasRenderingContext2D;
+        let game: Game;
+        let scene: OverworldScene;
         beforeEach(() => {
             context = new HTMLCanvasElement().getContext('2d');
+            game = <any>new MockGame();
+            (<any>game).scene = scene = <any>{
+                game: game, world: { gameTime: 8 / 24 },
+                findObject: () => null
+            };
+            guiObject.addToScene(scene);
         });
 
         it('should invoke fillText with the game time string', () => {
-            guiObject.addToScene(<any>{ world: { gameTime: 8 / 24 }, game: { canvasSize: [640, 480] } });
             sinon.stub(context, 'fillText');
             guiObject.render(context);
             expect(context.fillText).to.have.been.calledWith('Day 1, 8 AM');
         });
         it('should invoke fillText relative to the top right corner of the canvas', () => {
-            guiObject.addToScene(<any>{ world: { gameTime: 8 / 24 }, game: { canvasSize: [804, 480] } });
+            game.canvasSize = [804, 480];
             sinon.stub(context, 'fillText');
             guiObject.render(context);
             expect(context.fillText).to.have.been.calledWith(sinon.match.any, 800, 4);
+        });
+        it('should invoke renderHealth', () => {
+            sinon.stub(guiObject, 'renderHealth');
+            guiObject.render(context);
+            expect((<any>guiObject).renderHealth).to.have.been.calledOnce;
+        });
+    });
+
+    describe.only('.renderHealth', () => {
+        let context: CanvasRenderingContext2D;
+        let game: Game;
+        let scene: OverworldScene;
+        beforeEach(() => {
+            context = new HTMLCanvasElement().getContext('2d');
+            game = <any>new MockGame();
+            (<any>game).scene = scene = <any>{
+                game: game, world: { gameTime: 8 / 24 },
+                findObject: () => null
+            };
+            guiObject.addToScene(scene);
+        });
+
+        it('should invoke drawSprite ten times', () => {
+            let stub: sinon.SinonStub;
+            try {
+                stub = sinon.stub(renderUtils, 'drawSprite');
+                (<any>guiObject).renderHealth(context);
+                expect(stub.callCount).to.eq(10);
+            }
+            finally { if (stub) stub.restore(); }
+        });
+        it('should invoke drawSprite ten times even if the player is damaged', () => {
+            let stub: sinon.SinonStub;
+            try {
+                stub = sinon.stub(renderUtils, 'drawSprite');
+                sinon.stub(scene.world, 'findObject').returns({ currentHealth: 4 });
+                (<any>guiObject).renderHealth(context);
+                expect(stub.callCount).to.eq(10);
+            }
+            finally { if (stub) stub.restore(); }
         });
     });
 });

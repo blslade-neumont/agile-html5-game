@@ -11,7 +11,7 @@ import { MockGame, stubDocument, stubImage } from '../../engine/test';
 import { tiles } from '../tile-db';
 import { DungeonScene } from '../../scenes/dungeon-scene';
 
-describe.only('dbs/tiles', () => {
+describe('dbs/tiles', () => {
     stubDocument();
     stubImage();
 
