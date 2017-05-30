@@ -25,7 +25,7 @@ describe('AgileGame', () => {
         });
     });
 
-    describe('._score', () => {
+    describe('.score', () => {
         it('should be able to be set and get', () => {
             let aScore = 1;
             game.score = aScore;

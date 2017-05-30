@@ -14,4 +14,9 @@ export class MockAgileGame extends MockGame {
         emit: () => void(0),
         addListender: () => void(0)
     };
+
+    score = 0;
+    addToScore(val: number) {
+        this.score += val;
+    }
 }
