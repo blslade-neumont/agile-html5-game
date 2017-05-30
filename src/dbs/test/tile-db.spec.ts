@@ -90,6 +90,7 @@ describe('dbs/tiles', () => {
                 findObject: name => (name == 'Player') ? player :
                                      (name == 'World') ? returnWorld :
                                                          {},
+                addObject: () => void(0),
                 currentHealth: 5,
                 game: game,
                 world: returnWorld
