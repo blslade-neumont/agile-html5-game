@@ -3,6 +3,7 @@ import { World } from '../world';
 import { GridRenderer } from '../grid-renderer';
 import { Player } from '../player';
 import { BatController } from '../flocking/bat-controller';
+import { EnemyController } from '../enemies/enemy-controller';
 
 export class FlockingScene extends GameScene {
     constructor() {
@@ -32,6 +33,9 @@ export class FlockingScene extends GameScene {
         let batController = new BatController();
         this.addObject(batController);
         batController.addBats(1000);
+
+        let enemyController = new EnemyController(this._world);
+        this.addObject(enemyController);
         
         let camera = this.camera = new FollowCamera(this);
         camera.follow = player;

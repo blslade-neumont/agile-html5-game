@@ -26,6 +26,12 @@ export class World extends GameObject {
         let [relativex, relativey] = [fmod(x, 64), fmod(y, 64)];
         return chunk[relativex][relativey];
     }
+    setTileAt(x: number, y: number, tile: WorldTile): this {
+        let chunk = this.getChunk(Math.floor(x / 64), Math.floor(y / 64));
+        let [relativex, relativey] = [fmod(x, 64), fmod(y, 64)];
+        chunk[relativex][relativey] = tile;
+        return this;
+    }
     
     private _chunks = new Map<string, WorldTile[][]>();
     private getChunk(x: number, y: number): WorldTile[][] {

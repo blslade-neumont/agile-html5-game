@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 25);
+/******/ 	return __webpack_require__(__webpack_require__.s = 29);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -81,6 +81,51 @@ __export(__webpack_require__(17));
 
 /***/ }),
 /* 1 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var merge = __webpack_require__(4);
+exports.TILE_SIZE = 48;
+;
+exports.tiles = {
+    'enemy-base': {
+        sprite: {
+            src: 'images/enemy-base.png',
+            tileset: { width: exports.TILE_SIZE, height: exports.TILE_SIZE, tilex: 0, tiley: 0 }
+        },
+        isSolid: true
+    }
+};
+function addDecorationTiles(name, count, def) {
+    for (var q = 0; q < count; q++) {
+        var indName = "" + name + ((q && q + 1) || '');
+        exports.tiles[indName] = merge({}, def, {
+            sprite: {
+                tileset: { tilex: q }
+            }
+        });
+    }
+}
+addDecorationTiles('rock', 7, {
+    sprite: {
+        src: 'images/cave_floor.png',
+        tileset: { width: exports.TILE_SIZE, height: exports.TILE_SIZE, tilex: 0, tiley: 0 }
+    },
+    isSolid: false
+});
+addDecorationTiles('water', 4, {
+    sprite: {
+        src: 'images/water_tiles.png',
+        tileset: { width: exports.TILE_SIZE, height: exports.TILE_SIZE, tilex: 0, tiley: 0 }
+    },
+    isSolid: true
+});
+
+
+/***/ }),
+/* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -117,252 +162,7 @@ exports.pointDirection = pointDirection;
 //# sourceMappingURL=math.js.map
 
 /***/ }),
-/* 2 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var merge = __webpack_require__(6);
-exports.TILE_SIZE = 48;
-;
-exports.tiles = {};
-function addDecorationTiles(name, count, def) {
-    for (var q = 0; q < count; q++) {
-        var indName = "" + name + ((q && q + 1) || '');
-        exports.tiles[indName] = merge({}, def, {
-            sprite: {
-                tileset: { tilex: q }
-            }
-        });
-        console.log(indName, exports.tiles[indName]);
-    }
-}
-addDecorationTiles('rock', 7, {
-    sprite: {
-        src: 'images/cave_floor.png',
-        tileset: { width: 48, height: 48, tilex: 0, tiley: 0 }
-    },
-    isSolid: false
-});
-addDecorationTiles('water', 4, {
-    sprite: {
-        src: 'images/water_tiles.png',
-        tileset: { width: 48, height: 48, tilex: 0, tiley: 0 }
-    },
-    isSolid: true
-});
-
-
-/***/ }),
 /* 3 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var math_1 = __webpack_require__(1);
-var Camera = (function () {
-    function Camera(_scene) {
-        this._scene = _scene;
-        this._clearColor = null;
-        this._center = [0, 0];
-        this._zoomScale = 1;
-        this._maxZoomScale = 4;
-        this._minZoomScale = .25;
-        this._smoothing = true;
-        if (!this._scene)
-            throw new Error("You must pass in a valid Scene when you create a Camera.");
-    }
-    Object.defineProperty(Camera.prototype, "scene", {
-        get: function () {
-            return this._scene;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(Camera.prototype, "game", {
-        get: function () {
-            return this.scene.game;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(Camera.prototype, "clearColor", {
-        get: function () {
-            return this._clearColor;
-        },
-        set: function (val) {
-            this._clearColor = val;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(Camera.prototype, "center", {
-        get: function () {
-            return [this._center[0], this._center[1]];
-        },
-        set: function (_a) {
-            var x = _a[0], y = _a[1];
-            this._center = [x, y];
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(Camera.prototype, "zoomScale", {
-        get: function () {
-            return this._zoomScale;
-        },
-        set: function (val) {
-            if (val <= 0)
-                throw new Error("The zoom scale must be positive");
-            this._zoomScale = math_1.clamp(val, this.minZoomScale, this.maxZoomScale);
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(Camera.prototype, "maxZoomScale", {
-        get: function () {
-            return this._maxZoomScale;
-        },
-        set: function (val) {
-            if (val <= 0)
-                throw new Error("The max zoom scale must be positive");
-            if (val < this._minZoomScale)
-                throw new Error("The min zoom scale is greater than the max zoom scale.");
-            this._maxZoomScale = val;
-            this.zoomScale = this.zoomScale;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(Camera.prototype, "minZoomScale", {
-        get: function () {
-            return this._minZoomScale;
-        },
-        set: function (val) {
-            if (val <= 0)
-                throw new Error("The min zoom scale must be positive");
-            if (val > this._maxZoomScale)
-                throw new Error("The max zoom scale is less than the min zoom scale.");
-            this._minZoomScale = val;
-            this.zoomScale = this.zoomScale;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(Camera.prototype, "enableSmoothing", {
-        get: function () {
-            return this._smoothing;
-        },
-        set: function (val) {
-            this._smoothing = val;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(Camera.prototype, "bounds", {
-        get: function () {
-            var _a = this.game.canvasSize, cvWidth = _a[0], cvHeight = _a[1];
-            var _b = [(cvWidth / 2) / this._zoomScale, (cvHeight / 2) / this._zoomScale], hoff = _b[0], voff = _b[1];
-            return {
-                left: this._center[0] - hoff,
-                right: this._center[0] + hoff,
-                top: this._center[1] + voff,
-                bottom: this._center[1] - voff
-            };
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Camera.prototype.tick = function (delta) {
-    };
-    Camera.prototype.push = function (context) {
-        var _a = this.game.canvasSize, cvWidth = _a[0], cvHeight = _a[1];
-        context.save();
-        if (this._clearColor) {
-            context.fillStyle = this._clearColor;
-            context.fillRect(0, 0, cvWidth, cvHeight);
-        }
-        context.imageSmoothingEnabled = context.mozImageSmoothingEnabled = context.oImageSmoothingEnabled = context.webkitImageSmoothingEnabled = this._smoothing;
-        context.translate(Math.floor(cvWidth / 2), Math.floor(cvHeight / 2));
-        context.scale(this._zoomScale, this._zoomScale);
-        context.translate(-Math.floor(this._center[0]), -Math.floor(this._center[1]));
-    };
-    Camera.prototype.pop = function (context) {
-        context.restore();
-    };
-    return Camera;
-}());
-exports.Camera = Camera;
-//# sourceMappingURL=camera.js.map
-
-/***/ }),
-/* 4 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var sprite_1 = __webpack_require__(11);
-var math_1 = __webpack_require__(1);
-var LINE_HEIGHT = 12;
-function fillText(context, text, x, y) {
-    var lines = text.split('\n');
-    for (var _i = 0, lines_1 = lines; _i < lines_1.length; _i++) {
-        var line = lines_1[_i];
-        context.fillText(line, x, y);
-        y += LINE_HEIGHT;
-    }
-}
-exports.fillText = fillText;
-function drawSprite(context, loader, sprite, x, y, imageIndex, defaultFps) {
-    if (x === void 0) { x = 0; }
-    if (y === void 0) { y = 0; }
-    if (imageIndex === void 0) { imageIndex = 0; }
-    if (defaultFps === void 0) { defaultFps = 30; }
-    if (!loader || !loader.loadImage)
-        throw new Error("You must pass in a valid ResourceLoader to draw a sprite.");
-    if (!sprite || !sprite.src)
-        throw new Error("Invalid sprite. Cannot render " + sprite + ".");
-    var img = loader.loadImage(sprite.src);
-    var pivot = sprite.pivot || { x: 0, y: 0 };
-    if (sprite_1.isAnimationSprite(sprite)) {
-        var tileset = sprite.tileset;
-        var frames_1 = sprite.frames;
-        var fps = sprite.framesPerSecond;
-        if (typeof fps === 'undefined')
-            fps = defaultFps;
-        var frameIdx = math_1.fmod(Math.floor(imageIndex * fps), frames_1.length);
-        var frame = frames_1[frameIdx];
-        context.drawImage(img, frame.tilex * tileset.width, frame.tiley * tileset.height, tileset.width, tileset.height, x - pivot.x, y - pivot.y, tileset.width, tileset.height);
-    }
-    else if (sprite_1.isSingleTileSprite(sprite)) {
-        var tileset = sprite.tileset;
-        context.drawImage(img, tileset.tilex * tileset.width, tileset.tiley * tileset.height, tileset.width, tileset.height, x - pivot.x, y - pivot.y, tileset.width, tileset.height);
-    }
-    else {
-        context.drawImage(img, x - pivot.x, y - pivot.y);
-    }
-}
-exports.drawSprite = drawSprite;
-function measureSprite(loader, sprite) {
-    if (!sprite || !sprite.src)
-        throw new Error("Invalid sprite. Cannot measure " + sprite + ".");
-    var img = loader && loader.loadImage(sprite.src);
-    if (sprite_1.isAnimationSprite(sprite) || sprite_1.isSingleTileSprite(sprite)) {
-        var _a = sprite.tileset, width = _a.width, height = _a.height;
-        return { width: width, height: height };
-    }
-    else {
-        return { width: img.width || 0, height: img.height || 0 };
-    }
-}
-exports.measureSprite = measureSprite;
-//# sourceMappingURL=render.js.map
-
-/***/ }),
-/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -429,12 +229,18 @@ exports.alives = {
             ],
             framesPerSecond: 4
         }
+    },
+    enemy: {
+        sprite: {
+            src: 'images/enemy.png',
+            pivot: { x: 12, y: 12 }
+        }
     }
 };
 
 
 /***/ }),
-/* 6 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global, module) {/**
@@ -2645,7 +2451,214 @@ function stubFalse() {
 
 module.exports = merge;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(33), __webpack_require__(34)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(37), __webpack_require__(38)(module)))
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var math_1 = __webpack_require__(2);
+var Camera = (function () {
+    function Camera(_scene) {
+        this._scene = _scene;
+        this._clearColor = null;
+        this._center = [0, 0];
+        this._zoomScale = 1;
+        this._maxZoomScale = 4;
+        this._minZoomScale = .25;
+        this._smoothing = true;
+        if (!this._scene)
+            throw new Error("You must pass in a valid Scene when you create a Camera.");
+    }
+    Object.defineProperty(Camera.prototype, "scene", {
+        get: function () {
+            return this._scene;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Camera.prototype, "game", {
+        get: function () {
+            return this.scene.game;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Camera.prototype, "clearColor", {
+        get: function () {
+            return this._clearColor;
+        },
+        set: function (val) {
+            this._clearColor = val;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Camera.prototype, "center", {
+        get: function () {
+            return [this._center[0], this._center[1]];
+        },
+        set: function (_a) {
+            var x = _a[0], y = _a[1];
+            this._center = [x, y];
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Camera.prototype, "zoomScale", {
+        get: function () {
+            return this._zoomScale;
+        },
+        set: function (val) {
+            if (val <= 0)
+                throw new Error("The zoom scale must be positive");
+            this._zoomScale = math_1.clamp(val, this.minZoomScale, this.maxZoomScale);
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Camera.prototype, "maxZoomScale", {
+        get: function () {
+            return this._maxZoomScale;
+        },
+        set: function (val) {
+            if (val <= 0)
+                throw new Error("The max zoom scale must be positive");
+            if (val < this._minZoomScale)
+                throw new Error("The min zoom scale is greater than the max zoom scale.");
+            this._maxZoomScale = val;
+            this.zoomScale = this.zoomScale;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Camera.prototype, "minZoomScale", {
+        get: function () {
+            return this._minZoomScale;
+        },
+        set: function (val) {
+            if (val <= 0)
+                throw new Error("The min zoom scale must be positive");
+            if (val > this._maxZoomScale)
+                throw new Error("The max zoom scale is less than the min zoom scale.");
+            this._minZoomScale = val;
+            this.zoomScale = this.zoomScale;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Camera.prototype, "enableSmoothing", {
+        get: function () {
+            return this._smoothing;
+        },
+        set: function (val) {
+            this._smoothing = val;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Camera.prototype, "bounds", {
+        get: function () {
+            var _a = this.game.canvasSize, cvWidth = _a[0], cvHeight = _a[1];
+            var _b = [(cvWidth / 2) / this._zoomScale, (cvHeight / 2) / this._zoomScale], hoff = _b[0], voff = _b[1];
+            return {
+                left: this._center[0] - hoff,
+                right: this._center[0] + hoff,
+                top: this._center[1] + voff,
+                bottom: this._center[1] - voff
+            };
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Camera.prototype.tick = function (delta) {
+    };
+    Camera.prototype.push = function (context) {
+        var _a = this.game.canvasSize, cvWidth = _a[0], cvHeight = _a[1];
+        context.save();
+        if (this._clearColor) {
+            context.fillStyle = this._clearColor;
+            context.fillRect(0, 0, cvWidth, cvHeight);
+        }
+        context.imageSmoothingEnabled = context.mozImageSmoothingEnabled = context.oImageSmoothingEnabled = context.webkitImageSmoothingEnabled = this._smoothing;
+        context.translate(Math.floor(cvWidth / 2), Math.floor(cvHeight / 2));
+        context.scale(this._zoomScale, this._zoomScale);
+        context.translate(-Math.floor(this._center[0]), -Math.floor(this._center[1]));
+    };
+    Camera.prototype.pop = function (context) {
+        context.restore();
+    };
+    return Camera;
+}());
+exports.Camera = Camera;
+//# sourceMappingURL=camera.js.map
+
+/***/ }),
+/* 6 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var sprite_1 = __webpack_require__(11);
+var math_1 = __webpack_require__(2);
+var LINE_HEIGHT = 12;
+function fillText(context, text, x, y) {
+    var lines = text.split('\n');
+    for (var _i = 0, lines_1 = lines; _i < lines_1.length; _i++) {
+        var line = lines_1[_i];
+        context.fillText(line, x, y);
+        y += LINE_HEIGHT;
+    }
+}
+exports.fillText = fillText;
+function drawSprite(context, loader, sprite, x, y, imageIndex, defaultFps) {
+    if (x === void 0) { x = 0; }
+    if (y === void 0) { y = 0; }
+    if (imageIndex === void 0) { imageIndex = 0; }
+    if (defaultFps === void 0) { defaultFps = 30; }
+    if (!loader || !loader.loadImage)
+        throw new Error("You must pass in a valid ResourceLoader to draw a sprite.");
+    if (!sprite || !sprite.src)
+        throw new Error("Invalid sprite. Cannot render " + sprite + ".");
+    var img = loader.loadImage(sprite.src);
+    var pivot = sprite.pivot || { x: 0, y: 0 };
+    if (sprite_1.isAnimationSprite(sprite)) {
+        var tileset = sprite.tileset;
+        var frames_1 = sprite.frames;
+        var fps = sprite.framesPerSecond;
+        if (typeof fps === 'undefined')
+            fps = defaultFps;
+        var frameIdx = math_1.fmod(Math.floor(imageIndex * fps), frames_1.length);
+        var frame = frames_1[frameIdx];
+        context.drawImage(img, frame.tilex * tileset.width, frame.tiley * tileset.height, tileset.width, tileset.height, x - pivot.x, y - pivot.y, tileset.width, tileset.height);
+    }
+    else if (sprite_1.isSingleTileSprite(sprite)) {
+        var tileset = sprite.tileset;
+        context.drawImage(img, tileset.tilex * tileset.width, tileset.tiley * tileset.height, tileset.width, tileset.height, x - pivot.x, y - pivot.y, tileset.width, tileset.height);
+    }
+    else {
+        context.drawImage(img, x - pivot.x, y - pivot.y);
+    }
+}
+exports.drawSprite = drawSprite;
+function measureSprite(loader, sprite) {
+    if (!sprite || !sprite.src)
+        throw new Error("Invalid sprite. Cannot measure " + sprite + ".");
+    var img = loader && loader.loadImage(sprite.src);
+    if (sprite_1.isAnimationSprite(sprite) || sprite_1.isSingleTileSprite(sprite)) {
+        var _a = sprite.tileset, width = _a.width, height = _a.height;
+        return { width: width, height: height };
+    }
+    else {
+        return { width: img.width || 0, height: img.height || 0 };
+    }
+}
+exports.measureSprite = measureSprite;
+//# sourceMappingURL=render.js.map
 
 /***/ }),
 /* 7 */
@@ -2831,9 +2844,9 @@ exports.EventQueue = EventQueue;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var math_1 = __webpack_require__(1);
+var math_1 = __webpack_require__(2);
 var rect_1 = __webpack_require__(10);
-var render_1 = __webpack_require__(4);
+var render_1 = __webpack_require__(6);
 ;
 var GameObject = (function () {
     function GameObject(name, opts) {
@@ -3173,7 +3186,7 @@ exports.GameObject = GameObject;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var render_1 = __webpack_require__(4);
+var render_1 = __webpack_require__(6);
 var ResourceLoader = (function () {
     function ResourceLoader() {
         this.DEBUG_RESOURCES = false;
@@ -3363,9 +3376,9 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var engine_1 = __webpack_require__(0);
-var tile_preload_strategy_1 = __webpack_require__(28);
-var alive_preload_strategy_1 = __webpack_require__(27);
-var flocking_scene_1 = __webpack_require__(29);
+var tile_preload_strategy_1 = __webpack_require__(32);
+var alive_preload_strategy_1 = __webpack_require__(31);
+var flocking_scene_1 = __webpack_require__(33);
 var RtsGame = (function (_super) {
     __extends(RtsGame, _super);
     function RtsGame(framesPerSecond) {
@@ -3402,7 +3415,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var game_object_1 = __webpack_require__(8);
-var merge = __webpack_require__(6);
+var merge = __webpack_require__(4);
 var AudioSourceObject = (function (_super) {
     __extends(AudioSourceObject, _super);
     function AudioSourceObject(name, audio, opts) {
@@ -3475,7 +3488,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-var camera_1 = __webpack_require__(3);
+var camera_1 = __webpack_require__(5);
 var FollowCamera = (function (_super) {
     __extends(FollowCamera, _super);
     function FollowCamera(scene) {
@@ -3524,7 +3537,7 @@ exports.FollowCamera = FollowCamera;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var camera_1 = __webpack_require__(3);
+var camera_1 = __webpack_require__(5);
 var GameScene = (function () {
     function GameScene(_game) {
         if (_game === void 0) { _game = null; }
@@ -3833,7 +3846,7 @@ function __export(m) {
 Object.defineProperty(exports, "__esModule", { value: true });
 __export(__webpack_require__(7));
 __export(__webpack_require__(9));
-__export(__webpack_require__(3));
+__export(__webpack_require__(5));
 __export(__webpack_require__(14));
 __export(__webpack_require__(16));
 __export(__webpack_require__(8));
@@ -3919,9 +3932,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 __export(__webpack_require__(18));
 __export(__webpack_require__(19));
 __export(__webpack_require__(20));
-__export(__webpack_require__(1));
+__export(__webpack_require__(2));
 __export(__webpack_require__(10));
-__export(__webpack_require__(4));
+__export(__webpack_require__(6));
 __export(__webpack_require__(11));
 //# sourceMappingURL=index.js.map
 
@@ -3943,7 +3956,214 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var engine_1 = __webpack_require__(0);
-var bat_1 = __webpack_require__(23);
+var enemy_1 = __webpack_require__(23);
+var tile_db_1 = __webpack_require__(1);
+var EnemyController = (function (_super) {
+    __extends(EnemyController, _super);
+    function EnemyController(world) {
+        var _this = _super.call(this, 'EnemyController', { shouldRender: false }) || this;
+        _this.world = world;
+        _this._baseCoords = [0, 0];
+        _this._enemies = [];
+        _this.init();
+        return _this;
+    }
+    EnemyController.prototype.init = function () {
+        this.initBase();
+    };
+    EnemyController.prototype.initBase = function () {
+        while (true) {
+            var distance = 5 + Math.random() * 10;
+            var angle = 2 * Math.PI * Math.random();
+            var xpos = Math.floor(Math.cos(angle) * distance);
+            var ypos = Math.floor(Math.sin(angle) * distance);
+            if (!this.world.getTileAt(xpos, ypos).isSolid && !this.world.getTileAt(xpos + 1, ypos).isSolid && !this.world.getTileAt(xpos, ypos + 1).isSolid && !this.world.getTileAt(xpos + 1, ypos + 1).isSolid) {
+                this._baseCoords = [xpos, ypos];
+                this.world.setTileAt(xpos, ypos, tile_db_1.tiles['enemy-base']);
+                break;
+            }
+        }
+    };
+    EnemyController.prototype.addToScene = function (scene) {
+        _super.prototype.addToScene.call(this, scene);
+        this.addEnemies(3);
+    };
+    Object.defineProperty(EnemyController.prototype, "baseCoords", {
+        get: function () {
+            return [this._baseCoords[0], this._baseCoords[1]];
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(EnemyController.prototype, "enemies", {
+        get: function () {
+            return this._enemies;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    EnemyController.prototype.addEnemies = function (count) {
+        for (var q = 0; q < count; q++) {
+            this.addEnemy();
+        }
+    };
+    EnemyController.prototype.addEnemy = function () {
+        var enemy = new enemy_1.Enemy(this, {
+            x: (this._baseCoords[0] + 1) * tile_db_1.TILE_SIZE,
+            y: (this._baseCoords[1] + 1) * tile_db_1.TILE_SIZE
+        });
+        this.enemies.push(enemy);
+        this.scene.addObject(enemy);
+        return enemy;
+    };
+    return EnemyController;
+}(engine_1.GameObject));
+exports.EnemyController = EnemyController;
+
+
+/***/ }),
+/* 23 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var engine_1 = __webpack_require__(0);
+var state_machine_1 = __webpack_require__(24);
+var state_1 = __webpack_require__(25);
+var alive_db_1 = __webpack_require__(3);
+var merge = __webpack_require__(4);
+var Enemy = (function (_super) {
+    __extends(Enemy, _super);
+    function Enemy(controller, opts) {
+        if (opts === void 0) { opts = {}; }
+        var _this = _super.call(this, 'EnemyController', merge({
+            sprite: alive_db_1.alives['enemy'].sprite,
+            direction: Math.random() * 360
+        }, opts)) || this;
+        _this.controller = controller;
+        _this._states = new state_machine_1.StateMachine(new WanderState(_this));
+        return _this;
+    }
+    Enemy.prototype.tick = function (delta) {
+        this._states.tick(delta);
+        this.imageAngle = this.direction;
+    };
+    return Enemy;
+}(engine_1.GameObject));
+exports.Enemy = Enemy;
+var WanderState = (function (_super) {
+    __extends(WanderState, _super);
+    function WanderState(self) {
+        var _this = _super.call(this) || this;
+        _this.self = self;
+        return _this;
+    }
+    WanderState.prototype.tick = function (machine, delta) {
+    };
+    return WanderState;
+}(state_1.State));
+exports.WanderState = WanderState;
+
+
+/***/ }),
+/* 24 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var StateMachine = (function () {
+    function StateMachine(currentState) {
+        this._currentState = null;
+        this._changingState = false;
+        this.currentState = currentState;
+    }
+    Object.defineProperty(StateMachine.prototype, "currentState", {
+        get: function () {
+            return this._currentState;
+        },
+        set: function (val) {
+            if (val == null)
+                throw new Error("Cannot set currentState to null");
+            if (val == this._currentState)
+                return;
+            if (this._changingState)
+                throw new Error("Already changing states! Don't change state from within onEnter or onExit lifecycle hooks!");
+            this._changingState = true;
+            var prev = this._currentState;
+            try {
+                if (this._currentState)
+                    this._currentState.onExit(this, val);
+                this._currentState = val;
+                if (this._currentState)
+                    this._currentState.onEnter(this, prev);
+            }
+            finally {
+                this._changingState = false;
+            }
+        },
+        enumerable: true,
+        configurable: true
+    });
+    StateMachine.prototype.tick = function (delta) {
+        this.currentState.tick(this, delta);
+    };
+    return StateMachine;
+}());
+exports.StateMachine = StateMachine;
+
+
+/***/ }),
+/* 25 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var State = (function () {
+    function State() {
+    }
+    State.prototype.onEnter = function (machine, previousState) {
+    };
+    State.prototype.onExit = function (machine, nextState) {
+    };
+    State.prototype.tick = function (machine, delta) {
+    };
+    return State;
+}());
+exports.State = State;
+
+
+/***/ }),
+/* 26 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var engine_1 = __webpack_require__(0);
+var bat_1 = __webpack_require__(27);
 var BatController = (function (_super) {
     __extends(BatController, _super);
     function BatController() {
@@ -3997,7 +4217,7 @@ exports.BatController = BatController;
 
 
 /***/ }),
-/* 23 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4014,8 +4234,8 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var engine_1 = __webpack_require__(0);
-var alive_db_1 = __webpack_require__(5);
-var merge = __webpack_require__(6);
+var alive_db_1 = __webpack_require__(3);
+var merge = __webpack_require__(4);
 function pointDistance2(x1, y1, x2, y2) {
     return Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2);
 }
@@ -4129,7 +4349,7 @@ exports.Bat = Bat;
 
 
 /***/ }),
-/* 24 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4146,7 +4366,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var engine_1 = __webpack_require__(0);
-var tile_db_1 = __webpack_require__(2);
+var tile_db_1 = __webpack_require__(1);
 var GridRenderer = (function (_super) {
     __extends(GridRenderer, _super);
     function GridRenderer(world) {
@@ -4181,7 +4401,7 @@ exports.GridRenderer = GridRenderer;
 
 
 /***/ }),
-/* 25 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4193,7 +4413,7 @@ game.start();
 
 
 /***/ }),
-/* 26 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4210,8 +4430,8 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var engine_1 = __webpack_require__(0);
-var tile_db_1 = __webpack_require__(2);
-var alive_db_1 = __webpack_require__(5);
+var tile_db_1 = __webpack_require__(1);
+var alive_db_1 = __webpack_require__(3);
 var MOVE_SPEED = 4 * 30;
 var SIZE = 32;
 var OFFSET = (tile_db_1.TILE_SIZE - SIZE) / 2.0;
@@ -4313,13 +4533,13 @@ exports.Player = Player;
 
 
 /***/ }),
-/* 27 */
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var alive_db_1 = __webpack_require__(5);
+var alive_db_1 = __webpack_require__(3);
 var AlivePreloadStrategy = (function () {
     function AlivePreloadStrategy() {
     }
@@ -4334,13 +4554,13 @@ exports.AlivePreloadStrategy = AlivePreloadStrategy;
 
 
 /***/ }),
-/* 28 */
+/* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var tile_db_1 = __webpack_require__(2);
+var tile_db_1 = __webpack_require__(1);
 var TilePreloadStrategy = (function () {
     function TilePreloadStrategy() {
     }
@@ -4355,7 +4575,7 @@ exports.TilePreloadStrategy = TilePreloadStrategy;
 
 
 /***/ }),
-/* 29 */
+/* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4372,10 +4592,11 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var engine_1 = __webpack_require__(0);
-var world_1 = __webpack_require__(31);
-var grid_renderer_1 = __webpack_require__(24);
-var player_1 = __webpack_require__(26);
-var bat_controller_1 = __webpack_require__(22);
+var world_1 = __webpack_require__(35);
+var grid_renderer_1 = __webpack_require__(28);
+var player_1 = __webpack_require__(30);
+var bat_controller_1 = __webpack_require__(26);
+var enemy_controller_1 = __webpack_require__(22);
 var FlockingScene = (function (_super) {
     __extends(FlockingScene, _super);
     function FlockingScene() {
@@ -4404,6 +4625,8 @@ var FlockingScene = (function (_super) {
         var batController = new bat_controller_1.BatController();
         this.addObject(batController);
         batController.addBats(1000);
+        var enemyController = new enemy_controller_1.EnemyController(this._world);
+        this.addObject(enemyController);
         var camera = this.camera = new engine_1.FollowCamera(this);
         camera.follow = player;
         camera.enableSmoothing = false;
@@ -4415,13 +4638,13 @@ exports.FlockingScene = FlockingScene;
 
 
 /***/ }),
-/* 30 */
+/* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var nnn = __webpack_require__(32);
+var nnn = __webpack_require__(36);
 var Noise = nnn.Noise;
 var cache = new Map();
 function generateNoise(seed, chunkx, chunky) {
@@ -4441,7 +4664,7 @@ exports.generateNoise = generateNoise;
 
 
 /***/ }),
-/* 31 */
+/* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4458,8 +4681,8 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var engine_1 = __webpack_require__(0);
-var tile_db_1 = __webpack_require__(2);
-var noise_1 = __webpack_require__(30);
+var tile_db_1 = __webpack_require__(1);
+var noise_1 = __webpack_require__(34);
 var TIME_SCALE = 1 / (60 * 5);
 var World = (function (_super) {
     __extends(World, _super);
@@ -4488,6 +4711,12 @@ var World = (function (_super) {
         var chunk = this.getChunk(Math.floor(x / 64), Math.floor(y / 64));
         var _a = [engine_1.fmod(x, 64), engine_1.fmod(y, 64)], relativex = _a[0], relativey = _a[1];
         return chunk[relativex][relativey];
+    };
+    World.prototype.setTileAt = function (x, y, tile) {
+        var chunk = this.getChunk(Math.floor(x / 64), Math.floor(y / 64));
+        var _a = [engine_1.fmod(x, 64), engine_1.fmod(y, 64)], relativex = _a[0], relativey = _a[1];
+        chunk[relativex][relativey] = tile;
+        return this;
     };
     World.prototype.getChunk = function (x, y) {
         var key = x + ", " + y;
@@ -4523,7 +4752,7 @@ exports.World = World;
 
 
 /***/ }),
-/* 32 */
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -4856,7 +5085,7 @@ exports.World = World;
 
 
 /***/ }),
-/* 33 */
+/* 37 */
 /***/ (function(module, exports) {
 
 var g;
@@ -4883,7 +5112,7 @@ module.exports = g;
 
 
 /***/ }),
-/* 34 */
+/* 38 */
 /***/ (function(module, exports) {
 
 module.exports = function(module) {

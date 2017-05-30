@@ -65,5 +65,11 @@ export let alives: { [name: string]: Alive } =
                 ],
                 framesPerSecond: 4
             }
+        },
+        enemy: {
+            sprite: {
+                src: 'images/enemy.png',
+                pivot: { x: 12, y: 12 }
+            }
         }
     };

@@ -8,7 +8,15 @@ export interface WorldTile {
     isSolid: boolean
 };
 
-export let tiles: { [name: string]: WorldTile } = { };
+export let tiles: { [name: string]: WorldTile } = {
+    'enemy-base': {
+        sprite: {
+            src: 'images/enemy-base.png',
+            tileset: { width: TILE_SIZE, height: TILE_SIZE, tilex: 0, tiley: 0 }
+        },
+        isSolid: true
+    }
+};
 
 function addDecorationTiles(name: string, count: number, def: WorldTile) {
     for (let q = 0; q < count; q++) {
@@ -18,20 +26,19 @@ function addDecorationTiles(name: string, count: number, def: WorldTile) {
                 tileset: { tilex: q }
             }
         });
-        console.log(indName, tiles[indName]);
     }
 }
 addDecorationTiles('rock', 7, {
     sprite: {
         src: 'images/cave_floor.png',
-        tileset: { width: 48, height: 48, tilex: 0, tiley: 0 }
+        tileset: { width: TILE_SIZE, height: TILE_SIZE, tilex: 0, tiley: 0 }
     },
     isSolid: false
 });
 addDecorationTiles('water', 4, {
     sprite: {
         src: 'images/water_tiles.png',
-        tileset: { width: 48, height: 48, tilex: 0, tiley: 0 }
+        tileset: { width: TILE_SIZE, height: TILE_SIZE, tilex: 0, tiley: 0 }
     },
     isSolid: true
 });
