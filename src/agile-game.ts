@@ -19,6 +19,7 @@ export class AgileGame extends Game {
     get onPause() {
         return this._pause;
     }
+
     private _play = new EventEmitter<void>();
     get onPlay() {
         return this._play;
