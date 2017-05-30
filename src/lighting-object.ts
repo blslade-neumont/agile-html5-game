@@ -1,6 +1,8 @@
 ﻿import { GameObject, fmod } from './engine';
 import { World } from './world';
 
+const TIME_BETWEEN_LIGHT_TICKS = 0;
+
 export class LightingObject extends GameObject {
     constructor(private ambient = 1, private dayNightCycle = true) {
         super('LightingObject', { renderCamera: 'none' });
@@ -11,6 +13,12 @@ export class LightingObject extends GameObject {
     private compositeCanvas: HTMLCanvasElement;
     private compositeContext: CanvasRenderingContext2D;
 
+    tick(delta: number) {
+        super.tick(delta);
+        this._timeUntilLightTick -= delta;
+    }
+
+    private _timeUntilLightTick = 0;
     protected renderImpl(context: CanvasRenderingContext2D) {
         let world = <World | null>(<any>this.scene).world;
         if (!world && this.dayNightCycle) throw new Error(`Unsupported state: no world, no game time; but dayNightCycle is true!`);
@@ -26,20 +34,24 @@ export class LightingObject extends GameObject {
         darkness = Math.max(1 - this.ambient, darkness);
         if (darkness == 0) return;
 
-        this.createCompositeImage(darkness);
+        if (this._timeUntilLightTick <= 0) {
+            this.createCompositeImage(darkness);
+            this._timeUntilLightTick = TIME_BETWEEN_LIGHT_TICKS;
+        }
 
         context.save();
         try {
             context.globalCompositeOperation = 'multiply';
-            context.drawImage(this.compositeCanvas, 0, 0);
+            context.drawImage(this.compositeCanvas, -120, -120);
         }
         finally { context.restore(); }
     }
 
     private createCompositeImage(darkness: number) {
         let [width, height] = this.game.canvasSize;
-        [this.compositeCanvas.width, this.compositeCanvas.height] = [width, height];
+        [this.compositeCanvas.width, this.compositeCanvas.height] = [width + 240, height + 240];
         let ctx = this.compositeContext;
+        ctx.translate(120, 120);
 
         let color = Math.floor(255 * (1 - darkness));
         ctx.globalCompositeOperation = 'source-over';

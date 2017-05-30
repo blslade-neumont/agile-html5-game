@@ -6,6 +6,8 @@ export const TILE_SIZE: number = 32;
 export interface WorldTile {
     sprite: SpriteT,
     variants?: SpriteT[],
+    light?: SpriteT,
+    lightVariants?: (SpriteT | null)[],
     isSolid: boolean,
     onTick?: (delta: number, entity: Entity) => void,
     onLand?: (entity: Entity) => void
@@ -33,6 +35,10 @@ export let tiles: { [name: string]: WorldTile } =
             }, {
                 src: 'images/Tiles/Outside_A2.png',
                 tileset: { width: 32, height: 32, tilex: 1, tiley: 2 }
+            }],
+            lightVariants: [null, null, null, null, {
+                src: 'images/Alive/dim-light-source.png',
+                pivot: { x: 80, y: 80 }
             }],
             isSolid: false,
         },
@@ -94,6 +100,10 @@ export let tiles: { [name: string]: WorldTile } =
                 src: 'images/Tiles/World_A1.png',
                 tileset: { width: 32, height: 32, tilex: 15, tiley: 5 }
             }],
+            light: {
+                src: 'images/Alive/bright-light-source.png',
+                pivot: { x: 120, y: 120 }
+            },
             isSolid: false,
             onTick: (delta, entity) => {
                 entity.takeDamage(3);
@@ -110,6 +120,10 @@ export let tiles: { [name: string]: WorldTile } =
                 ],
                 framesPerSecond: 4,
             },
+            light: {
+                src: 'images/Alive/bright-light-source.png',
+                pivot: { x: 120, y: 120 }
+            },
             isSolid: false,
             onTick: (delta, entity) => {
                 entity.takeDamage(3);
@@ -125,6 +139,10 @@ export let tiles: { [name: string]: WorldTile } =
                     { tilex: 15, tiley: 2 },
                 ],
                 framesPerSecond: 4,
+            },
+            light: {
+                src: 'images/Alive/bright-light-source.png',
+                pivot: { x: 120, y: 120 }
             },
             isSolid: false,
             onTick: (delta, entity) => {
@@ -194,6 +212,10 @@ export let tiles: { [name: string]: WorldTile } =
                 src: 'images/Tiles/Outside_A2.png',
                 tileset: { width: 32, height: 32, tilex: 10, tiley: 10 }
             },
+            light: {
+                src: 'images/Alive/dim-light-source.png',
+                pivot: { x: 80, y: 80 }
+            },
             isSolid: false,
             onLand: (entity) => {
                 let scene = <any>entity.scene;
@@ -205,6 +227,10 @@ export let tiles: { [name: string]: WorldTile } =
             sprite: {
                 src: 'images/Tiles/Outside_A2.png',
                 tileset: { width: 32, height: 32, tilex: 10, tiley: 10 }
+            },
+            light: {
+                src: 'images/Alive/dim-light-source.png',
+                pivot: { x: 80, y: 80 }
             },
             isSolid: false,
             onLand: (entity) => {

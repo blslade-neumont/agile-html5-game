@@ -9,6 +9,10 @@ export class TilePreloadStrategy implements PreloadStrategy {
             for (let variant of tile.variants || []) {
                 loader.loadImage(variant.src);
             }
+            if (tile.light) loader.loadImage(tile.light.src)
+            for (let variant of tile.lightVariants || []) {
+                if (variant) loader.loadImage(variant.src);
+            }
         }
     }
 }

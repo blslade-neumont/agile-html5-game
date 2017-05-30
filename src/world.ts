@@ -30,7 +30,7 @@ export class World extends GameObject {
         pauseWithGame(this);
     }
     
-    private _gameTime = 8 / 24;
+    private _gameTime = 19 / 24;
     get gameTime() {
         return this._gameTime;
     }
@@ -70,6 +70,17 @@ export class World extends GameObject {
         let v = this._variantCache.get(key);
         if (!v) return tile.sprite;
         return tile.variants[v - 1];
+    }
+    getLightSpriteAt(x: number, y: number): SpriteT | null {
+        let tile = this.getTileAt(x, y);
+        if (!tile.variants) return tile.light || null;
+        let key = `${x}_${y}`;
+        if (!this._variantCache.has(key)) {
+            this._variantCache.set(key, this.variantNumber(x, y, tile.variants.length + 1));
+        }
+        let v = this._variantCache.get(key);
+        if (!v) return tile.light || null;
+        return (tile.lightVariants || [])[v - 1] || null;
     }
     getTileAt(x: number, y: number): WorldTile {
         let chunk = this.getChunk(Math.floor(x / 64), Math.floor(y / 64));
