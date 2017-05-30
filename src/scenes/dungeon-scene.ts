@@ -26,6 +26,7 @@ export class DungeonScene extends GameScene {
         this._returnX = portalx;
         this._returnY = portaly + 33;
         fromScene.game.changeScene(this);
+        this.game = fromScene.game;
 
         let otherPlayer = <Player>fromScene.findObject('Player');
         if (!otherPlayer) throw new Error(`Could not find player object in previous scene while entering dungeon.`);
@@ -37,6 +38,8 @@ export class DungeonScene extends GameScene {
 
         let otherWorld = <World>(fromScene.findObject('World') || (<any>fromScene).world);
         if (otherWorld) this.world.gameTime = otherWorld.gameTime;
+
+        this.addObject(new AudioSourceObject('EnterDungeonSound', sfx['teleport'], { x: this.player.x, y: this.player.y }));
     }
     exit() {
         this.game.changeScene(this._returnScene);
@@ -51,6 +54,8 @@ export class DungeonScene extends GameScene {
 
         let otherWorld = <World>(this._returnScene.findObject('World') || (<any>this._returnScene).world);
         if (otherWorld) otherWorld.gameTime = this.world.gameTime;
+
+        this._returnScene.addObject(new AudioSourceObject('ExitDungeonSound', sfx['teleport'], { x: this.player.x, y: this.player.y }));
     }
     private _returnScene: GameScene;
     private _returnX: number;

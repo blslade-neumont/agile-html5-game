@@ -1,10 +1,13 @@
-﻿import { GameObject, GameObjectOptions, clamp } from './engine';
+﻿import { GameObject, GameObjectOptions, clamp, AudioT, AudioSourceObject } from './engine';
 
 export interface EntityOptions extends GameObjectOptions {
     maxHealth: number,
     currentHealth?: number,
     damageImmunity?: number,
-    damageImmunityTimer?: number
+    damageImmunityTimer?: number,
+
+    takeDamageSound?: AudioT | null,
+    killSound?: AudioT | null
 }
 
 export class Entity extends GameObject {
@@ -21,8 +24,11 @@ export class Entity extends GameObject {
         }
         else this.currentHealth = this.maxHealth;
 
-        if (typeof opts.damageImmunity != 'undefined') this._damageImmunity = opts.damageImmunity;
-        if (typeof opts.damageImmunityTimer != 'undefined') this._damageImmunityTimer = opts.damageImmunityTimer;
+        if (typeof opts.damageImmunity !== 'undefined') this._damageImmunity = opts.damageImmunity;
+        if (typeof opts.damageImmunityTimer !== 'undefined') this._damageImmunityTimer = opts.damageImmunityTimer;
+
+        if (typeof opts.takeDamageSound !== 'undefined') this.takeDamageSound = opts.takeDamageSound;
+        if (typeof opts.killSound !== 'undefined') this.killSound = opts.killSound;
     }
 
     private _maxHealth = 1;
@@ -69,6 +75,22 @@ export class Entity extends GameObject {
     get isDead() {
         return !this.isAlive;
     }
+    
+    private _takeDamageSound: AudioT | null = null;
+    get takeDamageSound() {
+        return this._takeDamageSound;
+    }
+    set takeDamageSound(val: AudioT | null) {
+        this._takeDamageSound = val;
+    }
+
+    private _killSound: AudioT | null = null;
+    get killSound() {
+        return this._killSound;
+    }
+    set killSound(val: AudioT | null) {
+        this._killSound = val;
+    }
 
     tick(delta: number) {
         super.tick(delta);
@@ -80,6 +102,7 @@ export class Entity extends GameObject {
         if (amt < 0) throw new Error(`Cannot take negative damage`);
         if (this.isImmuneToDamage) return false;
         this.currentHealth -= amt;
+        if (!this.isDead && this.takeDamageSound) this.scene.addObject(new AudioSourceObject(`${this.name}-TakeDamageSound`, this.takeDamageSound, { x: this.x, y: this.y }));
         this.damageImmunity = this.damageImmunityTimer;
         return true;
     }
@@ -87,6 +110,7 @@ export class Entity extends GameObject {
     kill() {
         if (!this.isAlive) throw new Error('This entity is already dead!');
         this._isAlive = false;
+        if (this.takeDamageSound) this.scene.addObject(new AudioSourceObject(`${this.name}-KillSound`, this.killSound, { x: this.x, y: this.y }));
         this.scene.removeObject(this);
     }
 

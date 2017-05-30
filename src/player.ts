@@ -5,6 +5,7 @@ import { DeadPlayer } from './dead-player';
 import { ResourceLoader, Game, GameEvent, fmod, GameScene, clamp, Rect, SpriteT, drawSprite } from './engine';
 import { Entity, EntityOptions } from './entity';
 import { alives } from './dbs/alive-db';
+import { sfx } from './dbs/sfx-db';
 import { pauseWithGame } from './utils/pause-with-game';
 import merge = require('lodash.merge');
 
@@ -15,10 +16,12 @@ const CLOSE_ENOUGH: number = 3.0;
 
 export class Player extends Entity {
     constructor(opts: EntityOptions = { maxHealth: 10 }) {
-        super("Player", merge({}, opts, {
+        super("Player", merge({
             sprite: alives['player-south'].sprite,
-            collisionBounds: new Rect(0, SIZE, 0, SIZE)
-        }));
+            collisionBounds: new Rect(0, SIZE, 0, SIZE),
+            takeDamageSound: sfx['playerDamage'],
+            killSound: sfx['playerDeath']
+        }, opts));
         this._lightSourceSprite = alives['dim-light-source'].sprite;
     }
 

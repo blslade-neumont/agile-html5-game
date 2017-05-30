@@ -1,4 +1,4 @@
-﻿import { SpriteT } from '../engine';
+﻿import { SpriteT, AudioSourceObject } from '../engine';
 import { Entity } from '../entity';
 
 export const TILE_SIZE: number = 32;
