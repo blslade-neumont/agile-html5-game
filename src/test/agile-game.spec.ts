@@ -24,4 +24,18 @@ describe('AgileGame', () => {
             expect(game.resourceLoader.totalResources).to.be.greaterThan(0);
         });
     });
+
+    describe('._score', () => {
+        it('should be able to be set and get', () => {
+            let aScore = 1;
+            game.score = aScore;
+            expect(game.score).to.be.equal(aScore);
+        });
+        it('should be able to be added to', () => {
+            let aScore = 1;
+            game.score = aScore;
+            game.addToScore(aScore);
+            expect(game.score).to.be.equal(aScore + aScore);
+        });
+    });
 });

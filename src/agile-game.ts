@@ -28,4 +28,17 @@ export class AgileGame extends Game {
         super.start();
         this.changeScene(new TitleScene());
     }
+
+    private _score = 0;
+    get score() {
+        return this._score;
+    }
+
+    set score(val: number) {
+        this._score = val; 
+    }
+
+    addToScore(val: number){
+        this._score += val;
+    }
 }

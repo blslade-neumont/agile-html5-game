@@ -1,6 +1,7 @@
 ﻿import { GameEvent, drawSprite } from './engine';
 import { AgileGame } from './agile-game';
 import { OverworldScene } from './scenes/overworld-scene';
+import { DungeonScene } from './scenes/dungeon-scene';
 import { gui } from './dbs/gui-db';
 import { MenuGuiObject } from './menu-gui-object';
 import { Entity } from './entity';
@@ -17,6 +18,10 @@ export class InGameGuiObject extends MenuGuiObject {
         let day = Math.floor(gameTime);
         let hour = Math.floor((gameTime - day) * 24);
         return `Day ${day + 1}, ${(hour + 23) % 12 + 1} ${hour < 12 ? 'AM' : 'PM'}`;
+    }
+
+    get score() {
+        return `Score: ${(<AgileGame>this.game).score}`;
     }
 
     handleEvent(evt: GameEvent) {
@@ -40,15 +45,24 @@ export class InGameGuiObject extends MenuGuiObject {
         let [canvasWidth, canvasHeight] = this.game.canvasSize;
         let timeText = this.gameTimeString;
         context.font = '24px Verdana';
-        let textWidth = context.measureText(timeText).width;
-        
+        let timeTextWidth = context.measureText(timeText).width;
+        let scoreText = this.score;
+        let scoreTextWidth = context.measureText(scoreText).width;
+
+        let timeyOffset = 0;
+        let scoreyOffset = 24;
+
         context.fillStyle = 'rgba(0, 0, 0, .5)';
-        context.fillRect(canvasWidth - (8 + textWidth), 0, 8 + textWidth, 8 + 24);
+        context.fillRect(canvasWidth - (8 + timeTextWidth), timeyOffset, 8 + timeTextWidth, 8 + 24);
+
+        context.fillStyle = 'rgba(0, 0, 0, .5)';
+        context.fillRect(canvasWidth - (8 + scoreTextWidth), scoreyOffset + 8, 8 + scoreTextWidth, 8 + 24);
 
         context.fillStyle = 'white';
         context.textAlign = 'right';
         context.textBaseline = 'top';
-        context.fillText(timeText, canvasWidth - 4, 4);
+        context.fillText(timeText, canvasWidth - 4, timeyOffset + 4);
+        context.fillText(scoreText, canvasWidth - 4, scoreyOffset + 10);
 
         this.renderHealth(context);
 
