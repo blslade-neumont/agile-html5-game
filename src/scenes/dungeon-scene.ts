@@ -1,9 +1,10 @@
-﻿import { GameScene, GameEvent, FollowCamera } from '../engine';
+﻿import { GameScene, GameEvent, FollowCamera, AudioSourceObject } from '../engine';
 import { World } from '../world';
 import { GridRenderer } from '../grid-renderer';
 import { Player } from '../player';
 import { InGameGuiObject } from '../in-game-gui-object';
 import { LightingObject } from '../lighting-object';
+import { sfx } from '../dbs/sfx-db';
 
 export class DungeonScene extends GameScene {
     constructor() {
@@ -81,6 +82,8 @@ export class DungeonScene extends GameScene {
         this.addObject(new LightingObject(.4, false));
 
         this.addObject(new InGameGuiObject());
+
+        this.addObject(new AudioSourceObject('Music', sfx['dungeonMusic'], { shouldLoop: true }));
 
         let camera = this.camera = new FollowCamera(this);
         camera.follow = this.player;

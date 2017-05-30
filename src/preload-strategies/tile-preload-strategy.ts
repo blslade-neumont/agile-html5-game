@@ -5,7 +5,7 @@ export class TilePreloadStrategy implements PreloadStrategy {
     preload(loader: ResourceLoader) {
         for (let name in tiles) {
             let tile = tiles[name];
-            loader.loadImage(tile.sprite.src)
+            loader.loadImage(tile.sprite.src);
             for (let variant of tile.variants || []) {
                 loader.loadImage(variant.src);
             }

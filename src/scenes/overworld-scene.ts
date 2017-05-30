@@ -1,10 +1,11 @@
-﻿import { GameScene, GameEvent, FollowCamera } from '../engine';
+﻿import { GameScene, GameEvent, FollowCamera, AudioSourceObject } from '../engine';
 import { World } from '../world';
 import { GridRenderer } from '../grid-renderer';
 import { Player } from '../player';
 import { InGameGuiObject } from '../in-game-gui-object';
 import { DungeonScene } from './dungeon-scene';
 import { LightingObject } from '../lighting-object';
+import { sfx } from '../dbs/sfx-db';
 
 export class OverworldScene extends GameScene {
     constructor() {
@@ -46,6 +47,8 @@ export class OverworldScene extends GameScene {
         this.addObject(new LightingObject(1, true));
 
         this.addObject(new InGameGuiObject());
+
+        this.addObject(new AudioSourceObject('Music', sfx['overworldMusic'], { shouldLoop: true }));
 
         let camera = this.camera = new FollowCamera(this);
         camera.follow = player;
