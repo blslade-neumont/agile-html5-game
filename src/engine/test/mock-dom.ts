@@ -22,9 +22,15 @@ export class MockElement {
     scrollWidth = 640;
     scrollHeight = 480;
 
+    //canvas
     getContext() {
         return new MockContext(this);
     }
+
+    //audio
+    play() { this.paused = false; }
+    pause() { this.paused = true; }
+    paused = true;
 }
 
 export class MockDocument {

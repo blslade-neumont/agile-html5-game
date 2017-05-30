@@ -24,10 +24,11 @@ export class Game {
 
     private handleSceneChange() {
         if (this._nextScene) {
+            if (this._scene) this._scene.onExit();
             this._scene = this._nextScene;
-            this._nextScene = null;
             this._scene.game = this;
-            this._scene.start();
+            this._scene.onEnter();
+            this._nextScene = null;
         }
     }
 

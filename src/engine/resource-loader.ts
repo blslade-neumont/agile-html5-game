@@ -63,7 +63,7 @@ export class ResourceLoader {
         if (this.DEBUG_RESOURCES) console.log(`Loading audio: '${src}'`);
         let aud = new Audio();
         this._audio.set(src, aud);
-        aud.onload = () => {
+        aud.onloadeddata = () => {
             this._resourcesLoaded++;
         };
         aud.onerror = (e) => {

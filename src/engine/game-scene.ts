@@ -13,8 +13,23 @@ export class GameScene {
         this._game = val;
     }
 
+    public onEnter() {
+        this.start();
+        for (let obj of this._objects) {
+            obj.onSceneEnter();
+        }
+    }
+    public onExit() {
+        this.stop();
+        for (let obj of this._objects) {
+            obj.onSceneExit();
+        }
+    }
+
     public start() {
         if (!this.camera) this.initCamera();
+    }
+    public stop() {
     }
 
     public handleEvent(evt) {
@@ -29,7 +44,7 @@ export class GameScene {
         }
         if (this.camera) this.camera.tick(delta);
     }
-
+    
     public render(context: CanvasRenderingContext2D) {
         let defaultCamera = this.camera;
         let lastRenderCamera = null;

@@ -8,6 +8,7 @@ export * from './follow-camera';
 
 export * from './game';
 export * from './game-object';
+export * from './audio-source-object';
 
 export * from './game-scene';
 

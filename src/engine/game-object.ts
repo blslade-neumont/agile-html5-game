@@ -225,6 +225,9 @@ export class GameObject {
         this._scene = null;
     }
 
+    onSceneEnter() { }
+    onSceneExit() { }
+
     handleEvent(evt: GameEvent): boolean | void {
     }
 
