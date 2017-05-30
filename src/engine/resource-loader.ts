@@ -37,7 +37,6 @@ export class ResourceLoader {
     }
 
     private _images = new Map<string, HTMLImageElement>();
-
     loadImage(src: string) {
         src = this.resolvePath(src);
         if (this._images.has(src)) return this._images.get(src);
@@ -55,6 +54,25 @@ export class ResourceLoader {
         img.src = src;
         return img;
     }
+    private _audio = new Map<string, HTMLAudioElement>();
+    loadAudio(src: string) {
+        src = this.resolvePath(src);
+        if (this._audio.has(src)) return this._audio.get(src);
+
+        this._resourcesLoading++;
+        if (this.DEBUG_RESOURCES) console.log(`Loading audio: '${src}'`);
+        let aud = new Audio();
+        this._audio.set(src, aud);
+        aud.onload = () => {
+            this._resourcesLoaded++;
+        };
+        aud.onerror = (e) => {
+            this._errors.push(`ERROR: Could not load ${src}`);
+        };
+        aud.src = src;
+        return aud;
+    }
+
     private resolvePath(src: string) {
         if (src.match(/^[a-z]:\/\//i)) return src;
         if (src.startsWith('/')) return `${this.baseUrl}${src}`;

@@ -1,6 +1,31 @@
 ﻿/// <reference types="mocha" />
 
-import { MockElement } from './mock-element';
+export class MockContext {
+    constructor(readonly canvas: MockElement) { }
+
+    save() { }
+    restore() { }
+
+    translate() { }
+    rotate() { }
+    scale() { }
+
+    fillRect() { }
+    fillText() { }
+    measureText() { return { width: 42 } }
+    drawImage() { }
+}
+
+export class MockElement {
+    width = 925;
+    height = 295;
+    scrollWidth = 640;
+    scrollHeight = 480;
+
+    getContext() {
+        return new MockContext(this);
+    }
+}
 
 export class MockDocument {
     constructor() { }
@@ -33,6 +58,7 @@ export function stubDOM() {
     let previousWindow: any;
     let previousCanvas: any;
     let previousImage: any;
+    let previousAudio: any;
     beforeEach(() => {
         previousDocument = global.document;
         global.document = new MockDocument();
@@ -42,6 +68,8 @@ export function stubDOM() {
         global.HTMLCanvasElement = MockElement;
         previousImage = global.Image;
         global.Image = MockImage;
+        previousAudio = global.Audio;
+        global.Audio = MockImage;
     });
     afterEach(() => {
         delete global.document;
@@ -52,6 +80,8 @@ export function stubDOM() {
         if (typeof previousCanvas !== 'undefined') global.HTMLCanvasElement = previousCanvas;
         delete global.Image;
         if (typeof previousImage !== 'undefined') global.Image = previousImage;
+        delete global.Audio;
+        if (typeof previousAudio !== 'undefined') global.Audio = previousAudio;
     });
 }
 stubDOM();
