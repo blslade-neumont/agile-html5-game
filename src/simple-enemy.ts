@@ -48,10 +48,10 @@ export class SimpleEnemy extends Entity {
 
         if (this.speed <= 0.01) {
             let i: number = this.getMove();
-            if ((i == 0))      { h = -MOVE_SPEED; }
+            if ((i == 0)) { v = -MOVE_SPEED; }
             else if ((i == 1)) { h = +MOVE_SPEED; }
-            else if ((i == 2)) { v = -MOVE_SPEED; }
-            else if ((i == 3)) { v = +MOVE_SPEED; }
+            else if ((i == 2)) { v = +MOVE_SPEED; }
+            else if ((i == 3)) { h = -MOVE_SPEED;}
         }
 
         this.snapToTile(h, v);
