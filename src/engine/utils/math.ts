@@ -23,3 +23,8 @@ export function fmod(a: number, b: number) {
     //Besides that, it also converts to a string and back. Yikes.
     return +(a - (Math.floor(a / b) * b)).toPrecision(8);
 }
+
+export function pointDirection(x1: number, y1: number, x2: number, y2: number) {
+    let xdiff = x2 - x1, ydiff = y2 - y1;
+    return fmod(radToDeg(Math.atan2(-ydiff, xdiff)), 360);
+}

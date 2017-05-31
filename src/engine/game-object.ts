@@ -1,4 +1,4 @@
-﻿import { degToRad, radToDeg, fmod } from './utils/math';
+﻿import { degToRad, radToDeg, fmod, pointDirection } from './utils/math';
 import { Rect } from './utils/rect';
 import { Game } from './game';
 import { GameEvent } from './utils/events';
@@ -145,14 +145,14 @@ export class GameObject {
 
     private updateHVSpeed() {
         let radians = degToRad(this._dir);
-        this._vspeed = Math.sin(radians) * this._speed;
+        this._vspeed = -Math.sin(radians) * this._speed;
         this._hspeed = Math.cos(radians) * this._speed;
         if (this.DEBUG_MOVEMENT) console.log(`  hspeed: ${this._hspeed}; vspeed: ${this._vspeed}`);
     }
     private updateDirectionAndSpeed() {
         this._speed = Math.sqrt(this._hspeed * this._hspeed + this._vspeed * this._vspeed);
         if (this._speed == 0) return;
-        this._dir = radToDeg(Math.atan2(this._vspeed, this._hspeed));
+        this._dir = pointDirection(0, 0, this._hspeed, this._vspeed);
         if (this._dir < 0) this._dir += 360;
         if (this.DEBUG_MOVEMENT) console.log(`  speed: ${this._speed}; direction: ${this._dir}`);
     }

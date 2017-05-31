@@ -151,7 +151,7 @@ describe('GameObject', () => {
             expect(gobj.direction).to.be.closeTo(180, .00001);
             gobj.direction = 90;
             expect(gobj.hspeed).to.be.closeTo(0, .00001);
-            expect(gobj.vspeed).to.be.closeTo(4, .00001);
+            expect(gobj.vspeed).to.be.closeTo(-4, .00001);
         });
         it('should normalize the value when it is less than 0 or greater than 360', () => {
             let gobj = new GameObject('name');
@@ -172,6 +172,48 @@ describe('GameObject', () => {
                 expect(console.log).to.have.been.calledWith(sinon.match(/setting direction/i));
                 expect(console.log).to.have.been.calledWith(sinon.match(/hspeed:.*vspeed:/i));
             } finally { if (stub) stub.restore(); }
+        });
+
+        it('should be 0 when facing east', () => {
+            let gobj = new GameObject('name', { hspeed: 1, vspeed: 0 });
+            expect(gobj.direction).to.eql(0);
+        });
+        it('should be 45 when facing northeast', () => {
+            let gobj = new GameObject('name', { hspeed: 1, vspeed: -1 });
+            expect(gobj.direction).to.eql(45);
+        });
+        it('should be 90 when facing north', () => {
+            let gobj = new GameObject('name', { hspeed: 0, vspeed: -1 });
+            expect(gobj.direction).to.eql(90);
+        });
+        it('should be 135 when facing northwest', () => {
+            let gobj = new GameObject('name', { hspeed: -1, vspeed: -1 });
+            expect(gobj.direction).to.eql(135);
+        });
+        it('should be 180 when facing west', () => {
+            let gobj = new GameObject('name', { hspeed: -1, vspeed: 0 });
+            expect(gobj.direction).to.eql(180);
+        });
+        it('should be 225 when facing southwest', () => {
+            let gobj = new GameObject('name', { hspeed: -1, vspeed: 1 });
+            expect(gobj.direction).to.eql(225);
+        });
+        it('should be 270 when facing south', () => {
+            let gobj = new GameObject('name', { hspeed: 0, vspeed: 1 });
+            expect(gobj.direction).to.eql(270);
+        });
+        it('should be 315 when facing southeast', () => {
+            let gobj = new GameObject('name', { hspeed: 1, vspeed: 1 });
+            expect(gobj.direction).to.eql(315);
+        });
+        it('should be the same direction regardless of magnitude', () => {
+            let dx = Math.random() - .5;
+            let dy = Math.random() - .5;
+            let gobj = new GameObject('name', { hspeed: dx, vspeed: dy });
+            let dir = gobj.direction;
+            gobj.hspeed = dx * 5;
+            gobj.vspeed = dy * 5;
+            expect(gobj.direction).to.be.closeTo(dir, .00001);
         });
     });
     describe('.speed', () => {
@@ -248,18 +290,18 @@ describe('GameObject', () => {
         it('should modify speed and direction when it changes', () => {
             let gobj = new GameObject('name', { speed: 4, direction: 90 });
             expect(gobj.hspeed).to.be.closeTo(0, .00001);
-            expect(gobj.vspeed).to.be.closeTo(4, .00001);
-            gobj.vspeed = -2;
+            expect(gobj.vspeed).to.be.closeTo(-4, .00001);
+            gobj.vspeed = 2;
             expect(gobj.direction).to.be.closeTo(270, .00001);
             expect(gobj.speed).to.be.closeTo(2, .00001);
         });
         it('should not change direction if set to 0 and hspeed is already 0', () => {
             let gobj = new GameObject('name', { hspeed: 0, vspeed: 4 });
-            expect(gobj.direction).to.be.closeTo(90, .00001);
+            expect(gobj.direction).to.be.closeTo(270, .00001);
             gobj.vspeed = 0;
             expect(gobj.hspeed).to.be.closeTo(0, .00001);
             expect(gobj.vspeed).to.be.closeTo(0, .00001);
-            expect(gobj.direction).to.be.closeTo(90, .00001);
+            expect(gobj.direction).to.be.closeTo(270, .00001);
         });
         it('should invoke console.log when the setter is called if DEBUG_MOVEMENT is true', () => {
             let stub: sinon.SinonStub;
