@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 31);
+/******/ 	return __webpack_require__(__webpack_require__.s = 32);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -76,7 +76,7 @@ function __export(m) {
     for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
 }
 Object.defineProperty(exports, "__esModule", { value: true });
-__export(__webpack_require__(17));
+__export(__webpack_require__(18));
 
 
 /***/ }),
@@ -2451,7 +2451,7 @@ function stubFalse() {
 
 module.exports = merge;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(39), __webpack_require__(40)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(40), __webpack_require__(41)(module)))
 
 /***/ }),
 /* 5 */
@@ -3364,6 +3364,23 @@ exports.isAnimationSprite = isAnimationSprite;
 
 "use strict";
 
+Object.defineProperty(exports, "__esModule", { value: true });
+function pointDistance2(x1, y1, x2, y2) {
+    return Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2);
+}
+exports.pointDistance2 = pointDistance2;
+function pointDistance(x1, y1, x2, y2) {
+    return Math.sqrt(pointDistance2(x1, y1, x2, y2));
+}
+exports.pointDistance = pointDistance;
+
+
+/***/ }),
+/* 13 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -3376,9 +3393,9 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var engine_1 = __webpack_require__(0);
-var tile_preload_strategy_1 = __webpack_require__(34);
-var alive_preload_strategy_1 = __webpack_require__(33);
-var flocking_scene_1 = __webpack_require__(35);
+var tile_preload_strategy_1 = __webpack_require__(35);
+var alive_preload_strategy_1 = __webpack_require__(34);
+var flocking_scene_1 = __webpack_require__(36);
 var RtsGame = (function (_super) {
     __extends(RtsGame, _super);
     function RtsGame(framesPerSecond) {
@@ -3398,7 +3415,7 @@ exports.RtsGame = RtsGame;
 
 
 /***/ }),
-/* 13 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3472,7 +3489,7 @@ exports.AudioSourceObject = AudioSourceObject;
 //# sourceMappingURL=audio-source-object.js.map
 
 /***/ }),
-/* 14 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3531,7 +3548,7 @@ exports.FollowCamera = FollowCamera;
 //# sourceMappingURL=follow-camera.js.map
 
 /***/ }),
-/* 15 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3665,7 +3682,7 @@ exports.GameScene = GameScene;
 //# sourceMappingURL=game-scene.js.map
 
 /***/ }),
-/* 16 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3835,7 +3852,7 @@ exports.Game = Game;
 //# sourceMappingURL=game.js.map
 
 /***/ }),
-/* 17 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3847,16 +3864,16 @@ Object.defineProperty(exports, "__esModule", { value: true });
 __export(__webpack_require__(7));
 __export(__webpack_require__(9));
 __export(__webpack_require__(5));
+__export(__webpack_require__(15));
+__export(__webpack_require__(17));
+__export(__webpack_require__(8));
 __export(__webpack_require__(14));
 __export(__webpack_require__(16));
-__export(__webpack_require__(8));
-__export(__webpack_require__(13));
-__export(__webpack_require__(15));
-__export(__webpack_require__(21));
+__export(__webpack_require__(22));
 //# sourceMappingURL=index.js.map
 
 /***/ }),
-/* 18 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3871,7 +3888,7 @@ exports.delay = delay;
 //# sourceMappingURL=delay.js.map
 
 /***/ }),
-/* 19 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3903,7 +3920,7 @@ exports.EventEmitter = EventEmitter;
 //# sourceMappingURL=event-emitter.js.map
 
 /***/ }),
-/* 20 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3920,7 +3937,7 @@ var MouseButton;
 //# sourceMappingURL=events.js.map
 
 /***/ }),
-/* 21 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3929,9 +3946,9 @@ function __export(m) {
     for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
 }
 Object.defineProperty(exports, "__esModule", { value: true });
-__export(__webpack_require__(18));
 __export(__webpack_require__(19));
 __export(__webpack_require__(20));
+__export(__webpack_require__(21));
 __export(__webpack_require__(2));
 __export(__webpack_require__(10));
 __export(__webpack_require__(6));
@@ -3939,7 +3956,7 @@ __export(__webpack_require__(11));
 //# sourceMappingURL=index.js.map
 
 /***/ }),
-/* 22 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3956,10 +3973,10 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var engine_1 = __webpack_require__(0);
-var enemy_1 = __webpack_require__(23);
+var enemy_1 = __webpack_require__(24);
 var tile_db_1 = __webpack_require__(1);
-var node_1 = __webpack_require__(24);
-var path_1 = __webpack_require__(25);
+var node_1 = __webpack_require__(25);
+var path_1 = __webpack_require__(26);
 var EnemyController = (function (_super) {
     __extends(EnemyController, _super);
     function EnemyController(world) {
@@ -3967,6 +3984,7 @@ var EnemyController = (function (_super) {
         _this.world = world;
         _this._baseCoords = [0, 0];
         _this._enemies = [];
+        _this.renderMode = 'single';
         _this.nodeMap = new Map();
         _this.init();
         return _this;
@@ -3989,7 +4007,7 @@ var EnemyController = (function (_super) {
     };
     EnemyController.prototype.addToScene = function (scene) {
         _super.prototype.addToScene.call(this, scene);
-        this.addEnemies(3);
+        this.addEnemies(1);
     };
     Object.defineProperty(EnemyController.prototype, "baseCoords", {
         get: function () {
@@ -4006,9 +4024,9 @@ var EnemyController = (function (_super) {
         configurable: true
     });
     EnemyController.prototype.addEnemies = function (count) {
-        for (var q = 0; q < count; q++) {
+        for (var q = 0; q < count; q++)
             this.addEnemy();
-        }
+        this.updateRenderDebugInfo();
     };
     EnemyController.prototype.addEnemy = function () {
         var enemy = new enemy_1.Enemy(this, {
@@ -4018,6 +4036,22 @@ var EnemyController = (function (_super) {
         this.enemies.push(enemy);
         this.scene.addObject(enemy);
         return enemy;
+    };
+    EnemyController.prototype.handleEvent = function (evt) {
+        if (evt.type == 'keyPressed' && evt.code == 'KeyE') {
+            this.renderMode = (this.renderMode == 'none') ? 'single' :
+                (this.renderMode == 'single') ? 'all' :
+                    'none';
+            this.updateRenderDebugInfo();
+        }
+    };
+    EnemyController.prototype.updateRenderDebugInfo = function () {
+        for (var _i = 0, _a = this._enemies; _i < _a.length; _i++) {
+            var enemy = _a[_i];
+            enemy.renderDebugInfo = this.renderMode == 'all';
+        }
+        if (this.renderMode == 'single' && this._enemies.length)
+            this._enemies[0].renderDebugInfo = true;
     };
     EnemyController.prototype.getNode = function (x, y) {
         var key = node_1.keyFromCoords(x, y);
@@ -4042,7 +4076,7 @@ exports.EnemyController = EnemyController;
 
 
 /***/ }),
-/* 23 */
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4059,10 +4093,11 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var engine_1 = __webpack_require__(0);
-var state_machine_1 = __webpack_require__(26);
-var state_1 = __webpack_require__(27);
+var state_machine_1 = __webpack_require__(27);
+var state_1 = __webpack_require__(28);
 var alive_db_1 = __webpack_require__(3);
 var tile_db_1 = __webpack_require__(1);
+var math_1 = __webpack_require__(12);
 var merge = __webpack_require__(4);
 var Enemy = (function (_super) {
     __extends(Enemy, _super);
@@ -4073,11 +4108,13 @@ var Enemy = (function (_super) {
             direction: Math.random() * 360
         }, opts)) || this;
         _this.controller = controller;
+        _this.renderDebugInfo = false;
         _this._states = new state_machine_1.StateMachine(new WanderState(_this));
         return _this;
     }
     Enemy.prototype.tick = function (delta) {
         this._states.tick(delta);
+        _super.prototype.tick.call(this, delta);
         this.imageAngle = this.direction;
     };
     Enemy.prototype.render = function (context) {
@@ -4092,24 +4129,62 @@ var WanderState = (function (_super) {
     function WanderState(self) {
         var _this = _super.call(this) || this;
         _this.self = self;
+        _this.currentIdx = 0;
+        _this.turnRadius = 24;
+        _this.directionChangeSpeed = 180;
         return _this;
     }
+    Object.defineProperty(WanderState.prototype, "turnRadius2", {
+        get: function () {
+            return this.turnRadius * this.turnRadius;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    WanderState.prototype.onEnter = function (machine, prevState) {
+        _super.prototype.onEnter.call(this, machine, prevState);
+        this.self.speed = 30 * (2 + Math.random() * 1);
+    };
     WanderState.prototype.tick = function (machine, delta) {
+        if (this.path && this.currentIdx >= this.path.nodes.length)
+            this.path = null;
         if (!this.path) {
             var targetx = Math.floor((this.self.x + (Math.random() * 3000) - 1500) / tile_db_1.TILE_SIZE);
             var targety = Math.floor((this.self.y + (Math.random() * 3000) - 1500) / tile_db_1.TILE_SIZE);
             this.path = this.self.controller.getPath(Math.floor(this.self.x / tile_db_1.TILE_SIZE), Math.floor(this.self.y / tile_db_1.TILE_SIZE), targetx, targety);
-            if (!this.path)
-                console.log('path: null');
-            else
-                console.log('path: ' + this.path.nodes.map(function (node) { return "(" + node.x + ", " + node.y + ")"; }).join(', '));
+            this.currentIdx = 0;
         }
         if (!this.path)
             return;
+        var nodes = this.path.nodes;
+        var targeting = null;
+        while (true) {
+            if (this.currentIdx >= nodes.length)
+                return;
+            targeting = nodes[this.currentIdx];
+            var dist2 = math_1.pointDistance2(this.self.x, this.self.y, (targeting.x + .5) * tile_db_1.TILE_SIZE, (targeting.y + .5) * tile_db_1.TILE_SIZE);
+            if (dist2 > this.turnRadius2)
+                break;
+            this.currentIdx++;
+        }
+        var dir = engine_1.pointDirection(this.self.x, this.self.y, (targeting.x + .5) * tile_db_1.TILE_SIZE, (targeting.y + .5) * tile_db_1.TILE_SIZE);
+        if (dir > this.self.direction + 180)
+            dir -= 180;
+        else if (dir < this.self.direction - 180)
+            dir += 180;
+        var dirChange = 0;
+        if (dir > this.self.direction) {
+            dirChange = Math.min(dir - this.self.direction, this.directionChangeSpeed * delta);
+        }
+        else if (dir < this.self.direction) {
+            dirChange = Math.max(dir - this.self.direction, -this.directionChangeSpeed * delta);
+        }
+        console.log(this.self.direction - dir);
+        this.self.direction += dirChange;
     };
     WanderState.prototype.render = function (machine, context) {
         _super.prototype.render.call(this, machine, context);
-        if (this.path) {
+        if (this.path && this.self.renderDebugInfo) {
             context.strokeStyle = 'red';
             context.beginPath();
             var nodes = this.path.nodes;
@@ -4117,6 +4192,14 @@ var WanderState = (function (_super) {
             for (var q = 1; q < nodes.length; q++) {
                 context.lineTo((nodes[q].x + .5) * tile_db_1.TILE_SIZE, (nodes[q].y + .5) * tile_db_1.TILE_SIZE);
             }
+            context.stroke();
+            for (var q = 0; q < nodes.length; q++) {
+                context.fillStyle = q == this.currentIdx ? 'white' : 'red';
+                context.fillRect((nodes[q].x + .5) * tile_db_1.TILE_SIZE - 2, (nodes[q].y + .5) * tile_db_1.TILE_SIZE - 2, 4, 4);
+            }
+            context.strokeStyle = 'blue';
+            context.beginPath();
+            context.ellipse(this.self.x, this.self.y, this.turnRadius, this.turnRadius, 0, 0, 2 * Math.PI);
             context.stroke();
         }
     };
@@ -4126,7 +4209,7 @@ exports.WanderState = WanderState;
 
 
 /***/ }),
-/* 24 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4182,7 +4265,7 @@ exports.Node = Node;
 
 
 /***/ }),
-/* 25 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4262,7 +4345,7 @@ exports.Path = Path;
 
 
 /***/ }),
-/* 26 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4313,7 +4396,7 @@ exports.StateMachine = StateMachine;
 
 
 /***/ }),
-/* 27 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4336,7 +4419,7 @@ exports.State = State;
 
 
 /***/ }),
-/* 28 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4353,7 +4436,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var engine_1 = __webpack_require__(0);
-var bat_1 = __webpack_require__(29);
+var bat_1 = __webpack_require__(30);
 var BatController = (function (_super) {
     __extends(BatController, _super);
     function BatController() {
@@ -4395,8 +4478,8 @@ var BatController = (function (_super) {
     };
     BatController.prototype.updateRenderDebugInfo = function () {
         for (var _i = 0, _a = this._bats; _i < _a.length; _i++) {
-            var bird = _a[_i];
-            bird.renderDebugInfo = this.renderMode == 'all';
+            var bat = _a[_i];
+            bat.renderDebugInfo = this.renderMode == 'all';
         }
         if (this.renderMode == 'single' && this._bats.length)
             this._bats[0].renderDebugInfo = true;
@@ -4407,7 +4490,7 @@ exports.BatController = BatController;
 
 
 /***/ }),
-/* 29 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4425,13 +4508,8 @@ var __extends = (this && this.__extends) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var engine_1 = __webpack_require__(0);
 var alive_db_1 = __webpack_require__(3);
+var math_1 = __webpack_require__(12);
 var merge = __webpack_require__(4);
-function pointDistance2(x1, y1, x2, y2) {
-    return Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2);
-}
-function pointDistance(x1, y1, x2, y2) {
-    return Math.sqrt(pointDistance2(x1, y1, x2, y2));
-}
 var Bat = (function (_super) {
     __extends(Bat, _super);
     function Bat(controller, opts) {
@@ -4477,7 +4555,7 @@ var Bat = (function (_super) {
         if (this.timeSinceLastEnv > this.envCalcThreshold) {
             var nbdist2_1 = this.neighborDistance * this.neighborDistance;
             this.env = this.controller.bats
-                .map(function (bird) { return ({ bird: bird, dist: pointDistance2(_this.x, _this.y, bird.x, bird.y) }); })
+                .map(function (bird) { return ({ bird: bird, dist: math_1.pointDistance2(_this.x, _this.y, bird.x, bird.y) }); })
                 .filter(function (bird) { return bird.bird != _this && bird.dist < nbdist2_1; })
                 .sort(function (lhs, rhs) { return lhs.dist - rhs.dist; })
                 .slice(0, this.attentionSpan)
@@ -4487,7 +4565,7 @@ var Bat = (function (_super) {
         this.timeSinceLastEnv += delta;
         var env = this.env;
         var gravHVSpeed = env.reduce(function (prev, current) {
-            var dist = pointDistance(_this.x, _this.y, current.x, current.y);
+            var dist = math_1.pointDistance(_this.x, _this.y, current.x, current.y);
             var addx = 0, addy = 0;
             if (dist < _this.repulsionDistance) {
                 addx += (_this.x - current.x) * _this.repulsionForce * (_this.repulsionDistance - dist) / _this.repulsionDistance;
@@ -4539,7 +4617,7 @@ exports.Bat = Bat;
 
 
 /***/ }),
-/* 30 */
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4591,19 +4669,19 @@ exports.GridRenderer = GridRenderer;
 
 
 /***/ }),
-/* 31 */
+/* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var rts_game_1 = __webpack_require__(12);
+var rts_game_1 = __webpack_require__(13);
 var game = new rts_game_1.RtsGame();
 game.start();
 
 
 /***/ }),
-/* 32 */
+/* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4723,7 +4801,7 @@ exports.Player = Player;
 
 
 /***/ }),
-/* 33 */
+/* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4744,7 +4822,7 @@ exports.AlivePreloadStrategy = AlivePreloadStrategy;
 
 
 /***/ }),
-/* 34 */
+/* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4765,7 +4843,7 @@ exports.TilePreloadStrategy = TilePreloadStrategy;
 
 
 /***/ }),
-/* 35 */
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4782,11 +4860,11 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var engine_1 = __webpack_require__(0);
-var world_1 = __webpack_require__(37);
-var grid_renderer_1 = __webpack_require__(30);
-var player_1 = __webpack_require__(32);
-var bat_controller_1 = __webpack_require__(28);
-var enemy_controller_1 = __webpack_require__(22);
+var world_1 = __webpack_require__(38);
+var grid_renderer_1 = __webpack_require__(31);
+var player_1 = __webpack_require__(33);
+var bat_controller_1 = __webpack_require__(29);
+var enemy_controller_1 = __webpack_require__(23);
 var FlockingScene = (function (_super) {
     __extends(FlockingScene, _super);
     function FlockingScene() {
@@ -4828,13 +4906,13 @@ exports.FlockingScene = FlockingScene;
 
 
 /***/ }),
-/* 36 */
+/* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var nnn = __webpack_require__(38);
+var nnn = __webpack_require__(39);
 var Noise = nnn.Noise;
 var cache = new Map();
 function generateNoise(seed, chunkx, chunky) {
@@ -4854,7 +4932,7 @@ exports.generateNoise = generateNoise;
 
 
 /***/ }),
-/* 37 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4872,7 +4950,7 @@ var __extends = (this && this.__extends) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var engine_1 = __webpack_require__(0);
 var tile_db_1 = __webpack_require__(1);
-var noise_1 = __webpack_require__(36);
+var noise_1 = __webpack_require__(37);
 var TIME_SCALE = 1 / (60 * 5);
 var World = (function (_super) {
     __extends(World, _super);
@@ -4942,7 +5020,7 @@ exports.World = World;
 
 
 /***/ }),
-/* 38 */
+/* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -5275,7 +5353,7 @@ exports.World = World;
 
 
 /***/ }),
-/* 39 */
+/* 40 */
 /***/ (function(module, exports) {
 
 var g;
@@ -5302,7 +5380,7 @@ module.exports = g;
 
 
 /***/ }),
-/* 40 */
+/* 41 */
 /***/ (function(module, exports) {
 
 module.exports = function(module) {

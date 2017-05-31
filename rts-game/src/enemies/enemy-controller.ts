@@ -1,9 +1,11 @@
-﻿import { GameObject, GameScene } from '../engine';
+import { GameObject, GameScene, GameEvent } from '../engine';
 import { Enemy } from './enemy';
 import { World } from '../world';
 import { tiles, TILE_SIZE } from '../dbs/tile-db';
 import { Node, keyFromCoords } from './node';
 import { Path } from './path';
+
+type EnemyRenderMode = 'none' | 'single' | 'all';
 
 export class EnemyController extends GameObject {
     constructor(private world: World) {
@@ -29,7 +31,7 @@ export class EnemyController extends GameObject {
 
     addToScene(scene: GameScene) {
         super.addToScene(scene);
-        this.addEnemies(3);
+        this.addEnemies(1);
     }
 
     private _baseCoords: [number, number] = [0, 0];
@@ -43,9 +45,9 @@ export class EnemyController extends GameObject {
     }
 
     addEnemies(count: number) {
-        for (let q = 0; q < count; q++) {
+        for (let q = 0; q < count; q++)
             this.addEnemy();
-        }
+        this.updateRenderDebugInfo();
     }
     private addEnemy() {
         let enemy = new Enemy(this, {
@@ -55,6 +57,22 @@ export class EnemyController extends GameObject {
         this.enemies.push(enemy);
         this.scene.addObject(enemy);
         return enemy;
+    }
+
+    renderMode = 'single';
+    handleEvent(evt: GameEvent) {
+        if (evt.type == 'keyPressed' && evt.code == 'KeyE') {
+            this.renderMode = (this.renderMode == 'none') ? 'single' :
+                            (this.renderMode == 'single') ? 'all' :
+                                                            'none';
+            this.updateRenderDebugInfo();
+        }
+    }
+    private updateRenderDebugInfo() {
+        for (let enemy of this._enemies) {
+            enemy.renderDebugInfo = this.renderMode == 'all';
+        }
+        if (this.renderMode == 'single' && this._enemies.length) this._enemies[0].renderDebugInfo = true;
     }
 
     nodeMap = new Map<string, Node | null>();

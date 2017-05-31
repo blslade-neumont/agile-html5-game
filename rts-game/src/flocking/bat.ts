@@ -1,14 +1,8 @@
 ﻿import { GameObject, GameObjectOptions, fmod, degToRad, clamp } from '../engine';
 import { BatController } from './bat-controller';
 import { alives } from '../dbs/alive-db';
+import { pointDistance, pointDistance2 } from '../utils/math';
 import merge = require('lodash.merge');
-
-function pointDistance2(x1: number, y1: number, x2: number, y2: number) {
-    return Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2);
-}
-function pointDistance(x1: number, y1: number, x2: number, y2: number) {
-    return Math.sqrt(pointDistance2(x1, y1, x2, y2));
-}
 
 export class Bat extends GameObject {
     constructor(private controller: BatController, opts: GameObjectOptions = {}) {
@@ -97,12 +91,6 @@ export class Bat extends GameObject {
         this.animationSpeed = .5 + (1 * (this.maxSpeed - this.minSpeed) / (this.maxSpeed - this.minSpeed));
 
         this.imageAngle = this.direction + 90;
-        // let clampDist = 0;
-        // let dir = this.direction >= 180 ? 360 - this.direction : this.direction;
-        // if (dir < clampDist) this.imageAngle = clampDist;
-        // else if (dir > 180 - clampDist) this.imageAngle = 180 - clampDist;
-        // else this.imageAngle = dir;
-        // this.imageAngle = -this.imageAngle + 90;
     }
 
     render(context: CanvasRenderingContext2D) {

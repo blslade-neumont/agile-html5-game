@@ -41,8 +41,8 @@ export class BatController extends GameObject {
         }
     }
     private updateRenderDebugInfo() {
-        for (let bird of this._bats) {
-            bird.renderDebugInfo = this.renderMode == 'all';
+        for (let bat of this._bats) {
+            bat.renderDebugInfo = this.renderMode == 'all';
         }
         if (this.renderMode == 'single' && this._bats.length) this._bats[0].renderDebugInfo = true;
     }
