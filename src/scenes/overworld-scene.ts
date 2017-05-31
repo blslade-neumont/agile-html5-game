@@ -19,18 +19,8 @@ export class OverworldScene extends GameScene {
         return this._world;
     }
 
-    private _dungeon = new DungeonScene();
-    get dungeon() {
-        return this._dungeon;
-    }
-
-    public handleEvent(evt: GameEvent) {
-        if (super.handleEvent(evt)) return true;
-        if (evt.type == 'keyPressed' && evt.code == 'KeyI') {
-            this._dungeon.enter(this, 64, 64);
-        }
-    }
-
+    readonly dungeon = new DungeonScene();
+    
     private _initialized = false;
 
     start() {

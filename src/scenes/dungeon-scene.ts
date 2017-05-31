@@ -62,13 +62,6 @@ export class DungeonScene extends GameScene {
 
     private player: Player = new Player({ maxHealth: 10 });
 
-    public handleEvent(evt: GameEvent) {
-        if (super.handleEvent(evt)) return true;
-        if (evt.type == 'keyPressed' && evt.code == 'KeyI') {
-            this.exit();
-        }
-    }
-
     private _initialized = false;
 
     // scene enter
