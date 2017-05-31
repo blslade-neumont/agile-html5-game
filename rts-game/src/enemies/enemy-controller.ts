@@ -2,6 +2,8 @@
 import { Enemy } from './enemy';
 import { World } from '../world';
 import { tiles, TILE_SIZE } from '../dbs/tile-db';
+import { Node, keyFromCoords } from './node';
+import { Path } from './path';
 
 export class EnemyController extends GameObject {
     constructor(private world: World) {
@@ -47,11 +49,28 @@ export class EnemyController extends GameObject {
     }
     private addEnemy() {
         let enemy = new Enemy(this, {
-            x: (this._baseCoords[0] + 1) * TILE_SIZE,
-            y: (this._baseCoords[1] + 1) * TILE_SIZE
+            x: (this._baseCoords[0] + 1.5) * TILE_SIZE,
+            y: (this._baseCoords[1] + 1.5) * TILE_SIZE
         });
         this.enemies.push(enemy);
         this.scene.addObject(enemy);
         return enemy;
+    }
+
+    nodeMap = new Map<string, Node | null>();
+    getNode(x: number, y: number): Node | null {
+        let key = keyFromCoords(x, y);
+        if (!this.nodeMap.has(key)) {
+            let newNode: Node | null = this.world.getTileAt(x, y).isSolid ? null : new Node(this, x, y);
+            this.nodeMap.set(key, newNode);
+            return newNode;
+        }
+        else return this.nodeMap.get(key);
+    }
+    getPath(xfrom: number, yfrom: number, xto: number, yto: number): Path | null {
+        let from = this.getNode(xfrom, yfrom);
+        let to = this.getNode(xto, yto);
+        if (!from || !to) return null;
+        return Path.pathfind(from, to);
     }
 }

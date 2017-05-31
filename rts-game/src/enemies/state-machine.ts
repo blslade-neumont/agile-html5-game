@@ -28,4 +28,7 @@ export class StateMachine {
     tick(delta: number) {
         this.currentState.tick(this, delta);
     }
+    render(context: CanvasRenderingContext2D) {
+        this.currentState.render(this, context);
+    }
 }
