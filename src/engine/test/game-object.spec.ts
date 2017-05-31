@@ -430,7 +430,7 @@ describe('GameObject', () => {
             let gobj = new GameObject('name', { x: 13, y: -27, imageAngle: 180 });
             gobj.render(context);
             expect(context.translate).to.have.been.calledOnce.calledWith(13, -27);
-            expect(context.rotate).to.have.been.calledOnce.calledWith(Math.PI);
+            expect(context.rotate).to.have.been.calledOnce.calledWith(-Math.PI);
         });
     });
 

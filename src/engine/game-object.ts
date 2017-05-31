@@ -247,12 +247,16 @@ export class GameObject {
         if (!this.shouldRender) return;
 
         context.save();
-        context.translate(this.x, this.y);
-        context.rotate(degToRad(this.imageAngle));
 
-        this.renderImpl(context);
-        
-        context.restore();
+        try {
+            context.translate(this.x, this.y);
+            context.rotate(-degToRad(this.imageAngle));
+
+            this.renderImpl(context);
+        }
+        finally {
+            context.restore();
+        }
     }
     protected renderImpl(context: CanvasRenderingContext2D) {
         if (this.sprite) {
