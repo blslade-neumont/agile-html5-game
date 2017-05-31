@@ -39,7 +39,6 @@ export class Entity extends GameObject {
         if (typeof opts.takeDamageSound !== 'undefined') this.takeDamageSound = opts.takeDamageSound;
         if (typeof opts.killSound !== 'undefined') this.killSound = opts.killSound;
         if (typeof opts.flying !== 'undefined') this._flying = opts.flying;
-
     }
 
     private _maxHealth = 1;
@@ -194,7 +193,7 @@ export class Entity extends GameObject {
     kill() {
         if (!this.isAlive) throw new Error('This entity is already dead!');
         this._isAlive = false;
-        if (this.takeDamageSound) this.scene.addObject(new AudioSourceObject(`${this.name}-KillSound`, this.killSound, { x: this.x, y: this.y }));
+        if (this.killSound) this.scene.addObject(new AudioSourceObject(`${this.name}-KillSound`, this.killSound, { x: this.x, y: this.y }));
         this.scene.removeObject(this);
     }
 

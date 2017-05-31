@@ -6,7 +6,7 @@ import * as sinonChai from 'sinon-chai';
 use(sinonChai);
 
 import { Entity } from '../entity';
-import { GameObject } from '../engine';
+import { GameObject, AudioSourceObject } from '../engine';
 import { MockEventQueue } from './mock-event-queue';
 import { MockWorld } from './mock-world';
 
@@ -14,7 +14,10 @@ describe('Entity', () => {
     let ent: Entity;
     beforeEach(() => {
         ent = new Entity('name', { maxHealth: 10 });
-        ent.addToScene(<any>{ removeObject: () => { ; } });
+        ent.addToScene(<any>{
+            removeObject: () => { },
+            addObject: () => { }
+        });
     });
 
     describe('.constructor', () => {
@@ -415,6 +418,24 @@ describe('Entity', () => {
             ent.takeDamage(2);
             expect(ent.isImmuneToDamage).to.be.false;
         });
+        it('should not play a sound if there is no takeDamageSound', () => {
+            sinon.stub(ent.scene, 'addObject');
+            ent.takeDamage(2);
+            expect(ent.scene.addObject).not.to.have.been.called;
+        });
+        it('should not play a sound if the entity dies even if there is a takeDamageSound', () => {
+            sinon.stub(ent.scene, 'addObject');
+            ent.currentHealth = 1;
+            ent.takeDamageSound = { src: 'blah' };
+            ent.takeDamage(2);
+            expect(ent.scene.addObject).not.to.have.been.called;
+        });
+        it('should play a sound if the entity does not die and there is a takeDamageSound', () => {
+            sinon.stub(ent.scene, 'addObject');
+            ent.takeDamageSound = { src: 'blah' };
+            ent.takeDamage(2);
+            expect(ent.scene.addObject).to.have.been.calledOnce.calledWith(sinon.match(obj => obj instanceof AudioSourceObject));
+        });
     });
 
     describe('.kill', () => {
@@ -431,6 +452,17 @@ describe('Entity', () => {
             sinon.stub(ent.scene, 'removeObject');
             ent.kill();
             expect(ent.scene.removeObject).to.have.been.calledOnce.calledWithExactly(ent);
+        });
+        it('should not play a sound if there is no killSound', () => {
+            sinon.stub(ent.scene, 'addObject');
+            ent.kill();
+            expect(ent.scene.addObject).not.to.have.been.called;
+        });
+        it('should play a sound if there is a killSound', () => {
+            sinon.stub(ent.scene, 'addObject');
+            ent.killSound = { src: 'blah' };
+            ent.kill();
+            expect(ent.scene.addObject).to.have.been.calledOnce.calledWith(sinon.match(obj => obj instanceof AudioSourceObject));
         });
     });
 

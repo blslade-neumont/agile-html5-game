@@ -5,27 +5,33 @@ import * as sinon from 'sinon';
 import * as sinonChai from 'sinon-chai';
 use(sinonChai);
 
-import { OverworldScene } from '../overworld-scene';
+import { DungeonScene } from '../dungeon-scene';
 import { Game, AudioSourceObject } from '../../engine';
 import { MockGame } from '../../engine/test';
 
-describe('OverworldScene', () => {
+describe('DungeonScene', () => {
     let game: Game;
-    let scene: OverworldScene;
+    let scene: DungeonScene;
     beforeEach(() => {
-        scene = new OverworldScene();
+        scene = new DungeonScene();
         game = scene.game = <any>new MockGame(scene);
     });
 
-    it('should start with no world', () => {
-        expect(scene.world).not.to.be.ok;
+    describe('.world', () => {
+        it('should not be falsey', () => {
+            expect(scene.world).to.be.ok;
+        });
+    });
+
+    describe('.enter', () => {
+
+    });
+
+    describe('.exit', () => {
+
     });
 
     describe('.start', () => {
-        it('should create a new world', () => {
-            scene.start();
-            expect(scene.world).to.be.ok;
-        });
         it('should create a new grid renderer', () => {
             scene.start();
             let gridRenderer = scene.findObject('GridRenderer');
