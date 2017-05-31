@@ -62,6 +62,10 @@
       <SubType>Code</SubType>
     </Content>
     <Content Include="tsconfig.json" />
+    <TypeScriptCompile Include="src\dbs\sfx-db.ts" />
+    <TypeScriptCompile Include="src\engine\audio-source-object.ts" />
+    <TypeScriptCompile Include="src\engine\test\mock-dom.ts" />
+    <TypeScriptCompile Include="src\engine\utils\audio.ts" />
     <TypeScriptCompile Include="src\entity.ts" />
     <TypeScriptCompile Include="src\lighting-object.ts" />
     <TypeScriptCompile Include="src\dbs\test\gui-db.spec.ts">
@@ -108,10 +112,6 @@
       <SubType>Code</SubType>
       <TestFramework>Mocha</TestFramework>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="src\engine\test\mock-element.ts">
-      <TestFramework>
-      </TestFramework>
-    </TypeScriptCompile>
     <TypeScriptCompile Include="src\engine\utils\index.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
@@ -134,6 +134,8 @@
     <TypeScriptCompile Include="src\player.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="src\preload-strategies\sfx-preload-strategy.ts" />
+    <TypeScriptCompile Include="src\preload-strategies\test\sfx-preload-strategy.spec.ts" />
     <TypeScriptCompile Include="src\scenes\dungeon-scene.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
@@ -242,16 +244,6 @@
     <TypeScriptCompile Include="src\test\grid-renderer.spec.ts">
       <SubType>Code</SubType>
       <TestFramework>Mocha</TestFramework>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="src\engine\test\mock-document.ts">
-      <SubType>Code</SubType>
-      <TestFramework>
-      </TestFramework>
-    </TypeScriptCompile>
-    <TypeScriptCompile Include="src\engine\test\mock-image.ts">
-      <SubType>Code</SubType>
-      <TestFramework>
-      </TestFramework>
     </TypeScriptCompile>
     <TypeScriptCompile Include="src\engine\test\resource-loader.spec.ts">
       <SubType>Code</SubType>

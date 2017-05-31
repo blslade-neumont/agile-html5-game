@@ -43,7 +43,7 @@ export class ResourceLoader {
 
         this._resourcesLoading++;
         if (this.DEBUG_RESOURCES) console.log(`Loading image: '${src}'`);
-        let img = new Image();
+        let img = document.createElement('img');
         this._images.set(src, img);
         img.onload = () => {
             this._resourcesLoaded++;
@@ -61,7 +61,7 @@ export class ResourceLoader {
 
         this._resourcesLoading++;
         if (this.DEBUG_RESOURCES) console.log(`Loading audio: '${src}'`);
-        let aud = new Audio();
+        let aud = document.createElement('audio');
         this._audio.set(src, aud);
         aud.onloadeddata = () => {
             this._resourcesLoaded++;

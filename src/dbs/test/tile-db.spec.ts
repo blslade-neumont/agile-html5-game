@@ -6,7 +6,7 @@ import * as sinonChai from 'sinon-chai';
 use(sinonChai);
 
 import { World } from '../../world';
-import { Game, GameScene, Rect } from '../../engine';
+import { Game, GameScene, Rect, AudioSourceObject } from '../../engine';
 import { MockGame } from '../../engine/test';
 import { tiles } from '../tile-db';
 import { DungeonScene } from '../../scenes/dungeon-scene';
@@ -46,30 +46,33 @@ describe('dbs/tiles', () => {
     });
     
     describe('teleporter', () => {
-        it('should not navigate to an DungeonScene when the player collides if they are still moving', () => {
-            (<any>scene).dungeon = new DungeonScene();
-            let ent = new Entity('Player', { maxHealth: 10, x: 0, y: 0, collisionBounds: new Rect(0, 32, 0, 32), speed: 10 });
+        let ent: Entity;
+        let dung: DungeonScene;
+        beforeEach(() => {
+            dung = (<any>scene).dungeon = new DungeonScene();
+            ent = new Entity('Player', { maxHealth: 10, x: 0, y: 0, collisionBounds: new Rect(0, 32, 0, 32) });
             scene.addObject(ent);
-            sinon.spy(game, 'changeScene');
             sinon.stub(world, 'getTileAt').withArgs(0, 0).returns(tiles['teleporter']);
+        });
+
+        it('should not navigate to a DungeonScene when the player collides if they are still moving', () => {
+            ent.speed = 10;
+            sinon.spy(game, 'changeScene');
             world.tick(.02);
             expect(game.changeScene).not.to.have.been.called;
         });
+        it('should play a sound when it navigates to the DungeonScene', () => {
+            sinon.spy(dung, 'addObject');
+            world.tick(.02);
+            expect(dung.addObject).to.have.been.calledOnce.calledWith(sinon.match.instanceOf(AudioSourceObject));
+        });
         it('should navigate to an DungeonScene when the player lands', () => {
-            (<any>scene).dungeon = new DungeonScene();
-            let ent = new Entity('Player', { maxHealth: 10, x: 0, y: 0, collisionBounds: new Rect(0, 32, 0, 32) });
-            scene.addObject(ent);
             sinon.spy(game, 'changeScene');
-            sinon.stub(world, 'getTileAt').withArgs(0, 0).returns(tiles['teleporter']);
             world.tick(.02);
             expect(game.changeScene).to.have.been.calledOnce.calledWith(sinon.match.instanceOf(DungeonScene));
         });
         it('should preserve the game time when it navigates to a DungeonScene', () => {
-            let dung = (<any>scene).dungeon = new DungeonScene();
-            let ent = new Entity('Player', { maxHealth: 10, x: 0, y: 0, collisionBounds: new Rect(0, 32, 0, 32) });
-            scene.addObject(ent);
             sinon.spy(game, 'changeScene');
-            sinon.stub(world, 'getTileAt').withArgs(0, 0).returns(tiles['teleporter']);
             world.gameTime = 2953;
             world.tick(.02);
             expect(dung.world.gameTime).to.be.closeTo(world.gameTime, .00001);
@@ -79,6 +82,7 @@ describe('dbs/tiles', () => {
     describe('dungeonTeleporter', () => {
         let dungScene: DungeonScene;
         let returnScene: GameScene;
+        let ent: Entity;
         beforeEach(() => {
             dungScene = scene = new DungeonScene();
             game.changeScene(scene);
@@ -96,27 +100,28 @@ describe('dbs/tiles', () => {
                 world: returnWorld
             };
             dungScene.enter(returnScene, 0, 0);
+
+            ent = <Entity>dungScene.findObject('Player');
+            sinon.stub(dungScene.world, 'getTileAt').withArgs(0, 0).returns(tiles['dungeonTeleporter']);
         });
 
         it('should not navigate to the previous scene when the player collides if they are still moving', () => {
-            let ent = <Entity>dungScene.findObject('Player');
             ent.speed = 10;
             sinon.spy(game, 'changeScene');
-            sinon.stub(dungScene.world, 'getTileAt').withArgs(0, 0).returns(tiles['dungeonTeleporter']);
             dungScene.world.tick(.02);
             expect(game.changeScene).not.to.have.been.called;
         });
+        it('should play a sound when it navigates to the DungeonScene', () => {
+            sinon.spy(returnScene, 'addObject');
+            dungScene.world.tick(.02);
+            expect(returnScene.addObject).to.have.been.calledOnce.calledWith(sinon.match.instanceOf(AudioSourceObject));
+        });
         it('should navigate to the previous scene when the player lands', () => {
-            let ent = <Entity>dungScene.findObject('Player');
             sinon.spy(game, 'changeScene');
-            sinon.stub(dungScene.world, 'getTileAt').withArgs(0, 0).returns(tiles['dungeonTeleporter']);
             dungScene.world.tick(.02);
             expect(game.changeScene).to.have.been.calledOnce.calledWith(returnScene);
         });
         it('should preserve the game time when it navigates to the previous scene', () => {
-            let ent = <Entity>dungScene.findObject('Player');
-            sinon.spy(game, 'changeScene');
-            sinon.stub(dungScene.world, 'getTileAt').withArgs(0, 0).returns(tiles['dungeonTeleporter']);
             dungScene.world.gameTime = 28582.5;
             dungScene.world.tick(.02);
             expect((<any>returnScene).world.gameTime).to.be.closeTo(dungScene.world.gameTime, .00001);
