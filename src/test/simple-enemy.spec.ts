@@ -24,6 +24,17 @@ describe('SimpleEnemy', () => {
         expect(enemy.sprite).to.deep.eq(alives['bat-south'].sprite);
     });
 
+    describe('getMove', () => {
+        it('should not move directly opposite its last move', () => {
+            let l: number = (<any>enemy).getMove();
+            for (let i: number = 0; i < 50; ++i) {
+                let c: number = (<any>enemy).getMove();
+                expect((c+2)%4).to.not.eq(l);
+                l = c;
+            }
+        });
+    });
+
     describe('animation', () => {
         it('should change the sprite to enemy-north if the enemy is moving north', () => {
             enemy.addToScene(<any>{

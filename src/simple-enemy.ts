@@ -37,8 +37,8 @@ export class SimpleEnemy extends Entity {
 
     private getMove(): number {
         let r = Math.random();
-        let i: number = this._moves[Math.floor(fmod(r * 7919, 3.0))];
-        this._moves = [0, 1, 2, 3].filter(x => x != ((i + 2) % 4));
+        let i: number = this._moves[Math.floor(r * 3.0)];
+        this._moves = [0, 1, 2, 3].filter(x => (x != ((i + 2) % 4)));
         return i;
     }
 
@@ -51,7 +51,7 @@ export class SimpleEnemy extends Entity {
             if ((i == 0)) { v = -MOVE_SPEED; }
             else if ((i == 1)) { h = +MOVE_SPEED; }
             else if ((i == 2)) { v = +MOVE_SPEED; }
-            else if ((i == 3)) { h = -MOVE_SPEED;}
+            else if ((i == 3)) { h = -MOVE_SPEED; }
         }
 
         this.snapToTile(h, v);
