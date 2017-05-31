@@ -16,7 +16,7 @@ export interface EntityOptions extends GameObjectOptions {
 const MOVE_SPEED = 4 * 30;
 const SIZE = 32;
 const OFFSET: number = (TILE_SIZE - SIZE) / 2.0;
-const CLOSE_ENOUGH: number = 3.0;
+const CLOSE_ENOUGH: number = 1.0;
 
 export class Entity extends GameObject {
     constructor(name: string, opts: EntityOptions) {
@@ -104,20 +104,26 @@ export class Entity extends GameObject {
         let thisTileX: number = fmod(this.x, TILE_SIZE);
         let thisTileY: number = fmod(this.y, TILE_SIZE);
 
-        console.log(thisTileX);
-        console.log(CLOSE_ENOUGH);
-        if ((Math.abs(h) < CLOSE_ENOUGH) && (Math.abs(thisTileX - OFFSET) < CLOSE_ENOUGH)) {
-            this.x = OFFSET + Math.floor(this.x / TILE_SIZE) * TILE_SIZE;
+        let stopH: boolean = (Math.abs(h) < CLOSE_ENOUGH);
+        if (stopH && (thisTileX <= CLOSE_ENOUGH)) {
+            this.x = OFFSET + (Math.floor(this.x / TILE_SIZE)) * TILE_SIZE;
+            this.hspeed = 0.0;
+        } else if (stopH && ((thisTileX + CLOSE_ENOUGH) >= TILE_SIZE)) {
+            this.x = OFFSET + (Math.floor(this.x / TILE_SIZE) + 1) * TILE_SIZE;
             this.hspeed = 0.0;
         } else {
-            this.hspeed = ((Math.abs(h) < CLOSE_ENOUGH) ? this.hspeed : h);
+            this.hspeed = (stopH ? this.hspeed : h);
         }
 
-        if ((Math.abs(v) < CLOSE_ENOUGH) && (Math.abs(thisTileY - OFFSET) < CLOSE_ENOUGH)) {
+        let stopV: boolean = (Math.abs(v) < CLOSE_ENOUGH);
+        if (stopV && (thisTileY <= CLOSE_ENOUGH)) {
+            this.y = OFFSET + (Math.floor(this.y / TILE_SIZE)) * TILE_SIZE;
             this.vspeed = 0.0;
-            this.y = OFFSET + Math.floor(this.y / TILE_SIZE) * TILE_SIZE;
+        } else if (stopV && ((thisTileY + CLOSE_ENOUGH) >= TILE_SIZE)) {
+            this.y = OFFSET + (Math.floor(this.y / TILE_SIZE) + 1) * TILE_SIZE;
+            this.vspeed = 0.0;
         } else {
-            this.vspeed = ((Math.abs(v) < CLOSE_ENOUGH) ? this.vspeed : v);
+            this.vspeed = (stopV ? this.vspeed : v);
         }
     }
 

@@ -196,8 +196,10 @@ export let tiles: { [name: string]: WorldTile } =
             },
             isSolid: false,
             onLand: (entity) => {
-                let scene = <any>entity.scene;
-                scene.dungeon.enter(scene, entity.x, entity.y);
+                if (entity.name == "Player") {
+                    let scene = <any>entity.scene;
+                    scene.dungeon.enter(scene, entity.x, entity.y);
+                }
             }
         },
 
@@ -208,8 +210,10 @@ export let tiles: { [name: string]: WorldTile } =
             },
             isSolid: false,
             onLand: (entity) => {
-                let scene = <any>entity.scene;
-                scene.exit();
+                if (entity.name == "Player") {
+                    let scene = <any>entity.scene;
+                    scene.exit();
+                }
             }
         }
     };

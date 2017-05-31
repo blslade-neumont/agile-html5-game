@@ -6,6 +6,7 @@ import { InGameGuiObject } from '../in-game-gui-object';
 import { DungeonScene } from './dungeon-scene';
 import { LightingObject } from '../lighting-object';
 import { sfx } from '../dbs/sfx-db';
+import { SimpleEnemy } from '../simple-enemy';
 
 export class OverworldScene extends GameScene {
     constructor() {
@@ -47,6 +48,10 @@ export class OverworldScene extends GameScene {
         this.addObject(new LightingObject(1, true));
 
         this.addObject(new InGameGuiObject());
+
+        for (let i: number = 0; i < 100; ++i) {
+            this.addObject(new SimpleEnemy({ maxHealth: 5, x: Math.random() * 1000, y: Math.random() * 1000 }));
+        }
 
         this.addObject(new AudioSourceObject('Music', sfx['overworldMusic'], { shouldLoop: true }));
 

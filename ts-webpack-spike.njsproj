@@ -149,6 +149,9 @@
     <TypeScriptCompile Include="src\scenes\test\overworld-scene.spec.ts" />
     <TypeScriptCompile Include="src\scenes\test\title-scene.spec.ts" />
     <TypeScriptCompile Include="src\scenes\title-scene.ts" />
+    <TypeScriptCompile Include="src\simple-enemy.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="src\test\agile-game.spec.ts">
       <SubType>Code</SubType>
       <TestFramework>Mocha</TestFramework>
@@ -216,6 +219,9 @@
     <TypeScriptCompile Include="src\preload-strategies\test\tile-preload-strategy.spec.ts">
       <SubType>Code</SubType>
       <TestFramework>Mocha</TestFramework>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="src\test\simple-enemy.spec.ts">
+      <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="src\test\world.spec.ts">
       <TestFramework>Mocha</TestFramework>

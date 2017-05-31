@@ -38,7 +38,6 @@ export class DungeonScene extends GameScene {
 
         let otherWorld = <World>(fromScene.findObject('World') || (<any>fromScene).world);
         if (otherWorld) this.world.gameTime = otherWorld.gameTime;
-
         this.addObject(new AudioSourceObject('EnterDungeonSound', sfx['teleport'], { x: this.player.x, y: this.player.y }));
     }
     exit() {
