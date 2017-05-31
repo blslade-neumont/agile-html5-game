@@ -180,6 +180,13 @@ export class Entity extends GameObject {
 
     }
 
+    recoverDamage(amt: number) {
+        if (!this.isAlive) throw new Error('This entity is already dead!');
+        if (amt < 0) throw new Error('Cannot heal a negative amount');
+        this.currentHealth += amt;
+        return true;
+    }
+
     takeDamage(amt: number) {
         if (!this.isAlive) throw new Error('This entity is already dead!');
         if (amt < 0) throw new Error(`Cannot take negative damage`);

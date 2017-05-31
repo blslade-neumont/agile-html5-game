@@ -1,9 +1,11 @@
 ﻿import { SpriteT } from '../engine';
+import { Player } from '../player'
 
 export const ITEM_SIZE: number = 24;
 
 export interface GameItem {
-    sprite: SpriteT
+    sprite: SpriteT,
+    onUse?: (player: Player) => void,
 };
 
 export let items: { [name: string]: GameItem } =
@@ -12,8 +14,11 @@ export let items: { [name: string]: GameItem } =
         {
             sprite: {
                 src: 'images/Icons/IconSet.png',
-                tileset: { width: ITEM_SIZE, height: ITEM_SIZE, tilex: 12, tiley: 8 }
+                tileset: { width: ITEM_SIZE, height: ITEM_SIZE, tilex: 12, tiley: 8 },
             },
+            onUse: (player) => {
+                player.recoverDamage(1);
+            }
         },
         plant_2:
         {
@@ -21,6 +26,9 @@ export let items: { [name: string]: GameItem } =
                 src: 'images/Icons/IconSet.png',
                 tileset: { width: ITEM_SIZE, height: ITEM_SIZE, tilex: 12, tiley: 9 }
             },
+            onUse: (player) => {
+                player.recoverDamage(2);
+            }
         },
         plant_3:
         {
@@ -28,6 +36,9 @@ export let items: { [name: string]: GameItem } =
                 src: 'images/Icons/IconSet.png',
                 tileset: { width: ITEM_SIZE, height: ITEM_SIZE, tilex: 12, tiley: 10 }
             },
+            onUse: (player) => {
+                player.recoverDamage(3);
+            }
         },
         plant_4:
         {
@@ -35,6 +46,9 @@ export let items: { [name: string]: GameItem } =
                 src: 'images/Icons/IconSet.png',
                 tileset: { width: ITEM_SIZE, height: ITEM_SIZE, tilex: 12, tiley: 11 }
             },
+            onUse: (player) => {
+                player.recoverDamage(4);
+            }
         },
         plant_5:
         {
@@ -42,6 +56,9 @@ export let items: { [name: string]: GameItem } =
                 src: 'images/Icons/IconSet.png',
                 tileset: { width: ITEM_SIZE, height: ITEM_SIZE, tilex: 12, tiley: 12 }
             },
+            onUse: (player) => {
+                player.recoverDamage(1);
+            }
         },
         plant_6:
         {
@@ -49,6 +66,9 @@ export let items: { [name: string]: GameItem } =
                 src: 'images/Icons/IconSet.png',
                 tileset: { width: ITEM_SIZE, height: ITEM_SIZE, tilex: 12, tiley: 13 }
             },
+            onUse: (player) => {
+                player.recoverDamage(1);
+            }
         },
         plant_7:
         {
@@ -56,6 +76,9 @@ export let items: { [name: string]: GameItem } =
                 src: 'images/Icons/IconSet.png',
                 tileset: { width: ITEM_SIZE, height: ITEM_SIZE, tilex: 12, tiley: 14 }
             },
+            onUse: (player) => {
+                player.recoverDamage(1);
+            }
         },
         plant_8:
         {
@@ -63,6 +86,9 @@ export let items: { [name: string]: GameItem } =
                 src: 'images/Icons/IconSet.png',
                 tileset: { width: ITEM_SIZE, height: ITEM_SIZE, tilex: 12, tiley: 15 }
             },
+            onUse: (player) => {
+                player.recoverDamage(1);
+            }
         },
         crop_carrot:
         {
@@ -70,6 +96,9 @@ export let items: { [name: string]: GameItem } =
                 src: 'images/Icons/IconSet.png',
                 tileset: { width: ITEM_SIZE, height: ITEM_SIZE, tilex: 18, tiley: 0 }
             },
+            onUse: (player) => {
+                player.recoverDamage(300);
+            }
         }
     };
 

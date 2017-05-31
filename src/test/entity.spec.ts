@@ -365,6 +365,28 @@ describe('Entity', () => {
             ent.tick(.02);
             expect(ent.damageImmunity).to.be.lessThan(prevDamageImmunity);
         });
+    }); 
+
+    describe('.recoverDamage', () => {
+        it('should throw an error if the entity is dead', () => {
+            ent.kill();
+            expect(() => ent.recoverDamage(2)).to.throw(/already dead/i);
+        });
+        it('should throw an error if the recover amount is negative', () => {
+            expect(() => ent.recoverDamage(-2)).to.throw(/cannot heal a negative/i);
+        });
+        it('should clamp the healed amount to the max health if it would surpass the max health', () => {
+            ent = new Entity('name', { maxHealth: 10, currentHealth: 8 });
+            ent.recoverDamage(999);
+            expect(ent.currentHealth).to.be.eq(ent.maxHealth);
+        });
+        it('should restore the correct amount of health', () => {
+            let startingHealth = 8;
+            let recoverAmount = 1;
+            ent = new Entity('name', { maxHealth: 10, currentHealth: startingHealth });
+            ent.recoverDamage(recoverAmount);
+            expect(ent.currentHealth).to.be.eq(startingHealth + recoverAmount);
+        });
     });
 
     describe('.takeDamage', () => {

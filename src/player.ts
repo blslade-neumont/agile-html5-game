@@ -70,4 +70,10 @@ export class Player extends Entity {
         }));
         super.kill();
     }
+
+    private _inventory
+    get inventory() {
+        return this._inventory;
+    }
+
 }
