@@ -14,10 +14,11 @@ const MOVE_SPEED = 4 * 30;
 export class SimpleEnemy extends Entity {
     constructor(opts: EntityOptions = { maxHealth: 5 }) {
         super("Simple Enemy", merge({
-            sprite: alives['player-south'].sprite,
+            sprite: alives['bat-south'].sprite,
             collisionBounds: new Rect(0, SIZE, 0, SIZE),
             takeDamageSound: sfx['playerDamage'],
-            killSound: sfx['playerDeath']
+            killSound: sfx['playerDeath'],
+            flying: true
         }, opts));
     }
 
@@ -58,10 +59,10 @@ export class SimpleEnemy extends Entity {
         super.tick(delta);
 
         this.animationSpeed = this.speed > 0 ? .2 : 0;
-        if (this.hspeed > 0) this.sprite = alives['player-east'].sprite;
-        else if (this.hspeed < 0) this.sprite = alives['player-west'].sprite;
-        else if (this.vspeed > 0) this.sprite = alives['player-south'].sprite;
-        else if (this.vspeed < 0) this.sprite = alives['player-north'].sprite;
+        if (this.hspeed > 0) this.sprite = alives['bat-east'].sprite;
+        else if (this.hspeed < 0) this.sprite = alives['bat-west'].sprite;
+        else if (this.vspeed > 0) this.sprite = alives['bat-south'].sprite;
+        else if (this.vspeed < 0) this.sprite = alives['bat-north'].sprite;
 
     }
 

@@ -96,7 +96,9 @@ export let tiles: { [name: string]: WorldTile } =
             }],
             isSolid: false,
             onTick: (delta, entity) => {
-                entity.takeDamage(3);
+                if (!entity.flying) {
+                    entity.takeDamage(3);
+                }
             }
         },
         lava_left: {
@@ -112,7 +114,9 @@ export let tiles: { [name: string]: WorldTile } =
             },
             isSolid: false,
             onTick: (delta, entity) => {
-                entity.takeDamage(3);
+                if (!entity.flying) {
+                    entity.takeDamage(3);
+                }
             }
         },
         lava_right: {
@@ -128,7 +132,9 @@ export let tiles: { [name: string]: WorldTile } =
             },
             isSolid: false,
             onTick: (delta, entity) => {
-                entity.takeDamage(3);
+                if (!entity.flying) {
+                    entity.takeDamage(3);
+                }
             }
         },
         water: {
@@ -138,7 +144,9 @@ export let tiles: { [name: string]: WorldTile } =
             },
             isSolid: false,
             onTick: (delta, entity) => {
-                entity.takeDamage(1);
+                if (!entity.flying) {
+                    entity.takeDamage(1);
+                }
             }
         },
         water_left: {
@@ -154,7 +162,9 @@ export let tiles: { [name: string]: WorldTile } =
             },
             isSolid: false,
             onTick: (delta, entity) => {
-                entity.takeDamage(1);
+                if (!entity.flying) {
+                    entity.takeDamage(1);
+                }
             }
         },
         water_right: {
@@ -170,7 +180,9 @@ export let tiles: { [name: string]: WorldTile } =
             },
             isSolid: false,
             onTick: (delta, entity) => {
-                entity.takeDamage(1);
+                if (!entity.flying) {
+                    entity.takeDamage(1);
+                }
             }
         },
 

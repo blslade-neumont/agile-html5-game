@@ -8,6 +8,7 @@ export interface EntityOptions extends GameObjectOptions {
     currentHealth?: number,
     damageImmunity?: number,
     damageImmunityTimer?: number,
+    flying?: boolean,
 
     takeDamageSound?: AudioT | null,
     killSound?: AudioT | null
@@ -37,11 +38,18 @@ export class Entity extends GameObject {
 
         if (typeof opts.takeDamageSound !== 'undefined') this.takeDamageSound = opts.takeDamageSound;
         if (typeof opts.killSound !== 'undefined') this.killSound = opts.killSound;
+        if (typeof opts.flying !== 'undefined') this._flying = opts.flying;
+
     }
 
     private _maxHealth = 1;
     get maxHealth() {
         return this._maxHealth;
+    }
+
+    private _flying: boolean = false;
+    get flying() {
+        return this._flying;
     }
 
     private _currentHealth = 1;

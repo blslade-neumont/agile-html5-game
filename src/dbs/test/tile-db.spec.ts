@@ -34,13 +34,22 @@ describe('dbs/tiles', () => {
     ];
     damageTiles.forEach(([tileType, damageAmount]) => {
         describe(tileType, () => {
-            it(`should invoke Entity.takeDamage with ${damageAmount} damage when an entity ticks`, () => {
-                let ent = new Entity('name', { maxHealth: 10, x: 0, y: 0, collisionBounds: new Rect(0, 32, 0, 32) });
+            it(`should invoke Entity.takeDamage with ${damageAmount} damage when a non-flying entity ticks`, () => {
+                let ent = new Entity('name', { maxHealth: 10, x: 0, y: 0, collisionBounds: new Rect(0, 32, 0, 32), flying: false });
                 scene.addObject(ent);
                 sinon.spy(ent, 'takeDamage');
                 sinon.stub(world, 'getTileAt').withArgs(0, 0).returns(tiles[tileType]);
                 world.tick(.02);
                 expect(ent.takeDamage).to.have.been.calledOnce.calledWith(damageAmount);
+            });
+
+            it(`should not invoke Entity.takeDamage when a flying entity ticks`, () => {
+                let ent = new Entity('name', { maxHealth: 10, x: 0, y: 0, collisionBounds: new Rect(0, 32, 0, 32), flying: true });
+                scene.addObject(ent);
+                sinon.spy(ent, 'takeDamage');
+                sinon.stub(world, 'getTileAt').withArgs(0, 0).returns(tiles[tileType]);
+                world.tick(.02);
+                expect(ent.takeDamage).to.not.have.been.called;
             });
         });
     });
@@ -70,6 +79,12 @@ describe('dbs/tiles', () => {
             sinon.spy(game, 'changeScene');
             world.tick(.02);
             expect(game.changeScene).to.have.been.calledOnce.calledWith(sinon.match.instanceOf(DungeonScene));
+        });
+        it('should not navigate to an DungeonScene when a non-player lands', () => {
+            sinon.spy(game, 'changeScene');
+            (<any>ent).name = "Non-Player";
+            world.tick(.02);
+            expect(game.changeScene).to.not.have.been.called;
         });
         it('should preserve the game time when it navigates to a DungeonScene', () => {
             sinon.spy(game, 'changeScene');
@@ -120,6 +135,12 @@ describe('dbs/tiles', () => {
             sinon.spy(game, 'changeScene');
             dungScene.world.tick(.02);
             expect(game.changeScene).to.have.been.calledOnce.calledWith(returnScene);
+        });
+        it('should not navigate to the previous scene when a non-player lands', () => {
+            sinon.spy(game, 'changeScene');
+            (<any>ent).name = "Non-Player";
+            dungScene.world.tick(.02);
+            expect(game.changeScene).to.not.have.been.called;
         });
         it('should preserve the game time when it navigates to the previous scene', () => {
             dungScene.world.gameTime = 28582.5;
