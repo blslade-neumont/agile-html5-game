@@ -7,6 +7,8 @@ use(sinonChai);
 
 import { Entity } from '../entity';
 import { GameObject } from '../engine';
+import { MockEventQueue } from './mock-event-queue';
+import { MockWorld } from './mock-world';
 
 describe('Entity', () => {
     let ent: Entity;
@@ -114,6 +116,238 @@ describe('Entity', () => {
     });
 
     describe('.tick', () => {
+        describe('physics', () => {
+            it('should allow the entity to move upwards when next to a right blocked tile', () => {
+                let entity: Entity = new Entity("testEnt", { maxHealth: 5, vspeed: -15 });
+                entity.addToScene(<any>{
+                    game: {
+                        eventQueue: new MockEventQueue()
+                    },
+                    world: new MockWorld(' X',
+                        ' X',
+                        ' X')
+                });
+                let [oldX, oldY] = [entity.x = 0, entity.y = 32];
+                entity.tick(.02);
+                expect(entity.x).to.be.eq(oldX);
+                expect(entity.y).to.be.lessThan(oldY);
+            });
+
+            it('should allow the entity to move downwards when next to a right blocked tile', () => {
+                let entity: Entity = new Entity("testEnt", { maxHealth: 5, vspeed: 15 });
+                entity.addToScene(<any>{
+                    game: {
+                        eventQueue: new MockEventQueue(),
+                    },
+                    world: new MockWorld(' X',
+                        ' X',
+                        ' X')
+                });
+                let [oldX, oldY] = [entity.x = 0, entity.y = 32];
+                entity.tick(.02);
+                expect(entity.x).to.be.eq(oldX);
+                expect(entity.y).to.be.greaterThan(oldY);
+            });
+
+            it('should allow the entity to move upwards when next to a left blocked tile', () => {
+                let entity: Entity = new Entity("testEnt", { maxHealth: 5, vspeed: -15 });
+                entity.addToScene(<any>{
+                    game: {
+                        eventQueue: new MockEventQueue(),
+                    },
+                    world: new MockWorld('X ',
+                        'X ',
+                        'X ')
+                });
+                let [oldX, oldY] = [entity.x = 32, entity.y = 32];
+                entity.tick(.02);
+                expect(entity.x).to.be.eq(oldX);
+                expect(entity.y).to.be.lessThan(oldY);
+            });
+
+            it('should allow the entity to move downwards when next to a left blocked tile', () => {
+                let entity: Entity = new Entity("testEnt", { maxHealth: 5, vspeed: 15 });
+                entity.addToScene(<any>{
+                    game: {
+                        eventQueue: new MockEventQueue()
+                    },
+                    world: new MockWorld('X ',
+                        'X ',
+                        'X ')
+                });
+                let [oldX, oldY] = [entity.x = 32, entity.y = 32];
+                entity.tick(.02);
+                expect(entity.x).to.be.eq(oldX);
+                expect(entity.y).to.be.greaterThan(oldY);
+            });
+
+            it('should allow the entity to move right when next to a top blocked tile', () => {
+                let entity: Entity = new Entity("testEnt", { maxHealth: 5, hspeed: 15 });
+                entity.addToScene(<any>{
+                    game: {
+                        eventQueue: new MockEventQueue()
+                    },
+                    world: new MockWorld('XXX')
+                });
+                let [oldX, oldY] = [entity.x = 32, entity.y = 32];
+                entity.tick(.02);
+                expect(entity.x).to.be.greaterThan(oldX);
+                expect(entity.y).to.be.eq(oldY);
+            });
+
+            it('should allow the entity to move left when next to a top blocked tile', () => {
+                let entity: Entity = new Entity("testEnt", { maxHealth: 5, hspeed: -15 });
+                entity.addToScene(<any>{
+                    game: {
+                        eventQueue: new MockEventQueue()
+                    },
+                    world: new MockWorld('XXX')
+                });
+                let [oldX, oldY] = [entity.x = 32, entity.y = 32];
+                entity.tick(.02);
+                expect(entity.x).to.be.lessThan(oldX);
+                expect(entity.y).to.be.eq(oldY);
+            });
+
+            it('should allow the entity to move right when next to a bottom blocked tile', () => {
+                let entity: Entity = new Entity("testEnt", { maxHealth: 5, hspeed: 15 });
+                entity.addToScene(<any>{
+                    game: {
+                        eventQueue: new MockEventQueue()
+                    },
+                    world: new MockWorld('   ',
+                        'XXX')
+                });
+                let [oldX, oldY] = [entity.x = 32, entity.y = 0];
+                entity.tick(.02);
+                expect(entity.x).to.be.greaterThan(oldX);
+                expect(entity.y).to.be.eq(oldY);
+            });
+
+            it('should allow the entity to move left when next to a bottom blocked tile', () => {
+                let entity: Entity = new Entity("testEnt", { maxHealth: 5, hspeed: -15 });
+                entity.addToScene(<any>{
+                    game: {
+                        eventQueue: new MockEventQueue()
+                    },
+                    world: new MockWorld('   ',
+                        'XXX')
+                });
+                let [oldX, oldY] = [entity.x = 32, entity.y = 0];
+                entity.tick(.02);
+                expect(entity.x).to.be.lessThan(oldX);
+                expect(entity.y).to.be.eq(oldY);
+            });
+
+            it('should not allow the entity to move into a blocked right tile', () => {
+                let entity: Entity = new Entity("testEnt", { maxHealth: 5, hspeed: 15 });
+                entity.addToScene(<any>{
+                    game: {
+                        eventQueue: new MockEventQueue()
+                    },
+                    world: new MockWorld(' X')
+                });
+                let [oldX, oldY] = [entity.x = 0, entity.y = 0];
+                entity.tick(.2);
+                expect([oldX, oldY]).to.deep.eq([entity.x, entity.y]);
+            });
+
+            it('should allow the entity to move into a non-blocked right tile', () => {
+                let entity: Entity = new Entity("testEnt", { maxHealth: 5, hspeed: 15 });
+                entity.addToScene(<any>{
+                    game: {
+                        eventQueue: new MockEventQueue()
+                    },
+                    world: new MockWorld()
+                });
+                let [oldX, oldY] = [entity.x = 0, entity.y = 0];
+                entity.tick(.02);
+                expect(entity.x).to.be.greaterThan(oldX);
+                expect(entity.y).to.be.eq(oldY);
+            });
+
+            it('should not allow the entity to move into a blocked left tile', () => {
+                let entity: Entity = new Entity("testEnt", { maxHealth: 5, hspeed: -15 });
+                entity.addToScene(<any>{
+                    game: {
+                        eventQueue: new MockEventQueue()
+                    },
+                    world: new MockWorld('X ')
+                });
+                let [oldX, oldY] = [entity.x = 32, entity.y = 0];
+                entity.tick(.2);
+                expect([oldX, oldY]).to.deep.eq([entity.x, entity.y]);
+            });
+
+            it('should allow the entity to move into a non-blocked left tile', () => {
+                let entity: Entity = new Entity("testEnt", { maxHealth: 5, hspeed: -15 });
+                entity.addToScene(<any>{
+                    game: {
+                        eventQueue: new MockEventQueue()
+                    },
+                    world: new MockWorld()
+                });
+                let [oldX, oldY] = [entity.x = 0, entity.y = 0];
+                entity.tick(.02);
+                expect(entity.x).to.be.lessThan(oldX);
+                expect(entity.y).to.be.eq(oldY);
+            });
+
+            it('should not allow the entity to move into a blocked top tile', () => {
+                let entity: Entity = new Entity("testEnt", { maxHealth: 5, vspeed: -15 });
+                entity.addToScene(<any>{
+                    game: {
+                        eventQueue: new MockEventQueue()
+                    },
+                    world: new MockWorld('X', ' ')
+                });
+                let [oldX, oldY] = [entity.x = 0, entity.y = 32];
+                entity.tick(.2);
+                expect([oldX, oldY]).to.deep.eq([entity.x, entity.y]);
+            });
+
+            it('should allow the entity to move into a non-blocked top tile', () => {
+                let entity: Entity = new Entity("testEnt", { maxHealth: 5, vspeed: -15 });
+                entity.addToScene(<any>{
+                    game: {
+                        eventQueue: new MockEventQueue()
+                    },
+                    world: new MockWorld()
+                });
+                let [oldX, oldY] = [entity.x = 0, entity.y = 0];
+                entity.tick(.02);
+                expect(entity.x).to.be.eq(oldX);
+                expect(entity.y).to.be.lessThan(oldY);
+            });
+
+            it('should not allow the entity to move into a blocked bottom tile', () => {
+                let entity: Entity = new Entity("testEnt", { maxHealth: 5, vspeed: 15 });
+                entity.addToScene(<any>{
+                    game: {
+                        eventQueue: new MockEventQueue()
+                    },
+                    world: new MockWorld('', 'X')
+                });
+                let [oldX, oldY] = [entity.x = 0, entity.y = 0];
+                entity.tick(.2);
+                expect([oldX, oldY]).to.deep.eq([entity.x, entity.y]);
+            });
+
+            it('should allow the entity to move into a non-blocked bottom tile', () => {
+                let entity: Entity = new Entity("testEnt", { maxHealth: 5, vspeed: 15 });
+                entity.addToScene(<any>{
+                    game: {
+                        eventQueue: new MockEventQueue()
+                    },
+                    world: new MockWorld()
+                });
+                let [oldX, oldY] = [entity.x = 0, entity.y = 0];
+                entity.tick(.02);
+                expect(entity.x).to.be.eq(oldX);
+                expect(entity.y).to.be.greaterThan(oldY);
+            });
+        });
+
         it('should invoke super.tick', () => {
             let stub: sinon.SinonStub;
             try {

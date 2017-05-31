@@ -1,4 +1,7 @@
-﻿import { GameObject, GameObjectOptions, clamp, AudioT, AudioSourceObject } from './engine';
+﻿import { GameObject, GameObjectOptions, clamp, AudioT, AudioSourceObject, fmod } from './engine';
+import { World } from './world';
+import { WorldTile, TILE_SIZE } from './dbs/tile-db';
+import { OverworldScene } from './scenes/overworld-scene';
 
 export interface EntityOptions extends GameObjectOptions {
     maxHealth: number,
@@ -9,6 +12,11 @@ export interface EntityOptions extends GameObjectOptions {
     takeDamageSound?: AudioT | null,
     killSound?: AudioT | null
 }
+
+const MOVE_SPEED = 4 * 30;
+const SIZE = 32;
+const OFFSET: number = (TILE_SIZE - SIZE) / 2.0;
+const CLOSE_ENOUGH: number = 3.0;
 
 export class Entity extends GameObject {
     constructor(name: string, opts: EntityOptions) {
@@ -92,9 +100,71 @@ export class Entity extends GameObject {
         this._killSound = val;
     }
 
+    snapToTile(h: number, v: number) {
+        let thisTileX: number = fmod(this.x, TILE_SIZE);
+        let thisTileY: number = fmod(this.y, TILE_SIZE);
+
+        console.log(thisTileX);
+        console.log(CLOSE_ENOUGH);
+        if ((Math.abs(h) < CLOSE_ENOUGH) && (Math.abs(thisTileX - OFFSET) < CLOSE_ENOUGH)) {
+            this.x = OFFSET + Math.floor(this.x / TILE_SIZE) * TILE_SIZE;
+            this.hspeed = 0.0;
+        } else {
+            this.hspeed = ((Math.abs(h) < CLOSE_ENOUGH) ? this.hspeed : h);
+        }
+
+        if ((Math.abs(v) < CLOSE_ENOUGH) && (Math.abs(thisTileY - OFFSET) < CLOSE_ENOUGH)) {
+            this.vspeed = 0.0;
+            this.y = OFFSET + Math.floor(this.y / TILE_SIZE) * TILE_SIZE;
+        } else {
+            this.vspeed = ((Math.abs(v) < CLOSE_ENOUGH) ? this.vspeed : v);
+        }
+    }
+
     tick(delta: number) {
-        super.tick(delta);
+        let nextX: number = this.x + delta * this.hspeed;
+        let nextY: number = this.y + delta * this.vspeed;
+
+        let nextMinX: number = nextX;
+        let nextMinY: number = nextY;
+        let nextMaxX: number = (nextX + SIZE - 1);
+        let nextMaxY: number = (nextY + SIZE - 1);
+
+        let minTX: number = Math.floor(nextMinX / TILE_SIZE) * TILE_SIZE;
+        let maxTX: number = Math.floor(nextMaxX / TILE_SIZE) * TILE_SIZE;
+        let minTY: number = Math.floor(nextMinY / TILE_SIZE) * TILE_SIZE;
+        let maxTY: number = Math.floor(nextMaxY / TILE_SIZE) * TILE_SIZE;
+
+        let scene = <OverworldScene>this.scene;
+
+        // right-left collisions
+        if (this.hspeed > 0.0) {
+            if ((nextMaxX > maxTX) && (scene.world.getTileAt(maxTX / TILE_SIZE, minTY / TILE_SIZE).isSolid || scene.world.getTileAt(maxTX / TILE_SIZE, maxTY / TILE_SIZE).isSolid)) {
+                this.x = OFFSET + minTX;
+                this.hspeed = 0.0;
+            }
+        } else if (this.hspeed < 0.0) {
+            if ((nextMinX < maxTX) && (scene.world.getTileAt(minTX / TILE_SIZE, minTY / TILE_SIZE).isSolid || scene.world.getTileAt(minTX / TILE_SIZE, maxTY / TILE_SIZE).isSolid)) {
+                this.x = OFFSET + maxTX;
+                this.hspeed = 0.0;
+            }
+        }
+
+        // bottom-top collision
+        if (this.vspeed > 0.0) {
+            if ((nextMaxY > maxTY) && (scene.world.getTileAt(minTX / TILE_SIZE, maxTY / TILE_SIZE).isSolid || scene.world.getTileAt(maxTX / TILE_SIZE, maxTY / TILE_SIZE).isSolid)) {
+                this.y = OFFSET + minTY;
+                this.vspeed = 0.0;
+            }
+        } else if (this.vspeed < 0.0) {
+            if ((nextMinY < maxTY) && (scene.world.getTileAt(minTX / TILE_SIZE, minTY / TILE_SIZE).isSolid || scene.world.getTileAt(maxTX / TILE_SIZE, minTY / TILE_SIZE).isSolid)) {
+                this.y = OFFSET + maxTY;
+                this.vspeed = 0.0;
+            }
+        }
         this.damageImmunity -= delta;
+        super.tick(delta);
+
     }
 
     takeDamage(amt: number) {
