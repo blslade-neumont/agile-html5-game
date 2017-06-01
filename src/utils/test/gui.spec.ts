@@ -96,7 +96,7 @@ describe('utils/drawGUI', () => {
         drawGUI(<any>{ x: 0, y: 0 }, <any>{ items: [] }, context, game, gui);
         expect(engineUtils.drawSprite).to.have.been.calledOnce.calledWith(any, any, any, (924 / 2) - (100 / 2), (12 / 2) - (60 / 2));
     });
-    xit('should call drawSprite once for the gui, and once again for each item stack in the gui', () => {
+    it('should call drawSprite only once when the inventory is empty (for the gui)', () => {
         let gui = {
             sprite: { src: 'blah' },
             itemSlots: [
@@ -106,7 +106,29 @@ describe('utils/drawGUI', () => {
             ]
         };
         drawGUI(<any>{ x: 0, y: 0 }, <any>{ items: [] }, context, game, gui);
-        expect(drawSpriteStub.callCount).to.eq(3);
+        expect(drawSpriteStub.callCount).to.eq(1);
+    });
+
+    it('should call drawSprite once for the gui, and once again for each item in the inventory', () => {
+        let gui = {
+            sprite: { src: 'blah' },
+            itemSlots: [
+                { x: 5, y: 5, leftIndex: 0, rightIndex: 0, upIndex: 0, downIndex: 0 },
+                { x: 15, y: 5, leftIndex: 0, rightIndex: 0, upIndex: 0, downIndex: 0 },
+                { x: 25, y: 5, leftIndex: 0, rightIndex: 0, upIndex: 0, downIndex: 0 }
+            ]
+        };
+        let item = {
+            sprite: {
+                src: "Fake source"
+            }
+        };
+        drawGUI(<any>{ x: 0, y: 0 }, <any>{
+            items: [
+                item, item
+            ]
+        }, context, game, gui);
+        expect(drawSpriteStub.callCount).to.eq(2 + 1);
     });
 });
 

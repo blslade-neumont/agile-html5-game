@@ -78,7 +78,7 @@ function __export(m) {
 Object.defineProperty(exports, "__esModule", { value: true });
 __export(__webpack_require__(16));
 __export(__webpack_require__(18));
-__export(__webpack_require__(9));
+__export(__webpack_require__(8));
 __export(__webpack_require__(30));
 __export(__webpack_require__(32));
 __export(__webpack_require__(17));
@@ -115,7 +115,7 @@ exports.sfx = {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var item_db_1 = __webpack_require__(8);
+var item_db_1 = __webpack_require__(15);
 exports.TILE_SIZE = 32;
 ;
 exports.tiles = {
@@ -872,28 +872,6 @@ exports.gui = {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ITEM_SIZE = 24;
-;
-exports.items = {
-    crop_carrot: {
-        sprite: {
-            src: 'images/Icons/IconSet.png',
-            tileset: { width: exports.ITEM_SIZE, height: exports.ITEM_SIZE, tilex: 0, tiley: 18 }
-        },
-        onUse: function (player) {
-            player.recoverDamage(300);
-        }
-    }
-};
-
-
-/***/ }),
-/* 9 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
 var math_1 = __webpack_require__(4);
 var Camera = (function () {
     function Camera(_scene) {
@@ -1031,7 +1009,7 @@ exports.Camera = Camera;
 
 
 /***/ }),
-/* 10 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1095,7 +1073,7 @@ exports.measureSprite = measureSprite;
 
 
 /***/ }),
-/* 11 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1161,7 +1139,7 @@ exports.GridRenderer = GridRenderer;
 
 
 /***/ }),
-/* 12 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1180,7 +1158,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var engine_1 = __webpack_require__(0);
 var gui_db_1 = __webpack_require__(7);
 var gui_1 = __webpack_require__(49);
-var item_db_1 = __webpack_require__(8);
 var MenuGuiObject = (function (_super) {
     __extends(MenuGuiObject, _super);
     function MenuGuiObject(gui) {
@@ -1235,12 +1212,10 @@ var MenuGuiObject = (function (_super) {
                 this.inventoryPos = this.currentItem.downIndex;
                 return true;
             }
-            else if (evt.code == 'KeyC') {
-                this.inventory.addItem(item_db_1.items['crop_carrot']);
-            }
             else if (evt.code == 'Enter') {
                 this.inventory.items[this.inventoryPos].onUse(this._playerRef);
                 this.inventory.removeItem(this.inventory.items[this.inventoryPos]);
+                return true;
             }
         }
         return false;
@@ -1258,7 +1233,7 @@ exports.MenuGuiObject = MenuGuiObject;
 
 
 /***/ }),
-/* 13 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1417,7 +1392,7 @@ exports.World = World;
 
 
 /***/ }),
-/* 14 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global, module) {/**
@@ -3631,7 +3606,7 @@ module.exports = merge;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(52), __webpack_require__(53)(module)))
 
 /***/ }),
-/* 15 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3661,6 +3636,28 @@ exports.effects = {
             pivot: { x: 192 / 2 - 16, y: 192 / 2 - 16 }
         }
     },
+};
+
+
+/***/ }),
+/* 15 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.ITEM_SIZE = 24;
+;
+exports.items = {
+    crop_carrot: {
+        sprite: {
+            src: 'images/Icons/IconSet.png',
+            tileset: { width: exports.ITEM_SIZE, height: exports.ITEM_SIZE, tilex: 0, tiley: 18 }
+        },
+        onUse: function (player) {
+            player.recoverDamage(300);
+        }
+    }
 };
 
 
@@ -3850,7 +3847,7 @@ exports.EventQueue = EventQueue;
 Object.defineProperty(exports, "__esModule", { value: true });
 var math_1 = __webpack_require__(4);
 var rect_1 = __webpack_require__(19);
-var render_1 = __webpack_require__(10);
+var render_1 = __webpack_require__(9);
 ;
 var GameObject = (function () {
     function GameObject(name, opts) {
@@ -4190,7 +4187,7 @@ exports.GameObject = GameObject;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var render_1 = __webpack_require__(10);
+var render_1 = __webpack_require__(9);
 var ResourceLoader = (function () {
     function ResourceLoader() {
         this.DEBUG_RESOURCES = false;
@@ -4381,7 +4378,7 @@ var __extends = (this && this.__extends) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var engine_1 = __webpack_require__(0);
 var gui_db_1 = __webpack_require__(7);
-var menu_gui_object_1 = __webpack_require__(12);
+var menu_gui_object_1 = __webpack_require__(11);
 var InGameGuiObject = (function (_super) {
     __extends(InGameGuiObject, _super);
     function InGameGuiObject() {
@@ -4582,7 +4579,7 @@ var entity_1 = __webpack_require__(5);
 var alive_db_1 = __webpack_require__(3);
 var sfx_db_1 = __webpack_require__(1);
 var pause_with_game_1 = __webpack_require__(6);
-var merge = __webpack_require__(14);
+var merge = __webpack_require__(13);
 var bomb_1 = __webpack_require__(27);
 var simple_enemy_1 = __webpack_require__(25);
 var inventory_1 = __webpack_require__(38);
@@ -4715,9 +4712,9 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var engine_1 = __webpack_require__(0);
-var world_1 = __webpack_require__(13);
-var menu_gui_object_1 = __webpack_require__(12);
-var grid_renderer_1 = __webpack_require__(11);
+var world_1 = __webpack_require__(12);
+var menu_gui_object_1 = __webpack_require__(11);
+var grid_renderer_1 = __webpack_require__(10);
 var sfx_db_1 = __webpack_require__(1);
 var TitleScene = (function (_super) {
     __extends(TitleScene, _super);
@@ -4773,7 +4770,7 @@ var __extends = (this && this.__extends) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var entity_1 = __webpack_require__(5);
 var alive_db_1 = __webpack_require__(3);
-var merge = __webpack_require__(14);
+var merge = __webpack_require__(13);
 var sfx_db_1 = __webpack_require__(1);
 var engine_1 = __webpack_require__(0);
 var pause_with_game_1 = __webpack_require__(6);
@@ -5040,7 +5037,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var game_object_1 = __webpack_require__(17);
-var merge = __webpack_require__(14);
+var merge = __webpack_require__(13);
 var AudioSourceObject = (function (_super) {
     __extends(AudioSourceObject, _super);
     function AudioSourceObject(name, audio, opts) {
@@ -5106,7 +5103,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-var camera_1 = __webpack_require__(9);
+var camera_1 = __webpack_require__(8);
 var FollowCamera = (function (_super) {
     __extends(FollowCamera, _super);
     function FollowCamera(scene) {
@@ -5155,7 +5152,7 @@ exports.FollowCamera = FollowCamera;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var camera_1 = __webpack_require__(9);
+var camera_1 = __webpack_require__(8);
 var GameScene = (function () {
     function GameScene(_game) {
         if (_game === void 0) { _game = null; }
@@ -5531,7 +5528,7 @@ __export(__webpack_require__(34));
 __export(__webpack_require__(35));
 __export(__webpack_require__(4));
 __export(__webpack_require__(19));
-__export(__webpack_require__(10));
+__export(__webpack_require__(9));
 __export(__webpack_require__(20));
 
 
@@ -5553,7 +5550,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var engine_1 = __webpack_require__(0);
-var effect_db_1 = __webpack_require__(15);
+var effect_db_1 = __webpack_require__(14);
 var Explosion = (function (_super) {
     __extends(Explosion, _super);
     function Explosion(opts) {
@@ -5678,7 +5675,7 @@ exports.AlivePreloadStrategy = AlivePreloadStrategy;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var effect_db_1 = __webpack_require__(15);
+var effect_db_1 = __webpack_require__(14);
 var EffectPreloadStrategy = (function () {
     function EffectPreloadStrategy() {
     }
@@ -5720,7 +5717,7 @@ exports.GuiPreloadStrategy = GuiPreloadStrategy;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var item_db_1 = __webpack_require__(8);
+var item_db_1 = __webpack_require__(15);
 var ItemPreloadStrategy = (function () {
     function ItemPreloadStrategy() {
     }
@@ -5800,8 +5797,8 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var engine_1 = __webpack_require__(0);
-var world_1 = __webpack_require__(13);
-var grid_renderer_1 = __webpack_require__(11);
+var world_1 = __webpack_require__(12);
+var grid_renderer_1 = __webpack_require__(10);
 var player_1 = __webpack_require__(23);
 var in_game_gui_object_1 = __webpack_require__(21);
 var lighting_object_1 = __webpack_require__(22);
@@ -5918,7 +5915,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var engine_1 = __webpack_require__(0);
-var menu_gui_object_1 = __webpack_require__(12);
+var menu_gui_object_1 = __webpack_require__(11);
 var sfx_db_1 = __webpack_require__(1);
 var GameOverScene = (function (_super) {
     __extends(GameOverScene, _super);
@@ -5954,8 +5951,8 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var engine_1 = __webpack_require__(0);
-var world_1 = __webpack_require__(13);
-var grid_renderer_1 = __webpack_require__(11);
+var world_1 = __webpack_require__(12);
+var grid_renderer_1 = __webpack_require__(10);
 var player_1 = __webpack_require__(23);
 var in_game_gui_object_1 = __webpack_require__(21);
 var dungeon_scene_1 = __webpack_require__(46);
@@ -6039,10 +6036,12 @@ function drawGUI(currentItem, inventory, context, game, gui, imageIndex, default
         context.fillStyle = 'rgba(0, 0, 255, .5)';
         context.fillRect(offset.x + currentItem.x, offset.y + currentItem.y, 28, 28);
     }
-    for (var i = 0; i < inventory.items.length; ++i) {
-        var slot = gui.itemSlots[i];
-        var item = inventory.items[i];
-        drawItemStack(context, game, item, offset.x + slot.x, offset.y + slot.y, 1, imageIndex, defaultFps);
+    if (inventory) {
+        for (var i = 0; i < inventory.items.length; ++i) {
+            var slot = gui.itemSlots[i];
+            var item = inventory.items[i];
+            drawItemStack(context, game, item, offset.x + slot.x, offset.y + slot.y, 1, imageIndex, defaultFps);
+        }
     }
 }
 exports.drawGUI = drawGUI;

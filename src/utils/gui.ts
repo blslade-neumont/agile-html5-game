@@ -35,10 +35,12 @@ export function drawGUI(currentItem: ItemSlotSpec, inventory: Inventory, context
         context.fillRect(offset.x + currentItem.x, offset.y + currentItem.y, 28, 28);
     }
 
-    for (let i: number = 0; i < inventory.items.length; ++i) {
-        let slot = gui.itemSlots[i];
-        let item = inventory.items[i];
-        drawItemStack(context, game, item, offset.x + slot.x, offset.y + slot.y, 1, imageIndex, defaultFps);
+    if (inventory) {
+        for (let i: number = 0; i < inventory.items.length; ++i) {
+            let slot = gui.itemSlots[i];
+            let item = inventory.items[i];
+            drawItemStack(context, game, item, offset.x + slot.x, offset.y + slot.y, 1, imageIndex, defaultFps);
+        }
     }
 }
 

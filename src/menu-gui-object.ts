@@ -51,11 +51,10 @@ export class MenuGuiObject extends GameObject {
                 this.inventoryPos = this.currentItem.upIndex; return true;
             } else if (evt.code == 'KeyS' || evt.code == 'ArrowDown') {
                 this.inventoryPos = this.currentItem.downIndex; return true;
-            } else if (evt.code == 'KeyC') {
-                this.inventory.addItem(items['crop_carrot']);
             } else if (evt.code == 'Enter') {
                 this.inventory.items[this.inventoryPos].onUse(this._playerRef);
                 this.inventory.removeItem(this.inventory.items[this.inventoryPos]);
+                return true;
             }
 
         }

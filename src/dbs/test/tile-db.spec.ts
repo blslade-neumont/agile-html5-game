@@ -191,11 +191,12 @@ describe('dbs/tiles', () => {
                 world.tick(.02);
                 expect(world.setTileAt).not.to.have.been.called;
             });
-            xit(`should add ${itemCount} ${itemType}(s) when the player lands`, () => {
+            it(`should add ${itemCount} ${itemType}(s) when the player lands`, () => {
                 let ent = new Entity('Player', { maxHealth: 10, x: 0, y: 0, collisionBounds: new Rect(0, 32, 0, 32), flying: true });
                 let inventory = (<any>ent).inventory = new Inventory();
                 scene.addObject(ent);
                 sinon.stub(world, 'getTileAt').withArgs(0, 0).returns(tiles[tileType]);
+                sinon.stub(inventory, 'addItem');
                 world.tick(.02);
                 expect(inventory.addItem).to.have.been.calledOnce.calledWith(items[itemType], itemCount);
             });

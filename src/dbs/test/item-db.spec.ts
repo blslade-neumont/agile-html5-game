@@ -9,20 +9,20 @@ import { GameItem, items } from '../item-db';
 import { Player } from '../../player';
 
 describe('dbs/items', () => {
-    let healingItems: [string, number][] = [
-        ['crop_carrot', 300],
-    ];
     let player: Player;
     beforeEach(() => {
         player = new Player({ maxHealth: 1000, currentHealth: 100 });
     });
 
+    let healingItems: [string, number][] = [
+        ['crop_carrot', 300],
+    ];
     healingItems.forEach(([itemType, recoverAmount]) => {
         describe(itemType, () => {
-            xit(`should invoke GameItem.onUse with ${recoverAmount}`, () => {
-                player.inventory.addItem(items[itemType]);
-                // some sort of use method here
-                expect(items[itemType].onUse).to.have.been.calledOnce.calledWith(recoverAmount);
+            it(`onUse should invoke recover with ${recoverAmount}`, () => {
+                sinon.stub(player, 'recoverDamage');
+                items[itemType].onUse(player);
+                expect(player.recoverDamage).to.have.been.calledOnce.calledWith(recoverAmount);
             });
         });
     });
