@@ -4821,9 +4821,6 @@ var SimpleEnemy = (function (_super) {
         _super.prototype.addToScene.call(this, scene);
         pause_with_game_1.pauseWithGame(this);
     };
-    SimpleEnemy.prototype.handleEvent = function (evt) {
-        _super.prototype.handleEvent.call(this, evt);
-    };
     SimpleEnemy.prototype.getMove = function () {
         var r = Math.random();
         var i = this._moves[Math.floor(r * 3.0)];

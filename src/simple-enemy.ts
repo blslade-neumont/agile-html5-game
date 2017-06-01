@@ -27,10 +27,6 @@ export class SimpleEnemy extends Entity {
         pauseWithGame(this);
     }
 
-    handleEvent(evt: GameEvent) {
-        super.handleEvent(evt);
-    }
-
     private _moves: number[] = [0, 1, 2];
     // t r d l
     // 0 1 2 3
