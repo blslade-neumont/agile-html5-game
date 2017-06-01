@@ -4664,6 +4664,7 @@ var TitleScene = (function (_super) {
         var camera = this.camera = new engine_1.FollowCamera(this);
         camera.follow = cameraFollowObject;
         camera.enableSmoothing = false;
+        this.game.score = 0;
     };
     return TitleScene;
 }(engine_1.GameScene));

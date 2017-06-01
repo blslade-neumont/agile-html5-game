@@ -8,11 +8,11 @@ export class MockAgileGame extends MockGame {
 
     onPause = {
         emit: () => void(0),
-        addListender: () => void(0)
+        addListener: () => void(0)
     };
     onPlay = {
         emit: () => void(0),
-        addListender: () => void(0)
+        addListener: () => void(0)
     };
 
     score = 0;
