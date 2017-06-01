@@ -1,7 +1,8 @@
-﻿import { GameScene, GameObject, FollowCamera } from '../engine';
+﻿import { GameScene, GameObject, FollowCamera, AudioSourceObject } from '../engine';
 import { World } from '../world';
 import { MenuGuiObject } from '../menu-gui-object';
 import { GridRenderer } from '../grid-renderer';
+import { sfx } from '../dbs/sfx-db';
 
 export class TitleScene extends GameScene {
     constructor() {
@@ -28,6 +29,8 @@ export class TitleScene extends GameScene {
             shouldRender: false
         });
         this.addObject(cameraFollowObject);
+
+        this.addObject(new AudioSourceObject('Music', sfx['titleScreenMusic'], { shouldLoop: true }));
 
         let camera = this.camera = new FollowCamera(this);
         camera.follow = cameraFollowObject;

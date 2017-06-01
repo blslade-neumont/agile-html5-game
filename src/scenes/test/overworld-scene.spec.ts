@@ -17,8 +17,10 @@ describe('OverworldScene', () => {
         game = scene.game = <any>new MockGame(scene);
     });
 
-    it('should start with no world', () => {
-        expect(scene.world).not.to.be.ok;
+    describe('.world', () => {
+        it('should start as null', () => {
+            expect(scene.world).to.be.null;
+        });
     });
 
     describe('.start', () => {

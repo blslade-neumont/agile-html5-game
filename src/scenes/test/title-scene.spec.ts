@@ -19,11 +19,22 @@ describe('TitleScene', () => {
     });
     
     describe('.handleEvent', () => {
-        beforeEach(() => {
+        it('should create a new world', () => {
             scene.start();
+            expect(scene.world).to.be.ok;
         });
-
+        it('should create a new grid renderer', () => {
+            scene.start();
+            let gridRenderer = scene.findObject('GridRenderer');
+            expect(gridRenderer).to.be.ok;
+        });
+        it('should create an AudioSourceObject for the music', () => {
+            sinon.stub(scene, 'addObject');
+            scene.start();
+            expect(scene.addObject).to.have.been.calledWith(sinon.match(obj => obj instanceof AudioSourceObject && obj.name.match(/music/i)));
+        });
         it('should navigate to the overworld scene when enter is pressed', () => {
+            scene.start();
             sinon.stub(game, 'changeScene');
             scene.handleEvent({
                 type: 'keyPressed',
