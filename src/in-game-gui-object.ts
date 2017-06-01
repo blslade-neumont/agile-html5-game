@@ -66,7 +66,10 @@ export class InGameGuiObject extends MenuGuiObject {
 
         this.renderHealth(context);
 
-        if (this.showInventory) super.renderImpl(context);
+        if (this.showInventory) {
+            super.renderImpl(context);
+
+        }
     }
     private renderHealth(context: CanvasRenderingContext2D) {
         const HEART_SIZE = 24;

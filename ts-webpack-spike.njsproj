@@ -81,6 +81,9 @@
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="src\dbs\sfx-db.ts" />
+    <TypeScriptCompile Include="src\dbs\test\item-db.spec.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="src\engine\audio-source-object.ts" />
     <TypeScriptCompile Include="src\engine\test\mock-dom.ts">
       <TestFramework>Mocha</TestFramework>
@@ -90,7 +93,9 @@
     <TypeScriptCompile Include="src\explosion.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="src\inventory.ts" />
+    <TypeScriptCompile Include="src\inventory.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="src\lighting-object.ts" />
     <TypeScriptCompile Include="src\dbs\test\gui-db.spec.ts">
       <SubType>Code</SubType>
@@ -257,6 +262,9 @@
     <TypeScriptCompile Include="src\preload-strategies\test\item-preload-strategy.spec.ts">
       <SubType>Code</SubType>
       <TestFramework>Mocha</TestFramework>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="src\test\inventory.spec.ts">
+      <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="src\test\lighting-object.spec.ts">
       <SubType>Code</SubType>

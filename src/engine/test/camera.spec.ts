@@ -20,7 +20,7 @@ describe('Camera', () => {
     });
 
     describe('.constructor', () => {
-        it('should throw an error if game is falsey', () => {
+        it('should throw an error if game is false', () => {
             expect(() => new Camera(<any>null)).to.throw(/pass in a valid Scene/i);
         });
     });

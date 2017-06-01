@@ -112,5 +112,4 @@ export class Player extends Entity {
     get inventory() {
         return this._inventory;
     }
-
 }
