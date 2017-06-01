@@ -3,6 +3,7 @@ import { Entity } from '../entity';
 import { World } from '../world';
 import { Inventory } from '../inventory';
 import { items } from './item-db';
+import { sfx } from './sfx-db';
 
 export const TILE_SIZE: number = 32;
 
@@ -245,6 +246,7 @@ export let tiles: { [name: string]: WorldTile } =
                     inventory.addItem(items['crop_carrot'], 1);
                     let world: World = <any>entity.scene.findObject('World');
                     world.setTileAt(x, y, tiles['grass']);
+                    entity.scene.addObject(new AudioSourceObject('rekolte', sfx['rekolte'], { x: x * TILE_SIZE, y: y * TILE_SIZE }));
                 }
             }
         },

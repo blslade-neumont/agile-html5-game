@@ -104,7 +104,9 @@ exports.sfx = {
     playerDeath: { src: 'audio/sfx/Cry2.ogg' },
     playerDamage: { src: 'audio/sfx/Scream.ogg' },
     explode: { src: 'audio/sfx/Explosion1.ogg' },
-    batDeath: { src: 'audio/sfx/Book1.ogg' }
+    batDeath: { src: 'audio/sfx/Book1.ogg' },
+    rekolte: { src: 'audio/sfx/Wind2.ogg' },
+    heal: { src: 'audio/sfx/Heal5.ogg' }
 };
 
 
@@ -115,7 +117,9 @@ exports.sfx = {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+var engine_1 = __webpack_require__(0);
 var item_db_1 = __webpack_require__(15);
+var sfx_db_1 = __webpack_require__(1);
 exports.TILE_SIZE = 32;
 ;
 exports.tiles = {
@@ -345,6 +349,7 @@ exports.tiles = {
                 inventory.addItem(item_db_1.items['crop_carrot'], 1);
                 var world = entity.scene.findObject('World');
                 world.setTileAt(x, y, exports.tiles['grass']);
+                entity.scene.addObject(new engine_1.AudioSourceObject('rekolte', sfx_db_1.sfx['rekolte'], { x: x * exports.TILE_SIZE, y: y * exports.TILE_SIZE }));
             }
         }
     },
@@ -586,6 +591,9 @@ var Entity = (function (_super) {
     Object.defineProperty(Entity.prototype, "flying", {
         get: function () {
             return this._flying;
+        },
+        set: function (val) {
+            this._flying = val;
         },
         enumerable: true,
         configurable: true
@@ -3655,6 +3663,8 @@ exports.effects = {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+var engine_1 = __webpack_require__(0);
+var sfx_db_1 = __webpack_require__(1);
 exports.ITEM_SIZE = 24;
 ;
 exports.items = {
@@ -3665,6 +3675,7 @@ exports.items = {
         },
         onUse: function (player) {
             player.recoverDamage(300);
+            player.scene.addObject(new engine_1.AudioSourceObject('heal', sfx_db_1.sfx['heal'], { x: player.x, y: player.y }));
         }
     }
 };

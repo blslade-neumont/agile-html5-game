@@ -54,7 +54,9 @@
     <Content Include="docs\audio\sfx\Book1.ogg" />
     <Content Include="docs\audio\sfx\Cry2.ogg" />
     <Content Include="docs\audio\sfx\Explosion1.ogg" />
+    <Content Include="docs\audio\sfx\Heal5.ogg" />
     <Content Include="docs\audio\sfx\Scream.ogg" />
+    <Content Include="docs\audio\sfx\Wind2.ogg" />
     <Content Include="docs\images\Alive\Katie.png" />
     <Content Include="docs\images\Alive\large-dim-light-source.png" />
     <Content Include="docs\images\Alive\Monster3.png" />

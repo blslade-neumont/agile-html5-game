@@ -50,6 +50,9 @@ export class Entity extends GameObject {
     get flying() {
         return this._flying;
     }
+    set flying(val: boolean) {
+        this._flying = val;
+    }
 
     private _currentHealth = 1;
     get currentHealth() {

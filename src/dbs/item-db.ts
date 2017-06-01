@@ -1,5 +1,6 @@
-﻿import { SpriteT } from '../engine';
-import { Player } from '../player'
+﻿import { SpriteT, AudioSourceObject } from '../engine';
+import { Player } from '../player';
+import { sfx } from './sfx-db';
 
 export const ITEM_SIZE: number = 24;
 
@@ -98,7 +99,7 @@ export let items: { [name: string]: GameItem } =
             },
             onUse: (player) => {
                 player.recoverDamage(300);
+                player.scene.addObject(new AudioSourceObject('heal', sfx['heal'], { x: player.x, y: player.y }));
             }
         }
     };
-

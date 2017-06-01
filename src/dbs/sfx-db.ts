@@ -13,5 +13,7 @@ export let sfx: { [name: string]: AudioT } =
         playerDeath: { src: 'audio/sfx/Cry2.ogg' },
         playerDamage: { src: 'audio/sfx/Scream.ogg' },
         explode: { src: 'audio/sfx/Explosion1.ogg' },
-        batDeath: { src: 'audio/sfx/Book1.ogg' }
+        batDeath: { src: 'audio/sfx/Book1.ogg' },
+        rekolte: { src: 'audio/sfx/Wind2.ogg' },
+        heal: { src: 'audio/sfx/Heal5.ogg' }
     };

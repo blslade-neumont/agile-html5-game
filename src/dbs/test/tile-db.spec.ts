@@ -36,20 +36,22 @@ describe('dbs/tiles', () => {
     ];
     damageTiles.forEach(([tileType, damageAmount]) => {
         describe(tileType, () => {
-            it(`should invoke Entity.takeDamage with ${damageAmount} damage when a non-flying entity ticks`, () => {
-                let ent = new Entity('name', { maxHealth: 10, x: 0, y: 0, collisionBounds: new Rect(0, 32, 0, 32), flying: false });
+            let ent: Entity;
+            beforeEach(() => {
+                ent = new Entity('name', { maxHealth: 10, x: 0, y: 0, collisionBounds: new Rect(0, 32, 0, 32), flying: false });
                 scene.addObject(ent);
-                sinon.spy(ent, 'takeDamage');
                 sinon.stub(world, 'getTileAt').withArgs(0, 0).returns(tiles[tileType]);
+            });
+
+            it(`should invoke Entity.takeDamage with ${damageAmount} damage when a non-flying entity ticks`, () => {
+                sinon.spy(ent, 'takeDamage');
                 world.tick(.02);
                 expect(ent.takeDamage).to.have.been.calledOnce.calledWith(damageAmount);
             });
 
             it(`should not invoke Entity.takeDamage when a flying entity ticks`, () => {
-                let ent = new Entity('name', { maxHealth: 10, x: 0, y: 0, collisionBounds: new Rect(0, 32, 0, 32), flying: true });
-                scene.addObject(ent);
+                ent.flying = true;
                 sinon.spy(ent, 'takeDamage');
-                sinon.stub(world, 'getTileAt').withArgs(0, 0).returns(tiles[tileType]);
                 world.tick(.02);
                 expect(ent.takeDamage).to.not.have.been.called;
             });
@@ -183,37 +185,43 @@ describe('dbs/tiles', () => {
         });
     });
 
-    let cropTiles: [string, string, string, number][] = [
-        ['carrotCrop', 'grass', 'crop_carrot', 1]
+    let cropTiles: [string, string, string, number, RegExp][] = [
+        ['carrotCrop', 'grass', 'crop_carrot', 1, /rekolte/i]
     ];
-    cropTiles.forEach(([tileType, swapTileType, itemType, itemCount]) => {
+    cropTiles.forEach(([tileType, swapTileType, itemType, itemCount, audioRegexp]) => {
         describe(tileType, () => {
-            it(`should replace the ${tileType} tile with a ${swapTileType} tile when the player lands`, () => {
-                let ent = new Entity('Player', { maxHealth: 10, x: 0, y: 0, collisionBounds: new Rect(0, 32, 0, 32), flying: false });
-                let inventory = (<any>ent).inventory = new Inventory();
+            let ent: Entity;
+            let inventory: Inventory;
+            beforeEach(() => {
+                ent = new Entity('Player', { maxHealth: 10, x: 0, y: 0, collisionBounds: new Rect(0, 32, 0, 32), flying: false });
+                inventory = (<any>ent).inventory = new Inventory();
                 scene.addObject(ent);
-                sinon.spy(world, 'setTileAt');
                 sinon.stub(world, 'getTileAt').withArgs(0, 0).returns(tiles[tileType]);
+            });
+
+            it(`should replace the ${tileType} tile with a ${swapTileType} tile when the player lands`, () => {
+                sinon.spy(world, 'setTileAt');
                 world.tick(.02);
                 expect(world.setTileAt).to.have.been.calledOnce.calledWith(0, 0, tiles[swapTileType]);
             });
             it(`should not replace the tile with a ${swapTileType} when a non-player entity lands`, () => {
-                let ent = new Entity('Non-Player', { maxHealth: 10, x: 0, y: 0, collisionBounds: new Rect(0, 32, 0, 32), flying: false });
-                scene.addObject(ent);
+                ent.name = 'Non-Player';
                 sinon.spy(world, 'setTileAt');
-                sinon.stub(world, 'getTileAt').withArgs(0, 0).returns(tiles[tileType]);
                 world.tick(.02);
                 expect(world.setTileAt).not.to.have.been.called;
             });
             it(`should add ${itemCount} ${itemType}(s) when the player lands`, () => {
-                let ent = new Entity('Player', { maxHealth: 10, x: 0, y: 0, collisionBounds: new Rect(0, 32, 0, 32), flying: true });
-                let inventory = (<any>ent).inventory = new Inventory();
-                scene.addObject(ent);
-                sinon.stub(world, 'getTileAt').withArgs(0, 0).returns(tiles[tileType]);
                 sinon.stub(inventory, 'addItem');
                 world.tick(.02);
                 expect(inventory.addItem).to.have.been.calledOnce.calledWith(items[itemType], itemCount);
             });
+            if (audioRegexp) {
+                it('should play a sound when the player lands', () => {
+                    sinon.spy(scene, 'addObject');
+                    world.tick(.02);
+                    expect(scene.addObject).to.have.been.calledOnce.calledWith(sinon.match(obj => obj instanceof AudioSourceObject && obj.name.match(audioRegexp)));
+                });
+            }
         });
     });
 });
