@@ -113,5 +113,14 @@ export let alives: { [name: string]: Alive } =
                 src: 'images/Alive/dim-light-source.png',
                 pivot: { x: 80, y: 80 }
             }
+        },        
+        'bomb': {
+            sprite: {
+                src: 'images/Alive/Other1.png',
+                tileset: { width: 32, height: 32 },
+                frames: [
+                    { tilex: 10, tiley: 0 }
+                ]
+            }
         }
     };

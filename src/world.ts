@@ -48,7 +48,10 @@ export class World extends GameObject {
             for (let tlx = fromx; tlx <= tox; tlx++) {
                 for (let tly = fromy; tly <= toy; tly++) {
                     if (entity.isDead) { break; }
+
                     let tileUnder: WorldTile = this.getTileAt(tlx, tly);
+                    if (!tileUnder) { continue; }
+
                     if (tileUnder.onTick) {
                         tileUnder.onTick(delta, entity);
                     }

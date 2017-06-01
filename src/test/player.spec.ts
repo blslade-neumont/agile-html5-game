@@ -24,6 +24,7 @@ describe('Player', () => {
     it('should be named Player', () => {
         expect(player.name).to.be.eq('Player');
     });
+
     it('should start with player-south as the sprite', () => {
         expect(player.sprite).to.deep.eq(alives['player-south'].sprite);
     });

@@ -5,6 +5,8 @@ import { Player } from '../player';
 import { InGameGuiObject } from '../in-game-gui-object';
 import { LightingObject } from '../lighting-object';
 import { sfx } from '../dbs/sfx-db';
+import { WorldTile, TILE_SIZE } from '../dbs/tile-db';
+import { SimpleEnemy } from '../simple-enemy';
 
 export class DungeonScene extends GameScene {
     constructor() {
@@ -75,6 +77,14 @@ export class DungeonScene extends GameScene {
         this.addObject(new GridRenderer());
 
         this.addObject(this.player);
+
+        for (let i: number = 0; i < 1000; ++i) {
+            let x: number = Math.floor(((Math.random()-0.5) * 10000) / TILE_SIZE) * TILE_SIZE;
+            let y: number = Math.floor(((Math.random()-0.5) * 10000) / TILE_SIZE) * TILE_SIZE;
+            if (!this.world.getTileAt(Math.floor(x / TILE_SIZE), Math.floor(y / TILE_SIZE)).isSolid) {
+                this.addObject(new SimpleEnemy({ maxHealth: 5, x: x, y: y }));
+            }
+        }
 
         this.addObject(new LightingObject(.4, false));
 

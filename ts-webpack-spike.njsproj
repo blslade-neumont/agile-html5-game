@@ -62,6 +62,9 @@
       <SubType>Code</SubType>
     </Content>
     <Content Include="tsconfig.json" />
+    <TypeScriptCompile Include="src\dbs\effect-db.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="src\dbs\sfx-db.ts" />
     <TypeScriptCompile Include="src\engine\audio-source-object.ts" />
     <TypeScriptCompile Include="src\engine\test\mock-dom.ts" />
@@ -125,6 +128,9 @@
     <TypeScriptCompile Include="src\in-game-gui-object.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
+    <TypeScriptCompile Include="src\preload-strategies\effect-preload-strategy.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="src\preload-strategies\gui-preload-strategy.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
@@ -135,6 +141,9 @@
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="src\preload-strategies\sfx-preload-strategy.ts" />
+    <TypeScriptCompile Include="src\preload-strategies\test\effect-preload-strategy.spec.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="src\preload-strategies\test\sfx-preload-strategy.spec.ts" />
     <TypeScriptCompile Include="src\scenes\dungeon-scene.ts">
       <SubType>Code</SubType>
