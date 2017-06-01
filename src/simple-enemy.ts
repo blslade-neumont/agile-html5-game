@@ -17,8 +17,7 @@ export class SimpleEnemy extends Entity {
         super("Simple Enemy", merge({
             sprite: alives['bat-south'].sprite,
             collisionBounds: new Rect(0, SIZE, 0, SIZE),
-            takeDamageSound: sfx['playerDamage'],
-            killSound: sfx['playerDeath'],
+            killSound: sfx['batDeath'],
             flying: true
         }, opts));
     }

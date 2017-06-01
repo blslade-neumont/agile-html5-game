@@ -12,5 +12,6 @@ export let sfx: { [name: string]: AudioT } =
         teleport: { src: 'audio/sfx/Absorb2.ogg' },
         playerDeath: { src: 'audio/sfx/Cry2.ogg' },
         playerDamage: { src: 'audio/sfx/Scream.ogg' },
-        explode: { src: 'audio/sfx/Explosion1.ogg' }
+        explode: { src: 'audio/sfx/Explosion1.ogg' },
+        batDeath: { src: 'audio/sfx/Book1.ogg' }
     };

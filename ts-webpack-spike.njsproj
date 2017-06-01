@@ -46,6 +46,15 @@
   <ItemGroup>
     <Content Include=".gitignore" />
     <Content Include=".travis.yml" />
+    <Content Include="audio\music\Airship.ogg" />
+    <Content Include="audio\music\Dungeon1.ogg" />
+    <Content Include="audio\music\Gameover2.ogg" />
+    <Content Include="audio\music\Town1.ogg" />
+    <Content Include="audio\sfx\Absorb2.ogg" />
+    <Content Include="audio\sfx\Book1.ogg" />
+    <Content Include="audio\sfx\Cry2.ogg" />
+    <Content Include="audio\sfx\Explosion1.ogg" />
+    <Content Include="audio\sfx\Scream.ogg" />
     <Content Include="images\Alive\dim-light-source.png" />
     <Content Include="images\Alive\Katie.png" />
     <Content Include="images\Alive\Monster3.png" />
@@ -352,6 +361,9 @@
     <TypeScriptCompile Include="src\world.ts" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="audio\" />
+    <Folder Include="audio\music\" />
+    <Folder Include="audio\sfx\" />
     <Folder Include="config\" />
     <Folder Include="config\webpack\" />
     <Folder Include="images\" />
