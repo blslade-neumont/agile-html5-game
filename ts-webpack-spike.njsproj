@@ -73,7 +73,9 @@
     </TypeScriptCompile>
     <TypeScriptCompile Include="src\dbs\sfx-db.ts" />
     <TypeScriptCompile Include="src\engine\audio-source-object.ts" />
-    <TypeScriptCompile Include="src\engine\test\mock-dom.ts" />
+    <TypeScriptCompile Include="src\engine\test\mock-dom.ts">
+      <TestFramework>Mocha</TestFramework>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="src\engine\utils\audio.ts" />
     <TypeScriptCompile Include="src\entity.ts" />
     <TypeScriptCompile Include="src\explosion.ts">
@@ -83,9 +85,11 @@
     <TypeScriptCompile Include="src\lighting-object.ts" />
     <TypeScriptCompile Include="src\dbs\test\gui-db.spec.ts">
       <SubType>Code</SubType>
+      <TestFramework>Mocha</TestFramework>
     </TypeScriptCompile>
     <TypeScriptCompile Include="src\dbs\test\tile-db.spec.ts">
       <SubType>Code</SubType>
+      <TestFramework>Mocha</TestFramework>
     </TypeScriptCompile>
     <TypeScriptCompile Include="src\dead-player.ts">
       <SubType>Code</SubType>
@@ -93,13 +97,18 @@
     <TypeScriptCompile Include="src\engine\game-scene.ts" />
     <TypeScriptCompile Include="src\engine\test\game-scene.spec.ts">
       <SubType>Code</SubType>
+      <TestFramework>Mocha</TestFramework>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="src\engine\test\mock-game.ts" />
+    <TypeScriptCompile Include="src\engine\test\mock-game.ts">
+      <TestFramework>Mocha</TestFramework>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="src\engine\utils\event-emitter.ts" />
     <TypeScriptCompile Include="src\engine\utils\rect.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="src\engine\utils\test\event-emitter.spec.ts" />
+    <TypeScriptCompile Include="src\engine\utils\test\event-emitter.spec.ts">
+      <TestFramework>Mocha</TestFramework>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="src\menu-gui-object.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
@@ -153,8 +162,11 @@
     <TypeScriptCompile Include="src\preload-strategies\sfx-preload-strategy.ts" />
     <TypeScriptCompile Include="src\preload-strategies\test\effect-preload-strategy.spec.ts">
       <SubType>Code</SubType>
+      <TestFramework>Mocha</TestFramework>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="src\preload-strategies\test\sfx-preload-strategy.spec.ts" />
+    <TypeScriptCompile Include="src\preload-strategies\test\sfx-preload-strategy.spec.ts">
+      <TestFramework>Mocha</TestFramework>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="src\scenes\dungeon-scene.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
@@ -162,12 +174,19 @@
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="src\scenes\overworld-scene.ts" />
-    <TypeScriptCompile Include="src\scenes\test\dungeon-scene.spec.ts" />
+    <TypeScriptCompile Include="src\scenes\test\dungeon-scene.spec.ts">
+      <TestFramework>Mocha</TestFramework>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="src\scenes\test\game-over-scene.spec.ts">
       <SubType>Code</SubType>
+      <TestFramework>Mocha</TestFramework>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="src\scenes\test\overworld-scene.spec.ts" />
-    <TypeScriptCompile Include="src\scenes\test\title-scene.spec.ts" />
+    <TypeScriptCompile Include="src\scenes\test\overworld-scene.spec.ts">
+      <TestFramework>Mocha</TestFramework>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="src\scenes\test\title-scene.spec.ts">
+      <TestFramework>Mocha</TestFramework>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="src\scenes\title-scene.ts" />
     <TypeScriptCompile Include="src\simple-enemy.ts">
       <SubType>Code</SubType>
@@ -208,18 +227,23 @@
       <TestFramework>Mocha</TestFramework>
     </TypeScriptCompile>
     <TypeScriptCompile Include="src\test\bomb.spec.ts">
-      <SubType>Code</SubType>
+      <TestFramework>Mocha</TestFramework>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="src\test\dead-player.spec.ts" />
-    <TypeScriptCompile Include="src\test\entity.spec.ts" />
+    <TypeScriptCompile Include="src\test\dead-player.spec.ts">
+      <TestFramework>Mocha</TestFramework>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="src\test\entity.spec.ts">
+      <TestFramework>Mocha</TestFramework>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="src\test\explosion.spec.ts">
-      <SubType>Code</SubType>
+      <TestFramework>Mocha</TestFramework>
     </TypeScriptCompile>
     <TypeScriptCompile Include="src\test\in-game-gui-object.spec.ts">
       <TestFramework>Mocha</TestFramework>
     </TypeScriptCompile>
     <TypeScriptCompile Include="src\preload-strategies\test\gui-preload-strategy.spec.ts">
       <SubType>Code</SubType>
+      <TestFramework>Mocha</TestFramework>
     </TypeScriptCompile>
     <TypeScriptCompile Include="src\preload-strategies\test\item-preload-strategy.spec.ts">
       <SubType>Code</SubType>
@@ -227,11 +251,15 @@
     </TypeScriptCompile>
     <TypeScriptCompile Include="src\test\lighting-object.spec.ts">
       <SubType>Code</SubType>
+      <TestFramework>Mocha</TestFramework>
     </TypeScriptCompile>
     <TypeScriptCompile Include="src\test\menu-gui-object.spec.ts">
       <SubType>Code</SubType>
+      <TestFramework>Mocha</TestFramework>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="src\test\mock-agile-game.ts" />
+    <TypeScriptCompile Include="src\test\mock-agile-game.ts">
+      <TestFramework>Mocha</TestFramework>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="src\test\mock-event-queue.ts">
       <TestFramework>Mocha</TestFramework>
     </TypeScriptCompile>
@@ -248,6 +276,7 @@
     </TypeScriptCompile>
     <TypeScriptCompile Include="src\test\simple-enemy.spec.ts">
       <SubType>Code</SubType>
+      <TestFramework>Mocha</TestFramework>
     </TypeScriptCompile>
     <TypeScriptCompile Include="src\test\world.spec.ts">
       <TestFramework>Mocha</TestFramework>
@@ -313,7 +342,13 @@
     <TypeScriptCompile Include="src\utils\gui.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
-    <TypeScriptCompile Include="src\utils\test\pause-with-game.spec.ts" />
+    <TypeScriptCompile Include="src\utils\test\gui.spec.ts">
+      <SubType>Code</SubType>
+      <TestFramework>Mocha</TestFramework>
+    </TypeScriptCompile>
+    <TypeScriptCompile Include="src\utils\test\pause-with-game.spec.ts">
+      <TestFramework>Mocha</TestFramework>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="src\world.ts" />
   </ItemGroup>
   <ItemGroup>
