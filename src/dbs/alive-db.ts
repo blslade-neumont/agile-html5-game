@@ -116,11 +116,15 @@ export let alives: { [name: string]: Alive } =
         },
         'bomb': {
             sprite: {
-                src: 'images/Alive/Other1.png',
+                src: 'images/Alive/Bomb1.png',
                 tileset: { width: 32, height: 32 },
                 frames: [
-                    { tilex: 10, tiley: 0 }
-                ]
+                    { tilex: 0, tiley: 0 },
+                    { tilex: 1, tiley: 0 },
+                    { tilex: 2, tiley: 0 },
+                    { tilex: 3, tiley: 0 }
+                ],
+                framesPerSecond: 2
             }
         }
     };

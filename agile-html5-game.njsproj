@@ -57,10 +57,10 @@
     <Content Include="docs\audio\sfx\Heal5.ogg" />
     <Content Include="docs\audio\sfx\Scream.ogg" />
     <Content Include="docs\audio\sfx\Wind2.ogg" />
+    <Content Include="docs\images\Alive\Bomb1.png" />
     <Content Include="docs\images\Alive\Katie.png" />
     <Content Include="docs\images\Alive\large-dim-light-source.png" />
     <Content Include="docs\images\Alive\Monster3.png" />
-    <Content Include="docs\images\Alive\Other1.png" />
     <Content Include="docs\images\Effects\Fire2.png" />
     <Content Include="docs\images\GUI\game-over.png" />
     <Content Include="docs\images\GUI\hearts.png" />
