@@ -12,7 +12,7 @@ export class Bomb extends GameObject {
         if (!this.sprite) this.sprite = alives['bomb'].sprite;
     }
 
-    private timeUntilExplode = 3;
+    private timeUntilExplode = 2;
 
     tick(delta: number) {
         super.tick(delta);

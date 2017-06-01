@@ -16,6 +16,7 @@ import { Entity } from '../entity';
 import { DeadPlayer } from '../dead-player';
 import { Bomb } from '../bomb';
 import { TILE_SIZE } from '../dbs/tile-db';
+import { SimpleEnemy } from '../simple-enemy';
 
 describe('Player', () => {
     let player: Player;
@@ -38,7 +39,8 @@ describe('Player', () => {
                     eventQueue: new MockEventQueue('ArrowDown', 'Space')
                 },
                 world: new MockWorld(),
-                addObject: (obj: GameObject) => { }
+                addObject: (obj: GameObject) => { },
+                findObjects: () => []
             });
 
             player.tick(0.2);
@@ -58,7 +60,8 @@ describe('Player', () => {
                     eventQueue: new MockEventQueue('ArrowDown', 'Space')
                 },
                 world: new MockWorld(),
-                addObject: (obj: GameObject) => { }
+                addObject: (obj: GameObject) => { },
+                findObjects: () => []
             });
 
             player.tick(0.2);
@@ -78,7 +81,8 @@ describe('Player', () => {
                     eventQueue: new MockEventQueue('ArrowRight', 'Space')
                 },
                 world: new MockWorld(),
-                addObject: (obj: GameObject) => { }
+                addObject: (obj: GameObject) => { },
+                findObjects: () => []
             });
 
             sinon.stub(player.scene, 'addObject');
@@ -97,7 +101,8 @@ describe('Player', () => {
                     eventQueue: new MockEventQueue('ArrowLeft', 'Space')
                 },
                 world: new MockWorld(),
-                addObject: (obj: GameObject) => { }
+                addObject: (obj: GameObject) => { },
+                findObjects: () => []
             });
 
             sinon.stub(player.scene, 'addObject');
@@ -116,7 +121,8 @@ describe('Player', () => {
                     eventQueue: new MockEventQueue('ArrowUp', 'Space')
                 },
                 world: new MockWorld(),
-                addObject: (obj: GameObject) => { }
+                addObject: (obj: GameObject) => { },
+                findObjects: () => []
             });
 
             sinon.stub(player.scene, 'addObject');
@@ -135,7 +141,8 @@ describe('Player', () => {
                     eventQueue: new MockEventQueue('ArrowDown', 'Space')
                 },
                 world: new MockWorld(),
-                addObject: (obj: GameObject) => { }
+                addObject: (obj: GameObject) => { },
+                findObjects: () => []
             });
 
             sinon.stub(player.scene, 'addObject');
@@ -173,6 +180,42 @@ describe('Player', () => {
             player.handleEvent(<any>{ type: 'mouseWheel', delta: -10 });
             expect(game.scene.camera.zoomScale).to.be.greaterThan(lastZoom);
         });
+
+        describe('Enemy Interaction', () => {
+            it('should take damage only once next to more than one an instance of SimpleEnemy', () => {
+                game.start();
+                game.scene.addObject(player);
+                let ent: SimpleEnemy = new SimpleEnemy({ maxHealth: 5, x: 32, y: 0 });
+                let ent1: SimpleEnemy = new SimpleEnemy({ maxHealth: 5, x: -32, y: 0 });
+                let ent2: SimpleEnemy = new SimpleEnemy({ maxHealth: 5, x: 0, y: 32 });
+                game.scene.addObject(ent);
+                game.scene.addObject(ent1);
+                game.scene.addObject(ent2);
+                let health = player.currentHealth;
+                player.tick(0.2);
+                expect(player.currentHealth).to.be.eq(health - 2);
+            });
+
+            it('should take damage when next to an instance of SimpleEnemy', () => {
+                game.start();
+                game.scene.addObject(player);
+                let ent: SimpleEnemy = new SimpleEnemy({ maxHealth: 5, x: 32, y: 0 });
+                game.scene.addObject(ent);
+                let health = player.currentHealth;
+                player.tick(0.2);
+                expect(player.currentHealth).to.be.eq(health - 2);
+            });
+
+            it('should not take damage when not next to an instance of SimpleEnemy', () => {
+                game.start();
+                game.scene.addObject(player);
+                let ent: SimpleEnemy = new SimpleEnemy({ maxHealth: 5, x: 64, y: 0 });
+                game.scene.addObject(ent);
+                let health = player.currentHealth;
+                player.tick(0.2);
+                expect(player.currentHealth).to.be.eq(health);
+            });
+        });
     });
 
     describe('.tick', () => {
@@ -183,7 +226,8 @@ describe('Player', () => {
                     game: {
                         eventQueue: new MockEventQueue('ArrowLeft', 'ArrowRight')
                     },
-                    world: new MockWorld()
+                    world: new MockWorld(),
+                    findObjects: () => []
                 });
                 let [oldX, oldY] = [player.x = 0, player.y = 0];
                 player.tick(.02);
@@ -195,7 +239,8 @@ describe('Player', () => {
                     game: {
                         eventQueue: new MockEventQueue('ArrowUp', 'ArrowDown')
                     },
-                    world: new MockWorld()
+                    world: new MockWorld(),
+                    findObjects: () => []
                 });
                 let [oldX, oldY] = [player.x = 0, player.y = 0];
                 player.tick(.02);
@@ -207,7 +252,8 @@ describe('Player', () => {
                     game: {
                         eventQueue: new MockEventQueue()
                     },
-                    world: new MockWorld()
+                    world: new MockWorld(),
+                    findObjects: () => []
                 });
                 let [oldX, oldY] = [player.x = 0, player.y = 0];
                 player.tick(.02);
@@ -221,7 +267,8 @@ describe('Player', () => {
                     game: {
                         eventQueue: new MockEventQueue()
                     },
-                    world: new MockWorld()
+                    world: new MockWorld(),
+                    findObjects: () => []
                 });
                 let sprite = player.sprite = <any>'I like chocolate milk!';
                 player.tick(.02);
@@ -232,7 +279,8 @@ describe('Player', () => {
                     game: {
                         eventQueue: new MockEventQueue('ArrowUp')
                     },
-                    world: new MockWorld()
+                    world: new MockWorld(),
+                    findObjects: () => []
                 });
                 player.sprite = <any>'I like chocolate milk!';
                 player.tick(.02);
@@ -243,7 +291,8 @@ describe('Player', () => {
                     game: {
                         eventQueue: new MockEventQueue('ArrowDown')
                     },
-                    world: new MockWorld()
+                    world: new MockWorld(),
+                    findObjects: () => []
                 });
                 player.sprite = <any>'I like chocolate milk!';
                 player.tick(.02);
@@ -254,7 +303,8 @@ describe('Player', () => {
                     game: {
                         eventQueue: new MockEventQueue('ArrowRight')
                     },
-                    world: new MockWorld()
+                    world: new MockWorld(),
+                    findObjects: () => []
                 });
                 player.sprite = <any>'I like chocolate milk!';
                 player.tick(.02);
@@ -265,7 +315,8 @@ describe('Player', () => {
                     game: {
                         eventQueue: new MockEventQueue('ArrowLeft')
                     },
-                    world: new MockWorld()
+                    world: new MockWorld(),
+                    findObjects: () => []
                 });
                 player.sprite = <any>'I like chocolate milk!';
                 player.tick(.02);
@@ -276,7 +327,8 @@ describe('Player', () => {
                     game: {
                         eventQueue: new MockEventQueue()
                     },
-                    world: new MockWorld()
+                    world: new MockWorld(),
+                    findObjects: () => []
                 });
                 player.animationSpeed = <any>5;
                 player.tick(.02);
@@ -287,7 +339,8 @@ describe('Player', () => {
                     game: {
                         eventQueue: new MockEventQueue('ArrowRight')
                     },
-                    world: new MockWorld()
+                    world: new MockWorld(),
+                    findObjects: () => []
                 });
                 player.animationSpeed = <any>5;
                 player.tick(.02);

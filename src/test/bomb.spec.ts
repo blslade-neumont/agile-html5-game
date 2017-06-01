@@ -25,17 +25,17 @@ describe('Bomb', () => {
         if (game.isRunning) game.stop();
     });
 
-    it('should call explode after three seconds', () => {
+    it('should call explode after two seconds', () => {
         game.scene.addObject(bomb);
         sinon.stub(bomb, 'explode');
-        bomb.tick(3.01);
+        bomb.tick(2.01);
         expect(bomb.explode).to.be.calledOnce;
     });
 
-    it('should not call explode after less than three seconds', () => {
+    it('should not call explode after less than two seconds', () => {
         game.scene.addObject(bomb);
         sinon.stub(bomb, 'explode');
-        bomb.tick(2.99);
+        bomb.tick(1.99);
         expect(bomb.explode).not.to.have.been.called;
     });
 

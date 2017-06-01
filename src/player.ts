@@ -9,6 +9,7 @@ import { sfx } from './dbs/sfx-db';
 import { pauseWithGame } from './utils/pause-with-game';
 import merge = require('lodash.merge');
 import { Bomb } from './bomb';
+import { SimpleEnemy } from './simple-enemy';
 
 const CLOSE_ENOUGH: number = 3.0;
 const MOVE_SPEED = 4 * 30;
@@ -83,6 +84,15 @@ export class Player extends Entity {
         else if (this.vspeed > 0) this.sprite = alives['player-south'].sprite;
         else if (this.vspeed < 0) this.sprite = alives['player-north'].sprite;
 
+        for (let entity of <Entity[]>this.scene.findObjects((obj) => obj instanceof SimpleEnemy)) {
+            let xDiff = entity.x - this.x;
+            let yDiff = entity.y - this.y;
+            let distSqrd = (xDiff * xDiff) + (yDiff * yDiff);
+            if (distSqrd <= 32*32) {
+                this.takeDamage(2);
+                break;
+            }
+        }
     }
 
     private _lightSourceSprite: SpriteT;
