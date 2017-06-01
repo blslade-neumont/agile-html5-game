@@ -4486,6 +4486,7 @@ var PathfindState = (function (_super) {
         _this.currentIdx = 0;
         _this.turnRadius = 24;
         _this.directionChangeSpeed = 180;
+        _this.directionTolerance = 15;
         return _this;
     }
     Object.defineProperty(PathfindState.prototype, "path", {
@@ -4517,17 +4518,16 @@ var PathfindState = (function (_super) {
         }
         var dir = engine_1.pointDirection(this.self.x, this.self.y, (targeting.x + .5) * tile_db_1.TILE_SIZE, (targeting.y + .5) * tile_db_1.TILE_SIZE);
         if (dir > this.self.direction + 180)
-            dir -= 180;
+            dir -= 360;
         else if (dir < this.self.direction - 180)
-            dir += 180;
+            dir += 360;
         var dirChange = 0;
-        if (dir > this.self.direction) {
+        if (dir > this.self.direction + this.directionTolerance) {
             dirChange = Math.min(dir - this.self.direction, this.directionChangeSpeed * delta);
         }
-        else if (dir < this.self.direction) {
+        else if (dir < this.self.direction - this.directionTolerance) {
             dirChange = Math.max(dir - this.self.direction, -this.directionChangeSpeed * delta);
         }
-        console.log(this.self.direction - dir);
         this.self.direction += dirChange;
     };
     PathfindState.prototype.render = function (machine, context) {

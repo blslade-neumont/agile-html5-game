@@ -24,6 +24,7 @@ export abstract class PathfindState extends State {
     private currentIdx = 0;
     turnRadius = 24;
     directionChangeSpeed = 180;
+    directionTolerance = 15;
     
     tick(machine: StateMachine, delta: number) {
         if (this.path && this.currentIdx >= this.path.nodes.length) this.path = null;
@@ -40,16 +41,15 @@ export abstract class PathfindState extends State {
         }
 
         let dir = pointDirection(this.self.x, this.self.y, (targeting.x + .5) * TILE_SIZE, (targeting.y + .5) * TILE_SIZE);
-        if (dir > this.self.direction + 180) dir -= 180;
-        else if (dir < this.self.direction - 180) dir += 180;
+        if (dir > this.self.direction + 180) dir -= 360;
+        else if (dir < this.self.direction - 180) dir += 360;
         let dirChange = 0;
-        if (dir > this.self.direction) {
+        if (dir > this.self.direction + this.directionTolerance) {
             dirChange = Math.min(dir - this.self.direction, this.directionChangeSpeed * delta);
         }
-        else if (dir < this.self.direction) {
+        else if (dir < this.self.direction - this.directionTolerance) {
             dirChange = Math.max(dir - this.self.direction, -this.directionChangeSpeed * delta);
         }
-        console.log(this.self.direction - dir);
         this.self.direction += dirChange;
     }
 
