@@ -9,11 +9,13 @@ import { Player } from '../player';
 import { MockEventQueue } from './mock-event-queue';
 import { MockWorld } from './mock-world';
 import { alives } from '../dbs/alive-db';
-import { GameScene } from '../engine';
+import { GameScene, GameObject} from '../engine';
 import { AgileGame } from '../agile-game';
 import { Game, MouseWheelEvent } from '../engine';
 import { Entity } from '../entity';
 import { DeadPlayer } from '../dead-player';
+import { Bomb } from '../bomb';
+import { TILE_SIZE } from '../dbs/tile-db';
 
 describe('Player', () => {
     let player: Player;
@@ -27,6 +29,124 @@ describe('Player', () => {
 
     it('should start with player-south as the sprite', () => {
         expect(player.sprite).to.deep.eq(alives['player-south'].sprite);
+    });
+
+    describe('Bomb Placement', () => {
+        it('should not allow the player to place another bomb if one second has yet to elapse since the last placement', () => {
+            player.addToScene(<any>{
+                game: {
+                    eventQueue: new MockEventQueue('ArrowDown', 'Space')
+                },
+                world: new MockWorld(),
+                addObject: (obj: GameObject) => { }
+            });
+
+            player.tick(0.2);
+            player.handleEvent(<any>{ type: 'keyPressed' });
+
+            sinon.stub(player.scene, 'addObject');
+
+            player.tick(0.99);
+            player.handleEvent(<any>{ type: 'keyPressed' });
+
+            expect(player.scene.addObject).not.to.have.been.called;
+        });
+
+        it('should allow the player to place another bomb if one second has elapsed since the last placement', () => {
+            player.addToScene(<any>{
+                game: {
+                    eventQueue: new MockEventQueue('ArrowDown', 'Space')
+                },
+                world: new MockWorld(),
+                addObject: (obj: GameObject) => { }
+            });
+
+            player.tick(0.2);
+            player.handleEvent(<any>{ type: 'keyPressed' });
+
+            sinon.stub(player.scene, 'addObject');
+
+            player.tick(1.01);
+            player.handleEvent(<any>{ type: 'keyPressed' });
+
+            expect(player.scene.addObject).to.have.been.calledOnce.calledWith(sinon.match(obj => obj instanceof Bomb));
+        });
+
+        it('should place a bomb one tile to the right if the player is facing east', () => {
+            player.addToScene(<any>{
+                game: {
+                    eventQueue: new MockEventQueue('ArrowRight', 'Space')
+                },
+                world: new MockWorld(),
+                addObject: (obj: GameObject) => { }
+            });
+
+            sinon.stub(player.scene, 'addObject');
+
+            player.tick(0.2);
+            player.handleEvent(<any>{ type: 'keyPressed' });
+
+            expect(player.scene.addObject).to.have.been.calledOnce.calledWith(sinon.match(obj => obj instanceof Bomb
+                && (Math.floor(obj.x / TILE_SIZE) == Math.floor(1 + player.x / TILE_SIZE))
+                && (Math.floor(obj.y / TILE_SIZE) == Math.floor(player.y / TILE_SIZE))));
+        });
+
+        it('should place a bomb one tile to the left if the player is facing west', () => {
+            player.addToScene(<any>{
+                game: {
+                    eventQueue: new MockEventQueue('ArrowLeft', 'Space')
+                },
+                world: new MockWorld(),
+                addObject: (obj: GameObject) => { }
+            });
+
+            sinon.stub(player.scene, 'addObject');
+
+            player.tick(0.2);
+            player.handleEvent(<any>{ type: 'keyPressed' });
+
+            expect(player.scene.addObject).to.have.been.calledOnce.calledWith(sinon.match(obj => obj instanceof Bomb
+                && (Math.floor(obj.x / TILE_SIZE) == Math.floor(-1 + player.x / TILE_SIZE))
+                && (Math.floor(obj.y / TILE_SIZE) == Math.floor(player.y / TILE_SIZE))));
+        });
+
+        it('should place a bomb one tile to the top if the player is facing north', () => {
+            player.addToScene(<any>{
+                game: {
+                    eventQueue: new MockEventQueue('ArrowUp', 'Space')
+                },
+                world: new MockWorld(),
+                addObject: (obj: GameObject) => { }
+            });
+
+            sinon.stub(player.scene, 'addObject');
+
+            player.tick(0.2);
+            player.handleEvent(<any>{ type: 'keyPressed' });
+
+            expect(player.scene.addObject).to.have.been.calledOnce.calledWith(sinon.match(obj => obj instanceof Bomb
+                && (Math.floor(obj.x / TILE_SIZE) == Math.floor(player.x / TILE_SIZE))
+                && (Math.floor(obj.y / TILE_SIZE) == Math.floor(-1 + player.y / TILE_SIZE))));
+        });
+
+        it('should place a bomb one tile to the bottom if the player is facing south', () => {
+            player.addToScene(<any>{
+                game: {
+                    eventQueue: new MockEventQueue('ArrowDown', 'Space')
+                },
+                world: new MockWorld(),
+                addObject: (obj: GameObject) => { }
+            });
+
+            sinon.stub(player.scene, 'addObject');
+
+            player.tick(0.2);
+            player.handleEvent(<any>{ type: 'keyPressed' });
+
+            expect(player.scene.addObject).to.have.been.calledOnce.calledWith(sinon.match(obj => obj instanceof Bomb
+                && (Math.floor(obj.x / TILE_SIZE) == Math.floor(player.x / TILE_SIZE))
+                && (Math.floor(obj.y / TILE_SIZE) == Math.floor(1 + player.y / TILE_SIZE))));
+        });
     });
 
     describe('.handleEvent', () => {

@@ -8,6 +8,7 @@ import { alives } from './dbs/alive-db';
 import { sfx } from './dbs/sfx-db';
 import { pauseWithGame } from './utils/pause-with-game';
 import merge = require('lodash.merge');
+import { Bomb } from './bomb';
 
 const CLOSE_ENOUGH: number = 3.0;
 const MOVE_SPEED = 4 * 30;
@@ -33,11 +34,37 @@ export class Player extends Entity {
         if (evt.type == 'mouseWheel') {
             let scale = Math.pow(2, -clamp(evt.delta, -1, 1) / 7);
             this.game.scene.camera.zoomScale *= scale;
+        } else if (evt.type == 'keyPressed') {
+            if (this.events.isKeyDown('Space') && this.bombPlaceTimer <= 0.0) {
+                let offset: number[] = [0, 0];
+
+                if (this.sprite == alives['player-east'].sprite) {
+                    offset = [1, 0];
+                } else if (this.sprite == alives['player-west'].sprite) {
+                    offset = [-1, 0];
+                } else if (this.sprite == alives['player-south'].sprite) {
+                    offset = [0, 1];
+                } else if (this.sprite == alives['player-north'].sprite) {
+                    offset = [0, -1];
+                }
+
+                this.scene.addObject(new Bomb({
+                    x: Math.floor(this.x / TILE_SIZE + offset[0]) * TILE_SIZE,
+                    y: Math.floor(this.y / TILE_SIZE + offset[1]) * TILE_SIZE,
+                }));
+
+                this.bombPlaceTimer = 1.0;
+            }
         }
+
         super.handleEvent(evt);
     }
 
+    private bombPlaceTimer: number = 0.0;
+
     tick(delta: number) {
+        this.bombPlaceTimer -= delta;
+
         let h: number = 0.0;
         if ((this.events.isKeyDown('ArrowLeft') || this.events.isKeyDown('KeyA')) && (Math.abs(this.vspeed) < CLOSE_ENOUGH)) { h -= MOVE_SPEED; }
         if ((this.events.isKeyDown('ArrowRight') || this.events.isKeyDown('KeyD')) && (Math.abs(this.vspeed) < CLOSE_ENOUGH)) { h += MOVE_SPEED; }
