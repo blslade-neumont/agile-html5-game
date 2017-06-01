@@ -10,6 +10,7 @@ import { Game } from '../engine';
 import { GameObject, GameScene, AudioSourceObject } from '../engine';
 import { alives } from '../dbs/alive-db';
 import { Explosion } from '../explosion';
+import { SimpleEnemy } from '../simple-enemy';
 
 describe('Bomb', () => {
     let bomb: Bomb;
@@ -53,8 +54,22 @@ describe('Bomb', () => {
             expect(stub.firstCall).to.have.been.calledWith(sinon.match(obj => obj instanceof Explosion && obj.x == bomb.x && obj.y == bomb.y));
         });
 
-        xit('should deal damage to any entity within a certain radius', () => {
+        it('should deal damage to an entity within the radius', () => {
+            let ent: SimpleEnemy = new SimpleEnemy({ maxHealth: 6, x: 0, y: 32 });
+            game.scene.addObject(bomb);
+            game.scene.addObject(ent);
+            sinon.stub(ent, 'takeDamage');
+            bomb.explode();
+            expect(ent.takeDamage).to.have.been.calledOnce;
+        });
 
+        it('should not deal damage to an entity outside the radius', () => {
+            let ent: SimpleEnemy = new SimpleEnemy({ maxHealth: 6, x: 0, y: 96 });
+            game.scene.addObject(bomb);
+            game.scene.addObject(ent);
+            sinon.stub(ent, 'takeDamage');
+            bomb.explode();
+            expect(ent.takeDamage).not.to.have.been;
         });
 
         it('should play the explosion sound effect', () => {
