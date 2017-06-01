@@ -4,6 +4,7 @@ import { GridRenderer } from '../grid-renderer';
 import { Player } from '../player';
 import { BatController } from '../flocking/bat-controller';
 import { EnemyController } from '../enemies/enemy-controller';
+import { DebugControls } from '../debug-controls';
 
 export class FlockingScene extends GameScene {
     constructor() {
@@ -36,7 +37,10 @@ export class FlockingScene extends GameScene {
 
         let enemyController = new EnemyController(this._world);
         this.addObject(enemyController);
-        
+
+        let debugControls = new DebugControls();
+        this.addObject(debugControls);
+
         let camera = this.camera = new FollowCamera(this);
         camera.follow = player;
         camera.enableSmoothing = false;

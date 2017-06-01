@@ -7,6 +7,12 @@ export class BatController extends GameObject {
     constructor() {
         super("BirdController", { shouldRender: false });
     }
+    
+    get debugControls(): any[] {
+        return [
+            { key: 'f', name: 'flocking render mode', state: this.renderMode }
+        ];
+    }
 
     private _bats: Bat[] = [];
     get bats() {

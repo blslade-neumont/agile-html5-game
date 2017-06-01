@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 34);
+/******/ 	return __webpack_require__(__webpack_require__.s = 35);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -2451,7 +2451,7 @@ function stubFalse() {
 
 module.exports = merge;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(42), __webpack_require__(43)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(43), __webpack_require__(44)(module)))
 
 /***/ }),
 /* 5 */
@@ -3393,9 +3393,9 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var engine_1 = __webpack_require__(0);
-var tile_preload_strategy_1 = __webpack_require__(37);
-var alive_preload_strategy_1 = __webpack_require__(36);
-var flocking_scene_1 = __webpack_require__(38);
+var tile_preload_strategy_1 = __webpack_require__(38);
+var alive_preload_strategy_1 = __webpack_require__(37);
+var flocking_scene_1 = __webpack_require__(39);
 var RtsGame = (function (_super) {
     __extends(RtsGame, _super);
     function RtsGame(framesPerSecond) {
@@ -3973,10 +3973,60 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var engine_1 = __webpack_require__(0);
-var enemy_1 = __webpack_require__(24);
+var DebugControls = (function (_super) {
+    __extends(DebugControls, _super);
+    function DebugControls() {
+        return _super.call(this, 'DebugControls', { renderCamera: 'none' }) || this;
+    }
+    DebugControls.prototype.addToScene = function (scene) {
+        _super.prototype.addToScene.call(this, scene);
+        var objsWithControls = scene.findObjects(function (obj) { return obj.debugControls; });
+        this.controls = function () {
+            return [].concat.apply([], objsWithControls.map(function (obj) { return obj.debugControls; }));
+        };
+    };
+    DebugControls.prototype.renderImpl = function (context) {
+        var controlsStr = this.controls()
+            .map(function (c) {
+            var state = typeof c.state === 'undefined' || c.state == null ? '' :
+                typeof c.state !== 'boolean' ? "" + c.state :
+                    c.state ? 'on' :
+                        'off';
+            return ((c.key && c.key + " - ") || '') + c.name + ((state && ": " + state) || '');
+        })
+            .join('\n');
+        context.textAlign = 'left';
+        context.textBaseline = 'top';
+        context.fillStyle = 'white';
+        engine_1.fillText(context, controlsStr, 4, 4);
+    };
+    return DebugControls;
+}(engine_1.GameObject));
+exports.DebugControls = DebugControls;
+
+
+/***/ }),
+/* 24 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var engine_1 = __webpack_require__(0);
+var enemy_1 = __webpack_require__(25);
 var tile_db_1 = __webpack_require__(1);
-var node_1 = __webpack_require__(25);
-var path_1 = __webpack_require__(26);
+var node_1 = __webpack_require__(26);
+var path_1 = __webpack_require__(27);
 var EnemyController = (function (_super) {
     __extends(EnemyController, _super);
     function EnemyController(world) {
@@ -4010,6 +4060,16 @@ var EnemyController = (function (_super) {
         _super.prototype.addToScene.call(this, scene);
         this.addEnemies(10);
     };
+    Object.defineProperty(EnemyController.prototype, "debugControls", {
+        get: function () {
+            return [
+                { key: 'E', name: 'enemy render mode', state: this.renderMode },
+                { key: 'G', name: 'fog of war', state: this.renderFogOfWar }
+            ];
+        },
+        enumerable: true,
+        configurable: true
+    });
     Object.defineProperty(EnemyController.prototype, "baseCoords", {
         get: function () {
             return [this._baseCoords[0], this._baseCoords[1]];
@@ -4039,11 +4099,16 @@ var EnemyController = (function (_super) {
         return enemy;
     };
     EnemyController.prototype.handleEvent = function (evt) {
-        if (evt.type == 'keyPressed' && evt.code == 'KeyE') {
-            this.renderMode = (this.renderMode == 'none') ? 'single' :
-                (this.renderMode == 'single') ? 'all' :
-                    'none';
-            this.updateRenderDebugInfo();
+        if (evt.type == 'keyPressed') {
+            if (evt.code == 'KeyE') {
+                this.renderMode = (this.renderMode == 'none') ? 'single' :
+                    (this.renderMode == 'single') ? 'all' :
+                        'none';
+                this.updateRenderDebugInfo();
+            }
+            else if (evt.code == 'KeyG') {
+                this.renderFogOfWar = !this.renderFogOfWar;
+            }
         }
     };
     EnemyController.prototype.updateRenderDebugInfo = function () {
@@ -4081,7 +4146,7 @@ exports.EnemyController = EnemyController;
 
 
 /***/ }),
-/* 24 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4098,8 +4163,8 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var engine_1 = __webpack_require__(0);
-var state_machine_1 = __webpack_require__(28);
-var wander_state_1 = __webpack_require__(30);
+var state_machine_1 = __webpack_require__(29);
+var wander_state_1 = __webpack_require__(31);
 var alive_db_1 = __webpack_require__(3);
 var merge = __webpack_require__(4);
 var Enemy = (function (_super) {
@@ -4130,7 +4195,7 @@ exports.Enemy = Enemy;
 
 
 /***/ }),
-/* 25 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4186,7 +4251,7 @@ exports.Node = Node;
 
 
 /***/ }),
-/* 26 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4266,7 +4331,7 @@ exports.Path = Path;
 
 
 /***/ }),
-/* 27 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4283,7 +4348,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var engine_1 = __webpack_require__(0);
-var state_1 = __webpack_require__(29);
+var state_1 = __webpack_require__(30);
 var tile_db_1 = __webpack_require__(1);
 var math_1 = __webpack_require__(12);
 var PathfindState = (function (_super) {
@@ -4364,7 +4429,7 @@ exports.PathfindState = PathfindState;
 
 
 /***/ }),
-/* 28 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4415,7 +4480,7 @@ exports.StateMachine = StateMachine;
 
 
 /***/ }),
-/* 29 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4472,7 +4537,7 @@ exports.State = State;
 
 
 /***/ }),
-/* 30 */
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4488,7 +4553,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-var pathfind_state_1 = __webpack_require__(27);
+var pathfind_state_1 = __webpack_require__(28);
 var tile_db_1 = __webpack_require__(1);
 var WanderState = (function (_super) {
     __extends(WanderState, _super);
@@ -4527,7 +4592,7 @@ exports.WanderState = WanderState;
 
 
 /***/ }),
-/* 31 */
+/* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4544,7 +4609,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var engine_1 = __webpack_require__(0);
-var bat_1 = __webpack_require__(32);
+var bat_1 = __webpack_require__(33);
 var BatController = (function (_super) {
     __extends(BatController, _super);
     function BatController() {
@@ -4553,6 +4618,15 @@ var BatController = (function (_super) {
         _this.renderMode = 'none';
         return _this;
     }
+    Object.defineProperty(BatController.prototype, "debugControls", {
+        get: function () {
+            return [
+                { key: 'f', name: 'flocking render mode', state: this.renderMode }
+            ];
+        },
+        enumerable: true,
+        configurable: true
+    });
     Object.defineProperty(BatController.prototype, "bats", {
         get: function () {
             return this._bats;
@@ -4598,7 +4672,7 @@ exports.BatController = BatController;
 
 
 /***/ }),
-/* 32 */
+/* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4725,7 +4799,7 @@ exports.Bat = Bat;
 
 
 /***/ }),
-/* 33 */
+/* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4777,7 +4851,7 @@ exports.GridRenderer = GridRenderer;
 
 
 /***/ }),
-/* 34 */
+/* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4789,7 +4863,7 @@ game.start();
 
 
 /***/ }),
-/* 35 */
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4821,6 +4895,16 @@ var Player = (function (_super) {
             _this.sprite = alive_db_1.alives['player-south'].sprite;
         return _this;
     }
+    Object.defineProperty(Player.prototype, "debugControls", {
+        get: function () {
+            return [
+                { key: 'WASD', name: 'move' },
+                { key: 'Mouse Wheel', name: 'zoom in/out' }
+            ];
+        },
+        enumerable: true,
+        configurable: true
+    });
     Player.prototype.handleEvent = function (evt) {
         if (evt.type == 'mouseWheel') {
             var scale = Math.pow(2, -engine_1.clamp(evt.delta, -1, 1) / 7);
@@ -4909,7 +4993,7 @@ exports.Player = Player;
 
 
 /***/ }),
-/* 36 */
+/* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4930,7 +5014,7 @@ exports.AlivePreloadStrategy = AlivePreloadStrategy;
 
 
 /***/ }),
-/* 37 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4951,7 +5035,7 @@ exports.TilePreloadStrategy = TilePreloadStrategy;
 
 
 /***/ }),
-/* 38 */
+/* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4968,11 +5052,12 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var engine_1 = __webpack_require__(0);
-var world_1 = __webpack_require__(40);
-var grid_renderer_1 = __webpack_require__(33);
-var player_1 = __webpack_require__(35);
-var bat_controller_1 = __webpack_require__(31);
-var enemy_controller_1 = __webpack_require__(23);
+var world_1 = __webpack_require__(41);
+var grid_renderer_1 = __webpack_require__(34);
+var player_1 = __webpack_require__(36);
+var bat_controller_1 = __webpack_require__(32);
+var enemy_controller_1 = __webpack_require__(24);
+var debug_controls_1 = __webpack_require__(23);
 var FlockingScene = (function (_super) {
     __extends(FlockingScene, _super);
     function FlockingScene() {
@@ -5003,6 +5088,8 @@ var FlockingScene = (function (_super) {
         batController.addBats(1000);
         var enemyController = new enemy_controller_1.EnemyController(this._world);
         this.addObject(enemyController);
+        var debugControls = new debug_controls_1.DebugControls();
+        this.addObject(debugControls);
         var camera = this.camera = new engine_1.FollowCamera(this);
         camera.follow = player;
         camera.enableSmoothing = false;
@@ -5014,13 +5101,13 @@ exports.FlockingScene = FlockingScene;
 
 
 /***/ }),
-/* 39 */
+/* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var nnn = __webpack_require__(41);
+var nnn = __webpack_require__(42);
 var Noise = nnn.Noise;
 var cache = new Map();
 function generateNoise(seed, chunkx, chunky) {
@@ -5040,7 +5127,7 @@ exports.generateNoise = generateNoise;
 
 
 /***/ }),
-/* 40 */
+/* 41 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5058,7 +5145,7 @@ var __extends = (this && this.__extends) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var engine_1 = __webpack_require__(0);
 var tile_db_1 = __webpack_require__(1);
-var noise_1 = __webpack_require__(39);
+var noise_1 = __webpack_require__(40);
 var TIME_SCALE = 1 / (60 * 5);
 var World = (function (_super) {
     __extends(World, _super);
@@ -5128,7 +5215,7 @@ exports.World = World;
 
 
 /***/ }),
-/* 41 */
+/* 42 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -5461,7 +5548,7 @@ exports.World = World;
 
 
 /***/ }),
-/* 42 */
+/* 43 */
 /***/ (function(module, exports) {
 
 var g;
@@ -5488,7 +5575,7 @@ module.exports = g;
 
 
 /***/ }),
-/* 43 */
+/* 44 */
 /***/ (function(module, exports) {
 
 module.exports = function(module) {

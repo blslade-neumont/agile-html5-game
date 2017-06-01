@@ -14,6 +14,13 @@ export class Player extends GameObject {
         super("Player", opts);
         if (!this.sprite) this.sprite = alives['player-south'].sprite;
     }
+    
+    get debugControls(): any[] {
+        return [
+            { key: 'WASD', name: 'move' },
+            { key: 'Mouse Wheel', name: 'zoom in/out' }
+        ];
+    }
 
     handleEvent(evt: GameEvent) {
         if (evt.type == 'mouseWheel') {

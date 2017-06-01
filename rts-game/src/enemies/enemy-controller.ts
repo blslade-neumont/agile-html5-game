@@ -34,6 +34,13 @@ export class EnemyController extends GameObject {
         this.addEnemies(10);
     }
 
+    get debugControls(): any[] {
+        return [
+            { key: 'E', name: 'enemy render mode', state: this.renderMode },
+            { key: 'G', name: 'fog of war', state: this.renderFogOfWar }
+        ];
+    }
+
     private _baseCoords: [number, number] = [0, 0];
     get baseCoords(): [number, number] {
         return [this._baseCoords[0], this._baseCoords[1]];
@@ -62,11 +69,16 @@ export class EnemyController extends GameObject {
     renderMode = 'all';
     renderFogOfWar = true;
     handleEvent(evt: GameEvent) {
-        if (evt.type == 'keyPressed' && evt.code == 'KeyE') {
-            this.renderMode = (this.renderMode == 'none') ? 'single' :
-                            (this.renderMode == 'single') ? 'all' :
-                                                            'none';
-            this.updateRenderDebugInfo();
+        if (evt.type == 'keyPressed') {
+            if (evt.code == 'KeyE') {
+                this.renderMode = (this.renderMode == 'none') ? 'single' :
+                                (this.renderMode == 'single') ? 'all' :
+                                                                'none';
+                this.updateRenderDebugInfo();
+            }
+            else if (evt.code == 'KeyG') {
+                this.renderFogOfWar = !this.renderFogOfWar;
+            }
         }
     }
     private updateRenderDebugInfo() {
