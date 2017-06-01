@@ -9,6 +9,7 @@ import { SimpleEnemy } from '../simple-enemy';
 import { alives } from '../dbs/alive-db';
 import { MockEventQueue } from './mock-event-queue';
 import { MockWorld } from './mock-world';
+import { GameObject } from '../engine';
 
 describe('SimpleEnemy', () => {
     let enemy: SimpleEnemy;
@@ -32,6 +33,24 @@ describe('SimpleEnemy', () => {
                 expect((c+2)%4).to.not.eq(l);
                 l = c;
             }
+        });
+    });
+
+    describe('.kill', () => {
+        it('should increase the game score', () => {
+            let scene: any = <any>{
+                game: {
+                    eventQueue: new MockEventQueue(),
+                    score: 0
+                },
+                world: new MockWorld(),
+                addObject: (obj: GameObject) => { },
+                removeObject: (obj: GameObject) => { }
+            };
+
+            enemy.addToScene(scene);
+            enemy.kill();
+            expect(scene.game.score).to.be.greaterThan(0);
         });
     });
 

@@ -6,6 +6,7 @@ import merge = require('lodash.merge');
 import { sfx } from './dbs/sfx-db';
 import { ResourceLoader, Game, GameEvent, fmod, GameScene, clamp, Rect, SpriteT, drawSprite } from './engine';
 import { pauseWithGame } from './utils/pause-with-game';
+import { AgileGame } from './agile-game';
 
 const SIZE = 32;
 const CLOSE_ENOUGH: number = 3.0;
@@ -67,7 +68,7 @@ export class SimpleEnemy extends Entity {
     }
 
     kill() {
-        // TODO: WORKING DEATH ANIMATION
+        (<AgileGame>this.game).score += 50;
         super.kill();
     }
 }
