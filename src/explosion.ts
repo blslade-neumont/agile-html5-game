@@ -5,7 +5,7 @@ export class Explosion extends GameObject {
     constructor(opts: GameObjectOptions = {}) {
         super('Explosion', opts);
         if (!this.sprite) this.sprite = effects['explosion'].sprite;
-        this.animationSpeed = 0.1;
+        this.animationSpeed = 0.4;
     }
 
     private effectTime = 1;

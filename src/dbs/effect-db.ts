@@ -25,7 +25,7 @@ export let effects: { [name: string]: Effect } =
                     { tilex: 1, tiley: 2 },
                     { tilex: 2, tiley: 2 }
                 ],
-                pivot: { x: 192/2, y: 192/2 }
+                pivot: { x: 192/2-16, y: 192/2-16 }
             }
         },
     };
