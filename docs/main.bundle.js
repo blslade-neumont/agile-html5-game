@@ -4686,6 +4686,9 @@ var Player = (function (_super) {
         get: function () {
             return this._inventory;
         },
+        set: function (val) {
+            this._inventory = val;
+        },
         enumerable: true,
         configurable: true
     });
@@ -5842,6 +5845,7 @@ var DungeonScene = (function (_super) {
         this.player.hspeed = 0;
         this.player.vspeed = 0;
         this.player.currentHealth = otherPlayer.currentHealth;
+        this.player.inventory = otherPlayer.inventory;
         var otherWorld = fromScene.findObject('World');
         if (otherWorld)
             this.world.gameTime = otherWorld.gameTime;

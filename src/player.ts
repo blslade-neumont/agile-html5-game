@@ -114,4 +114,7 @@ export class Player extends Entity {
     get inventory() {
         return this._inventory;
     }
+    set inventory(val: Inventory) {
+        this._inventory = val;
+    }
 }

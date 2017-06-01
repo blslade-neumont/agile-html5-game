@@ -39,6 +39,7 @@ export class DungeonScene extends GameScene {
         this.player.hspeed = 0;
         this.player.vspeed = 0;
         this.player.currentHealth = otherPlayer.currentHealth;
+        this.player.inventory = otherPlayer.inventory;
 
         let otherWorld = <World>fromScene.findObject('World');
         if (otherWorld) this.world.gameTime = otherWorld.gameTime;

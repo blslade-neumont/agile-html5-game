@@ -60,10 +60,12 @@ describe('dbs/tiles', () => {
         let ent: Entity;
         let dung: DungeonScene;
         let dungCamera: FollowCamera;
+        let entInventory: Inventory;
         beforeEach(() => {
             dung = (<any>scene).dungeon = new DungeonScene();
             dungCamera = (<any>dung)._followCamera;
             ent = new Entity('Player', { maxHealth: 10, x: 0, y: 0, collisionBounds: new Rect(0, 32, 0, 32) });
+            entInventory = (<any>ent).inventory = new Inventory();
             scene.addObject(ent);
             sinon.stub(world, 'getTileAt').withArgs(0, 0).returns(tiles['teleporter']);
         });
@@ -103,6 +105,12 @@ describe('dbs/tiles', () => {
             world.tick(.02);
             expect(dung.world.gameTime).to.be.closeTo(world.gameTime, .00001);
         });
+        it('should preserve the player inventory when it navigates to a DungeonScene', () => {
+            sinon.spy(game, 'changeScene');
+            entInventory.addItem(<any>{ sprite: { src: 'abc.xyz' } });
+            world.tick(.02);
+            expect((<any>dung).player.inventory).to.deep.eq(entInventory);
+        });
     });
 
     describe('dungeonTeleporter', () => {
@@ -110,13 +118,14 @@ describe('dbs/tiles', () => {
         let dungCamera: FollowCamera;
         let returnScene: GameScene;
         let ent: Entity;
+        let entInventory: Inventory;
         beforeEach(() => {
             dungScene = scene = new DungeonScene();
             dungCamera = (<any>dungScene)._followCamera;
             game.changeScene(scene);
             scene.start();
 
-            let player: any = {};
+            let player: any = { inventory: entInventory = new Inventory() };
             let returnWorld: any = { gameTime: 0 };
             returnScene = <any>{
                 findObject: name => (name == 'Player') ? player :
@@ -144,7 +153,7 @@ describe('dbs/tiles', () => {
             dungScene.world.tick(.02);
             expect(returnScene.addObject).to.have.been.calledOnce.calledWith(sinon.match.instanceOf(AudioSourceObject));
         });
-        it('should preserve the camera zoomScale when it navigates to the DungeonScene', () => {
+        it('should preserve the camera zoomScale when it navigates to the previous scene', () => {
             let testCamera = new Camera(scene);
             returnScene.camera = testCamera;
             dungCamera.zoomScale = 3.14159;
@@ -166,6 +175,11 @@ describe('dbs/tiles', () => {
             dungScene.world.gameTime = 28582.5;
             dungScene.world.tick(.02);
             expect((<any>returnScene).world.gameTime).to.be.closeTo(dungScene.world.gameTime, .00001);
+        });
+        it('should preserve the player inventory when it navigates to the previous scene', () => {
+            entInventory.addItem(<any>{ sprite: { src: 'abc.xyz' } });
+            dungScene.world.tick(.02);
+            expect((<any>returnScene.findObject('Player')).inventory).to.deep.eq(entInventory);
         });
     });
 
