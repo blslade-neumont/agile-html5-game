@@ -1,9 +1,12 @@
-import { GameObject, GameScene, GameEvent } from '../engine';
+import { GameObject, GameScene, GameEvent, fmod } from '../engine';
 import { Enemy } from './enemy';
 import { World } from '../world';
 import { tiles, TILE_SIZE } from '../dbs/tile-db';
 import { Node, keyFromCoords } from './node';
 import { Path } from './path';
+import { pointDistance2 } from '../utils/math';
+
+const FOW_BUCKET_SIZE = 8;
 
 type EnemyRenderMode = 'none' | 'single' | 'all';
 
@@ -87,6 +90,39 @@ export class EnemyController extends GameObject {
         }
         if (this.renderMode == 'single' && this._enemies.length) this._enemies[0].renderDebugInfo = true;
     }
+    
+    private _fowBuckets = new Map<string, boolean[][]>();
+    isInFOW(x: number, y: number) {
+        let [bucketx, buckety] = [Math.floor(x / FOW_BUCKET_SIZE), Math.floor(y / FOW_BUCKET_SIZE)];
+        let key = `${bucketx}_${buckety}`;
+        if (!this._fowBuckets.has(key)) return true;
+        let bucket = this._fowBuckets.get(key);
+        let [offsetx, offsety] = [fmod(x, FOW_BUCKET_SIZE), fmod(y, FOW_BUCKET_SIZE)];
+        return bucket[offsetx][offsety];
+    }
+    setFOW(x: number, y: number, val: boolean) {
+        let [bucketx, buckety] = [Math.floor(x / FOW_BUCKET_SIZE), Math.floor(y / FOW_BUCKET_SIZE)];
+        let key = `${bucketx}_${buckety}`;
+        if (!this._fowBuckets.has(key)) {
+            if (val) return;
+            let row = [];
+            for (let q = 0; q < FOW_BUCKET_SIZE; q++)
+                row.push(true);
+            this._fowBuckets.set(key, row.map(col => [...row]));
+        }
+        let bucket = this._fowBuckets.get(key);
+        let [offsetx, offsety] = [fmod(x, FOW_BUCKET_SIZE), fmod(y, FOW_BUCKET_SIZE)];
+        bucket[offsetx][offsety] = val;
+    }
+    clearFOW(x: number, y: number, radius: number, newVal = false) {
+        let dist = Math.ceil(radius);
+        let radius2 = radius * radius;
+        for (let q = x - dist; q <= x + dist; q++) {
+            for (let w = y - dist; w <= y + dist; w++) {
+                if (pointDistance2(x, y, q, w) <= radius2) this.setFOW(q, w, newVal);
+            }
+        }
+    }
 
     nodeMap = new Map<string, Node | null>();
     getNode(x: number, y: number): Node | null {
@@ -108,6 +144,33 @@ export class EnemyController extends GameObject {
     render(context: CanvasRenderingContext2D) {
         if (!this.renderFogOfWar) return;
 
+        if (!this.shouldRender) return;
 
+        let bounds = this.scene.camera.bounds;
+        let startx = Math.floor(bounds.left / TILE_SIZE / FOW_BUCKET_SIZE);
+        let starty = Math.floor(bounds.bottom / TILE_SIZE / FOW_BUCKET_SIZE);
+        let endx = Math.floor(bounds.right / TILE_SIZE / FOW_BUCKET_SIZE) + 1;
+        let endy = Math.floor(bounds.top / TILE_SIZE / FOW_BUCKET_SIZE) + 1;
+
+        context.fillStyle = 'rgba(0, 0, 0, .8)';
+        for (let bucketx = startx; bucketx < endx; bucketx++) {
+            for (let buckety = starty; buckety < endy; buckety++) {
+                let bucketPx = bucketx * TILE_SIZE * FOW_BUCKET_SIZE;
+                let bucketPy = buckety * TILE_SIZE * FOW_BUCKET_SIZE;
+
+                let key = `${bucketx}_${buckety}`;
+                if (!this._fowBuckets.has(key)) {
+                    context.fillRect(bucketPx, bucketPy, TILE_SIZE * FOW_BUCKET_SIZE, TILE_SIZE * FOW_BUCKET_SIZE);
+                    continue;
+                }
+                let bucket = this._fowBuckets.get(key);
+
+                for (let q = 0; q < FOW_BUCKET_SIZE; q++) {
+                    for (let w = 0; w < FOW_BUCKET_SIZE; w++) {
+                        if (bucket[q][w]) context.fillRect(bucketPx + q * TILE_SIZE, bucketPy + w * TILE_SIZE, TILE_SIZE, TILE_SIZE);
+                    }
+                }
+            }
+        }
     }
 }

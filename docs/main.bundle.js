@@ -2603,7 +2603,7 @@ exports.Camera = Camera;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var sprite_1 = __webpack_require__(11);
+var sprite_1 = __webpack_require__(12);
 var math_1 = __webpack_require__(2);
 var LINE_HEIGHT = 12;
 function fillText(context, text, x, y) {
@@ -2662,6 +2662,23 @@ exports.measureSprite = measureSprite;
 
 /***/ }),
 /* 7 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+function pointDistance2(x1, y1, x2, y2) {
+    return Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2);
+}
+exports.pointDistance2 = pointDistance2;
+function pointDistance(x1, y1, x2, y2) {
+    return Math.sqrt(pointDistance2(x1, y1, x2, y2));
+}
+exports.pointDistance = pointDistance;
+
+
+/***/ }),
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2838,14 +2855,14 @@ exports.EventQueue = EventQueue;
 //# sourceMappingURL=event-queue.js.map
 
 /***/ }),
-/* 8 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var math_1 = __webpack_require__(2);
-var rect_1 = __webpack_require__(10);
+var rect_1 = __webpack_require__(11);
 var render_1 = __webpack_require__(6);
 ;
 var GameObject = (function () {
@@ -3180,7 +3197,7 @@ exports.GameObject = GameObject;
 //# sourceMappingURL=game-object.js.map
 
 /***/ }),
-/* 9 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3307,7 +3324,7 @@ exports.ResourceLoader = ResourceLoader;
 //# sourceMappingURL=resource-loader.js.map
 
 /***/ }),
-/* 10 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3342,7 +3359,7 @@ exports.Rect = Rect;
 //# sourceMappingURL=rect.js.map
 
 /***/ }),
-/* 11 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3357,23 +3374,6 @@ function isAnimationSprite(sprite) {
 }
 exports.isAnimationSprite = isAnimationSprite;
 //# sourceMappingURL=sprite.js.map
-
-/***/ }),
-/* 12 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-function pointDistance2(x1, y1, x2, y2) {
-    return Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2);
-}
-exports.pointDistance2 = pointDistance2;
-function pointDistance(x1, y1, x2, y2) {
-    return Math.sqrt(pointDistance2(x1, y1, x2, y2));
-}
-exports.pointDistance = pointDistance;
-
 
 /***/ }),
 /* 13 */
@@ -3431,7 +3431,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-var game_object_1 = __webpack_require__(8);
+var game_object_1 = __webpack_require__(9);
 var merge = __webpack_require__(4);
 var AudioSourceObject = (function (_super) {
     __extends(AudioSourceObject, _super);
@@ -3688,8 +3688,8 @@ exports.GameScene = GameScene;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var resource_loader_1 = __webpack_require__(9);
-var event_queue_1 = __webpack_require__(7);
+var resource_loader_1 = __webpack_require__(10);
+var event_queue_1 = __webpack_require__(8);
 var Game = (function () {
     function Game(framesPerSecond) {
         if (framesPerSecond === void 0) { framesPerSecond = 30; }
@@ -3861,12 +3861,12 @@ function __export(m) {
     for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
 }
 Object.defineProperty(exports, "__esModule", { value: true });
-__export(__webpack_require__(7));
-__export(__webpack_require__(9));
+__export(__webpack_require__(8));
+__export(__webpack_require__(10));
 __export(__webpack_require__(5));
 __export(__webpack_require__(15));
 __export(__webpack_require__(17));
-__export(__webpack_require__(8));
+__export(__webpack_require__(9));
 __export(__webpack_require__(14));
 __export(__webpack_require__(16));
 __export(__webpack_require__(22));
@@ -3950,9 +3950,9 @@ __export(__webpack_require__(19));
 __export(__webpack_require__(20));
 __export(__webpack_require__(21));
 __export(__webpack_require__(2));
-__export(__webpack_require__(10));
-__export(__webpack_require__(6));
 __export(__webpack_require__(11));
+__export(__webpack_require__(6));
+__export(__webpack_require__(12));
 //# sourceMappingURL=index.js.map
 
 /***/ }),
@@ -4027,6 +4027,8 @@ var enemy_1 = __webpack_require__(25);
 var tile_db_1 = __webpack_require__(1);
 var node_1 = __webpack_require__(26);
 var path_1 = __webpack_require__(27);
+var math_1 = __webpack_require__(7);
+var FOW_BUCKET_SIZE = 8;
 var EnemyController = (function (_super) {
     __extends(EnemyController, _super);
     function EnemyController(world) {
@@ -4036,6 +4038,7 @@ var EnemyController = (function (_super) {
         _this._enemies = [];
         _this.renderMode = 'all';
         _this.renderFogOfWar = true;
+        _this._fowBuckets = new Map();
         _this.nodeMap = new Map();
         _this.init();
         return _this;
@@ -4119,6 +4122,41 @@ var EnemyController = (function (_super) {
         if (this.renderMode == 'single' && this._enemies.length)
             this._enemies[0].renderDebugInfo = true;
     };
+    EnemyController.prototype.isInFOW = function (x, y) {
+        var _a = [Math.floor(x / FOW_BUCKET_SIZE), Math.floor(y / FOW_BUCKET_SIZE)], bucketx = _a[0], buckety = _a[1];
+        var key = bucketx + "_" + buckety;
+        if (!this._fowBuckets.has(key))
+            return true;
+        var bucket = this._fowBuckets.get(key);
+        var _b = [engine_1.fmod(x, FOW_BUCKET_SIZE), engine_1.fmod(y, FOW_BUCKET_SIZE)], offsetx = _b[0], offsety = _b[1];
+        return bucket[offsetx][offsety];
+    };
+    EnemyController.prototype.setFOW = function (x, y, val) {
+        var _a = [Math.floor(x / FOW_BUCKET_SIZE), Math.floor(y / FOW_BUCKET_SIZE)], bucketx = _a[0], buckety = _a[1];
+        var key = bucketx + "_" + buckety;
+        if (!this._fowBuckets.has(key)) {
+            if (val)
+                return;
+            var row_1 = [];
+            for (var q = 0; q < FOW_BUCKET_SIZE; q++)
+                row_1.push(true);
+            this._fowBuckets.set(key, row_1.map(function (col) { return row_1.slice(); }));
+        }
+        var bucket = this._fowBuckets.get(key);
+        var _b = [engine_1.fmod(x, FOW_BUCKET_SIZE), engine_1.fmod(y, FOW_BUCKET_SIZE)], offsetx = _b[0], offsety = _b[1];
+        bucket[offsetx][offsety] = val;
+    };
+    EnemyController.prototype.clearFOW = function (x, y, radius, newVal) {
+        if (newVal === void 0) { newVal = false; }
+        var dist = Math.ceil(radius);
+        var radius2 = radius * radius;
+        for (var q = x - dist; q <= x + dist; q++) {
+            for (var w = y - dist; w <= y + dist; w++) {
+                if (math_1.pointDistance2(x, y, q, w) <= radius2)
+                    this.setFOW(q, w, newVal);
+            }
+        }
+    };
     EnemyController.prototype.getNode = function (x, y) {
         var key = node_1.keyFromCoords(x, y);
         if (!this.nodeMap.has(key)) {
@@ -4139,6 +4177,32 @@ var EnemyController = (function (_super) {
     EnemyController.prototype.render = function (context) {
         if (!this.renderFogOfWar)
             return;
+        if (!this.shouldRender)
+            return;
+        var bounds = this.scene.camera.bounds;
+        var startx = Math.floor(bounds.left / tile_db_1.TILE_SIZE / FOW_BUCKET_SIZE);
+        var starty = Math.floor(bounds.bottom / tile_db_1.TILE_SIZE / FOW_BUCKET_SIZE);
+        var endx = Math.floor(bounds.right / tile_db_1.TILE_SIZE / FOW_BUCKET_SIZE) + 1;
+        var endy = Math.floor(bounds.top / tile_db_1.TILE_SIZE / FOW_BUCKET_SIZE) + 1;
+        context.fillStyle = 'rgba(0, 0, 0, .8)';
+        for (var bucketx = startx; bucketx < endx; bucketx++) {
+            for (var buckety = starty; buckety < endy; buckety++) {
+                var bucketPx = bucketx * tile_db_1.TILE_SIZE * FOW_BUCKET_SIZE;
+                var bucketPy = buckety * tile_db_1.TILE_SIZE * FOW_BUCKET_SIZE;
+                var key = bucketx + "_" + buckety;
+                if (!this._fowBuckets.has(key)) {
+                    context.fillRect(bucketPx, bucketPy, tile_db_1.TILE_SIZE * FOW_BUCKET_SIZE, tile_db_1.TILE_SIZE * FOW_BUCKET_SIZE);
+                    continue;
+                }
+                var bucket = this._fowBuckets.get(key);
+                for (var q = 0; q < FOW_BUCKET_SIZE; q++) {
+                    for (var w = 0; w < FOW_BUCKET_SIZE; w++) {
+                        if (bucket[q][w])
+                            context.fillRect(bucketPx + q * tile_db_1.TILE_SIZE, bucketPy + w * tile_db_1.TILE_SIZE, tile_db_1.TILE_SIZE, tile_db_1.TILE_SIZE);
+                    }
+                }
+            }
+        }
     };
     return EnemyController;
 }(engine_1.GameObject));
@@ -4163,10 +4227,12 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var engine_1 = __webpack_require__(0);
-var state_machine_1 = __webpack_require__(29);
-var wander_state_1 = __webpack_require__(31);
+var state_machine_1 = __webpack_require__(30);
+var explore_state_1 = __webpack_require__(28);
 var alive_db_1 = __webpack_require__(3);
+var tile_db_1 = __webpack_require__(1);
 var merge = __webpack_require__(4);
+var FOW_CLEAR_RESET_TIME = .5;
 var Enemy = (function (_super) {
     __extends(Enemy, _super);
     function Enemy(controller, opts) {
@@ -4177,10 +4243,17 @@ var Enemy = (function (_super) {
         }, opts)) || this;
         _this.controller = controller;
         _this.renderDebugInfo = false;
-        _this._states = new state_machine_1.StateMachine(new wander_state_1.WanderState(_this));
+        _this._fowClearTime = Math.random() * FOW_CLEAR_RESET_TIME;
+        _this.fowClearDistance = 4;
+        _this._states = new state_machine_1.StateMachine(new explore_state_1.ExploreState(_this));
         return _this;
     }
     Enemy.prototype.tick = function (delta) {
+        this._fowClearTime -= delta;
+        if (this._fowClearTime <= 0) {
+            this.controller.clearFOW(Math.floor(this.x / tile_db_1.TILE_SIZE), Math.floor(this.y / tile_db_1.TILE_SIZE), this.fowClearDistance);
+            this._fowClearTime += FOW_CLEAR_RESET_TIME;
+        }
         this._states.tick(delta);
         _super.prototype.tick.call(this, delta);
         this.imageAngle = this.direction;
@@ -4347,10 +4420,65 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-var engine_1 = __webpack_require__(0);
-var state_1 = __webpack_require__(30);
+var pathfind_state_1 = __webpack_require__(29);
 var tile_db_1 = __webpack_require__(1);
-var math_1 = __webpack_require__(12);
+var ExploreState = (function (_super) {
+    __extends(ExploreState, _super);
+    function ExploreState(self) {
+        return _super.call(this, self) || this;
+    }
+    Object.defineProperty(ExploreState.prototype, "stateName", {
+        get: function () {
+            return 'exploring';
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(ExploreState.prototype, "stateStatus", {
+        get: function () {
+            return 'ok';
+        },
+        enumerable: true,
+        configurable: true
+    });
+    ExploreState.prototype.onEnter = function (machine, prevState) {
+        _super.prototype.onEnter.call(this, machine, prevState);
+        this.self.speed = 30 * (2 + Math.random() * 1);
+    };
+    ExploreState.prototype.tick = function (machine, delta) {
+        if (!this.path) {
+            var targetx = Math.floor((this.self.x + (Math.random() * 3000) - 1500) / tile_db_1.TILE_SIZE);
+            var targety = Math.floor((this.self.y + (Math.random() * 3000) - 1500) / tile_db_1.TILE_SIZE);
+            this.path = this.self.controller.getPath(Math.floor(this.self.x / tile_db_1.TILE_SIZE), Math.floor(this.self.y / tile_db_1.TILE_SIZE), targetx, targety);
+        }
+        _super.prototype.tick.call(this, machine, delta);
+    };
+    return ExploreState;
+}(pathfind_state_1.PathfindState));
+exports.ExploreState = ExploreState;
+
+
+/***/ }),
+/* 29 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var engine_1 = __webpack_require__(0);
+var state_1 = __webpack_require__(31);
+var tile_db_1 = __webpack_require__(1);
+var math_1 = __webpack_require__(7);
 var PathfindState = (function (_super) {
     __extends(PathfindState, _super);
     function PathfindState(self) {
@@ -4429,7 +4557,7 @@ exports.PathfindState = PathfindState;
 
 
 /***/ }),
-/* 29 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4480,7 +4608,7 @@ exports.StateMachine = StateMachine;
 
 
 /***/ }),
-/* 30 */
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4534,61 +4662,6 @@ var State = (function () {
     return State;
 }());
 exports.State = State;
-
-
-/***/ }),
-/* 31 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-var pathfind_state_1 = __webpack_require__(28);
-var tile_db_1 = __webpack_require__(1);
-var WanderState = (function (_super) {
-    __extends(WanderState, _super);
-    function WanderState(self) {
-        return _super.call(this, self) || this;
-    }
-    Object.defineProperty(WanderState.prototype, "stateName", {
-        get: function () {
-            return 'wandering';
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(WanderState.prototype, "stateStatus", {
-        get: function () {
-            return 'confused';
-        },
-        enumerable: true,
-        configurable: true
-    });
-    WanderState.prototype.onEnter = function (machine, prevState) {
-        _super.prototype.onEnter.call(this, machine, prevState);
-        this.self.speed = 30 * (2 + Math.random() * 1);
-    };
-    WanderState.prototype.tick = function (machine, delta) {
-        if (!this.path) {
-            var targetx = Math.floor((this.self.x + (Math.random() * 3000) - 1500) / tile_db_1.TILE_SIZE);
-            var targety = Math.floor((this.self.y + (Math.random() * 3000) - 1500) / tile_db_1.TILE_SIZE);
-            this.path = this.self.controller.getPath(Math.floor(this.self.x / tile_db_1.TILE_SIZE), Math.floor(this.self.y / tile_db_1.TILE_SIZE), targetx, targety);
-        }
-        _super.prototype.tick.call(this, machine, delta);
-    };
-    return WanderState;
-}(pathfind_state_1.PathfindState));
-exports.WanderState = WanderState;
 
 
 /***/ }),
@@ -4690,7 +4763,7 @@ var __extends = (this && this.__extends) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var engine_1 = __webpack_require__(0);
 var alive_db_1 = __webpack_require__(3);
-var math_1 = __webpack_require__(12);
+var math_1 = __webpack_require__(7);
 var merge = __webpack_require__(4);
 var Bat = (function (_super) {
     __extends(Bat, _super);
