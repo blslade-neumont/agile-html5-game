@@ -17,7 +17,8 @@ export class DungeonScene extends GameScene {
         grass: 'dungeonGrass',
         sand: 'dungeonSand',
         teleporter: 'dungeonTeleporter',
-        water: 'lava'
+        water: 'lava',
+        carrotCrop: 'dungeonGrass',
     });
     private _followCamera: FollowCamera = new FollowCamera(this);
     get world() {

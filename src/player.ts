@@ -10,6 +10,7 @@ import { pauseWithGame } from './utils/pause-with-game';
 import merge = require('lodash.merge');
 import { Bomb } from './bomb';
 import { SimpleEnemy } from './simple-enemy';
+import { Inventory } from './inventory';
 
 const CLOSE_ENOUGH: number = 3.0;
 const MOVE_SPEED = 4 * 30;
@@ -108,7 +109,7 @@ export class Player extends Entity {
         super.kill();
     }
 
-    private _inventory
+    private _inventory = new Inventory();
     get inventory() {
         return this._inventory;
     }

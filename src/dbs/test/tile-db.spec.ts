@@ -11,6 +11,9 @@ import { MockGame } from '../../engine/test';
 import { tiles } from '../tile-db';
 import { DungeonScene } from '../../scenes/dungeon-scene';
 import { Entity } from '../../entity';
+import { items, GameItem } from '../item-db';
+import { tiles } from '../tile-db';
+import { Inventory } from '../../inventory';
 
 describe('dbs/tiles', () => {
     let game: Game;
@@ -164,6 +167,39 @@ describe('dbs/tiles', () => {
             dungScene.world.gameTime = 28582.5;
             dungScene.world.tick(.02);
             expect((<any>returnScene).world.gameTime).to.be.closeTo(dungScene.world.gameTime, .00001);
+        });
+    });
+
+    let cropTiles: [string, string, string, number][] = [
+        ['carrotCrop', 'grass', 'crop_carrot', 1]
+    ];
+    cropTiles.forEach(([tileType, swapTileType, itemType, itemCount]) => {
+        describe(tileType, () => {
+            it(`should replace the ${tileType} tile with a ${swapTileType} tile when the player lands`, () => {
+                let ent = new Entity('Player', { maxHealth: 10, x: 0, y: 0, collisionBounds: new Rect(0, 32, 0, 32), flying: false });
+                let inventory = (<any>ent).inventory = new Inventory();
+                scene.addObject(ent);
+                sinon.spy(world, 'setTileAt');
+                sinon.stub(world, 'getTileAt').withArgs(0, 0).returns(tiles[tileType]);
+                world.tick(.02);
+                expect(world.setTileAt).to.have.been.calledOnce.calledWith(0, 0, tiles[swapTileType]);
+            });
+            it(`should not replace the tile with a ${swapTileType} when a non-player entity lands`, () => {
+                let ent = new Entity('Non-Player', { maxHealth: 10, x: 0, y: 0, collisionBounds: new Rect(0, 32, 0, 32), flying: false });
+                scene.addObject(ent);
+                sinon.spy(world, 'setTileAt');
+                sinon.stub(world, 'getTileAt').withArgs(0, 0).returns(tiles[tileType]);
+                world.tick(.02);
+                expect(world.setTileAt).not.to.have.been.called;
+            });
+            xit(`should add ${itemCount} ${itemType}(s) when the player lands`, () => {
+                let ent = new Entity('Player', { maxHealth: 10, x: 0, y: 0, collisionBounds: new Rect(0, 32, 0, 32), flying: true });
+                let inventory = (<any>ent).inventory = new Inventory();
+                scene.addObject(ent);
+                sinon.stub(world, 'getTileAt').withArgs(0, 0).returns(tiles[tileType]);
+                world.tick(.02);
+                expect(inventory.addItem).to.have.been.calledOnce.calledWith(items[itemType], itemCount);
+            });
         });
     });
 });

@@ -12,7 +12,8 @@ type TileDefaultsT = {
     sand?: string,
     wallSide?: string,
     wallTop?: string,
-    teleporter?: string
+    teleporter?: string,
+    carrotCrop?: string
 };
 
 export class World extends GameObject {
@@ -53,10 +54,10 @@ export class World extends GameObject {
                     if (!tileUnder) { continue; }
 
                     if (tileUnder.onTick) {
-                        tileUnder.onTick(delta, entity);
+                        tileUnder.onTick(delta, entity, tlx, tly);
                     }
                     if (tileUnder.onLand && Math.abs(entity.hspeed - 0.0005) <= 0.001 && Math.abs(entity.vspeed - 0.0005) <= 0.001) {
-                        tileUnder.onLand(entity);
+                        tileUnder.onLand(entity, tlx, tly);
                     }
                 }
             }
@@ -80,6 +81,13 @@ export class World extends GameObject {
         let [relativex, relativey] = [fmod(x, 64), fmod(y, 64)];
         return chunk[relativex][relativey];
     }
+    setTileAt(x: number, y: number, tile: WorldTile) {
+        let chunk = this.getChunk(Math.floor(x / 64), Math.floor(y / 64));
+        let [relativex, relativey] = [fmod(x, 64), fmod(y, 64)];
+        chunk[relativex][relativey] = tile;
+        let key = `${x}_${y}`;
+        if (this._variantCache.has(key)) this._variantCache.delete(key);
+    }
     
     private _chunks = new Map<string, WorldTile[][]>();
     private getChunk(x: number, y: number): WorldTile[][] {
@@ -100,7 +108,9 @@ export class World extends GameObject {
                      num < .5 || w == 63 || (noise[q][w + 1] < .5 && (w == 0 || noise[q][w - 1] < .5)) ? this.tileDefaults.sand     || 'sand' :
                                                                        noise[q][w + 1] < .5 || w == 62 ? this.tileDefaults.wallSide || 'wallSide' :
                                                                                                          this.tileDefaults.wallTop  || 'wallTop';
-                
+                if (name == (this.tileDefaults.grass || 'grass') && Math.random() < .0015) {
+                    name = this.tileDefaults.carrotCrop || 'carrotCrop';
+                }
                 names.push(name);
             }
 

@@ -115,6 +115,7 @@ exports.sfx = {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+var item_db_1 = __webpack_require__(15);
 exports.TILE_SIZE = 32;
 ;
 exports.tiles = {
@@ -200,7 +201,7 @@ exports.tiles = {
                 tileset: { width: 32, height: 32, tilex: 15, tiley: 5 }
             }],
         isSolid: false,
-        onTick: function (delta, entity) {
+        onTick: function (delta, entity, x, y) {
             if (!entity.flying) {
                 entity.takeDamage(3);
             }
@@ -218,7 +219,7 @@ exports.tiles = {
             framesPerSecond: 4,
         },
         isSolid: false,
-        onTick: function (delta, entity) {
+        onTick: function (delta, entity, x, y) {
             if (!entity.flying) {
                 entity.takeDamage(3);
             }
@@ -236,7 +237,7 @@ exports.tiles = {
             framesPerSecond: 4,
         },
         isSolid: false,
-        onTick: function (delta, entity) {
+        onTick: function (delta, entity, x, y) {
             if (!entity.flying) {
                 entity.takeDamage(3);
             }
@@ -248,7 +249,7 @@ exports.tiles = {
             tileset: { width: 32, height: 32, tilex: 9, tiley: 0 }
         },
         isSolid: false,
-        onTick: function (delta, entity) {
+        onTick: function (delta, entity, x, y) {
             if (!entity.flying) {
                 entity.takeDamage(1);
             }
@@ -266,7 +267,7 @@ exports.tiles = {
             framesPerSecond: 4,
         },
         isSolid: false,
-        onTick: function (delta, entity) {
+        onTick: function (delta, entity, x, y) {
             if (!entity.flying) {
                 entity.takeDamage(1);
             }
@@ -284,7 +285,7 @@ exports.tiles = {
             framesPerSecond: 4,
         },
         isSolid: false,
-        onTick: function (delta, entity) {
+        onTick: function (delta, entity, x, y) {
             if (!entity.flying) {
                 entity.takeDamage(1);
             }
@@ -310,7 +311,7 @@ exports.tiles = {
             tileset: { width: 32, height: 32, tilex: 10, tiley: 10 }
         },
         isSolid: false,
-        onLand: function (entity) {
+        onLand: function (entity, x, y) {
             if (entity.name == "Player") {
                 var scene = entity.scene;
                 scene.dungeon.enter(scene, entity.x, entity.y);
@@ -323,13 +324,30 @@ exports.tiles = {
             tileset: { width: 32, height: 32, tilex: 10, tiley: 10 }
         },
         isSolid: false,
-        onLand: function (entity) {
+        onLand: function (entity, x, y) {
             if (entity.name == "Player") {
                 var scene = entity.scene;
                 scene.exit();
             }
         }
-    }
+    },
+    carrotCrop: {
+        sprite: {
+            src: 'images/Tiles/Outside_A2.png',
+            tileset: { width: 32, height: 32, tilex: 8, tiley: 0 }
+        },
+        isSolid: false,
+        onLand: function (entity, x, y) {
+            if (entity.name == "Player") {
+                var inventory = entity.inventory;
+                if (!inventory)
+                    throw new Error("Player has no inventory!");
+                inventory.addItem(item_db_1.items['crop_carrot'], 1);
+                var world = entity.scene.findObject('World');
+                world.setTileAt(x, y, exports.tiles['grass']);
+            }
+        }
+    },
 };
 
 
@@ -1237,10 +1255,10 @@ var World = (function (_super) {
                         continue;
                     }
                     if (tileUnder.onTick) {
-                        tileUnder.onTick(delta, entity);
+                        tileUnder.onTick(delta, entity, tlx, tly);
                     }
                     if (tileUnder.onLand && Math.abs(entity.hspeed - 0.0005) <= 0.001 && Math.abs(entity.vspeed - 0.0005) <= 0.001) {
-                        tileUnder.onLand(entity);
+                        tileUnder.onLand(entity, tlx, tly);
                     }
                 }
             }
@@ -1264,6 +1282,14 @@ var World = (function (_super) {
         var _a = [engine_1.fmod(x, 64), engine_1.fmod(y, 64)], relativex = _a[0], relativey = _a[1];
         return chunk[relativex][relativey];
     };
+    World.prototype.setTileAt = function (x, y, tile) {
+        var chunk = this.getChunk(Math.floor(x / 64), Math.floor(y / 64));
+        var _a = [engine_1.fmod(x, 64), engine_1.fmod(y, 64)], relativex = _a[0], relativey = _a[1];
+        chunk[relativex][relativey] = tile;
+        var key = x + "_" + y;
+        if (this._variantCache.has(key))
+            this._variantCache.delete(key);
+    };
     World.prototype.getChunk = function (x, y) {
         var key = x + ", " + y;
         !this._chunks.has(key) && this._chunks.set(key, this.generateChunk(x, y));
@@ -1282,6 +1308,9 @@ var World = (function (_super) {
                         num < .5 || w == 63 || (noise[q][w + 1] < .5 && (w == 0 || noise[q][w - 1] < .5)) ? this.tileDefaults.sand || 'sand' :
                             noise[q][w + 1] < .5 || w == 62 ? this.tileDefaults.wallSide || 'wallSide' :
                                 this.tileDefaults.wallTop || 'wallTop';
+                if (name_1 == (this.tileDefaults.grass || 'grass') && Math.random() < .0015) {
+                    name_1 = this.tileDefaults.carrotCrop || 'carrotCrop';
+                }
                 names.push(name_1);
             }
             chunkNames.push(names);
@@ -4504,6 +4533,7 @@ var pause_with_game_1 = __webpack_require__(6);
 var merge = __webpack_require__(13);
 var bomb_1 = __webpack_require__(27);
 var simple_enemy_1 = __webpack_require__(25);
+var inventory_1 = __webpack_require__(53);
 var CLOSE_ENOUGH = 3.0;
 var MOVE_SPEED = 4 * 30;
 var SIZE = 32;
@@ -4518,6 +4548,7 @@ var Player = (function (_super) {
             killSound: sfx_db_1.sfx['playerDeath']
         }, opts)) || this;
         _this.bombPlaceTimer = 0.0;
+        _this._inventory = new inventory_1.Inventory();
         _this._lightSourceSprite = alive_db_1.alives['large-dim-light-source'].sprite;
         return _this;
     }
@@ -5672,7 +5703,8 @@ var DungeonScene = (function (_super) {
             grass: 'dungeonGrass',
             sand: 'dungeonSand',
             teleporter: 'dungeonTeleporter',
-            water: 'lava'
+            water: 'lava',
+            carrotCrop: 'dungeonGrass',
         });
         _this._followCamera = new engine_1.FollowCamera(_this);
         _this.player = new player_1.Player({ maxHealth: 10 });
@@ -6328,6 +6360,66 @@ module.exports = function(module) {
 	}
 	return module;
 };
+
+
+/***/ }),
+/* 53 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var Inventory = (function () {
+    function Inventory() {
+        this._MAX_ITEM_COUNT = 27;
+        this._currentItemCount = 0;
+        this._items = [];
+    }
+    Object.defineProperty(Inventory.prototype, "MAX_ITEM_COUNT", {
+        get: function () {
+            return this._MAX_ITEM_COUNT;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Inventory.prototype, "currentItemCount", {
+        get: function () {
+            return this._currentItemCount;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Inventory.prototype, "items", {
+        get: function () {
+            return this._items;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Inventory.prototype.containsItem = function (itemToFind) {
+        return this.items.indexOf(itemToFind) >= 0;
+    };
+    Inventory.prototype.addItem = function (newItem, count) {
+        if (count === void 0) { count = 1; }
+        if (count !== 1) {
+            throw new Error("Not implemented: cannot add more than one item at a time");
+        }
+        if (this._currentItemCount == this._MAX_ITEM_COUNT) {
+            throw new Error('Attempted to add an item when the inventory was full');
+        }
+        this.items.push(newItem);
+        ++this._currentItemCount;
+    };
+    Inventory.prototype.removeItem = function (itemToRemove) {
+        if (!this.containsItem(itemToRemove)) {
+            throw new Error('Attempted to remove an item that was not in the inventory from the inventory.');
+        }
+        this.items.splice(this.items.indexOf(itemToRemove), 1);
+        --this._currentItemCount;
+    };
+    return Inventory;
+}());
+exports.Inventory = Inventory;
 
 
 /***/ })

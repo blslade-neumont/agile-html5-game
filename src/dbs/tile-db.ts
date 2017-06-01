@@ -1,5 +1,8 @@
 ﻿import { SpriteT, AudioSourceObject } from '../engine';
 import { Entity } from '../entity';
+import { World } from '../world';
+import { Inventory } from '../inventory';
+import { items } from './item-db';
 
 export const TILE_SIZE: number = 32;
 
@@ -7,8 +10,8 @@ export interface WorldTile {
     sprite: SpriteT,
     variants?: SpriteT[],
     isSolid: boolean,
-    onTick?: (delta: number, entity: Entity) => void,
-    onLand?: (entity: Entity) => void
+    onTick?: (delta: number, entity: Entity, x: number, y: number) => void,
+    onLand?: (entity: Entity, x: number, y: number) => void
 };
 
 export let tiles: { [name: string]: WorldTile } =
@@ -95,7 +98,7 @@ export let tiles: { [name: string]: WorldTile } =
                 tileset: { width: 32, height: 32, tilex: 15, tiley: 5 }
             }],
             isSolid: false,
-            onTick: (delta, entity) => {
+            onTick: (delta, entity, x, y) => {
                 if (!entity.flying) {
                     entity.takeDamage(3);
                 }
@@ -113,7 +116,7 @@ export let tiles: { [name: string]: WorldTile } =
                 framesPerSecond: 4,
             },
             isSolid: false,
-            onTick: (delta, entity) => {
+            onTick: (delta, entity, x, y) => {
                 if (!entity.flying) {
                     entity.takeDamage(3);
                 }
@@ -131,7 +134,7 @@ export let tiles: { [name: string]: WorldTile } =
                 framesPerSecond: 4,
             },
             isSolid: false,
-            onTick: (delta, entity) => {
+            onTick: (delta, entity, x, y) => {
                 if (!entity.flying) {
                     entity.takeDamage(3);
                 }
@@ -143,7 +146,7 @@ export let tiles: { [name: string]: WorldTile } =
                 tileset: { width: 32, height: 32, tilex: 9, tiley: 0 }
             },
             isSolid: false,
-            onTick: (delta, entity) => {
+            onTick: (delta, entity, x, y) => {
                 if (!entity.flying) {
                     entity.takeDamage(1);
                 }
@@ -161,7 +164,7 @@ export let tiles: { [name: string]: WorldTile } =
                 framesPerSecond: 4,
             },
             isSolid: false,
-            onTick: (delta, entity) => {
+            onTick: (delta, entity, x, y) => {
                 if (!entity.flying) {
                     entity.takeDamage(1);
                 }
@@ -179,7 +182,7 @@ export let tiles: { [name: string]: WorldTile } =
                 framesPerSecond: 4,
             },
             isSolid: false,
-            onTick: (delta, entity) => {
+            onTick: (delta, entity, x, y) => {
                 if (!entity.flying) {
                     entity.takeDamage(1);
                 }
@@ -207,7 +210,7 @@ export let tiles: { [name: string]: WorldTile } =
                 tileset: { width: 32, height: 32, tilex: 10, tiley: 10 }
             },
             isSolid: false,
-            onLand: (entity) => {
+            onLand: (entity, x, y) => {
                 if (entity.name == "Player") {
                     let scene = <any>entity.scene;
                     scene.dungeon.enter(scene, entity.x, entity.y);
@@ -221,11 +224,28 @@ export let tiles: { [name: string]: WorldTile } =
                 tileset: { width: 32, height: 32, tilex: 10, tiley: 10 }
             },
             isSolid: false,
-            onLand: (entity) => {
+            onLand: (entity, x, y) => {
                 if (entity.name == "Player") {
                     let scene = <any>entity.scene;
                     scene.exit();
                 }
             }
-        }
+        },
+
+        carrotCrop: {
+            sprite: {
+                src: 'images/Tiles/Outside_A2.png',
+                tileset: { width: 32, height: 32, tilex: 8, tiley: 0 }
+            },
+            isSolid: false,
+            onLand: (entity, x, y) => {
+                if (entity.name == "Player") {
+                    let inventory: Inventory | null = (<any>entity).inventory;
+                    if (!inventory) throw new Error(`Player has no inventory!`);
+                    inventory.addItem(items['crop_carrot'], 1);
+                    let world: World = <any>entity.scene.findObject('World');
+                    world.setTileAt(x, y, tiles['grass']);
+                }
+            }
+        },
     };
