@@ -6,7 +6,7 @@ import * as sinonChai from 'sinon-chai';
 use(sinonChai);
 
 import { DungeonScene } from '../dungeon-scene';
-import { Game, AudioSourceObject } from '../../engine';
+import { Game, AudioSourceObject, GameScene } from '../../engine';
 import { MockGame } from '../../engine/test';
 
 describe('DungeonScene', () => {
@@ -24,11 +24,33 @@ describe('DungeonScene', () => {
     });
 
     describe('.enter', () => {
-
+        //More thorough unit tests testing the tile db
+        it('should throw an error if fromScene has no player object', () => {
+            let fromScene: GameScene = <any>{
+                game: game,
+                findObject: () => null,
+                addObject: () => void (0),
+                removeObject: () => void (0),
+                camera: null
+            };
+            expect(() => scene.enter(fromScene, 0, 0)).to.throw(/could not find player/i);
+        });
     });
 
     describe('.exit', () => {
+        beforeEach(() => {
+            (<any>scene)._returnScene = {
+                game: game,
+                findObject: () => null,
+                addObject: () => void(0),
+                removeObject: () => void (0),
+                camera: null
+            };
+        });
 
+        it('should throw an error if returnScene has no player object', () => {
+            expect(() => scene.exit()).to.throw(/could not find player/i);
+        });
     });
 
     describe('.start', () => {

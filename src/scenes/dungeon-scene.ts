@@ -19,6 +19,7 @@ export class DungeonScene extends GameScene {
         teleporter: 'dungeonTeleporter',
         water: 'lava'
     });
+    private _followCamera: FollowCamera = new FollowCamera(this);
     get world() {
         return this._world;
     }
@@ -38,9 +39,12 @@ export class DungeonScene extends GameScene {
         this.player.vspeed = 0;
         this.player.currentHealth = otherPlayer.currentHealth;
 
-        let otherWorld = <World>(fromScene.findObject('World') || (<any>fromScene).world);
+        let otherWorld = <World>fromScene.findObject('World');
         if (otherWorld) this.world.gameTime = otherWorld.gameTime;
         this.addObject(new AudioSourceObject('EnterDungeonSound', sfx['teleport'], { x: this.player.x, y: this.player.y }));
+
+        let otherCamera = fromScene.camera;
+        if (otherCamera) this._followCamera.zoomScale = otherCamera.zoomScale;
     }
     exit() {
         this.game.changeScene(this._returnScene);
@@ -53,10 +57,13 @@ export class DungeonScene extends GameScene {
         otherPlayer.vspeed = 0;
         otherPlayer.currentHealth = this.player.currentHealth;
 
-        let otherWorld = <World>(this._returnScene.findObject('World') || (<any>this._returnScene).world);
+        let otherWorld = <World>this._returnScene.findObject('World');
         if (otherWorld) otherWorld.gameTime = this.world.gameTime;
 
         this._returnScene.addObject(new AudioSourceObject('ExitDungeonSound', sfx['teleport'], { x: this.player.x, y: this.player.y }));
+
+        let otherCamera = this._returnScene.camera;
+        if (otherCamera) otherCamera.zoomScale = this._followCamera.zoomScale;
     }
     private _returnScene: GameScene;
     private _returnX: number;
@@ -92,9 +99,10 @@ export class DungeonScene extends GameScene {
 
         this.addObject(new AudioSourceObject('Music', sfx['dungeonMusic'], { shouldLoop: true }));
 
-        let camera = this.camera = new FollowCamera(this);
+        let camera = this.camera = this._followCamera;
         camera.follow = this.player;
         camera.enableSmoothing = false;
         camera.followOffset = [16, 16];
+        camera.minZoomScale = .75;
     }
 }

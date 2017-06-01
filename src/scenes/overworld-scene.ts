@@ -44,5 +44,6 @@ export class OverworldScene extends GameScene {
         camera.follow = player;
         camera.enableSmoothing = false;
         camera.followOffset = [16, 16];
+        camera.minZoomScale = .75;
     }
 }

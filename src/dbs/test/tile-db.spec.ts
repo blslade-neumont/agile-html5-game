@@ -6,7 +6,7 @@ import * as sinonChai from 'sinon-chai';
 use(sinonChai);
 
 import { World } from '../../world';
-import { Game, GameScene, Rect, AudioSourceObject } from '../../engine';
+import { Game, GameScene, Rect, AudioSourceObject, Camera, FollowCamera } from '../../engine';
 import { MockGame } from '../../engine/test';
 import { tiles } from '../tile-db';
 import { DungeonScene } from '../../scenes/dungeon-scene';
@@ -57,8 +57,10 @@ describe('dbs/tiles', () => {
     describe('teleporter', () => {
         let ent: Entity;
         let dung: DungeonScene;
+        let dungCamera: FollowCamera;
         beforeEach(() => {
             dung = (<any>scene).dungeon = new DungeonScene();
+            dungCamera = (<any>dung)._followCamera;
             ent = new Entity('Player', { maxHealth: 10, x: 0, y: 0, collisionBounds: new Rect(0, 32, 0, 32) });
             scene.addObject(ent);
             sinon.stub(world, 'getTileAt').withArgs(0, 0).returns(tiles['teleporter']);
@@ -74,6 +76,13 @@ describe('dbs/tiles', () => {
             sinon.spy(dung, 'addObject');
             world.tick(.02);
             expect(dung.addObject).to.have.been.calledOnce.calledWith(sinon.match.instanceOf(AudioSourceObject));
+        });
+        it('should preserve the camera zoomScale when it navigates to the DungeonScene', () => {
+            let testCamera = new Camera(scene);
+            testCamera.zoomScale = 3.14159;
+            scene.camera = testCamera;
+            world.tick(.02);
+            expect(dungCamera.zoomScale).to.be.closeTo(testCamera.zoomScale, .00001);
         });
         it('should navigate to an DungeonScene when the player lands', () => {
             sinon.spy(game, 'changeScene');
@@ -96,10 +105,12 @@ describe('dbs/tiles', () => {
 
     describe('dungeonTeleporter', () => {
         let dungScene: DungeonScene;
+        let dungCamera: FollowCamera;
         let returnScene: GameScene;
         let ent: Entity;
         beforeEach(() => {
             dungScene = scene = new DungeonScene();
+            dungCamera = (<any>dungScene)._followCamera;
             game.changeScene(scene);
             scene.start();
 
@@ -130,6 +141,13 @@ describe('dbs/tiles', () => {
             sinon.spy(returnScene, 'addObject');
             dungScene.world.tick(.02);
             expect(returnScene.addObject).to.have.been.calledOnce.calledWith(sinon.match.instanceOf(AudioSourceObject));
+        });
+        it('should preserve the camera zoomScale when it navigates to the DungeonScene', () => {
+            let testCamera = new Camera(scene);
+            returnScene.camera = testCamera;
+            dungCamera.zoomScale = 3.14159;
+            dungScene.world.tick(.02);
+            expect(testCamera.zoomScale).to.be.closeTo(dungCamera.zoomScale, .00001);
         });
         it('should navigate to the previous scene when the player lands', () => {
             sinon.spy(game, 'changeScene');
