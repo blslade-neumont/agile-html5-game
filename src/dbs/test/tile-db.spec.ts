@@ -12,7 +12,6 @@ import { tiles } from '../tile-db';
 import { DungeonScene } from '../../scenes/dungeon-scene';
 import { Entity } from '../../entity';
 import { items, GameItem } from '../item-db';
-import { tiles } from '../tile-db';
 import { Inventory } from '../../inventory';
 
 describe('dbs/tiles', () => {
