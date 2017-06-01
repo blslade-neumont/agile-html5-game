@@ -59,11 +59,11 @@ describe('Inventory', () => {
             inventory.addItem(carrot);
             expect(inventory.items[0]).to.be.equal(carrot);
         });
-        it('should throw an error when attempting to add too many items to an inventory', () => {
+        it('should return false when attempting to add too many items to an inventory', () => {
             for (let j = 0; j < inventory.MAX_ITEM_COUNT; ++j) {
                 inventory.addItem(carrot);
             }
-            expect(() => inventory.addItem(carrot)).to.throw(/add an item when the inventory was full/i);
+            expect(inventory.addItem(carrot)).to.be.false;
         });
     });
     describe('.removeItem', () => {

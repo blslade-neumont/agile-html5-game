@@ -25,6 +25,7 @@ export class Player extends Entity {
             killSound: sfx['playerDeath']
         }, opts));
         this._lightSourceSprite = alives['large-dim-light-source'].sprite;
+        
     }
 
     addToScene(scene: GameScene) {

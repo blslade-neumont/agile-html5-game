@@ -1,6 +1,7 @@
 ﻿import { Game, GameEvent, measureSprite, drawSprite } from '../engine';
-import { GuiSpec } from '../dbs/gui-db';
+import { GuiSpec, ItemSlotSpec } from '../dbs/gui-db';
 import { GameItem, items } from '../dbs/item-db';
+import { Inventory } from '../inventory';
 
 export function handleGUIEvent(evt: GameEvent, game: Game, gui: GuiSpec): boolean {
     if (evt.type == 'keyPressed') {
@@ -16,7 +17,7 @@ export function tickGUI(delta: number, game: Game, gui: GuiSpec) {
 
 }
 
-export function drawGUI(context: CanvasRenderingContext2D, game: Game, gui: GuiSpec, imageIndex = 0, defaultFps = 30) {
+export function drawGUI(currentItem: ItemSlotSpec, inventory: Inventory, context: CanvasRenderingContext2D, game: Game, gui: GuiSpec, imageIndex = 0, defaultFps = 30) {
     let [canvasWidth, canvasHeight] = game.canvasSize;
     context.fillStyle = 'rgba(0, 0, 0, .4)';
     context.fillRect(0, 0, canvasWidth, canvasHeight);
@@ -29,16 +30,15 @@ export function drawGUI(context: CanvasRenderingContext2D, game: Game, gui: GuiS
     } : { x: 0, y: 0 };
     drawSprite(context, resources, gui.sprite, offset.x, offset.y, imageIndex, defaultFps);
 
-    let itemNames = Object.keys(items);
-    if (gui.itemSlots && gui.itemSlots.length) {
-        for (let idx = 0; idx < gui.itemSlots.length; idx++) {
-            let itemIdx = Math.floor(idx % (itemNames.length * 1.5));
-            if (itemIdx >= itemNames.length) continue;
+    if (currentItem) {
+        context.fillStyle = 'rgba(0, 0, 255, .5)';
+        context.fillRect(offset.x + currentItem.x, offset.y + currentItem.y, 28, 28);
+    }
 
-            let slot = gui.itemSlots[idx];
-            let item = items[itemNames[itemIdx]];
-            drawItemStack(context, game, item, offset.x + slot.x, offset.y + slot.y, 1, imageIndex, defaultFps);
-        }
+    for (let i: number = 0; i < inventory.items.length; ++i) {
+        let slot = gui.itemSlots[i];
+        let item = inventory.items[i];
+        drawItemStack(context, game, item, offset.x + slot.x, offset.y + slot.y, 1, imageIndex, defaultFps);
     }
 }
 

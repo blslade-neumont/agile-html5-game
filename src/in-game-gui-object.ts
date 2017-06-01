@@ -24,12 +24,17 @@ export class InGameGuiObject extends MenuGuiObject {
         return `Score: ${(<AgileGame>this.game).score}`;
     }
 
+
+
     handleEvent(evt: GameEvent) {
         if (evt.type === 'keyPressed') {
             if (evt.code == 'KeyE' || (evt.code == 'Escape' && this.showInventory)) {
                 this.showInventory = !this.showInventory;
                 let game = <AgileGame>this.game;
-                if (this.showInventory) game.onPause.emit(void (0));
+                if (this.showInventory) {
+                    game.onPause.emit(void (0));
+                    
+                }
                 else game.onPlay.emit(void (0));
                 return true;
             }

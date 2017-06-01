@@ -94,7 +94,7 @@ export let items: { [name: string]: GameItem } =
         {
             sprite: {
                 src: 'images/Icons/IconSet.png',
-                tileset: { width: ITEM_SIZE, height: ITEM_SIZE, tilex: 18, tiley: 0 }
+                tileset: { width: ITEM_SIZE, height: ITEM_SIZE, tilex: 0, tiley: 18 }
             },
             onUse: (player) => {
                 player.recoverDamage(300);

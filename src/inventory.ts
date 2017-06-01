@@ -30,10 +30,12 @@ export class Inventory {
             throw new Error(`Not implemented: cannot add more than one item at a time`);
         }
         if (this._currentItemCount == this._MAX_ITEM_COUNT) {
-            throw new Error('Attempted to add an item when the inventory was full');
+            return false;
         }
+
         this.items.push(newItem);
         ++this._currentItemCount;
+        return true;
     }
 
     removeItem(itemToRemove: GameItem) {

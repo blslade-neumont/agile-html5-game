@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 38);
+/******/ 	return __webpack_require__(__webpack_require__.s = 39);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -78,7 +78,7 @@ function __export(m) {
 Object.defineProperty(exports, "__esModule", { value: true });
 __export(__webpack_require__(16));
 __export(__webpack_require__(18));
-__export(__webpack_require__(8));
+__export(__webpack_require__(9));
 __export(__webpack_require__(30));
 __export(__webpack_require__(32));
 __export(__webpack_require__(17));
@@ -115,7 +115,7 @@ exports.sfx = {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var item_db_1 = __webpack_require__(15);
+var item_db_1 = __webpack_require__(8);
 exports.TILE_SIZE = 32;
 ;
 exports.tiles = {
@@ -799,40 +799,40 @@ exports.pauseWithGame = pauseWithGame;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var overworld_scene_1 = __webpack_require__(47);
+var overworld_scene_1 = __webpack_require__(48);
 var title_scene_1 = __webpack_require__(24);
 ;
 exports.gui = {
     inventory: {
         sprite: { src: 'images/GUI/inventory.png' },
         itemSlots: [
-            { x: 11 + (36 * 0), y: 51 + (36 * 0) },
-            { x: 11 + (36 * 1), y: 51 + (36 * 0) },
-            { x: 11 + (36 * 2), y: 51 + (36 * 0) },
-            { x: 11 + (36 * 3), y: 51 + (36 * 0) },
-            { x: 11 + (36 * 4), y: 51 + (36 * 0) },
-            { x: 11 + (36 * 5), y: 51 + (36 * 0) },
-            { x: 11 + (36 * 6), y: 51 + (36 * 0) },
-            { x: 11 + (36 * 7), y: 51 + (36 * 0) },
-            { x: 11 + (36 * 8), y: 51 + (36 * 0) },
-            { x: 11 + (36 * 0), y: 51 + (36 * 1) },
-            { x: 11 + (36 * 1), y: 51 + (36 * 1) },
-            { x: 11 + (36 * 2), y: 51 + (36 * 1) },
-            { x: 11 + (36 * 3), y: 51 + (36 * 1) },
-            { x: 11 + (36 * 4), y: 51 + (36 * 1) },
-            { x: 11 + (36 * 5), y: 51 + (36 * 1) },
-            { x: 11 + (36 * 6), y: 51 + (36 * 1) },
-            { x: 11 + (36 * 7), y: 51 + (36 * 1) },
-            { x: 11 + (36 * 8), y: 51 + (36 * 1) },
-            { x: 11 + (36 * 0), y: 51 + (36 * 2) },
-            { x: 11 + (36 * 1), y: 51 + (36 * 2) },
-            { x: 11 + (36 * 2), y: 51 + (36 * 2) },
-            { x: 11 + (36 * 3), y: 51 + (36 * 2) },
-            { x: 11 + (36 * 4), y: 51 + (36 * 2) },
-            { x: 11 + (36 * 5), y: 51 + (36 * 2) },
-            { x: 11 + (36 * 6), y: 51 + (36 * 2) },
-            { x: 11 + (36 * 7), y: 51 + (36 * 2) },
-            { x: 11 + (36 * 8), y: 51 + (36 * 2) }
+            { x: 11 + (36 * 0), y: 51 + (36 * 0), upIndex: 18, downIndex: 9, leftIndex: 8, rightIndex: 1 },
+            { x: 11 + (36 * 1), y: 51 + (36 * 0), upIndex: 19, downIndex: 10, leftIndex: 0, rightIndex: 2 },
+            { x: 11 + (36 * 2), y: 51 + (36 * 0), upIndex: 20, downIndex: 11, leftIndex: 1, rightIndex: 3 },
+            { x: 11 + (36 * 3), y: 51 + (36 * 0), upIndex: 21, downIndex: 12, leftIndex: 2, rightIndex: 4 },
+            { x: 11 + (36 * 4), y: 51 + (36 * 0), upIndex: 22, downIndex: 13, leftIndex: 3, rightIndex: 5 },
+            { x: 11 + (36 * 5), y: 51 + (36 * 0), upIndex: 23, downIndex: 14, leftIndex: 4, rightIndex: 6 },
+            { x: 11 + (36 * 6), y: 51 + (36 * 0), upIndex: 24, downIndex: 15, leftIndex: 5, rightIndex: 7 },
+            { x: 11 + (36 * 7), y: 51 + (36 * 0), upIndex: 25, downIndex: 16, leftIndex: 6, rightIndex: 8 },
+            { x: 11 + (36 * 8), y: 51 + (36 * 0), upIndex: 26, downIndex: 17, leftIndex: 7, rightIndex: 0 },
+            { x: 11 + (36 * 0), y: 51 + (36 * 1), upIndex: 0, downIndex: 18, leftIndex: 17, rightIndex: 10 },
+            { x: 11 + (36 * 1), y: 51 + (36 * 1), upIndex: 1, downIndex: 19, leftIndex: 9, rightIndex: 11 },
+            { x: 11 + (36 * 2), y: 51 + (36 * 1), upIndex: 2, downIndex: 20, leftIndex: 10, rightIndex: 12 },
+            { x: 11 + (36 * 3), y: 51 + (36 * 1), upIndex: 3, downIndex: 21, leftIndex: 11, rightIndex: 13 },
+            { x: 11 + (36 * 4), y: 51 + (36 * 1), upIndex: 4, downIndex: 22, leftIndex: 12, rightIndex: 14 },
+            { x: 11 + (36 * 5), y: 51 + (36 * 1), upIndex: 5, downIndex: 23, leftIndex: 13, rightIndex: 15 },
+            { x: 11 + (36 * 6), y: 51 + (36 * 1), upIndex: 6, downIndex: 24, leftIndex: 14, rightIndex: 16 },
+            { x: 11 + (36 * 7), y: 51 + (36 * 1), upIndex: 7, downIndex: 25, leftIndex: 15, rightIndex: 17 },
+            { x: 11 + (36 * 8), y: 51 + (36 * 1), upIndex: 8, downIndex: 26, leftIndex: 16, rightIndex: 9 },
+            { x: 11 + (36 * 0), y: 51 + (36 * 2), upIndex: 9, downIndex: 0, leftIndex: 26, rightIndex: 19 },
+            { x: 11 + (36 * 1), y: 51 + (36 * 2), upIndex: 10, downIndex: 1, leftIndex: 18, rightIndex: 20 },
+            { x: 11 + (36 * 2), y: 51 + (36 * 2), upIndex: 11, downIndex: 2, leftIndex: 19, rightIndex: 21 },
+            { x: 11 + (36 * 3), y: 51 + (36 * 2), upIndex: 12, downIndex: 3, leftIndex: 20, rightIndex: 22 },
+            { x: 11 + (36 * 4), y: 51 + (36 * 2), upIndex: 13, downIndex: 4, leftIndex: 21, rightIndex: 23 },
+            { x: 11 + (36 * 5), y: 51 + (36 * 2), upIndex: 14, downIndex: 5, leftIndex: 22, rightIndex: 24 },
+            { x: 11 + (36 * 6), y: 51 + (36 * 2), upIndex: 15, downIndex: 6, leftIndex: 23, rightIndex: 25 },
+            { x: 11 + (36 * 7), y: 51 + (36 * 2), upIndex: 16, downIndex: 7, leftIndex: 24, rightIndex: 26 },
+            { x: 11 + (36 * 8), y: 51 + (36 * 2), upIndex: 17, downIndex: 8, leftIndex: 25, rightIndex: 18 }
         ]
     },
     title: {
@@ -867,6 +867,28 @@ exports.gui = {
 
 /***/ }),
 /* 8 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.ITEM_SIZE = 24;
+;
+exports.items = {
+    crop_carrot: {
+        sprite: {
+            src: 'images/Icons/IconSet.png',
+            tileset: { width: exports.ITEM_SIZE, height: exports.ITEM_SIZE, tilex: 0, tiley: 18 }
+        },
+        onUse: function (player) {
+            player.recoverDamage(300);
+        }
+    }
+};
+
+
+/***/ }),
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1009,7 +1031,7 @@ exports.Camera = Camera;
 
 
 /***/ }),
-/* 9 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1073,7 +1095,7 @@ exports.measureSprite = measureSprite;
 
 
 /***/ }),
-/* 10 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1139,7 +1161,7 @@ exports.GridRenderer = GridRenderer;
 
 
 /***/ }),
-/* 11 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1157,19 +1179,70 @@ var __extends = (this && this.__extends) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var engine_1 = __webpack_require__(0);
 var gui_db_1 = __webpack_require__(7);
-var gui_1 = __webpack_require__(48);
+var gui_1 = __webpack_require__(49);
+var item_db_1 = __webpack_require__(8);
 var MenuGuiObject = (function (_super) {
     __extends(MenuGuiObject, _super);
     function MenuGuiObject(gui) {
         var _this = _super.call(this, "MenuGuiObject", { renderCamera: 'none' }) || this;
+        _this.inventoryPos = 0;
         _this.gui = typeof gui === 'string' ? gui_db_1.gui[gui] : gui;
         return _this;
     }
+    MenuGuiObject.prototype.addToScene = function (scene) {
+        _super.prototype.addToScene.call(this, scene);
+        this._playerRef = this.scene.findObject(function (x) { return x.name == "Player"; });
+    };
+    Object.defineProperty(MenuGuiObject.prototype, "currentItem", {
+        get: function () {
+            if (!this.gui.itemSlots) {
+                return null;
+            }
+            return this.gui.itemSlots[this.inventoryPos];
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(MenuGuiObject.prototype, "inventory", {
+        get: function () {
+            if (!this._playerRef) {
+                return null;
+            }
+            return this._playerRef.inventory;
+        },
+        enumerable: true,
+        configurable: true
+    });
     MenuGuiObject.prototype.handleEvent = function (evt) {
         if (_super.prototype.handleEvent.call(this, evt))
             return true;
         if (gui_1.handleGUIEvent(evt, this.game, this.gui))
             return true;
+        if (evt.type == 'keyTyped' && this.currentItem) {
+            if (evt.code == 'KeyA' || evt.code == 'ArrowLeft') {
+                this.inventoryPos = this.currentItem.leftIndex;
+                return true;
+            }
+            else if (evt.code == 'KeyD' || evt.code == 'ArrowRight') {
+                this.inventoryPos = this.currentItem.rightIndex;
+                return true;
+            }
+            else if (evt.code == 'KeyW' || evt.code == 'ArrowUp') {
+                this.inventoryPos = this.currentItem.upIndex;
+                return true;
+            }
+            else if (evt.code == 'KeyS' || evt.code == 'ArrowDown') {
+                this.inventoryPos = this.currentItem.downIndex;
+                return true;
+            }
+            else if (evt.code == 'KeyC') {
+                this.inventory.addItem(item_db_1.items['crop_carrot']);
+            }
+            else if (evt.code == 'Enter') {
+                this.inventory.items[this.inventoryPos].onUse(this._playerRef);
+                this.inventory.removeItem(this.inventory.items[this.inventoryPos]);
+            }
+        }
         return false;
     };
     MenuGuiObject.prototype.tick = function (delta) {
@@ -1177,7 +1250,7 @@ var MenuGuiObject = (function (_super) {
         gui_1.tickGUI(delta, this.game, this.gui);
     };
     MenuGuiObject.prototype.renderImpl = function (context) {
-        gui_1.drawGUI(context, this.game, this.gui, this.animationAge);
+        gui_1.drawGUI(this.currentItem, this.inventory, context, this.game, this.gui, this.animationAge);
     };
     return MenuGuiObject;
 }(engine_1.GameObject));
@@ -1185,7 +1258,7 @@ exports.MenuGuiObject = MenuGuiObject;
 
 
 /***/ }),
-/* 12 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1204,7 +1277,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var engine_1 = __webpack_require__(0);
 var tile_db_1 = __webpack_require__(2);
 var pause_with_game_1 = __webpack_require__(6);
-var noise_1 = __webpack_require__(49);
+var noise_1 = __webpack_require__(50);
 var entity_1 = __webpack_require__(5);
 var TIME_SCALE = 1 / (60 * 5);
 var World = (function (_super) {
@@ -1344,7 +1417,7 @@ exports.World = World;
 
 
 /***/ }),
-/* 13 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global, module) {/**
@@ -3555,10 +3628,10 @@ function stubFalse() {
 
 module.exports = merge;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(51), __webpack_require__(52)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(52), __webpack_require__(53)(module)))
 
 /***/ }),
-/* 14 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3588,28 +3661,6 @@ exports.effects = {
             pivot: { x: 192 / 2 - 16, y: 192 / 2 - 16 }
         }
     },
-};
-
-
-/***/ }),
-/* 15 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.ITEM_SIZE = 24;
-;
-exports.items = {
-    crop_carrot: {
-        sprite: {
-            src: 'images/Icons/IconSet.png',
-            tileset: { width: exports.ITEM_SIZE, height: exports.ITEM_SIZE, tilex: 18, tiley: 0 }
-        },
-        onUse: function (player) {
-            player.recoverDamage(300);
-        }
-    }
 };
 
 
@@ -3799,7 +3850,7 @@ exports.EventQueue = EventQueue;
 Object.defineProperty(exports, "__esModule", { value: true });
 var math_1 = __webpack_require__(4);
 var rect_1 = __webpack_require__(19);
-var render_1 = __webpack_require__(9);
+var render_1 = __webpack_require__(10);
 ;
 var GameObject = (function () {
     function GameObject(name, opts) {
@@ -4139,7 +4190,7 @@ exports.GameObject = GameObject;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var render_1 = __webpack_require__(9);
+var render_1 = __webpack_require__(10);
 var ResourceLoader = (function () {
     function ResourceLoader() {
         this.DEBUG_RESOURCES = false;
@@ -4330,7 +4381,7 @@ var __extends = (this && this.__extends) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var engine_1 = __webpack_require__(0);
 var gui_db_1 = __webpack_require__(7);
-var menu_gui_object_1 = __webpack_require__(11);
+var menu_gui_object_1 = __webpack_require__(12);
 var InGameGuiObject = (function (_super) {
     __extends(InGameGuiObject, _super);
     function InGameGuiObject() {
@@ -4360,8 +4411,9 @@ var InGameGuiObject = (function (_super) {
             if (evt.code == 'KeyE' || (evt.code == 'Escape' && this.showInventory)) {
                 this.showInventory = !this.showInventory;
                 var game = this.game;
-                if (this.showInventory)
+                if (this.showInventory) {
                     game.onPause.emit(void (0));
+                }
                 else
                     game.onPlay.emit(void (0));
                 return true;
@@ -4530,10 +4582,10 @@ var entity_1 = __webpack_require__(5);
 var alive_db_1 = __webpack_require__(3);
 var sfx_db_1 = __webpack_require__(1);
 var pause_with_game_1 = __webpack_require__(6);
-var merge = __webpack_require__(13);
+var merge = __webpack_require__(14);
 var bomb_1 = __webpack_require__(27);
 var simple_enemy_1 = __webpack_require__(25);
-var inventory_1 = __webpack_require__(53);
+var inventory_1 = __webpack_require__(38);
 var CLOSE_ENOUGH = 3.0;
 var MOVE_SPEED = 4 * 30;
 var SIZE = 32;
@@ -4663,9 +4715,9 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var engine_1 = __webpack_require__(0);
-var world_1 = __webpack_require__(12);
-var menu_gui_object_1 = __webpack_require__(11);
-var grid_renderer_1 = __webpack_require__(10);
+var world_1 = __webpack_require__(13);
+var menu_gui_object_1 = __webpack_require__(12);
+var grid_renderer_1 = __webpack_require__(11);
 var sfx_db_1 = __webpack_require__(1);
 var TitleScene = (function (_super) {
     __extends(TitleScene, _super);
@@ -4721,7 +4773,7 @@ var __extends = (this && this.__extends) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var entity_1 = __webpack_require__(5);
 var alive_db_1 = __webpack_require__(3);
-var merge = __webpack_require__(13);
+var merge = __webpack_require__(14);
 var sfx_db_1 = __webpack_require__(1);
 var engine_1 = __webpack_require__(0);
 var pause_with_game_1 = __webpack_require__(6);
@@ -4811,13 +4863,13 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var engine_1 = __webpack_require__(0);
-var tile_preload_strategy_1 = __webpack_require__(44);
-var item_preload_strategy_1 = __webpack_require__(42);
-var alive_preload_strategy_1 = __webpack_require__(39);
-var gui_preload_strategy_1 = __webpack_require__(41);
-var effect_preload_strategy_1 = __webpack_require__(40);
+var tile_preload_strategy_1 = __webpack_require__(45);
+var item_preload_strategy_1 = __webpack_require__(43);
+var alive_preload_strategy_1 = __webpack_require__(40);
+var gui_preload_strategy_1 = __webpack_require__(42);
+var effect_preload_strategy_1 = __webpack_require__(41);
 var title_scene_1 = __webpack_require__(24);
-var sfx_preload_strategy_1 = __webpack_require__(43);
+var sfx_preload_strategy_1 = __webpack_require__(44);
 var AgileGame = (function (_super) {
     __extends(AgileGame, _super);
     function AgileGame(framesPerSecond) {
@@ -4948,7 +5000,7 @@ var __extends = (this && this.__extends) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var engine_1 = __webpack_require__(0);
 var alive_db_1 = __webpack_require__(3);
-var game_over_scene_1 = __webpack_require__(46);
+var game_over_scene_1 = __webpack_require__(47);
 var DeadPlayer = (function (_super) {
     __extends(DeadPlayer, _super);
     function DeadPlayer(opts) {
@@ -4988,7 +5040,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var game_object_1 = __webpack_require__(17);
-var merge = __webpack_require__(13);
+var merge = __webpack_require__(14);
 var AudioSourceObject = (function (_super) {
     __extends(AudioSourceObject, _super);
     function AudioSourceObject(name, audio, opts) {
@@ -5054,7 +5106,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-var camera_1 = __webpack_require__(8);
+var camera_1 = __webpack_require__(9);
 var FollowCamera = (function (_super) {
     __extends(FollowCamera, _super);
     function FollowCamera(scene) {
@@ -5103,7 +5155,7 @@ exports.FollowCamera = FollowCamera;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var camera_1 = __webpack_require__(8);
+var camera_1 = __webpack_require__(9);
 var GameScene = (function () {
     function GameScene(_game) {
         if (_game === void 0) { _game = null; }
@@ -5479,7 +5531,7 @@ __export(__webpack_require__(34));
 __export(__webpack_require__(35));
 __export(__webpack_require__(4));
 __export(__webpack_require__(19));
-__export(__webpack_require__(9));
+__export(__webpack_require__(10));
 __export(__webpack_require__(20));
 
 
@@ -5501,7 +5553,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var engine_1 = __webpack_require__(0);
-var effect_db_1 = __webpack_require__(14);
+var effect_db_1 = __webpack_require__(15);
 var Explosion = (function (_super) {
     __extends(Explosion, _super);
     function Explosion(opts) {
@@ -5532,13 +5584,74 @@ exports.Explosion = Explosion;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
+var Inventory = (function () {
+    function Inventory() {
+        this._MAX_ITEM_COUNT = 27;
+        this._currentItemCount = 0;
+        this._items = [];
+    }
+    Object.defineProperty(Inventory.prototype, "MAX_ITEM_COUNT", {
+        get: function () {
+            return this._MAX_ITEM_COUNT;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Inventory.prototype, "currentItemCount", {
+        get: function () {
+            return this._currentItemCount;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Inventory.prototype, "items", {
+        get: function () {
+            return this._items;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Inventory.prototype.containsItem = function (itemToFind) {
+        return this.items.indexOf(itemToFind) >= 0;
+    };
+    Inventory.prototype.addItem = function (newItem, count) {
+        if (count === void 0) { count = 1; }
+        if (count !== 1) {
+            throw new Error("Not implemented: cannot add more than one item at a time");
+        }
+        if (this._currentItemCount == this._MAX_ITEM_COUNT) {
+            return false;
+        }
+        this.items.push(newItem);
+        ++this._currentItemCount;
+        return true;
+    };
+    Inventory.prototype.removeItem = function (itemToRemove) {
+        if (!this.containsItem(itemToRemove)) {
+            throw new Error('Attempted to remove an item that was not in the inventory from the inventory.');
+        }
+        this.items.splice(this.items.indexOf(itemToRemove), 1);
+        --this._currentItemCount;
+    };
+    return Inventory;
+}());
+exports.Inventory = Inventory;
+
+
+/***/ }),
+/* 39 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
 var agile_game_1 = __webpack_require__(26);
 var game = new agile_game_1.AgileGame();
 game.start();
 
 
 /***/ }),
-/* 39 */
+/* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5559,13 +5672,13 @@ exports.AlivePreloadStrategy = AlivePreloadStrategy;
 
 
 /***/ }),
-/* 40 */
+/* 41 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var effect_db_1 = __webpack_require__(14);
+var effect_db_1 = __webpack_require__(15);
 var EffectPreloadStrategy = (function () {
     function EffectPreloadStrategy() {
     }
@@ -5580,7 +5693,7 @@ exports.EffectPreloadStrategy = EffectPreloadStrategy;
 
 
 /***/ }),
-/* 41 */
+/* 42 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5601,13 +5714,13 @@ exports.GuiPreloadStrategy = GuiPreloadStrategy;
 
 
 /***/ }),
-/* 42 */
+/* 43 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var item_db_1 = __webpack_require__(15);
+var item_db_1 = __webpack_require__(8);
 var ItemPreloadStrategy = (function () {
     function ItemPreloadStrategy() {
     }
@@ -5622,7 +5735,7 @@ exports.ItemPreloadStrategy = ItemPreloadStrategy;
 
 
 /***/ }),
-/* 43 */
+/* 44 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5644,7 +5757,7 @@ exports.SfxPreloadStrategy = SfxPreloadStrategy;
 
 
 /***/ }),
-/* 44 */
+/* 45 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5670,7 +5783,7 @@ exports.TilePreloadStrategy = TilePreloadStrategy;
 
 
 /***/ }),
-/* 45 */
+/* 46 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5687,8 +5800,8 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var engine_1 = __webpack_require__(0);
-var world_1 = __webpack_require__(12);
-var grid_renderer_1 = __webpack_require__(10);
+var world_1 = __webpack_require__(13);
+var grid_renderer_1 = __webpack_require__(11);
 var player_1 = __webpack_require__(23);
 var in_game_gui_object_1 = __webpack_require__(21);
 var lighting_object_1 = __webpack_require__(22);
@@ -5788,7 +5901,7 @@ exports.DungeonScene = DungeonScene;
 
 
 /***/ }),
-/* 46 */
+/* 47 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5805,7 +5918,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var engine_1 = __webpack_require__(0);
-var menu_gui_object_1 = __webpack_require__(11);
+var menu_gui_object_1 = __webpack_require__(12);
 var sfx_db_1 = __webpack_require__(1);
 var GameOverScene = (function (_super) {
     __extends(GameOverScene, _super);
@@ -5824,7 +5937,7 @@ exports.GameOverScene = GameOverScene;
 
 
 /***/ }),
-/* 47 */
+/* 48 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5841,11 +5954,11 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var engine_1 = __webpack_require__(0);
-var world_1 = __webpack_require__(12);
-var grid_renderer_1 = __webpack_require__(10);
+var world_1 = __webpack_require__(13);
+var grid_renderer_1 = __webpack_require__(11);
 var player_1 = __webpack_require__(23);
 var in_game_gui_object_1 = __webpack_require__(21);
-var dungeon_scene_1 = __webpack_require__(45);
+var dungeon_scene_1 = __webpack_require__(46);
 var lighting_object_1 = __webpack_require__(22);
 var sfx_db_1 = __webpack_require__(1);
 var OverworldScene = (function (_super) {
@@ -5889,14 +6002,13 @@ exports.OverworldScene = OverworldScene;
 
 
 /***/ }),
-/* 48 */
+/* 49 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var engine_1 = __webpack_require__(0);
-var item_db_1 = __webpack_require__(15);
 function handleGUIEvent(evt, game, gui) {
     if (evt.type == 'keyPressed') {
         if (gui.navigation && gui.navigation[evt.code]) {
@@ -5910,7 +6022,7 @@ exports.handleGUIEvent = handleGUIEvent;
 function tickGUI(delta, game, gui) {
 }
 exports.tickGUI = tickGUI;
-function drawGUI(context, game, gui, imageIndex, defaultFps) {
+function drawGUI(currentItem, inventory, context, game, gui, imageIndex, defaultFps) {
     if (imageIndex === void 0) { imageIndex = 0; }
     if (defaultFps === void 0) { defaultFps = 30; }
     var _a = game.canvasSize, canvasWidth = _a[0], canvasHeight = _a[1];
@@ -5923,16 +6035,14 @@ function drawGUI(context, game, gui, imageIndex, defaultFps) {
         y: (canvasHeight / 2) - (imgSize.height / 2)
     } : { x: 0, y: 0 };
     engine_1.drawSprite(context, resources, gui.sprite, offset.x, offset.y, imageIndex, defaultFps);
-    var itemNames = Object.keys(item_db_1.items);
-    if (gui.itemSlots && gui.itemSlots.length) {
-        for (var idx = 0; idx < gui.itemSlots.length; idx++) {
-            var itemIdx = Math.floor(idx % (itemNames.length * 1.5));
-            if (itemIdx >= itemNames.length)
-                continue;
-            var slot = gui.itemSlots[idx];
-            var item = item_db_1.items[itemNames[itemIdx]];
-            drawItemStack(context, game, item, offset.x + slot.x, offset.y + slot.y, 1, imageIndex, defaultFps);
-        }
+    if (currentItem) {
+        context.fillStyle = 'rgba(0, 0, 255, .5)';
+        context.fillRect(offset.x + currentItem.x, offset.y + currentItem.y, 28, 28);
+    }
+    for (var i = 0; i < inventory.items.length; ++i) {
+        var slot = gui.itemSlots[i];
+        var item = inventory.items[i];
+        drawItemStack(context, game, item, offset.x + slot.x, offset.y + slot.y, 1, imageIndex, defaultFps);
     }
 }
 exports.drawGUI = drawGUI;
@@ -5949,13 +6059,13 @@ exports.drawItemStack = drawItemStack;
 
 
 /***/ }),
-/* 49 */
+/* 50 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var nnn = __webpack_require__(50);
+var nnn = __webpack_require__(51);
 var Noise = nnn.Noise;
 var cache = new Map();
 function generateNoise(seed, chunkx, chunky) {
@@ -5975,7 +6085,7 @@ exports.generateNoise = generateNoise;
 
 
 /***/ }),
-/* 50 */
+/* 51 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -6308,7 +6418,7 @@ exports.generateNoise = generateNoise;
 
 
 /***/ }),
-/* 51 */
+/* 52 */
 /***/ (function(module, exports) {
 
 var g;
@@ -6335,7 +6445,7 @@ module.exports = g;
 
 
 /***/ }),
-/* 52 */
+/* 53 */
 /***/ (function(module, exports) {
 
 module.exports = function(module) {
@@ -6360,66 +6470,6 @@ module.exports = function(module) {
 	}
 	return module;
 };
-
-
-/***/ }),
-/* 53 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var Inventory = (function () {
-    function Inventory() {
-        this._MAX_ITEM_COUNT = 27;
-        this._currentItemCount = 0;
-        this._items = [];
-    }
-    Object.defineProperty(Inventory.prototype, "MAX_ITEM_COUNT", {
-        get: function () {
-            return this._MAX_ITEM_COUNT;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(Inventory.prototype, "currentItemCount", {
-        get: function () {
-            return this._currentItemCount;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(Inventory.prototype, "items", {
-        get: function () {
-            return this._items;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Inventory.prototype.containsItem = function (itemToFind) {
-        return this.items.indexOf(itemToFind) >= 0;
-    };
-    Inventory.prototype.addItem = function (newItem, count) {
-        if (count === void 0) { count = 1; }
-        if (count !== 1) {
-            throw new Error("Not implemented: cannot add more than one item at a time");
-        }
-        if (this._currentItemCount == this._MAX_ITEM_COUNT) {
-            throw new Error('Attempted to add an item when the inventory was full');
-        }
-        this.items.push(newItem);
-        ++this._currentItemCount;
-    };
-    Inventory.prototype.removeItem = function (itemToRemove) {
-        if (!this.containsItem(itemToRemove)) {
-            throw new Error('Attempted to remove an item that was not in the inventory from the inventory.');
-        }
-        this.items.splice(this.items.indexOf(itemToRemove), 1);
-        --this._currentItemCount;
-    };
-    return Inventory;
-}());
-exports.Inventory = Inventory;
 
 
 /***/ })
