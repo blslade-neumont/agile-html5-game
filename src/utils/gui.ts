@@ -23,10 +23,10 @@ export function drawGUI(context: CanvasRenderingContext2D, game: Game, gui: GuiS
 
     let resources = game.resourceLoader;
     let imgSize = measureSprite(resources, gui.sprite);
-    let offset = {
+    let offset = imgSize ? {
         x: (canvasWidth / 2) - (imgSize.width / 2),
         y: (canvasHeight / 2) - (imgSize.height / 2)
-    };
+    } : { x: 0, y: 0 };
     drawSprite(context, resources, gui.sprite, offset.x, offset.y, imageIndex, defaultFps);
 
     let itemNames = Object.keys(items);

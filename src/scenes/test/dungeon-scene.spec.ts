@@ -38,6 +38,7 @@ describe('DungeonScene', () => {
     });
 
     describe('.exit', () => {
+        //More thorough unit tests testing the tile db
         beforeEach(() => {
             (<any>scene)._returnScene = {
                 game: game,
