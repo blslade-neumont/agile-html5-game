@@ -76,6 +76,16 @@ describe('utils/drawGUI', () => {
         if (measureSpriteStub) measureSpriteStub.restore();
     });
 
+    it('should not throw an exception if there is no highlighted slot', () => {
+        let gui = { sprite: { src: 'blah' } };
+        expect(() => drawGUI(null, <any>{ items: [] }, context, game, gui)).not.to.throw;
+    });
+
+    it('should not throw an exception if there is no inventory passed in', () => {
+        let gui = { sprite: { src: 'blah' } };
+        expect(() => drawGUI(<any>{ x: 0, y: 0 }, null, context, game, gui)).not.to.throw;
+    });
+
     it('should fill the screen with a black overlay', () => {
         let gui = { sprite: { src: 'blah' } };
         sinon.stub(context, 'fillRect');

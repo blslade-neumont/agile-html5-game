@@ -9,6 +9,11 @@ import { Game, GameScene, GameObject } from '../engine';
 import { MenuGuiObject } from '../menu-gui-object';
 import { MockGame } from '../engine/test';
 import * as guiUtils from '../utils/gui';
+import { MockEventQueue } from './mock-event-queue';
+import { MockWorld } from './mock-world';
+import { Player } from '../player';
+import { gui } from '../dbs/gui-db';
+import { items } from '../dbs/item-db';
 
 let sampleGui = {
     sprite: {
@@ -33,6 +38,83 @@ describe('MenuGuiObject', () => {
     });
 
     describe('.handleEvent', () => {
+        describe('Inventory Selection', () => {
+            let guiObj: MenuGuiObject;
+            beforeEach(() => {
+                guiObj = new MenuGuiObject(gui['inventory']);
+                scene.addObject(new Player());
+                scene.addObject(guiObj);
+            });
+
+            it('should set the current item to the leftward item if the A key is pressed', () => {
+                let item = guiObj.currentItem;
+                guiObj.handleEvent(<any>{ type: 'keyTyped', code: 'KeyA' });
+                expect(item).to.be.eq(guiObj.Gui.itemSlots[guiObj.currentItem.rightIndex]);
+            });
+
+            it('should set the current item to the leftward item if the left arrow key is pressed', () => {
+                let item = guiObj.currentItem;
+                guiObj.handleEvent(<any>{ type: 'keyTyped', code: 'ArrowLeft' });
+                expect(item).to.be.eq(guiObj.Gui.itemSlots[guiObj.currentItem.rightIndex]);
+            });
+
+            it('should set the current item to the rightward item if the D key is pressed', () => {
+                let item = guiObj.currentItem;
+                guiObj.handleEvent(<any>{ type: 'keyTyped', code: 'KeyD' });
+                expect(item).to.be.eq(guiObj.Gui.itemSlots[guiObj.currentItem.leftIndex]);
+            });
+
+            it('should set the current item to the rightward item if the right arrow key is pressed', () => {
+                let item = guiObj.currentItem;
+                guiObj.handleEvent(<any>{ type: 'keyTyped', code: 'ArrowRight' });
+                expect(item).to.be.eq(guiObj.Gui.itemSlots[guiObj.currentItem.leftIndex]);
+            });
+
+            it('should set the current item to the downward item if the S key is pressed', () => {
+                let item = guiObj.currentItem;
+                guiObj.handleEvent(<any>{ type: 'keyTyped', code: 'KeyS' });
+                expect(item).to.be.eq(guiObj.Gui.itemSlots[guiObj.currentItem.upIndex]);
+            });
+
+            it('should set the current item to the downward item if the down arrow key is pressed', () => {
+                let item = guiObj.currentItem;
+                guiObj.handleEvent(<any>{ type: 'keyTyped', code: 'ArrowDown' });
+                expect(item).to.be.eq(guiObj.Gui.itemSlots[guiObj.currentItem.upIndex]);
+            });
+
+            it('should set the current item to the upward item if the W key is pressed', () => {
+                let item = guiObj.currentItem;
+                guiObj.handleEvent(<any>{ type: 'keyTyped', code: 'KeyW' });
+                expect(item).to.be.eq(guiObj.Gui.itemSlots[guiObj.currentItem.downIndex]);
+            });
+
+            it('should set the current item to the upward item if the up arrow key is pressed', () => {
+                let item = guiObj.currentItem;
+                guiObj.handleEvent(<any>{ type: 'keyTyped', code: 'ArrowUp' });
+                expect(item).to.be.eq(guiObj.Gui.itemSlots[guiObj.currentItem.downIndex]);
+            });
+
+            it('should use the selected item when enter is pressed on a valid item', () => {
+                guiObj.inventory.addItem(items['crop_carrot']);
+                let stub = sinon.stub(guiObj.inventory.items[0], 'onUse'); 
+                guiObj.handleEvent(<any>{ type: 'keyTyped', code: 'Enter' });
+                expect(stub).to.have.been.calledOnce;
+            });
+
+            it('should remove the selected item when enter is pressed on a valid item', () => {
+                guiObj.inventory.addItem(items['crop_carrot']);
+                sinon.stub(guiObj.inventory, 'removeItem');
+                guiObj.handleEvent(<any>{ type: 'keyTyped', code: 'Enter' });
+                expect(guiObj.inventory.removeItem).to.have.been.calledOnce;
+            });
+
+            it('should neither remove nor use any items when enter is pressed on a non-item', () => {
+                sinon.stub(guiObj.inventory, 'removeItem');
+                expect(() => guiObj.handleEvent(<any>{ type: 'keyTyped', code: 'Enter' })).to.not.throw;
+                expect(guiObj.inventory.removeItem).not.to.have.been.called;
+            });
+        });
+
         it('should call GameObject.handleEvent', () => {
             let stub: sinon.SinonStub;
             try {

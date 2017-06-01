@@ -23,6 +23,10 @@ export class MenuGuiObject extends GameObject {
     private gui: GuiSpec;
     private _playerRef: Player;
 
+    get Gui(): GuiSpec {
+        return this.gui;
+    }
+
     private inventoryPos: number = 0;
 
     get currentItem() {
@@ -52,8 +56,10 @@ export class MenuGuiObject extends GameObject {
             } else if (evt.code == 'KeyS' || evt.code == 'ArrowDown') {
                 this.inventoryPos = this.currentItem.downIndex; return true;
             } else if (evt.code == 'Enter') {
-                this.inventory.items[this.inventoryPos].onUse(this._playerRef);
-                this.inventory.removeItem(this.inventory.items[this.inventoryPos]);
+                if (this.inventory.items[this.inventoryPos]) {
+                    this.inventory.items[this.inventoryPos].onUse(this._playerRef);
+                    this.inventory.removeItem(this.inventory.items[this.inventoryPos]);
+                }
                 return true;
             }
 

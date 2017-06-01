@@ -1170,6 +1170,13 @@ var MenuGuiObject = (function (_super) {
         _super.prototype.addToScene.call(this, scene);
         this._playerRef = this.scene.findObject(function (x) { return x.name == "Player"; });
     };
+    Object.defineProperty(MenuGuiObject.prototype, "Gui", {
+        get: function () {
+            return this.gui;
+        },
+        enumerable: true,
+        configurable: true
+    });
     Object.defineProperty(MenuGuiObject.prototype, "currentItem", {
         get: function () {
             if (!this.gui.itemSlots) {
@@ -1213,8 +1220,10 @@ var MenuGuiObject = (function (_super) {
                 return true;
             }
             else if (evt.code == 'Enter') {
-                this.inventory.items[this.inventoryPos].onUse(this._playerRef);
-                this.inventory.removeItem(this.inventory.items[this.inventoryPos]);
+                if (this.inventory.items[this.inventoryPos]) {
+                    this.inventory.items[this.inventoryPos].onUse(this._playerRef);
+                    this.inventory.removeItem(this.inventory.items[this.inventoryPos]);
+                }
                 return true;
             }
         }
