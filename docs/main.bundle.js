@@ -5089,24 +5089,31 @@ var AudioSourceObject = (function (_super) {
         var _this = this;
         _super.prototype.addToScene.call(this, scene);
         var theirAudio = this.resources.loadAudio(this.audio.src);
-        this.myAudio = document.createElement('audio');
-        this.myAudio.src = theirAudio.src;
-        this.myAudio.onended = function () {
+        this._myAudio = document.createElement('audio');
+        this._myAudio.src = theirAudio.src;
+        this._myAudio.onended = function () {
             if (_this._shouldLoop)
-                _this.myAudio.play();
+                _this._myAudio.play();
             else
                 _this.scene.removeObject(_this);
         };
         if (this.game.scene == scene)
-            this.myAudio.play();
+            this._myAudio.play();
     };
+    Object.defineProperty(AudioSourceObject.prototype, "myAudio", {
+        get: function () {
+            return this._myAudio;
+        },
+        enumerable: true,
+        configurable: true
+    });
     AudioSourceObject.prototype.onSceneEnter = function () {
         if (this.myAudio.paused)
-            this.myAudio.play();
+            this._myAudio.play();
     };
     AudioSourceObject.prototype.onSceneExit = function () {
         if (!this.myAudio.paused)
-            this.myAudio.pause();
+            this._myAudio.pause();
     };
     return AudioSourceObject;
 }(game_object_1.GameObject));

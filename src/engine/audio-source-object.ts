@@ -25,21 +25,24 @@ export class AudioSourceObject extends GameObject {
         super.addToScene(scene);
 
         let theirAudio = this.resources.loadAudio(this.audio.src);
-        this.myAudio = document.createElement('audio');
-        this.myAudio.src = theirAudio.src;
-        this.myAudio.onended = () => {
-            if (this._shouldLoop) this.myAudio.play();
+        this._myAudio = document.createElement('audio');
+        this._myAudio.src = theirAudio.src;
+        this._myAudio.onended = () => {
+            if (this._shouldLoop) this._myAudio.play();
             else this.scene.removeObject(this);
         };
-        if (this.game.scene == scene) this.myAudio.play();
+        if (this.game.scene == scene) this._myAudio.play();
     }
 
-    private myAudio: HTMLAudioElement;
+    private _myAudio: HTMLAudioElement;
+    get myAudio() {
+        return this._myAudio;
+    }
 
     onSceneEnter() {
-        if (this.myAudio.paused) this.myAudio.play();
+        if (this.myAudio.paused) this._myAudio.play();
     }
     onSceneExit() {
-        if (!this.myAudio.paused) this.myAudio.pause();
+        if (!this.myAudio.paused) this._myAudio.pause();
     }
 }

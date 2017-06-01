@@ -90,6 +90,9 @@
       <SubType>Code</SubType>
     </TypeScriptCompile>
     <TypeScriptCompile Include="src\engine\audio-source-object.ts" />
+    <TypeScriptCompile Include="src\engine\test\audio-source-object.spec.ts">
+      <SubType>Code</SubType>
+    </TypeScriptCompile>
     <TypeScriptCompile Include="src\engine\test\mock-dom.ts">
       <TestFramework>Mocha</TestFramework>
     </TypeScriptCompile>
