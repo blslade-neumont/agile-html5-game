@@ -22,23 +22,23 @@ describe('InGameGuiObject', () => {
 
     describe('.gameTimeString', () => {
         it('should choose the correct hour', () => {
-            guiObject.addToScene(<any>{ world: { gameTime: 6 / 24 } });
+            guiObject.addToScene(<any>{ world: { gameTime: 6 / 24 }, findObject: () => null });
             expect(guiObject.gameTimeString).to.eq('Day 1, 6 AM');
         });
         it('should switch to PM correctly', () => {
-            guiObject.addToScene(<any>{ world: { gameTime: 18 / 24 } });
+            guiObject.addToScene(<any>{ world: { gameTime: 18 / 24 }, findObject: () => null });
             expect(guiObject.gameTimeString).to.eq('Day 1, 6 PM');
         });
         it('should work for later days', () => {
-            guiObject.addToScene(<any>{ world: { gameTime: 2 + (14 / 24) } });
+            guiObject.addToScene(<any>{ world: { gameTime: 2 + (14 / 24) }, findObject: () => null });
             expect(guiObject.gameTimeString).to.eq('Day 3, 2 PM');
         });
         it('should prefer 12 AM to 0 AM', () => {
-            guiObject.addToScene(<any>{ world: { gameTime: 0 / 24 } });
+            guiObject.addToScene(<any>{ world: { gameTime: 0 / 24 }, findObject: () => null });
             expect(guiObject.gameTimeString).to.eq('Day 1, 12 AM');
         });
         it('should prefer 12 PM to 0 PM', () => {
-            guiObject.addToScene(<any>{ world: { gameTime: 12 / 24 } });
+            guiObject.addToScene(<any>{ world: { gameTime: 12 / 24 }, findObject: () => null });
             expect(guiObject.gameTimeString).to.eq('Day 1, 12 PM');
         });
     });
