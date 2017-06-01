@@ -7,9 +7,9 @@ import { Node } from '../node';
 import { TILE_SIZE } from '../../dbs/tile-db';
 import { pointDistance2 } from '../../utils/math';
 
-export class PathfindState extends State {
-    constructor(protected readonly self: Enemy) {
-        super();
+export abstract class PathfindState extends State {
+    constructor(self: Enemy) {
+        super(self);
     }
 
     private _path: Path;

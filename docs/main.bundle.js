@@ -3980,11 +3980,12 @@ var path_1 = __webpack_require__(26);
 var EnemyController = (function (_super) {
     __extends(EnemyController, _super);
     function EnemyController(world) {
-        var _this = _super.call(this, 'EnemyController', { shouldRender: false }) || this;
+        var _this = _super.call(this, 'EnemyController') || this;
         _this.world = world;
         _this._baseCoords = [0, 0];
         _this._enemies = [];
-        _this.renderMode = 'single';
+        _this.renderMode = 'all';
+        _this.renderFogOfWar = true;
         _this.nodeMap = new Map();
         _this.init();
         return _this;
@@ -4069,6 +4070,10 @@ var EnemyController = (function (_super) {
         if (!from || !to)
             return null;
         return path_1.Path.pathfind(from, to);
+    };
+    EnemyController.prototype.render = function (context) {
+        if (!this.renderFogOfWar)
+            return;
     };
     return EnemyController;
 }(engine_1.GameObject));
@@ -4284,8 +4289,7 @@ var math_1 = __webpack_require__(12);
 var PathfindState = (function (_super) {
     __extends(PathfindState, _super);
     function PathfindState(self) {
-        var _this = _super.call(this) || this;
-        _this.self = self;
+        var _this = _super.call(this, self) || this;
         _this.currentIdx = 0;
         _this.turnRadius = 24;
         _this.directionChangeSpeed = 180;
@@ -4418,8 +4422,23 @@ exports.StateMachine = StateMachine;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var State = (function () {
-    function State() {
+    function State(self) {
+        this.self = self;
     }
+    Object.defineProperty(State.prototype, "renderDebugInfo", {
+        get: function () {
+            return this.self.renderDebugInfo;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(State.prototype, "stateStatus", {
+        get: function () {
+            return 'ok';
+        },
+        enumerable: true,
+        configurable: true
+    });
     State.prototype.onEnter = function (machine, previousState) {
     };
     State.prototype.onExit = function (machine, nextState) {
@@ -4427,6 +4446,25 @@ var State = (function () {
     State.prototype.tick = function (machine, delta) {
     };
     State.prototype.render = function (machine, context) {
+        if (!this.renderDebugInfo)
+            return;
+        context.fillStyle = this.stateStatus == 'ok' ? 'white' :
+            this.stateStatus == 'error' ? 'red' :
+                this.stateStatus == 'alert' ? 'orange' :
+                    this.stateStatus == 'confused' ? 'yellow' :
+                        'purple';
+        var text = this.stateStatus == 'ok' ? 'OK' :
+            this.stateStatus == 'error' ? 'ERR' :
+                this.stateStatus == 'alert' ? '!' :
+                    this.stateStatus == 'confused' ? '?' :
+                        this.stateStatus;
+        context.textAlign = 'right';
+        context.textBaseline = 'bottom';
+        context.fillText(text, this.self.x - 4, this.self.y - 24);
+        context.fillStyle = 'white';
+        context.textAlign = 'left';
+        context.textBaseline = 'bottom';
+        context.fillText('- ' + this.stateName, this.self.x, this.self.y - 24);
     };
     return State;
 }());
@@ -4457,6 +4495,20 @@ var WanderState = (function (_super) {
     function WanderState(self) {
         return _super.call(this, self) || this;
     }
+    Object.defineProperty(WanderState.prototype, "stateName", {
+        get: function () {
+            return 'wandering';
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(WanderState.prototype, "stateStatus", {
+        get: function () {
+            return 'confused';
+        },
+        enumerable: true,
+        configurable: true
+    });
     WanderState.prototype.onEnter = function (machine, prevState) {
         _super.prototype.onEnter.call(this, machine, prevState);
         this.self.speed = 30 * (2 + Math.random() * 1);

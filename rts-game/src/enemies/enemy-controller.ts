@@ -9,7 +9,7 @@ type EnemyRenderMode = 'none' | 'single' | 'all';
 
 export class EnemyController extends GameObject {
     constructor(private world: World) {
-        super('EnemyController', { shouldRender: false });
+        super('EnemyController');
         this.init();
     }
     private init() {
@@ -59,7 +59,8 @@ export class EnemyController extends GameObject {
         return enemy;
     }
 
-    renderMode = 'single';
+    renderMode = 'all';
+    renderFogOfWar = true;
     handleEvent(evt: GameEvent) {
         if (evt.type == 'keyPressed' && evt.code == 'KeyE') {
             this.renderMode = (this.renderMode == 'none') ? 'single' :
@@ -90,5 +91,11 @@ export class EnemyController extends GameObject {
         let to = this.getNode(xto, yto);
         if (!from || !to) return null;
         return Path.pathfind(from, to);
+    }
+
+    render(context: CanvasRenderingContext2D) {
+        if (!this.renderFogOfWar) return;
+
+
     }
 }

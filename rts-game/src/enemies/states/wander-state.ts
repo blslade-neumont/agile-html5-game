@@ -1,4 +1,4 @@
-﻿import { State } from './state';
+﻿import { State, StateStatusT } from './state';
 import { PathfindState } from './pathfind-state';
 import { StateMachine } from './state-machine';
 import { Enemy } from '../enemy';
@@ -8,7 +8,14 @@ export class WanderState extends PathfindState {
     constructor(self: Enemy) {
         super(self);
     }
-    
+
+    get stateName() {
+        return 'wandering';
+    }
+    get stateStatus(): StateStatusT {
+        return 'confused';
+    }
+
     onEnter(machine: StateMachine, prevState: State | null) {
         super.onEnter(machine, prevState);
         this.self.speed = 30 * (2 + Math.random() * 1);
