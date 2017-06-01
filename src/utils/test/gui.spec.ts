@@ -106,7 +106,7 @@ describe('utils/drawGUI', () => {
             ]
         };
         drawGUI(context, game, gui);
-        expect(drawSpriteStub.callCount).to.eq(4);
+        expect(drawSpriteStub.callCount).to.eq(3);
     });
 });
 
