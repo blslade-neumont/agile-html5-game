@@ -23,7 +23,7 @@ export class Player extends Entity {
             takeDamageSound: sfx['playerDamage'],
             killSound: sfx['playerDeath']
         }, opts));
-        this._lightSourceSprite = alives['dim-light-source'].sprite;
+        this._lightSourceSprite = alives['large-dim-light-source'].sprite;
     }
 
     addToScene(scene: GameScene) {

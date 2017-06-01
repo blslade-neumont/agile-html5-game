@@ -108,12 +108,12 @@ export let alives: { [name: string]: Alive } =
                 tileset: { width: 32, height: 32, tilex: 0, tiley: 4 }
             }
         },
-        'dim-light-source': {
+        'large-dim-light-source': {
             sprite: {
-                src: 'images/Alive/dim-light-source.png',
-                pivot: { x: 80, y: 80 }
+                src: 'images/Alive/large-dim-light-source.png',
+                pivot: { x: 150, y: 150 }
             }
-        },        
+        },
         'bomb': {
             sprite: {
                 src: 'images/Alive/Other1.png',
