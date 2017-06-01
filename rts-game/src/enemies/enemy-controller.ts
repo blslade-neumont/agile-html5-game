@@ -31,7 +31,7 @@ export class EnemyController extends GameObject {
 
     addToScene(scene: GameScene) {
         super.addToScene(scene);
-        this.addEnemies(1);
+        this.addEnemies(10);
     }
 
     private _baseCoords: [number, number] = [0, 0];

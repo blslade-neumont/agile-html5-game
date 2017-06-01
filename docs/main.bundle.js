@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 32);
+/******/ 	return __webpack_require__(__webpack_require__.s = 34);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -2451,7 +2451,7 @@ function stubFalse() {
 
 module.exports = merge;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(40), __webpack_require__(41)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(42), __webpack_require__(43)(module)))
 
 /***/ }),
 /* 5 */
@@ -3393,9 +3393,9 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var engine_1 = __webpack_require__(0);
-var tile_preload_strategy_1 = __webpack_require__(35);
-var alive_preload_strategy_1 = __webpack_require__(34);
-var flocking_scene_1 = __webpack_require__(36);
+var tile_preload_strategy_1 = __webpack_require__(37);
+var alive_preload_strategy_1 = __webpack_require__(36);
+var flocking_scene_1 = __webpack_require__(38);
 var RtsGame = (function (_super) {
     __extends(RtsGame, _super);
     function RtsGame(framesPerSecond) {
@@ -4007,7 +4007,7 @@ var EnemyController = (function (_super) {
     };
     EnemyController.prototype.addToScene = function (scene) {
         _super.prototype.addToScene.call(this, scene);
-        this.addEnemies(1);
+        this.addEnemies(10);
     };
     Object.defineProperty(EnemyController.prototype, "baseCoords", {
         get: function () {
@@ -4093,11 +4093,9 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var engine_1 = __webpack_require__(0);
-var state_machine_1 = __webpack_require__(27);
-var state_1 = __webpack_require__(28);
+var state_machine_1 = __webpack_require__(28);
+var wander_state_1 = __webpack_require__(30);
 var alive_db_1 = __webpack_require__(3);
-var tile_db_1 = __webpack_require__(1);
-var math_1 = __webpack_require__(12);
 var merge = __webpack_require__(4);
 var Enemy = (function (_super) {
     __extends(Enemy, _super);
@@ -4109,7 +4107,7 @@ var Enemy = (function (_super) {
         }, opts)) || this;
         _this.controller = controller;
         _this.renderDebugInfo = false;
-        _this._states = new state_machine_1.StateMachine(new WanderState(_this));
+        _this._states = new state_machine_1.StateMachine(new wander_state_1.WanderState(_this));
         return _this;
     }
     Enemy.prototype.tick = function (delta) {
@@ -4124,88 +4122,6 @@ var Enemy = (function (_super) {
     return Enemy;
 }(engine_1.GameObject));
 exports.Enemy = Enemy;
-var WanderState = (function (_super) {
-    __extends(WanderState, _super);
-    function WanderState(self) {
-        var _this = _super.call(this) || this;
-        _this.self = self;
-        _this.currentIdx = 0;
-        _this.turnRadius = 24;
-        _this.directionChangeSpeed = 180;
-        return _this;
-    }
-    Object.defineProperty(WanderState.prototype, "turnRadius2", {
-        get: function () {
-            return this.turnRadius * this.turnRadius;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    WanderState.prototype.onEnter = function (machine, prevState) {
-        _super.prototype.onEnter.call(this, machine, prevState);
-        this.self.speed = 30 * (2 + Math.random() * 1);
-    };
-    WanderState.prototype.tick = function (machine, delta) {
-        if (this.path && this.currentIdx >= this.path.nodes.length)
-            this.path = null;
-        if (!this.path) {
-            var targetx = Math.floor((this.self.x + (Math.random() * 3000) - 1500) / tile_db_1.TILE_SIZE);
-            var targety = Math.floor((this.self.y + (Math.random() * 3000) - 1500) / tile_db_1.TILE_SIZE);
-            this.path = this.self.controller.getPath(Math.floor(this.self.x / tile_db_1.TILE_SIZE), Math.floor(this.self.y / tile_db_1.TILE_SIZE), targetx, targety);
-            this.currentIdx = 0;
-        }
-        if (!this.path)
-            return;
-        var nodes = this.path.nodes;
-        var targeting = null;
-        while (true) {
-            if (this.currentIdx >= nodes.length)
-                return;
-            targeting = nodes[this.currentIdx];
-            var dist2 = math_1.pointDistance2(this.self.x, this.self.y, (targeting.x + .5) * tile_db_1.TILE_SIZE, (targeting.y + .5) * tile_db_1.TILE_SIZE);
-            if (dist2 > this.turnRadius2)
-                break;
-            this.currentIdx++;
-        }
-        var dir = engine_1.pointDirection(this.self.x, this.self.y, (targeting.x + .5) * tile_db_1.TILE_SIZE, (targeting.y + .5) * tile_db_1.TILE_SIZE);
-        if (dir > this.self.direction + 180)
-            dir -= 180;
-        else if (dir < this.self.direction - 180)
-            dir += 180;
-        var dirChange = 0;
-        if (dir > this.self.direction) {
-            dirChange = Math.min(dir - this.self.direction, this.directionChangeSpeed * delta);
-        }
-        else if (dir < this.self.direction) {
-            dirChange = Math.max(dir - this.self.direction, -this.directionChangeSpeed * delta);
-        }
-        console.log(this.self.direction - dir);
-        this.self.direction += dirChange;
-    };
-    WanderState.prototype.render = function (machine, context) {
-        _super.prototype.render.call(this, machine, context);
-        if (this.path && this.self.renderDebugInfo) {
-            context.strokeStyle = 'red';
-            context.beginPath();
-            var nodes = this.path.nodes;
-            context.moveTo((nodes[0].x + .5) * tile_db_1.TILE_SIZE, (nodes[0].y + .5) * tile_db_1.TILE_SIZE);
-            for (var q = 1; q < nodes.length; q++) {
-                context.lineTo((nodes[q].x + .5) * tile_db_1.TILE_SIZE, (nodes[q].y + .5) * tile_db_1.TILE_SIZE);
-            }
-            context.stroke();
-            for (var q = 0; q < nodes.length; q++) {
-                context.fillStyle = q == this.currentIdx ? 'white' : 'red';
-                context.fillRect((nodes[q].x + .5) * tile_db_1.TILE_SIZE - 2, (nodes[q].y + .5) * tile_db_1.TILE_SIZE - 2, 4, 4);
-            }
-            context.strokeStyle = 'blue';
-            context.beginPath();
-            context.ellipse(this.self.x, this.self.y, this.turnRadius, this.turnRadius, 0, 0, 2 * Math.PI);
-            context.stroke();
-        }
-    };
-    return WanderState;
-}(state_1.State));
-exports.WanderState = WanderState;
 
 
 /***/ }),
@@ -4350,6 +4266,105 @@ exports.Path = Path;
 
 "use strict";
 
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var engine_1 = __webpack_require__(0);
+var state_1 = __webpack_require__(29);
+var tile_db_1 = __webpack_require__(1);
+var math_1 = __webpack_require__(12);
+var PathfindState = (function (_super) {
+    __extends(PathfindState, _super);
+    function PathfindState(self) {
+        var _this = _super.call(this) || this;
+        _this.self = self;
+        _this.currentIdx = 0;
+        _this.turnRadius = 24;
+        _this.directionChangeSpeed = 180;
+        return _this;
+    }
+    Object.defineProperty(PathfindState.prototype, "path", {
+        get: function () {
+            return this._path;
+        },
+        set: function (val) {
+            this._path = val;
+            this.currentIdx = 0;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    PathfindState.prototype.tick = function (machine, delta) {
+        if (this.path && this.currentIdx >= this.path.nodes.length)
+            this.path = null;
+        if (!this.path)
+            return;
+        var nodes = this.path.nodes;
+        var targeting = null;
+        while (true) {
+            if (this.currentIdx >= nodes.length)
+                return;
+            targeting = nodes[this.currentIdx];
+            var dist2 = math_1.pointDistance2(this.self.x, this.self.y, (targeting.x + .5) * tile_db_1.TILE_SIZE, (targeting.y + .5) * tile_db_1.TILE_SIZE);
+            if (dist2 > this.turnRadius * this.turnRadius)
+                break;
+            this.currentIdx++;
+        }
+        var dir = engine_1.pointDirection(this.self.x, this.self.y, (targeting.x + .5) * tile_db_1.TILE_SIZE, (targeting.y + .5) * tile_db_1.TILE_SIZE);
+        if (dir > this.self.direction + 180)
+            dir -= 180;
+        else if (dir < this.self.direction - 180)
+            dir += 180;
+        var dirChange = 0;
+        if (dir > this.self.direction) {
+            dirChange = Math.min(dir - this.self.direction, this.directionChangeSpeed * delta);
+        }
+        else if (dir < this.self.direction) {
+            dirChange = Math.max(dir - this.self.direction, -this.directionChangeSpeed * delta);
+        }
+        console.log(this.self.direction - dir);
+        this.self.direction += dirChange;
+    };
+    PathfindState.prototype.render = function (machine, context) {
+        _super.prototype.render.call(this, machine, context);
+        if (this.path && this.self.renderDebugInfo) {
+            context.strokeStyle = 'red';
+            context.beginPath();
+            var nodes = this.path.nodes;
+            context.moveTo((nodes[0].x + .5) * tile_db_1.TILE_SIZE, (nodes[0].y + .5) * tile_db_1.TILE_SIZE);
+            for (var q = 1; q < nodes.length; q++) {
+                context.lineTo((nodes[q].x + .5) * tile_db_1.TILE_SIZE, (nodes[q].y + .5) * tile_db_1.TILE_SIZE);
+            }
+            context.stroke();
+            for (var q = 0; q < nodes.length; q++) {
+                context.fillStyle = q == this.currentIdx ? 'white' : 'red';
+                context.fillRect((nodes[q].x + .5) * tile_db_1.TILE_SIZE - 2, (nodes[q].y + .5) * tile_db_1.TILE_SIZE - 2, 4, 4);
+            }
+            context.strokeStyle = 'blue';
+            context.beginPath();
+            context.ellipse(this.self.x, this.self.y, this.turnRadius, this.turnRadius, 0, 0, 2 * Math.PI);
+            context.stroke();
+        }
+    };
+    return PathfindState;
+}(state_1.State));
+exports.PathfindState = PathfindState;
+
+
+/***/ }),
+/* 28 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
 Object.defineProperty(exports, "__esModule", { value: true });
 var StateMachine = (function () {
     function StateMachine(currentState) {
@@ -4396,7 +4411,7 @@ exports.StateMachine = StateMachine;
 
 
 /***/ }),
-/* 28 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4419,7 +4434,48 @@ exports.State = State;
 
 
 /***/ }),
-/* 29 */
+/* 30 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var pathfind_state_1 = __webpack_require__(27);
+var tile_db_1 = __webpack_require__(1);
+var WanderState = (function (_super) {
+    __extends(WanderState, _super);
+    function WanderState(self) {
+        return _super.call(this, self) || this;
+    }
+    WanderState.prototype.onEnter = function (machine, prevState) {
+        _super.prototype.onEnter.call(this, machine, prevState);
+        this.self.speed = 30 * (2 + Math.random() * 1);
+    };
+    WanderState.prototype.tick = function (machine, delta) {
+        if (!this.path) {
+            var targetx = Math.floor((this.self.x + (Math.random() * 3000) - 1500) / tile_db_1.TILE_SIZE);
+            var targety = Math.floor((this.self.y + (Math.random() * 3000) - 1500) / tile_db_1.TILE_SIZE);
+            this.path = this.self.controller.getPath(Math.floor(this.self.x / tile_db_1.TILE_SIZE), Math.floor(this.self.y / tile_db_1.TILE_SIZE), targetx, targety);
+        }
+        _super.prototype.tick.call(this, machine, delta);
+    };
+    return WanderState;
+}(pathfind_state_1.PathfindState));
+exports.WanderState = WanderState;
+
+
+/***/ }),
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4436,7 +4492,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var engine_1 = __webpack_require__(0);
-var bat_1 = __webpack_require__(30);
+var bat_1 = __webpack_require__(32);
 var BatController = (function (_super) {
     __extends(BatController, _super);
     function BatController() {
@@ -4490,7 +4546,7 @@ exports.BatController = BatController;
 
 
 /***/ }),
-/* 30 */
+/* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4617,7 +4673,7 @@ exports.Bat = Bat;
 
 
 /***/ }),
-/* 31 */
+/* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4669,7 +4725,7 @@ exports.GridRenderer = GridRenderer;
 
 
 /***/ }),
-/* 32 */
+/* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4681,7 +4737,7 @@ game.start();
 
 
 /***/ }),
-/* 33 */
+/* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4801,7 +4857,7 @@ exports.Player = Player;
 
 
 /***/ }),
-/* 34 */
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4822,7 +4878,7 @@ exports.AlivePreloadStrategy = AlivePreloadStrategy;
 
 
 /***/ }),
-/* 35 */
+/* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4843,7 +4899,7 @@ exports.TilePreloadStrategy = TilePreloadStrategy;
 
 
 /***/ }),
-/* 36 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4860,10 +4916,10 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var engine_1 = __webpack_require__(0);
-var world_1 = __webpack_require__(38);
-var grid_renderer_1 = __webpack_require__(31);
-var player_1 = __webpack_require__(33);
-var bat_controller_1 = __webpack_require__(29);
+var world_1 = __webpack_require__(40);
+var grid_renderer_1 = __webpack_require__(33);
+var player_1 = __webpack_require__(35);
+var bat_controller_1 = __webpack_require__(31);
 var enemy_controller_1 = __webpack_require__(23);
 var FlockingScene = (function (_super) {
     __extends(FlockingScene, _super);
@@ -4906,13 +4962,13 @@ exports.FlockingScene = FlockingScene;
 
 
 /***/ }),
-/* 37 */
+/* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var nnn = __webpack_require__(39);
+var nnn = __webpack_require__(41);
 var Noise = nnn.Noise;
 var cache = new Map();
 function generateNoise(seed, chunkx, chunky) {
@@ -4932,7 +4988,7 @@ exports.generateNoise = generateNoise;
 
 
 /***/ }),
-/* 38 */
+/* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4950,7 +5006,7 @@ var __extends = (this && this.__extends) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var engine_1 = __webpack_require__(0);
 var tile_db_1 = __webpack_require__(1);
-var noise_1 = __webpack_require__(37);
+var noise_1 = __webpack_require__(39);
 var TIME_SCALE = 1 / (60 * 5);
 var World = (function (_super) {
     __extends(World, _super);
@@ -5020,7 +5076,7 @@ exports.World = World;
 
 
 /***/ }),
-/* 39 */
+/* 41 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -5353,7 +5409,7 @@ exports.World = World;
 
 
 /***/ }),
-/* 40 */
+/* 42 */
 /***/ (function(module, exports) {
 
 var g;
@@ -5380,7 +5436,7 @@ module.exports = g;
 
 
 /***/ }),
-/* 41 */
+/* 43 */
 /***/ (function(module, exports) {
 
 module.exports = function(module) {
