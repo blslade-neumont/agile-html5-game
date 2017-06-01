@@ -46,30 +46,33 @@
   <ItemGroup>
     <Content Include=".gitignore" />
     <Content Include=".travis.yml" />
-    <Content Include="audio\music\Airship.ogg" />
-    <Content Include="audio\music\Dungeon1.ogg" />
-    <Content Include="audio\music\Gameover2.ogg" />
-    <Content Include="audio\music\Town1.ogg" />
-    <Content Include="audio\sfx\Absorb2.ogg" />
-    <Content Include="audio\sfx\Book1.ogg" />
-    <Content Include="audio\sfx\Cry2.ogg" />
-    <Content Include="audio\sfx\Explosion1.ogg" />
-    <Content Include="audio\sfx\Scream.ogg" />
-    <Content Include="images\Alive\dim-light-source.png" />
-    <Content Include="images\Alive\Katie.png" />
-    <Content Include="images\Alive\Monster3.png" />
-    <Content Include="images\Alive\Other1.png" />
-    <Content Include="images\Effects\Fire2.png" />
-    <Content Include="images\GUI\game-over.png" />
-    <Content Include="images\GUI\hearts.png" />
-    <Content Include="images\GUI\inventory.png" />
-    <Content Include="images\GUI\title.png" />
-    <Content Include="images\Icons\IconSet.png" />
-    <Content Include="images\Tiles\Dungeon_A1.png" />
-    <Content Include="images\Tiles\Dungeon_A2.png" />
-    <Content Include="images\Tiles\Outside_A2.png" />
-    <Content Include="images\Tiles\Outside_Tiles.png" />
-    <Content Include="images\Tiles\World_A1.png" />
+    <Content Include="docs\audio\music\Airship.ogg" />
+    <Content Include="docs\audio\music\Dungeon1.ogg" />
+    <Content Include="docs\audio\music\Gameover2.ogg" />
+    <Content Include="docs\audio\music\Town1.ogg" />
+    <Content Include="docs\audio\sfx\Absorb2.ogg" />
+    <Content Include="docs\audio\sfx\Book1.ogg" />
+    <Content Include="docs\audio\sfx\Cry2.ogg" />
+    <Content Include="docs\audio\sfx\Explosion1.ogg" />
+    <Content Include="docs\audio\sfx\Scream.ogg" />
+    <Content Include="docs\images\Alive\Katie.png" />
+    <Content Include="docs\images\Alive\large-dim-light-source.png" />
+    <Content Include="docs\images\Alive\Monster3.png" />
+    <Content Include="docs\images\Alive\Other1.png" />
+    <Content Include="docs\images\Effects\Fire2.png" />
+    <Content Include="docs\images\GUI\game-over.png" />
+    <Content Include="docs\images\GUI\hearts.png" />
+    <Content Include="docs\images\GUI\inventory.png" />
+    <Content Include="docs\images\GUI\title.png" />
+    <Content Include="docs\images\Icons\IconSet.png" />
+    <Content Include="docs\images\Tiles\Dungeon_A1.png" />
+    <Content Include="docs\images\Tiles\Dungeon_A2.png" />
+    <Content Include="docs\images\Tiles\Outside_A2.png" />
+    <Content Include="docs\images\Tiles\Outside_Tiles.png" />
+    <Content Include="docs\images\Tiles\World_A1.png" />
+    <Content Include="docs\index.html" />
+    <Content Include="docs\main.map" />
+    <Content Include="docs\styles.css" />
     <Content Include="styles.css">
       <SubType>Code</SubType>
     </Content>
@@ -369,17 +372,18 @@
     <TypeScriptCompile Include="src\world.ts" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="audio\" />
-    <Folder Include="audio\music\" />
-    <Folder Include="audio\sfx\" />
     <Folder Include="config\" />
     <Folder Include="config\webpack\" />
-    <Folder Include="images\" />
-    <Folder Include="images\Alive\" />
-    <Folder Include="images\Effects\" />
-    <Folder Include="images\GUI\" />
-    <Folder Include="images\Icons\" />
-    <Folder Include="images\Tiles\" />
+    <Folder Include="docs\" />
+    <Folder Include="docs\audio\" />
+    <Folder Include="docs\audio\music\" />
+    <Folder Include="docs\audio\sfx\" />
+    <Folder Include="docs\images\" />
+    <Folder Include="docs\images\Alive\" />
+    <Folder Include="docs\images\Effects\" />
+    <Folder Include="docs\images\GUI\" />
+    <Folder Include="docs\images\Icons\" />
+    <Folder Include="docs\images\Tiles\" />
     <Folder Include="src\dbs\test\" />
     <Folder Include="src\engine\" />
     <Folder Include="src\engine\test\" />
@@ -408,6 +412,7 @@
     <Compile Include="config\webpack\development.js">
       <SubType>Code</SubType>
     </Compile>
+    <Content Include="docs\main.bundle.js" />
   </ItemGroup>
   <!-- Do not delete the following Import Project.  While this appears to do nothing it is a marker for setting TypeScript properties before our import that depends on them. -->
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="False" />
