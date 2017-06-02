@@ -6,5 +6,7 @@ notifications:
     - brandonyoyoslade@gmail.com
     - jfurtado@student.neumont.edu
     - keima.ayasaki@gmail.com
+before_script:
+  - cd agile-game
 script:
   - yarn travis -s

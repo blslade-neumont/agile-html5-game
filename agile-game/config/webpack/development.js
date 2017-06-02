@@ -15,7 +15,7 @@ let devConfig = {
     },
 
     output: {
-        path: path.resolve(__dirname, '../../docs')
+        path: path.resolve(__dirname, '../../../docs')
     },
 
     plugins: [
