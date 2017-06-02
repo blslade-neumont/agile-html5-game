@@ -8,5 +8,6 @@ notifications:
     - keima.ayasaki@gmail.com
 before_script:
   - cd agile-game
+  - yarn
 script:
   - yarn travis -s
