@@ -7,6 +7,9 @@ notifications:
     - jfurtado@student.neumont.edu
     - keima.ayasaki@gmail.com
 before_script:
+  - git submodule update --init --recursive
+  - git submodule foreach yarn
+  - git submodule foreach yarn build
   - cd agile-game
   - yarn
 script:

@@ -7,9 +7,9 @@ use(sinonChai);
 
 import { SimpleEnemy } from '../simple-enemy';
 import { alives } from '../dbs/alive-db';
-import { MockEventQueue } from './mock-event-queue';
 import { MockWorld } from './mock-world';
 import { GameObject } from '../engine';
+import { MockEventQueue } from '../engine/test';
 
 describe('SimpleEnemy', () => {
     let enemy: SimpleEnemy;

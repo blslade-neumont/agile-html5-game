@@ -6,12 +6,11 @@ import * as sinonChai from 'sinon-chai';
 use(sinonChai);
 
 import { Player } from '../player';
-import { MockEventQueue } from './mock-event-queue';
 import { MockWorld } from './mock-world';
 import { alives } from '../dbs/alive-db';
-import { GameScene, GameObject} from '../engine';
+import { GameScene, GameObject, Game, MouseWheelEvent } from '../engine';
+import { MockEventQueue } from '../engine/test';
 import { AgileGame } from '../agile-game';
-import { Game, MouseWheelEvent } from '../engine';
 import { Entity } from '../entity';
 import { DeadPlayer } from '../dead-player';
 import { Bomb } from '../bomb';

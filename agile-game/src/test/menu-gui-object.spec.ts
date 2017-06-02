@@ -7,9 +7,8 @@ use(sinonChai);
 
 import { Game, GameScene, GameObject } from '../engine';
 import { MenuGuiObject } from '../menu-gui-object';
-import { MockGame } from '../engine/test';
+import { MockGame, MockEventQueue } from '../engine/test';
 import * as guiUtils from '../utils/gui';
-import { MockEventQueue } from './mock-event-queue';
 import { MockWorld } from './mock-world';
 import { Player } from '../player';
 import { gui } from '../dbs/gui-db';

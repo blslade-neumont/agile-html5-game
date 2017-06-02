@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 39);
+/******/ 	return __webpack_require__(__webpack_require__.s = 31);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -76,15 +76,7 @@ function __export(m) {
     for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
 }
 Object.defineProperty(exports, "__esModule", { value: true });
-__export(__webpack_require__(16));
-__export(__webpack_require__(18));
-__export(__webpack_require__(8));
-__export(__webpack_require__(30));
-__export(__webpack_require__(32));
-__export(__webpack_require__(17));
-__export(__webpack_require__(29));
-__export(__webpack_require__(31));
-__export(__webpack_require__(36));
+__export(__webpack_require__(50));
 
 
 /***/ }),
@@ -495,43 +487,6 @@ exports.alives = {
 
 "use strict";
 
-Object.defineProperty(exports, "__esModule", { value: true });
-function degToRad(deg) {
-    return (deg / 180) * Math.PI;
-}
-exports.degToRad = degToRad;
-function radToDeg(rad) {
-    return (rad / Math.PI) * 180;
-}
-exports.radToDeg = radToDeg;
-function clamp(value, lowerBound, upperBound) {
-    if (lowerBound > upperBound) {
-        throw new Error("Attempting to clamp with a lower bound greater than the upper bound");
-    }
-    if (value < lowerBound)
-        value = lowerBound;
-    else if (value > upperBound)
-        value = upperBound;
-    return value;
-}
-exports.clamp = clamp;
-function fmod(a, b) {
-    return +(a - (Math.floor(a / b) * b)).toPrecision(8);
-}
-exports.fmod = fmod;
-function pointDirection(x1, y1, x2, y2) {
-    var xdiff = x2 - x1, ydiff = y2 - y1;
-    return fmod(radToDeg(Math.atan2(-ydiff, xdiff)), 360);
-}
-exports.pointDirection = pointDirection;
-
-
-/***/ }),
-/* 5 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -786,7 +741,7 @@ exports.Entity = Entity;
 
 
 /***/ }),
-/* 6 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -805,14 +760,51 @@ exports.pauseWithGame = pauseWithGame;
 
 
 /***/ }),
+/* 6 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+function degToRad(deg) {
+    return (deg / 180) * Math.PI;
+}
+exports.degToRad = degToRad;
+function radToDeg(rad) {
+    return (rad / Math.PI) * 180;
+}
+exports.radToDeg = radToDeg;
+function clamp(value, lowerBound, upperBound) {
+    if (lowerBound > upperBound) {
+        throw new Error("Attempting to clamp with a lower bound greater than the upper bound");
+    }
+    if (value < lowerBound)
+        value = lowerBound;
+    else if (value > upperBound)
+        value = upperBound;
+    return value;
+}
+exports.clamp = clamp;
+function fmod(a, b) {
+    return +(a - (Math.floor(a / b) * b)).toPrecision(8);
+}
+exports.fmod = fmod;
+function pointDirection(x1, y1, x2, y2) {
+    var xdiff = x2 - x1, ydiff = y2 - y1;
+    return fmod(radToDeg(Math.atan2(-ydiff, xdiff)), 360);
+}
+exports.pointDirection = pointDirection;
+//# sourceMappingURL=math.js.map
+
+/***/ }),
 /* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var overworld_scene_1 = __webpack_require__(48);
-var title_scene_1 = __webpack_require__(24);
+var overworld_scene_1 = __webpack_require__(40);
+var title_scene_1 = __webpack_require__(19);
 ;
 exports.gui = {
     inventory: {
@@ -883,213 +875,6 @@ exports.gui = {
 
 "use strict";
 
-Object.defineProperty(exports, "__esModule", { value: true });
-var math_1 = __webpack_require__(4);
-var Camera = (function () {
-    function Camera(_scene) {
-        this._scene = _scene;
-        this._clearColor = null;
-        this._center = [0, 0];
-        this._zoomScale = 1;
-        this._maxZoomScale = 4;
-        this._minZoomScale = .25;
-        this._smoothing = true;
-        if (!this._scene)
-            throw new Error("You must pass in a valid Scene when you create a Camera.");
-    }
-    Object.defineProperty(Camera.prototype, "scene", {
-        get: function () {
-            return this._scene;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(Camera.prototype, "game", {
-        get: function () {
-            return this.scene.game;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(Camera.prototype, "clearColor", {
-        get: function () {
-            return this._clearColor;
-        },
-        set: function (val) {
-            this._clearColor = val;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(Camera.prototype, "center", {
-        get: function () {
-            return [this._center[0], this._center[1]];
-        },
-        set: function (_a) {
-            var x = _a[0], y = _a[1];
-            this._center = [x, y];
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(Camera.prototype, "zoomScale", {
-        get: function () {
-            return this._zoomScale;
-        },
-        set: function (val) {
-            if (val <= 0)
-                throw new Error("The zoom scale must be positive");
-            this._zoomScale = math_1.clamp(val, this.minZoomScale, this.maxZoomScale);
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(Camera.prototype, "maxZoomScale", {
-        get: function () {
-            return this._maxZoomScale;
-        },
-        set: function (val) {
-            if (val <= 0)
-                throw new Error("The max zoom scale must be positive");
-            if (val < this._minZoomScale)
-                throw new Error("The min zoom scale is greater than the max zoom scale.");
-            this._maxZoomScale = val;
-            this.zoomScale = this.zoomScale;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(Camera.prototype, "minZoomScale", {
-        get: function () {
-            return this._minZoomScale;
-        },
-        set: function (val) {
-            if (val <= 0)
-                throw new Error("The min zoom scale must be positive");
-            if (val > this._maxZoomScale)
-                throw new Error("The max zoom scale is less than the min zoom scale.");
-            this._minZoomScale = val;
-            this.zoomScale = this.zoomScale;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(Camera.prototype, "enableSmoothing", {
-        get: function () {
-            return this._smoothing;
-        },
-        set: function (val) {
-            this._smoothing = val;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(Camera.prototype, "bounds", {
-        get: function () {
-            var _a = this.game.canvasSize, cvWidth = _a[0], cvHeight = _a[1];
-            var _b = [(cvWidth / 2) / this._zoomScale, (cvHeight / 2) / this._zoomScale], hoff = _b[0], voff = _b[1];
-            return {
-                left: this._center[0] - hoff,
-                right: this._center[0] + hoff,
-                top: this._center[1] + voff,
-                bottom: this._center[1] - voff
-            };
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Camera.prototype.tick = function (delta) {
-    };
-    Camera.prototype.push = function (context) {
-        var _a = this.game.canvasSize, cvWidth = _a[0], cvHeight = _a[1];
-        context.save();
-        if (this._clearColor) {
-            context.fillStyle = this._clearColor;
-            context.fillRect(0, 0, cvWidth, cvHeight);
-        }
-        context.imageSmoothingEnabled = context.mozImageSmoothingEnabled = context.oImageSmoothingEnabled = context.webkitImageSmoothingEnabled = this._smoothing;
-        context.translate(Math.floor(cvWidth / 2), Math.floor(cvHeight / 2));
-        context.scale(this._zoomScale, this._zoomScale);
-        context.translate(-Math.floor(this._center[0]), -Math.floor(this._center[1]));
-    };
-    Camera.prototype.pop = function (context) {
-        context.restore();
-    };
-    return Camera;
-}());
-exports.Camera = Camera;
-
-
-/***/ }),
-/* 9 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var sprite_1 = __webpack_require__(20);
-var math_1 = __webpack_require__(4);
-var LINE_HEIGHT = 12;
-function fillText(context, text, x, y) {
-    var lines = text.split('\n');
-    for (var _i = 0, lines_1 = lines; _i < lines_1.length; _i++) {
-        var line = lines_1[_i];
-        context.fillText(line, x, y);
-        y += LINE_HEIGHT;
-    }
-}
-exports.fillText = fillText;
-function drawSprite(context, loader, sprite, x, y, imageIndex, defaultFps) {
-    if (x === void 0) { x = 0; }
-    if (y === void 0) { y = 0; }
-    if (imageIndex === void 0) { imageIndex = 0; }
-    if (defaultFps === void 0) { defaultFps = 30; }
-    if (!loader || !loader.loadImage)
-        throw new Error("You must pass in a valid ResourceLoader to draw a sprite.");
-    if (!sprite || !sprite.src)
-        throw new Error("Invalid sprite. Cannot render " + sprite + ".");
-    var img = loader.loadImage(sprite.src);
-    var pivot = sprite.pivot || { x: 0, y: 0 };
-    if (sprite_1.isAnimationSprite(sprite)) {
-        var tileset = sprite.tileset;
-        var frames_1 = sprite.frames;
-        var fps = sprite.framesPerSecond;
-        if (typeof fps === 'undefined')
-            fps = defaultFps;
-        var frameIdx = math_1.fmod(Math.floor(imageIndex * fps), frames_1.length);
-        var frame = frames_1[frameIdx];
-        context.drawImage(img, frame.tilex * tileset.width, frame.tiley * tileset.height, tileset.width, tileset.height, x - pivot.x, y - pivot.y, tileset.width, tileset.height);
-    }
-    else if (sprite_1.isSingleTileSprite(sprite)) {
-        var tileset = sprite.tileset;
-        context.drawImage(img, tileset.tilex * tileset.width, tileset.tiley * tileset.height, tileset.width, tileset.height, x - pivot.x, y - pivot.y, tileset.width, tileset.height);
-    }
-    else {
-        context.drawImage(img, x - pivot.x, y - pivot.y);
-    }
-}
-exports.drawSprite = drawSprite;
-function measureSprite(loader, sprite) {
-    if (!sprite || !sprite.src)
-        throw new Error("Invalid sprite. Cannot measure " + sprite + ".");
-    var img = loader && loader.loadImage(sprite.src);
-    if (sprite_1.isAnimationSprite(sprite) || sprite_1.isSingleTileSprite(sprite)) {
-        var _a = sprite.tileset, width = _a.width, height = _a.height;
-        return { width: width, height: height };
-    }
-    else {
-        return { width: img.width || 0, height: img.height || 0 };
-    }
-}
-exports.measureSprite = measureSprite;
-
-
-/***/ }),
-/* 10 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -1103,7 +888,7 @@ var __extends = (this && this.__extends) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var engine_1 = __webpack_require__(0);
 var tile_db_1 = __webpack_require__(2);
-var pause_with_game_1 = __webpack_require__(6);
+var pause_with_game_1 = __webpack_require__(5);
 var GridRenderer = (function (_super) {
     __extends(GridRenderer, _super);
     function GridRenderer() {
@@ -1151,7 +936,7 @@ exports.GridRenderer = GridRenderer;
 
 
 /***/ }),
-/* 11 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1169,7 +954,7 @@ var __extends = (this && this.__extends) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var engine_1 = __webpack_require__(0);
 var gui_db_1 = __webpack_require__(7);
-var gui_1 = __webpack_require__(49);
+var gui_1 = __webpack_require__(41);
 var MenuGuiObject = (function (_super) {
     __extends(MenuGuiObject, _super);
     function MenuGuiObject(gui) {
@@ -1254,7 +1039,7 @@ exports.MenuGuiObject = MenuGuiObject;
 
 
 /***/ }),
-/* 12 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1272,9 +1057,9 @@ var __extends = (this && this.__extends) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var engine_1 = __webpack_require__(0);
 var tile_db_1 = __webpack_require__(2);
-var pause_with_game_1 = __webpack_require__(6);
-var noise_1 = __webpack_require__(50);
-var entity_1 = __webpack_require__(5);
+var pause_with_game_1 = __webpack_require__(5);
+var noise_1 = __webpack_require__(42);
+var entity_1 = __webpack_require__(4);
 var TIME_SCALE = 1 / (60 * 5);
 var World = (function (_super) {
     __extends(World, _super);
@@ -1413,7 +1198,7 @@ exports.World = World;
 
 
 /***/ }),
-/* 13 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global, module) {/**
@@ -3624,7 +3409,214 @@ function stubFalse() {
 
 module.exports = merge;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(52), __webpack_require__(53)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(44), __webpack_require__(45)(module)))
+
+/***/ }),
+/* 12 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var math_1 = __webpack_require__(6);
+var Camera = (function () {
+    function Camera(_scene) {
+        this._scene = _scene;
+        this._clearColor = null;
+        this._center = [0, 0];
+        this._zoomScale = 1;
+        this._maxZoomScale = 4;
+        this._minZoomScale = .25;
+        this._smoothing = true;
+        if (!this._scene)
+            throw new Error("You must pass in a valid Scene when you create a Camera.");
+    }
+    Object.defineProperty(Camera.prototype, "scene", {
+        get: function () {
+            return this._scene;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Camera.prototype, "game", {
+        get: function () {
+            return this.scene.game;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Camera.prototype, "clearColor", {
+        get: function () {
+            return this._clearColor;
+        },
+        set: function (val) {
+            this._clearColor = val;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Camera.prototype, "center", {
+        get: function () {
+            return [this._center[0], this._center[1]];
+        },
+        set: function (_a) {
+            var x = _a[0], y = _a[1];
+            this._center = [x, y];
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Camera.prototype, "zoomScale", {
+        get: function () {
+            return this._zoomScale;
+        },
+        set: function (val) {
+            if (val <= 0)
+                throw new Error("The zoom scale must be positive");
+            this._zoomScale = math_1.clamp(val, this.minZoomScale, this.maxZoomScale);
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Camera.prototype, "maxZoomScale", {
+        get: function () {
+            return this._maxZoomScale;
+        },
+        set: function (val) {
+            if (val <= 0)
+                throw new Error("The max zoom scale must be positive");
+            if (val < this._minZoomScale)
+                throw new Error("The min zoom scale is greater than the max zoom scale.");
+            this._maxZoomScale = val;
+            this.zoomScale = this.zoomScale;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Camera.prototype, "minZoomScale", {
+        get: function () {
+            return this._minZoomScale;
+        },
+        set: function (val) {
+            if (val <= 0)
+                throw new Error("The min zoom scale must be positive");
+            if (val > this._maxZoomScale)
+                throw new Error("The max zoom scale is less than the min zoom scale.");
+            this._minZoomScale = val;
+            this.zoomScale = this.zoomScale;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Camera.prototype, "enableSmoothing", {
+        get: function () {
+            return this._smoothing;
+        },
+        set: function (val) {
+            this._smoothing = val;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Camera.prototype, "bounds", {
+        get: function () {
+            var _a = this.game.canvasSize, cvWidth = _a[0], cvHeight = _a[1];
+            var _b = [(cvWidth / 2) / this._zoomScale, (cvHeight / 2) / this._zoomScale], hoff = _b[0], voff = _b[1];
+            return {
+                left: this._center[0] - hoff,
+                right: this._center[0] + hoff,
+                top: this._center[1] + voff,
+                bottom: this._center[1] - voff
+            };
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Camera.prototype.tick = function (delta) {
+    };
+    Camera.prototype.push = function (context) {
+        var _a = this.game.canvasSize, cvWidth = _a[0], cvHeight = _a[1];
+        context.save();
+        if (this._clearColor) {
+            context.fillStyle = this._clearColor;
+            context.fillRect(0, 0, cvWidth, cvHeight);
+        }
+        context.imageSmoothingEnabled = context.mozImageSmoothingEnabled = context.oImageSmoothingEnabled = context.webkitImageSmoothingEnabled = this._smoothing;
+        context.translate(Math.floor(cvWidth / 2), Math.floor(cvHeight / 2));
+        context.scale(this._zoomScale, this._zoomScale);
+        context.translate(-Math.floor(this._center[0]), -Math.floor(this._center[1]));
+    };
+    Camera.prototype.pop = function (context) {
+        context.restore();
+    };
+    return Camera;
+}());
+exports.Camera = Camera;
+//# sourceMappingURL=camera.js.map
+
+/***/ }),
+/* 13 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var sprite_1 = __webpack_require__(25);
+var math_1 = __webpack_require__(6);
+var LINE_HEIGHT = 12;
+function fillText(context, text, x, y) {
+    var lines = text.split('\n');
+    for (var _i = 0, lines_1 = lines; _i < lines_1.length; _i++) {
+        var line = lines_1[_i];
+        context.fillText(line, x, y);
+        y += LINE_HEIGHT;
+    }
+}
+exports.fillText = fillText;
+function drawSprite(context, loader, sprite, x, y, imageIndex, defaultFps) {
+    if (x === void 0) { x = 0; }
+    if (y === void 0) { y = 0; }
+    if (imageIndex === void 0) { imageIndex = 0; }
+    if (defaultFps === void 0) { defaultFps = 30; }
+    if (!loader || !loader.loadImage)
+        throw new Error("You must pass in a valid ResourceLoader to draw a sprite.");
+    if (!sprite || !sprite.src)
+        throw new Error("Invalid sprite. Cannot render " + sprite + ".");
+    var img = loader.loadImage(sprite.src);
+    var pivot = sprite.pivot || { x: 0, y: 0 };
+    if (sprite_1.isAnimationSprite(sprite)) {
+        var tileset = sprite.tileset;
+        var frames_1 = sprite.frames;
+        var fps = sprite.framesPerSecond;
+        if (typeof fps === 'undefined')
+            fps = defaultFps;
+        var frameIdx = math_1.fmod(Math.floor(imageIndex * fps), frames_1.length);
+        var frame = frames_1[frameIdx];
+        context.drawImage(img, frame.tilex * tileset.width, frame.tiley * tileset.height, tileset.width, tileset.height, x - pivot.x, y - pivot.y, tileset.width, tileset.height);
+    }
+    else if (sprite_1.isSingleTileSprite(sprite)) {
+        var tileset = sprite.tileset;
+        context.drawImage(img, tileset.tilex * tileset.width, tileset.tiley * tileset.height, tileset.width, tileset.height, x - pivot.x, y - pivot.y, tileset.width, tileset.height);
+    }
+    else {
+        context.drawImage(img, x - pivot.x, y - pivot.y);
+    }
+}
+exports.drawSprite = drawSprite;
+function measureSprite(loader, sprite) {
+    if (!sprite || !sprite.src)
+        throw new Error("Invalid sprite. Cannot measure " + sprite + ".");
+    var img = loader && loader.loadImage(sprite.src);
+    if (sprite_1.isAnimationSprite(sprite) || sprite_1.isSingleTileSprite(sprite)) {
+        var _a = sprite.tileset, width = _a.width, height = _a.height;
+        return { width: width, height: height };
+    }
+    else {
+        return { width: img.width || 0, height: img.height || 0 };
+    }
+}
+exports.measureSprite = measureSprite;
+//# sourceMappingURL=render.js.map
 
 /***/ }),
 /* 14 */
@@ -3687,6 +3679,489 @@ exports.items = {
 
 /***/ }),
 /* 16 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var engine_1 = __webpack_require__(0);
+var gui_db_1 = __webpack_require__(7);
+var menu_gui_object_1 = __webpack_require__(9);
+var InGameGuiObject = (function (_super) {
+    __extends(InGameGuiObject, _super);
+    function InGameGuiObject() {
+        var _this = _super.call(this, gui_db_1.gui['inventory']) || this;
+        _this.showInventory = false;
+        return _this;
+    }
+    Object.defineProperty(InGameGuiObject.prototype, "gameTimeString", {
+        get: function () {
+            var gameTime = this.scene.world.gameTime;
+            var day = Math.floor(gameTime);
+            var hour = Math.floor((gameTime - day) * 24);
+            return "Day " + (day + 1) + ", " + ((hour + 23) % 12 + 1) + " " + (hour < 12 ? 'AM' : 'PM');
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(InGameGuiObject.prototype, "score", {
+        get: function () {
+            return "Score: " + this.game.score;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    InGameGuiObject.prototype.handleEvent = function (evt) {
+        if (evt.type === 'keyPressed') {
+            if (evt.code == 'KeyE' || (evt.code == 'Escape' && this.showInventory)) {
+                this.showInventory = !this.showInventory;
+                var game = this.game;
+                if (this.showInventory) {
+                    game.onPause.emit(void (0));
+                }
+                else
+                    game.onPlay.emit(void (0));
+                return true;
+            }
+        }
+        return this.showInventory && _super.prototype.handleEvent.call(this, evt);
+    };
+    InGameGuiObject.prototype.tick = function (delta) {
+        if (this.showInventory)
+            _super.prototype.tick.call(this, delta);
+    };
+    InGameGuiObject.prototype.renderImpl = function (context) {
+        var _a = this.game.canvasSize, canvasWidth = _a[0], canvasHeight = _a[1];
+        var timeText = this.gameTimeString;
+        context.font = '24px Verdana';
+        var timeTextWidth = context.measureText(timeText).width;
+        var scoreText = this.score;
+        var scoreTextWidth = context.measureText(scoreText).width;
+        var timeyOffset = 0;
+        var scoreyOffset = 24;
+        context.fillStyle = 'rgba(0, 0, 0, .5)';
+        context.fillRect(canvasWidth - (8 + timeTextWidth), timeyOffset, 8 + timeTextWidth, 8 + 24);
+        context.fillStyle = 'rgba(0, 0, 0, .5)';
+        context.fillRect(canvasWidth - (8 + scoreTextWidth), scoreyOffset + 8, 8 + scoreTextWidth, 8 + 24);
+        context.fillStyle = 'white';
+        context.textAlign = 'right';
+        context.textBaseline = 'top';
+        context.fillText(timeText, canvasWidth - 4, timeyOffset + 4);
+        context.fillText(scoreText, canvasWidth - 4, scoreyOffset + 10);
+        this.renderHealth(context);
+        if (this.showInventory) {
+            _super.prototype.renderImpl.call(this, context);
+        }
+    };
+    InGameGuiObject.prototype.renderHealth = function (context) {
+        var HEART_SIZE = 24;
+        var OFFSET_FROM_BOTTOM = 8;
+        var DEFAULT_MAX_HEARTS = 10;
+        var p = this.scene.findObject('Player');
+        var total = (p && p.maxHealth) || DEFAULT_MAX_HEARTS;
+        var hearts = (p && p.currentHealth) || 0;
+        var _a = this.game.canvasSize, xx = _a[0], yy = _a[1];
+        xx /= 2;
+        xx -= (HEART_SIZE * (total - 1)) / 2;
+        yy -= OFFSET_FROM_BOTTOM;
+        var fullHeartSprite = gui_db_1.gui['full-health-heart'].sprite;
+        var emptyHeartSprite = gui_db_1.gui['empty-health-heart'].sprite;
+        for (var q = 0; q < total; q++) {
+            var spr = (q < hearts) ? fullHeartSprite : emptyHeartSprite;
+            engine_1.drawSprite(context, this.resources, spr, xx + (q * HEART_SIZE), yy, this.animationAge);
+        }
+    };
+    return InGameGuiObject;
+}(menu_gui_object_1.MenuGuiObject));
+exports.InGameGuiObject = InGameGuiObject;
+
+
+/***/ }),
+/* 17 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var engine_1 = __webpack_require__(0);
+var LightingObject = (function (_super) {
+    __extends(LightingObject, _super);
+    function LightingObject(ambient, dayNightCycle) {
+        if (ambient === void 0) { ambient = 1; }
+        if (dayNightCycle === void 0) { dayNightCycle = true; }
+        var _this = _super.call(this, 'LightingObject', { renderCamera: 'none' }) || this;
+        _this.ambient = ambient;
+        _this.dayNightCycle = dayNightCycle;
+        _this.compositeCanvas = document.createElement('canvas');
+        _this.compositeContext = _this.compositeCanvas.getContext('2d');
+        return _this;
+    }
+    LightingObject.prototype.renderImpl = function (context) {
+        var world = this.scene.world;
+        if (!world && this.dayNightCycle)
+            throw new Error("Unsupported state: no world, no game time; but dayNightCycle is true!");
+        var darkness = 0;
+        var gameTime = world && (world.gameTime - Math.floor(world.gameTime));
+        if (this.dayNightCycle && (gameTime <= 7 / 24 || gameTime >= 19 / 24)) {
+            darkness = 1;
+            if (gameTime <= 7 / 24 && gameTime > 5.5 / 24)
+                darkness = 1 - ((gameTime * 24) - 5.5) / 1.5;
+            if (gameTime >= 19 / 24 && gameTime < 20.5 / 24)
+                darkness = ((gameTime * 24) - 19) / 1.5;
+            darkness *= .95;
+        }
+        darkness = Math.max(1 - this.ambient, darkness);
+        if (darkness == 0)
+            return;
+        this.createCompositeImage(darkness);
+        context.save();
+        try {
+            context.globalCompositeOperation = 'multiply';
+            context.drawImage(this.compositeCanvas, 0, 0);
+        }
+        finally {
+            context.restore();
+        }
+    };
+    LightingObject.prototype.createCompositeImage = function (darkness) {
+        var _a = this.game.canvasSize, width = _a[0], height = _a[1];
+        _b = [width, height], this.compositeCanvas.width = _b[0], this.compositeCanvas.height = _b[1];
+        var ctx = this.compositeContext;
+        var color = Math.floor(255 * (1 - darkness));
+        ctx.globalCompositeOperation = 'source-over';
+        ctx.fillStyle = "rgb(" + color + ", " + color + ", " + color + ")";
+        ctx.fillRect(0, 0, width, height);
+        var camera = this.scene.camera;
+        if (camera)
+            camera.push(ctx);
+        try {
+            ctx.globalCompositeOperation = 'lighten';
+            var objects = this.scene.findObjects();
+            for (var _i = 0, _c = objects.filter(function (obj) { return typeof obj.renderLight === 'function'; }); _i < _c.length; _i++) {
+                var obj = _c[_i];
+                obj.renderLight(ctx);
+            }
+        }
+        finally {
+            if (camera)
+                camera.pop(ctx);
+        }
+        var _b;
+    };
+    return LightingObject;
+}(engine_1.GameObject));
+exports.LightingObject = LightingObject;
+
+
+/***/ }),
+/* 18 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var tile_db_1 = __webpack_require__(2);
+var dead_player_1 = __webpack_require__(28);
+var engine_1 = __webpack_require__(0);
+var entity_1 = __webpack_require__(4);
+var alive_db_1 = __webpack_require__(3);
+var sfx_db_1 = __webpack_require__(1);
+var pause_with_game_1 = __webpack_require__(5);
+var merge = __webpack_require__(11);
+var bomb_1 = __webpack_require__(27);
+var simple_enemy_1 = __webpack_require__(20);
+var inventory_1 = __webpack_require__(30);
+var CLOSE_ENOUGH = 3.0;
+var MOVE_SPEED = 4 * 30;
+var SIZE = 32;
+var Player = (function (_super) {
+    __extends(Player, _super);
+    function Player(opts) {
+        if (opts === void 0) { opts = { maxHealth: 10 }; }
+        var _this = _super.call(this, "Player", merge({
+            sprite: alive_db_1.alives['player-south'].sprite,
+            collisionBounds: new engine_1.Rect(0, SIZE, 0, SIZE),
+            takeDamageSound: sfx_db_1.sfx['playerDamage'],
+            killSound: sfx_db_1.sfx['playerDeath']
+        }, opts)) || this;
+        _this.bombPlaceTimer = 0.0;
+        _this._inventory = new inventory_1.Inventory();
+        _this._lightSourceSprite = alive_db_1.alives['large-dim-light-source'].sprite;
+        return _this;
+    }
+    Player.prototype.addToScene = function (scene) {
+        _super.prototype.addToScene.call(this, scene);
+        pause_with_game_1.pauseWithGame(this);
+    };
+    Player.prototype.handleEvent = function (evt) {
+        if (evt.type == 'mouseWheel') {
+            var scale = Math.pow(2, -engine_1.clamp(evt.delta, -1, 1) / 7);
+            this.game.scene.camera.zoomScale *= scale;
+        }
+        else if (evt.type == 'keyPressed') {
+            if (this.events.isKeyDown('Space') && this.bombPlaceTimer <= 0.0) {
+                var offset = [0, 0];
+                if (this.sprite == alive_db_1.alives['player-east'].sprite) {
+                    offset = [1, 0];
+                }
+                else if (this.sprite == alive_db_1.alives['player-west'].sprite) {
+                    offset = [-1, 0];
+                }
+                else if (this.sprite == alive_db_1.alives['player-south'].sprite) {
+                    offset = [0, 1];
+                }
+                else if (this.sprite == alive_db_1.alives['player-north'].sprite) {
+                    offset = [0, -1];
+                }
+                this.scene.addObject(new bomb_1.Bomb({
+                    x: Math.floor(this.x / tile_db_1.TILE_SIZE + offset[0]) * tile_db_1.TILE_SIZE,
+                    y: Math.floor(this.y / tile_db_1.TILE_SIZE + offset[1]) * tile_db_1.TILE_SIZE,
+                }));
+                this.bombPlaceTimer = 1.0;
+            }
+        }
+        _super.prototype.handleEvent.call(this, evt);
+    };
+    Player.prototype.tick = function (delta) {
+        this.bombPlaceTimer -= delta;
+        var h = 0.0;
+        if ((this.events.isKeyDown('ArrowLeft') || this.events.isKeyDown('KeyA')) && (Math.abs(this.vspeed) < CLOSE_ENOUGH)) {
+            h -= MOVE_SPEED;
+        }
+        if ((this.events.isKeyDown('ArrowRight') || this.events.isKeyDown('KeyD')) && (Math.abs(this.vspeed) < CLOSE_ENOUGH)) {
+            h += MOVE_SPEED;
+        }
+        var v = 0.0;
+        if ((this.events.isKeyDown('ArrowUp') || this.events.isKeyDown('KeyW')) && (Math.abs(this.hspeed) < CLOSE_ENOUGH)) {
+            v -= MOVE_SPEED;
+        }
+        if ((this.events.isKeyDown('ArrowDown') || this.events.isKeyDown('KeyS')) && (Math.abs(this.hspeed) < CLOSE_ENOUGH)) {
+            v += MOVE_SPEED;
+        }
+        this.snapToTile(h, v);
+        _super.prototype.tick.call(this, delta);
+        this.animationSpeed = this.speed > 0 ? .2 : 0;
+        if (this.hspeed > 0)
+            this.sprite = alive_db_1.alives['player-east'].sprite;
+        else if (this.hspeed < 0)
+            this.sprite = alive_db_1.alives['player-west'].sprite;
+        else if (this.vspeed > 0)
+            this.sprite = alive_db_1.alives['player-south'].sprite;
+        else if (this.vspeed < 0)
+            this.sprite = alive_db_1.alives['player-north'].sprite;
+        for (var _i = 0, _a = this.scene.findObjects(function (obj) { return obj instanceof simple_enemy_1.SimpleEnemy; }); _i < _a.length; _i++) {
+            var entity = _a[_i];
+            var xDiff = entity.x - this.x;
+            var yDiff = entity.y - this.y;
+            var distSqrd = (xDiff * xDiff) + (yDiff * yDiff);
+            if (distSqrd <= 32 * 32) {
+                this.takeDamage(2);
+                break;
+            }
+        }
+    };
+    Player.prototype.renderLight = function (context) {
+        engine_1.drawSprite(context, this.resources, this._lightSourceSprite, this.x + (SIZE / 2), this.y + (SIZE / 2), this.animationAge);
+    };
+    Player.prototype.kill = function () {
+        this.scene.addObject(new dead_player_1.DeadPlayer({
+            x: this.x,
+            y: this.y
+        }));
+        _super.prototype.kill.call(this);
+    };
+    Object.defineProperty(Player.prototype, "inventory", {
+        get: function () {
+            return this._inventory;
+        },
+        set: function (val) {
+            this._inventory = val;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    return Player;
+}(entity_1.Entity));
+exports.Player = Player;
+
+
+/***/ }),
+/* 19 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var engine_1 = __webpack_require__(0);
+var world_1 = __webpack_require__(10);
+var menu_gui_object_1 = __webpack_require__(9);
+var grid_renderer_1 = __webpack_require__(8);
+var sfx_db_1 = __webpack_require__(1);
+var TitleScene = (function (_super) {
+    __extends(TitleScene, _super);
+    function TitleScene() {
+        return _super.call(this) || this;
+    }
+    Object.defineProperty(TitleScene.prototype, "world", {
+        get: function () {
+            return this._world;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    TitleScene.prototype.start = function () {
+        _super.prototype.start.call(this);
+        this._world = new world_1.World();
+        this.addObject(this._world);
+        this.addObject(new grid_renderer_1.GridRenderer());
+        this.addObject(new menu_gui_object_1.MenuGuiObject('title'));
+        var cameraFollowObject = new engine_1.GameObject("CameraFollowObject", {
+            direction: -30,
+            speed: 4 * 30,
+            shouldRender: false
+        });
+        this.addObject(cameraFollowObject);
+        this.addObject(new engine_1.AudioSourceObject('Music', sfx_db_1.sfx['titleScreenMusic'], { shouldLoop: true }));
+        var camera = this.camera = new engine_1.FollowCamera(this);
+        camera.follow = cameraFollowObject;
+        camera.enableSmoothing = false;
+        this.game.score = 0;
+    };
+    return TitleScene;
+}(engine_1.GameScene));
+exports.TitleScene = TitleScene;
+
+
+/***/ }),
+/* 20 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var entity_1 = __webpack_require__(4);
+var alive_db_1 = __webpack_require__(3);
+var merge = __webpack_require__(11);
+var sfx_db_1 = __webpack_require__(1);
+var engine_1 = __webpack_require__(0);
+var pause_with_game_1 = __webpack_require__(5);
+var SIZE = 32;
+var CLOSE_ENOUGH = 3.0;
+var MOVE_SPEED = 4 * 30;
+var SimpleEnemy = (function (_super) {
+    __extends(SimpleEnemy, _super);
+    function SimpleEnemy(opts) {
+        if (opts === void 0) { opts = { maxHealth: 5 }; }
+        var _this = _super.call(this, "Simple Enemy", merge({
+            sprite: alive_db_1.alives['bat-south'].sprite,
+            collisionBounds: new engine_1.Rect(0, SIZE, 0, SIZE),
+            killSound: sfx_db_1.sfx['batDeath'],
+            flying: true
+        }, opts)) || this;
+        _this._moves = [0, 1, 2];
+        return _this;
+    }
+    SimpleEnemy.prototype.addToScene = function (scene) {
+        _super.prototype.addToScene.call(this, scene);
+        pause_with_game_1.pauseWithGame(this);
+    };
+    SimpleEnemy.prototype.getMove = function () {
+        var r = Math.random();
+        var i = this._moves[Math.floor(r * 3.0)];
+        this._moves = [0, 1, 2, 3].filter(function (x) { return (x != ((i + 2) % 4)); });
+        return i;
+    };
+    SimpleEnemy.prototype.tick = function (delta) {
+        var h = 0.0;
+        var v = 0.0;
+        if (this.speed <= 0.01) {
+            var i = this.getMove();
+            if ((i == 0)) {
+                v = -MOVE_SPEED;
+            }
+            else if ((i == 1)) {
+                h = +MOVE_SPEED;
+            }
+            else if ((i == 2)) {
+                v = +MOVE_SPEED;
+            }
+            else if ((i == 3)) {
+                h = -MOVE_SPEED;
+            }
+        }
+        this.snapToTile(h, v);
+        _super.prototype.tick.call(this, delta);
+        this.animationSpeed = this.speed > 0 ? .2 : 0;
+        if (this.hspeed > 0)
+            this.sprite = alive_db_1.alives['bat-east'].sprite;
+        else if (this.hspeed < 0)
+            this.sprite = alive_db_1.alives['bat-west'].sprite;
+        else if (this.vspeed > 0)
+            this.sprite = alive_db_1.alives['bat-south'].sprite;
+        else if (this.vspeed < 0)
+            this.sprite = alive_db_1.alives['bat-north'].sprite;
+    };
+    SimpleEnemy.prototype.kill = function () {
+        this.game.score += 50;
+        _super.prototype.kill.call(this);
+    };
+    return SimpleEnemy;
+}(entity_1.Entity));
+exports.SimpleEnemy = SimpleEnemy;
+
+
+/***/ }),
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3860,18 +4335,18 @@ var EventQueue = (function () {
     return EventQueue;
 }());
 exports.EventQueue = EventQueue;
-
+//# sourceMappingURL=event-queue.js.map
 
 /***/ }),
-/* 17 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var math_1 = __webpack_require__(4);
-var rect_1 = __webpack_require__(19);
-var render_1 = __webpack_require__(9);
+var math_1 = __webpack_require__(6);
+var rect_1 = __webpack_require__(24);
+var render_1 = __webpack_require__(13);
 ;
 var GameObject = (function () {
     function GameObject(name, opts) {
@@ -4202,16 +4677,16 @@ var GameObject = (function () {
     return GameObject;
 }());
 exports.GameObject = GameObject;
-
+//# sourceMappingURL=game-object.js.map
 
 /***/ }),
-/* 18 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var render_1 = __webpack_require__(9);
+var render_1 = __webpack_require__(13);
 var ResourceLoader = (function () {
     function ResourceLoader() {
         this.DEBUG_RESOURCES = false;
@@ -4329,10 +4804,10 @@ var ResourceLoader = (function () {
     return ResourceLoader;
 }());
 exports.ResourceLoader = ResourceLoader;
-
+//# sourceMappingURL=resource-loader.js.map
 
 /***/ }),
-/* 19 */
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4364,10 +4839,10 @@ var Rect = (function () {
 Rect.zero = new Rect(0, 0, 0, 0);
 exports.Rect = Rect;
 ;
-
+//# sourceMappingURL=rect.js.map
 
 /***/ }),
-/* 20 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4381,490 +4856,7 @@ function isAnimationSprite(sprite) {
     return !!sprite.frames;
 }
 exports.isAnimationSprite = isAnimationSprite;
-
-
-/***/ }),
-/* 21 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-var engine_1 = __webpack_require__(0);
-var gui_db_1 = __webpack_require__(7);
-var menu_gui_object_1 = __webpack_require__(11);
-var InGameGuiObject = (function (_super) {
-    __extends(InGameGuiObject, _super);
-    function InGameGuiObject() {
-        var _this = _super.call(this, gui_db_1.gui['inventory']) || this;
-        _this.showInventory = false;
-        return _this;
-    }
-    Object.defineProperty(InGameGuiObject.prototype, "gameTimeString", {
-        get: function () {
-            var gameTime = this.scene.world.gameTime;
-            var day = Math.floor(gameTime);
-            var hour = Math.floor((gameTime - day) * 24);
-            return "Day " + (day + 1) + ", " + ((hour + 23) % 12 + 1) + " " + (hour < 12 ? 'AM' : 'PM');
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(InGameGuiObject.prototype, "score", {
-        get: function () {
-            return "Score: " + this.game.score;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    InGameGuiObject.prototype.handleEvent = function (evt) {
-        if (evt.type === 'keyPressed') {
-            if (evt.code == 'KeyE' || (evt.code == 'Escape' && this.showInventory)) {
-                this.showInventory = !this.showInventory;
-                var game = this.game;
-                if (this.showInventory) {
-                    game.onPause.emit(void (0));
-                }
-                else
-                    game.onPlay.emit(void (0));
-                return true;
-            }
-        }
-        return this.showInventory && _super.prototype.handleEvent.call(this, evt);
-    };
-    InGameGuiObject.prototype.tick = function (delta) {
-        if (this.showInventory)
-            _super.prototype.tick.call(this, delta);
-    };
-    InGameGuiObject.prototype.renderImpl = function (context) {
-        var _a = this.game.canvasSize, canvasWidth = _a[0], canvasHeight = _a[1];
-        var timeText = this.gameTimeString;
-        context.font = '24px Verdana';
-        var timeTextWidth = context.measureText(timeText).width;
-        var scoreText = this.score;
-        var scoreTextWidth = context.measureText(scoreText).width;
-        var timeyOffset = 0;
-        var scoreyOffset = 24;
-        context.fillStyle = 'rgba(0, 0, 0, .5)';
-        context.fillRect(canvasWidth - (8 + timeTextWidth), timeyOffset, 8 + timeTextWidth, 8 + 24);
-        context.fillStyle = 'rgba(0, 0, 0, .5)';
-        context.fillRect(canvasWidth - (8 + scoreTextWidth), scoreyOffset + 8, 8 + scoreTextWidth, 8 + 24);
-        context.fillStyle = 'white';
-        context.textAlign = 'right';
-        context.textBaseline = 'top';
-        context.fillText(timeText, canvasWidth - 4, timeyOffset + 4);
-        context.fillText(scoreText, canvasWidth - 4, scoreyOffset + 10);
-        this.renderHealth(context);
-        if (this.showInventory) {
-            _super.prototype.renderImpl.call(this, context);
-        }
-    };
-    InGameGuiObject.prototype.renderHealth = function (context) {
-        var HEART_SIZE = 24;
-        var OFFSET_FROM_BOTTOM = 8;
-        var DEFAULT_MAX_HEARTS = 10;
-        var p = this.scene.findObject('Player');
-        var total = (p && p.maxHealth) || DEFAULT_MAX_HEARTS;
-        var hearts = (p && p.currentHealth) || 0;
-        var _a = this.game.canvasSize, xx = _a[0], yy = _a[1];
-        xx /= 2;
-        xx -= (HEART_SIZE * (total - 1)) / 2;
-        yy -= OFFSET_FROM_BOTTOM;
-        var fullHeartSprite = gui_db_1.gui['full-health-heart'].sprite;
-        var emptyHeartSprite = gui_db_1.gui['empty-health-heart'].sprite;
-        for (var q = 0; q < total; q++) {
-            var spr = (q < hearts) ? fullHeartSprite : emptyHeartSprite;
-            engine_1.drawSprite(context, this.resources, spr, xx + (q * HEART_SIZE), yy, this.animationAge);
-        }
-    };
-    return InGameGuiObject;
-}(menu_gui_object_1.MenuGuiObject));
-exports.InGameGuiObject = InGameGuiObject;
-
-
-/***/ }),
-/* 22 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-var engine_1 = __webpack_require__(0);
-var LightingObject = (function (_super) {
-    __extends(LightingObject, _super);
-    function LightingObject(ambient, dayNightCycle) {
-        if (ambient === void 0) { ambient = 1; }
-        if (dayNightCycle === void 0) { dayNightCycle = true; }
-        var _this = _super.call(this, 'LightingObject', { renderCamera: 'none' }) || this;
-        _this.ambient = ambient;
-        _this.dayNightCycle = dayNightCycle;
-        _this.compositeCanvas = document.createElement('canvas');
-        _this.compositeContext = _this.compositeCanvas.getContext('2d');
-        return _this;
-    }
-    LightingObject.prototype.renderImpl = function (context) {
-        var world = this.scene.world;
-        if (!world && this.dayNightCycle)
-            throw new Error("Unsupported state: no world, no game time; but dayNightCycle is true!");
-        var darkness = 0;
-        var gameTime = world && (world.gameTime - Math.floor(world.gameTime));
-        if (this.dayNightCycle && (gameTime <= 7 / 24 || gameTime >= 19 / 24)) {
-            darkness = 1;
-            if (gameTime <= 7 / 24 && gameTime > 5.5 / 24)
-                darkness = 1 - ((gameTime * 24) - 5.5) / 1.5;
-            if (gameTime >= 19 / 24 && gameTime < 20.5 / 24)
-                darkness = ((gameTime * 24) - 19) / 1.5;
-            darkness *= .95;
-        }
-        darkness = Math.max(1 - this.ambient, darkness);
-        if (darkness == 0)
-            return;
-        this.createCompositeImage(darkness);
-        context.save();
-        try {
-            context.globalCompositeOperation = 'multiply';
-            context.drawImage(this.compositeCanvas, 0, 0);
-        }
-        finally {
-            context.restore();
-        }
-    };
-    LightingObject.prototype.createCompositeImage = function (darkness) {
-        var _a = this.game.canvasSize, width = _a[0], height = _a[1];
-        _b = [width, height], this.compositeCanvas.width = _b[0], this.compositeCanvas.height = _b[1];
-        var ctx = this.compositeContext;
-        var color = Math.floor(255 * (1 - darkness));
-        ctx.globalCompositeOperation = 'source-over';
-        ctx.fillStyle = "rgb(" + color + ", " + color + ", " + color + ")";
-        ctx.fillRect(0, 0, width, height);
-        var camera = this.scene.camera;
-        if (camera)
-            camera.push(ctx);
-        try {
-            ctx.globalCompositeOperation = 'lighten';
-            var objects = this.scene.findObjects();
-            for (var _i = 0, _c = objects.filter(function (obj) { return typeof obj.renderLight === 'function'; }); _i < _c.length; _i++) {
-                var obj = _c[_i];
-                obj.renderLight(ctx);
-            }
-        }
-        finally {
-            if (camera)
-                camera.pop(ctx);
-        }
-        var _b;
-    };
-    return LightingObject;
-}(engine_1.GameObject));
-exports.LightingObject = LightingObject;
-
-
-/***/ }),
-/* 23 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-var tile_db_1 = __webpack_require__(2);
-var dead_player_1 = __webpack_require__(28);
-var engine_1 = __webpack_require__(0);
-var entity_1 = __webpack_require__(5);
-var alive_db_1 = __webpack_require__(3);
-var sfx_db_1 = __webpack_require__(1);
-var pause_with_game_1 = __webpack_require__(6);
-var merge = __webpack_require__(13);
-var bomb_1 = __webpack_require__(27);
-var simple_enemy_1 = __webpack_require__(25);
-var inventory_1 = __webpack_require__(38);
-var CLOSE_ENOUGH = 3.0;
-var MOVE_SPEED = 4 * 30;
-var SIZE = 32;
-var Player = (function (_super) {
-    __extends(Player, _super);
-    function Player(opts) {
-        if (opts === void 0) { opts = { maxHealth: 10 }; }
-        var _this = _super.call(this, "Player", merge({
-            sprite: alive_db_1.alives['player-south'].sprite,
-            collisionBounds: new engine_1.Rect(0, SIZE, 0, SIZE),
-            takeDamageSound: sfx_db_1.sfx['playerDamage'],
-            killSound: sfx_db_1.sfx['playerDeath']
-        }, opts)) || this;
-        _this.bombPlaceTimer = 0.0;
-        _this._inventory = new inventory_1.Inventory();
-        _this._lightSourceSprite = alive_db_1.alives['large-dim-light-source'].sprite;
-        return _this;
-    }
-    Player.prototype.addToScene = function (scene) {
-        _super.prototype.addToScene.call(this, scene);
-        pause_with_game_1.pauseWithGame(this);
-    };
-    Player.prototype.handleEvent = function (evt) {
-        if (evt.type == 'mouseWheel') {
-            var scale = Math.pow(2, -engine_1.clamp(evt.delta, -1, 1) / 7);
-            this.game.scene.camera.zoomScale *= scale;
-        }
-        else if (evt.type == 'keyPressed') {
-            if (this.events.isKeyDown('Space') && this.bombPlaceTimer <= 0.0) {
-                var offset = [0, 0];
-                if (this.sprite == alive_db_1.alives['player-east'].sprite) {
-                    offset = [1, 0];
-                }
-                else if (this.sprite == alive_db_1.alives['player-west'].sprite) {
-                    offset = [-1, 0];
-                }
-                else if (this.sprite == alive_db_1.alives['player-south'].sprite) {
-                    offset = [0, 1];
-                }
-                else if (this.sprite == alive_db_1.alives['player-north'].sprite) {
-                    offset = [0, -1];
-                }
-                this.scene.addObject(new bomb_1.Bomb({
-                    x: Math.floor(this.x / tile_db_1.TILE_SIZE + offset[0]) * tile_db_1.TILE_SIZE,
-                    y: Math.floor(this.y / tile_db_1.TILE_SIZE + offset[1]) * tile_db_1.TILE_SIZE,
-                }));
-                this.bombPlaceTimer = 1.0;
-            }
-        }
-        _super.prototype.handleEvent.call(this, evt);
-    };
-    Player.prototype.tick = function (delta) {
-        this.bombPlaceTimer -= delta;
-        var h = 0.0;
-        if ((this.events.isKeyDown('ArrowLeft') || this.events.isKeyDown('KeyA')) && (Math.abs(this.vspeed) < CLOSE_ENOUGH)) {
-            h -= MOVE_SPEED;
-        }
-        if ((this.events.isKeyDown('ArrowRight') || this.events.isKeyDown('KeyD')) && (Math.abs(this.vspeed) < CLOSE_ENOUGH)) {
-            h += MOVE_SPEED;
-        }
-        var v = 0.0;
-        if ((this.events.isKeyDown('ArrowUp') || this.events.isKeyDown('KeyW')) && (Math.abs(this.hspeed) < CLOSE_ENOUGH)) {
-            v -= MOVE_SPEED;
-        }
-        if ((this.events.isKeyDown('ArrowDown') || this.events.isKeyDown('KeyS')) && (Math.abs(this.hspeed) < CLOSE_ENOUGH)) {
-            v += MOVE_SPEED;
-        }
-        this.snapToTile(h, v);
-        _super.prototype.tick.call(this, delta);
-        this.animationSpeed = this.speed > 0 ? .2 : 0;
-        if (this.hspeed > 0)
-            this.sprite = alive_db_1.alives['player-east'].sprite;
-        else if (this.hspeed < 0)
-            this.sprite = alive_db_1.alives['player-west'].sprite;
-        else if (this.vspeed > 0)
-            this.sprite = alive_db_1.alives['player-south'].sprite;
-        else if (this.vspeed < 0)
-            this.sprite = alive_db_1.alives['player-north'].sprite;
-        for (var _i = 0, _a = this.scene.findObjects(function (obj) { return obj instanceof simple_enemy_1.SimpleEnemy; }); _i < _a.length; _i++) {
-            var entity = _a[_i];
-            var xDiff = entity.x - this.x;
-            var yDiff = entity.y - this.y;
-            var distSqrd = (xDiff * xDiff) + (yDiff * yDiff);
-            if (distSqrd <= 32 * 32) {
-                this.takeDamage(2);
-                break;
-            }
-        }
-    };
-    Player.prototype.renderLight = function (context) {
-        engine_1.drawSprite(context, this.resources, this._lightSourceSprite, this.x + (SIZE / 2), this.y + (SIZE / 2), this.animationAge);
-    };
-    Player.prototype.kill = function () {
-        this.scene.addObject(new dead_player_1.DeadPlayer({
-            x: this.x,
-            y: this.y
-        }));
-        _super.prototype.kill.call(this);
-    };
-    Object.defineProperty(Player.prototype, "inventory", {
-        get: function () {
-            return this._inventory;
-        },
-        set: function (val) {
-            this._inventory = val;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    return Player;
-}(entity_1.Entity));
-exports.Player = Player;
-
-
-/***/ }),
-/* 24 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-var engine_1 = __webpack_require__(0);
-var world_1 = __webpack_require__(12);
-var menu_gui_object_1 = __webpack_require__(11);
-var grid_renderer_1 = __webpack_require__(10);
-var sfx_db_1 = __webpack_require__(1);
-var TitleScene = (function (_super) {
-    __extends(TitleScene, _super);
-    function TitleScene() {
-        return _super.call(this) || this;
-    }
-    Object.defineProperty(TitleScene.prototype, "world", {
-        get: function () {
-            return this._world;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    TitleScene.prototype.start = function () {
-        _super.prototype.start.call(this);
-        this._world = new world_1.World();
-        this.addObject(this._world);
-        this.addObject(new grid_renderer_1.GridRenderer());
-        this.addObject(new menu_gui_object_1.MenuGuiObject('title'));
-        var cameraFollowObject = new engine_1.GameObject("CameraFollowObject", {
-            direction: -30,
-            speed: 4 * 30,
-            shouldRender: false
-        });
-        this.addObject(cameraFollowObject);
-        this.addObject(new engine_1.AudioSourceObject('Music', sfx_db_1.sfx['titleScreenMusic'], { shouldLoop: true }));
-        var camera = this.camera = new engine_1.FollowCamera(this);
-        camera.follow = cameraFollowObject;
-        camera.enableSmoothing = false;
-        this.game.score = 0;
-    };
-    return TitleScene;
-}(engine_1.GameScene));
-exports.TitleScene = TitleScene;
-
-
-/***/ }),
-/* 25 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-var entity_1 = __webpack_require__(5);
-var alive_db_1 = __webpack_require__(3);
-var merge = __webpack_require__(13);
-var sfx_db_1 = __webpack_require__(1);
-var engine_1 = __webpack_require__(0);
-var pause_with_game_1 = __webpack_require__(6);
-var SIZE = 32;
-var CLOSE_ENOUGH = 3.0;
-var MOVE_SPEED = 4 * 30;
-var SimpleEnemy = (function (_super) {
-    __extends(SimpleEnemy, _super);
-    function SimpleEnemy(opts) {
-        if (opts === void 0) { opts = { maxHealth: 5 }; }
-        var _this = _super.call(this, "Simple Enemy", merge({
-            sprite: alive_db_1.alives['bat-south'].sprite,
-            collisionBounds: new engine_1.Rect(0, SIZE, 0, SIZE),
-            killSound: sfx_db_1.sfx['batDeath'],
-            flying: true
-        }, opts)) || this;
-        _this._moves = [0, 1, 2];
-        return _this;
-    }
-    SimpleEnemy.prototype.addToScene = function (scene) {
-        _super.prototype.addToScene.call(this, scene);
-        pause_with_game_1.pauseWithGame(this);
-    };
-    SimpleEnemy.prototype.getMove = function () {
-        var r = Math.random();
-        var i = this._moves[Math.floor(r * 3.0)];
-        this._moves = [0, 1, 2, 3].filter(function (x) { return (x != ((i + 2) % 4)); });
-        return i;
-    };
-    SimpleEnemy.prototype.tick = function (delta) {
-        var h = 0.0;
-        var v = 0.0;
-        if (this.speed <= 0.01) {
-            var i = this.getMove();
-            if ((i == 0)) {
-                v = -MOVE_SPEED;
-            }
-            else if ((i == 1)) {
-                h = +MOVE_SPEED;
-            }
-            else if ((i == 2)) {
-                v = +MOVE_SPEED;
-            }
-            else if ((i == 3)) {
-                h = -MOVE_SPEED;
-            }
-        }
-        this.snapToTile(h, v);
-        _super.prototype.tick.call(this, delta);
-        this.animationSpeed = this.speed > 0 ? .2 : 0;
-        if (this.hspeed > 0)
-            this.sprite = alive_db_1.alives['bat-east'].sprite;
-        else if (this.hspeed < 0)
-            this.sprite = alive_db_1.alives['bat-west'].sprite;
-        else if (this.vspeed > 0)
-            this.sprite = alive_db_1.alives['bat-south'].sprite;
-        else if (this.vspeed < 0)
-            this.sprite = alive_db_1.alives['bat-north'].sprite;
-    };
-    SimpleEnemy.prototype.kill = function () {
-        this.game.score += 50;
-        _super.prototype.kill.call(this);
-    };
-    return SimpleEnemy;
-}(entity_1.Entity));
-exports.SimpleEnemy = SimpleEnemy;
-
+//# sourceMappingURL=sprite.js.map
 
 /***/ }),
 /* 26 */
@@ -4884,13 +4876,13 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var engine_1 = __webpack_require__(0);
-var tile_preload_strategy_1 = __webpack_require__(45);
-var item_preload_strategy_1 = __webpack_require__(43);
-var alive_preload_strategy_1 = __webpack_require__(40);
-var gui_preload_strategy_1 = __webpack_require__(42);
-var effect_preload_strategy_1 = __webpack_require__(41);
-var title_scene_1 = __webpack_require__(24);
-var sfx_preload_strategy_1 = __webpack_require__(44);
+var tile_preload_strategy_1 = __webpack_require__(37);
+var item_preload_strategy_1 = __webpack_require__(35);
+var alive_preload_strategy_1 = __webpack_require__(32);
+var gui_preload_strategy_1 = __webpack_require__(34);
+var effect_preload_strategy_1 = __webpack_require__(33);
+var title_scene_1 = __webpack_require__(19);
+var sfx_preload_strategy_1 = __webpack_require__(36);
 var AgileGame = (function (_super) {
     __extends(AgileGame, _super);
     function AgileGame(framesPerSecond) {
@@ -4963,8 +4955,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var engine_1 = __webpack_require__(0);
 var alive_db_1 = __webpack_require__(3);
 var sfx_db_1 = __webpack_require__(1);
-var explosion_1 = __webpack_require__(37);
-var entity_1 = __webpack_require__(5);
+var explosion_1 = __webpack_require__(29);
+var entity_1 = __webpack_require__(4);
 var radiusSquared = 64 * 64;
 var Bomb = (function (_super) {
     __extends(Bomb, _super);
@@ -5021,7 +5013,7 @@ var __extends = (this && this.__extends) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var engine_1 = __webpack_require__(0);
 var alive_db_1 = __webpack_require__(3);
-var game_over_scene_1 = __webpack_require__(47);
+var game_over_scene_1 = __webpack_require__(39);
 var DeadPlayer = (function (_super) {
     __extends(DeadPlayer, _super);
     function DeadPlayer(opts) {
@@ -5045,526 +5037,6 @@ exports.DeadPlayer = DeadPlayer;
 
 /***/ }),
 /* 29 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-var game_object_1 = __webpack_require__(17);
-var merge = __webpack_require__(13);
-var AudioSourceObject = (function (_super) {
-    __extends(AudioSourceObject, _super);
-    function AudioSourceObject(name, audio, opts) {
-        if (opts === void 0) { opts = {}; }
-        var _this = _super.call(this, name, merge({
-            shouldRender: false
-        }, opts)) || this;
-        _this.audio = audio;
-        _this._shouldLoop = false;
-        if (typeof opts.shouldLoop !== 'undefined')
-            _this._shouldLoop = opts.shouldLoop;
-        return _this;
-    }
-    Object.defineProperty(AudioSourceObject.prototype, "shouldLoop", {
-        get: function () {
-            return this._shouldLoop;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    AudioSourceObject.prototype.addToScene = function (scene) {
-        var _this = this;
-        _super.prototype.addToScene.call(this, scene);
-        var theirAudio = this.resources.loadAudio(this.audio.src);
-        this._myAudio = document.createElement('audio');
-        this._myAudio.src = theirAudio.src;
-        this._myAudio.onended = function () {
-            if (_this._shouldLoop)
-                _this._myAudio.play();
-            else
-                _this.scene.removeObject(_this);
-        };
-        if (this.game.scene == scene)
-            this._myAudio.play();
-    };
-    Object.defineProperty(AudioSourceObject.prototype, "myAudio", {
-        get: function () {
-            return this._myAudio;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    AudioSourceObject.prototype.onSceneEnter = function () {
-        if (this.myAudio.paused)
-            this._myAudio.play();
-    };
-    AudioSourceObject.prototype.onSceneExit = function () {
-        if (!this.myAudio.paused)
-            this._myAudio.pause();
-    };
-    return AudioSourceObject;
-}(game_object_1.GameObject));
-exports.AudioSourceObject = AudioSourceObject;
-
-
-/***/ }),
-/* 30 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-var camera_1 = __webpack_require__(8);
-var FollowCamera = (function (_super) {
-    __extends(FollowCamera, _super);
-    function FollowCamera(scene) {
-        var _this = _super.call(this, scene) || this;
-        _this._follow = null;
-        _this._offset = [0, 0];
-        return _this;
-    }
-    Object.defineProperty(FollowCamera.prototype, "follow", {
-        get: function () {
-            return this._follow;
-        },
-        set: function (val) {
-            this._follow = val;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(FollowCamera.prototype, "followOffset", {
-        get: function () {
-            return [this._offset[0], this._offset[1]];
-        },
-        set: function (_a) {
-            var offsetx = _a[0], offsety = _a[1];
-            this._offset = [offsetx, offsety];
-        },
-        enumerable: true,
-        configurable: true
-    });
-    FollowCamera.prototype.tick = function (delta) {
-        if (this.follow) {
-            var target = [this._follow.x + this._offset[0], this._follow.y + this._offset[1]];
-            this.center = target;
-        }
-        _super.prototype.tick.call(this, delta);
-    };
-    return FollowCamera;
-}(camera_1.Camera));
-exports.FollowCamera = FollowCamera;
-
-
-/***/ }),
-/* 31 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var camera_1 = __webpack_require__(8);
-var GameScene = (function () {
-    function GameScene(_game) {
-        if (_game === void 0) { _game = null; }
-        this._game = _game;
-        this._objects = [];
-        this._camera = null;
-    }
-    Object.defineProperty(GameScene.prototype, "game", {
-        get: function () {
-            return this._game;
-        },
-        set: function (val) {
-            this._game = val;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    GameScene.prototype.onEnter = function () {
-        this.start();
-        for (var _i = 0, _a = this._objects; _i < _a.length; _i++) {
-            var obj = _a[_i];
-            obj.onSceneEnter();
-        }
-    };
-    GameScene.prototype.onExit = function () {
-        this.stop();
-        for (var _i = 0, _a = this._objects; _i < _a.length; _i++) {
-            var obj = _a[_i];
-            obj.onSceneExit();
-        }
-    };
-    GameScene.prototype.start = function () {
-        if (!this.camera)
-            this.initCamera();
-    };
-    GameScene.prototype.stop = function () {
-    };
-    GameScene.prototype.handleEvent = function (evt) {
-        for (var _i = 0, _a = this._objects; _i < _a.length; _i++) {
-            var obj = _a[_i];
-            if (obj.shouldTick && obj.handleEvent(evt))
-                break;
-        }
-    };
-    GameScene.prototype.tick = function (delta) {
-        for (var _i = 0, _a = this._objects; _i < _a.length; _i++) {
-            var obj = _a[_i];
-            if (obj.shouldTick)
-                obj.tick(delta);
-        }
-        if (this.camera)
-            this.camera.tick(delta);
-    };
-    GameScene.prototype.render = function (context) {
-        var defaultCamera = this.camera;
-        var lastRenderCamera = null;
-        for (var _i = 0, _a = this._objects; _i < _a.length; _i++) {
-            var obj = _a[_i];
-            if (obj.shouldRender) {
-                var renderCamera = obj.renderCamera === 'default' ? defaultCamera :
-                    obj.renderCamera !== 'none' ? obj.renderCamera :
-                        null;
-                if (lastRenderCamera != renderCamera) {
-                    if (lastRenderCamera)
-                        lastRenderCamera.pop(context);
-                    lastRenderCamera = renderCamera;
-                    if (lastRenderCamera)
-                        lastRenderCamera.push(context);
-                }
-                obj.render(context);
-            }
-        }
-        if (lastRenderCamera)
-            lastRenderCamera.pop(context);
-    };
-    GameScene.prototype.addObject = function (obj) {
-        this._objects.push(obj);
-        obj.addToScene(this);
-    };
-    GameScene.prototype.removeObject = function (obj) {
-        var idx = this._objects.indexOf(obj);
-        if (idx == -1)
-            throw new Error("Cannot remove game object '" + obj.name + "': it has not been added.");
-        this._objects.splice(idx, 1);
-        obj.removeFromScene();
-    };
-    GameScene.prototype.findObject = function (predicate) {
-        if (typeof predicate == 'string') {
-            var name_1 = predicate;
-            predicate = function (obj) { return obj.name == name_1; };
-        }
-        else if (!predicate)
-            throw new Error("Invalid predicate: " + predicate);
-        for (var _i = 0, _a = this._objects; _i < _a.length; _i++) {
-            var obj = _a[_i];
-            if (predicate(obj))
-                return obj;
-        }
-        return null;
-    };
-    GameScene.prototype.findObjects = function (predicate) {
-        if (!predicate)
-            return this._objects.slice();
-        if (typeof predicate !== 'function')
-            throw new Error("Invalid predicate: " + predicate);
-        return this._objects.filter(predicate);
-    };
-    GameScene.prototype.initCamera = function () {
-        this.camera = new camera_1.Camera(this);
-    };
-    Object.defineProperty(GameScene.prototype, "camera", {
-        get: function () {
-            return this._camera;
-        },
-        set: function (val) {
-            this._camera = val;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    return GameScene;
-}());
-exports.GameScene = GameScene;
-;
-
-
-/***/ }),
-/* 32 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var resource_loader_1 = __webpack_require__(18);
-var event_queue_1 = __webpack_require__(16);
-var Game = (function () {
-    function Game(framesPerSecond) {
-        if (framesPerSecond === void 0) { framesPerSecond = 30; }
-        this.framesPerSecond = framesPerSecond;
-        this._scene = null;
-        this._nextScene = null;
-        this.LOGIC_TICKS_PER_RENDER_TICK = 3;
-        this.canvas = null;
-        this.context = null;
-        this.previousTick = null;
-        this._resourceLoader = null;
-        this._eventQueue = null;
-        this._isRunning = false;
-        this._size = [640, 480];
-        this.init();
-    }
-    Object.defineProperty(Game.prototype, "scene", {
-        get: function () {
-            return this._scene;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Game.prototype.changeScene = function (newScene) {
-        if (!newScene) {
-            throw new Error("Tried to changeScene to a bad scene!");
-        }
-        if (this._nextScene) {
-            throw new Error("Scene cannot be set more than once per tick!");
-        }
-        this._nextScene = newScene;
-        if (!this._scene) {
-            this.handleSceneChange();
-        }
-    };
-    Game.prototype.handleSceneChange = function () {
-        if (this._nextScene) {
-            if (this._scene)
-                this._scene.onExit();
-            this._scene = this._nextScene;
-            this._scene.game = this;
-            this._scene.onEnter();
-            this._nextScene = null;
-        }
-    };
-    Game.prototype.init = function () {
-        this._resourceLoader = new resource_loader_1.ResourceLoader();
-        this._eventQueue = new event_queue_1.EventQueue();
-        var body = document.getElementsByTagName('body')[0];
-        this.initResize(body);
-    };
-    Game.prototype.initResize = function (body) {
-        var _this = this;
-        body.onresize = function (e) { return _this.refreshCanvasSize(); };
-    };
-    Game.prototype.refreshCanvasSize = function () {
-        if (this.canvas) {
-            _a = this.canvasSize = [this.canvas.scrollWidth, this.canvas.scrollHeight], this.canvas.width = _a[0], this.canvas.height = _a[1];
-        }
-        var _a;
-    };
-    Object.defineProperty(Game.prototype, "resourceLoader", {
-        get: function () {
-            return this._resourceLoader;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(Game.prototype, "eventQueue", {
-        get: function () {
-            return this._eventQueue;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(Game.prototype, "isRunning", {
-        get: function () {
-            return this._isRunning;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Game.prototype.start = function () {
-        var _this = this;
-        if (this.isRunning)
-            throw new Error("This game is already running. You can't run it again.");
-        this._isRunning = true;
-        if (!this.canvas)
-            this.canvas = document.getElementById('gameCanvas');
-        this.refreshCanvasSize();
-        this.context = this.canvas.getContext("2d");
-        this._intervalHandle = setInterval(function () { return _this.onTick(); }, 1000 / this.framesPerSecond);
-    };
-    Game.prototype.stop = function () {
-        if (this.isRunning)
-            clearInterval(this._intervalHandle);
-        this._isRunning = false;
-    };
-    Object.defineProperty(Game.prototype, "canvasSize", {
-        get: function () {
-            return [this._size[0], this._size[1]];
-        },
-        set: function (_a) {
-            var newWidth = _a[0], newHeight = _a[1];
-            if (newWidth == this._size[0] && newHeight == this._size[1])
-                return;
-            var prevSize = this._size;
-            this._size = [newWidth, newHeight];
-            this.eventQueue.enqueue({
-                type: 'canvasResize',
-                previousSize: prevSize,
-                size: [newWidth, newHeight]
-            });
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Game.prototype.onTick = function () {
-        if (!this.isRunning)
-            throw new Error("An error occurred. Game.onTick was invoked although the game is not running.");
-        if (this.resourceLoader.isDone) {
-            var currentTime = new Date();
-            var delta = (this.previousTick == null) ? 0 : (currentTime.valueOf() - this.previousTick.valueOf()) / 1000;
-            this.previousTick = currentTime;
-            this.sendEvents();
-            for (var q = 0; q < this.LOGIC_TICKS_PER_RENDER_TICK; q++) {
-                this.tick(delta / this.LOGIC_TICKS_PER_RENDER_TICK);
-            }
-            this.render(this.context);
-        }
-        else {
-            this.resourceLoader.render(this.context);
-        }
-    };
-    Game.prototype.sendEvents = function () {
-        var events = this._eventQueue.clearQueue();
-        for (var _i = 0, events_1 = events; _i < events_1.length; _i++) {
-            var evt = events_1[_i];
-            if (this._scene) {
-                this._scene.handleEvent(evt);
-            }
-        }
-    };
-    Game.prototype.tick = function (delta) {
-        if (this._scene) {
-            this._scene.tick(delta);
-            this.handleSceneChange();
-        }
-    };
-    Game.prototype.render = function (context) {
-        if (!context)
-            throw new Error("What the heck just happened? There is no rendering context!");
-        if (this._scene) {
-            this._scene.render(context);
-        }
-    };
-    return Game;
-}());
-exports.Game = Game;
-
-
-/***/ }),
-/* 33 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-function delay(millis) {
-    return new Promise(function (resolve, reject) {
-        setTimeout(function () { return resolve(); }, millis);
-    });
-}
-exports.delay = delay;
-
-
-/***/ }),
-/* 34 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var EventEmitter = (function () {
-    function EventEmitter() {
-        this._listeners = [];
-        this._isEmitting = false;
-    }
-    EventEmitter.prototype.addListener = function (listener) {
-        if (!listener || typeof listener !== 'function')
-            throw new Error("Listener is not a function: " + listener);
-        this._listeners.push(listener);
-    };
-    EventEmitter.prototype.emit = function (val) {
-        if (this._isEmitting)
-            throw new Error("EventEmitter.emit was recursively invoked. New value: " + val);
-        this._isEmitting = true;
-        for (var _i = 0, _a = this._listeners; _i < _a.length; _i++) {
-            var listener = _a[_i];
-            listener(val);
-        }
-        this._isEmitting = false;
-    };
-    return EventEmitter;
-}());
-exports.EventEmitter = EventEmitter;
-
-
-/***/ }),
-/* 35 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var MouseButton;
-(function (MouseButton) {
-    MouseButton[MouseButton["Left"] = 0] = "Left";
-    MouseButton[MouseButton["Middle"] = 1] = "Middle";
-    MouseButton[MouseButton["Right"] = 2] = "Right";
-    MouseButton[MouseButton["BrowserBack"] = 3] = "BrowserBack";
-    MouseButton[MouseButton["BrowserForward"] = 5] = "BrowserForward";
-})(MouseButton = exports.MouseButton || (exports.MouseButton = {}));
-
-
-/***/ }),
-/* 36 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-function __export(m) {
-    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
-}
-Object.defineProperty(exports, "__esModule", { value: true });
-__export(__webpack_require__(33));
-__export(__webpack_require__(34));
-__export(__webpack_require__(35));
-__export(__webpack_require__(4));
-__export(__webpack_require__(19));
-__export(__webpack_require__(9));
-__export(__webpack_require__(20));
-
-
-/***/ }),
-/* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5606,7 +5078,7 @@ exports.Explosion = Explosion;
 
 
 /***/ }),
-/* 38 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5667,7 +5139,7 @@ exports.Inventory = Inventory;
 
 
 /***/ }),
-/* 39 */
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5679,7 +5151,7 @@ game.start();
 
 
 /***/ }),
-/* 40 */
+/* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5700,7 +5172,7 @@ exports.AlivePreloadStrategy = AlivePreloadStrategy;
 
 
 /***/ }),
-/* 41 */
+/* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5721,7 +5193,7 @@ exports.EffectPreloadStrategy = EffectPreloadStrategy;
 
 
 /***/ }),
-/* 42 */
+/* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5742,7 +5214,7 @@ exports.GuiPreloadStrategy = GuiPreloadStrategy;
 
 
 /***/ }),
-/* 43 */
+/* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5763,7 +5235,7 @@ exports.ItemPreloadStrategy = ItemPreloadStrategy;
 
 
 /***/ }),
-/* 44 */
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5785,7 +5257,7 @@ exports.SfxPreloadStrategy = SfxPreloadStrategy;
 
 
 /***/ }),
-/* 45 */
+/* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5811,7 +5283,7 @@ exports.TilePreloadStrategy = TilePreloadStrategy;
 
 
 /***/ }),
-/* 46 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5828,14 +5300,14 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var engine_1 = __webpack_require__(0);
-var world_1 = __webpack_require__(12);
-var grid_renderer_1 = __webpack_require__(10);
-var player_1 = __webpack_require__(23);
-var in_game_gui_object_1 = __webpack_require__(21);
-var lighting_object_1 = __webpack_require__(22);
+var world_1 = __webpack_require__(10);
+var grid_renderer_1 = __webpack_require__(8);
+var player_1 = __webpack_require__(18);
+var in_game_gui_object_1 = __webpack_require__(16);
+var lighting_object_1 = __webpack_require__(17);
 var sfx_db_1 = __webpack_require__(1);
 var tile_db_1 = __webpack_require__(2);
-var simple_enemy_1 = __webpack_require__(25);
+var simple_enemy_1 = __webpack_require__(20);
 var DungeonScene = (function (_super) {
     __extends(DungeonScene, _super);
     function DungeonScene() {
@@ -5930,7 +5402,7 @@ exports.DungeonScene = DungeonScene;
 
 
 /***/ }),
-/* 47 */
+/* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5947,7 +5419,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var engine_1 = __webpack_require__(0);
-var menu_gui_object_1 = __webpack_require__(11);
+var menu_gui_object_1 = __webpack_require__(9);
 var sfx_db_1 = __webpack_require__(1);
 var GameOverScene = (function (_super) {
     __extends(GameOverScene, _super);
@@ -5966,7 +5438,7 @@ exports.GameOverScene = GameOverScene;
 
 
 /***/ }),
-/* 48 */
+/* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5983,12 +5455,12 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var engine_1 = __webpack_require__(0);
-var world_1 = __webpack_require__(12);
-var grid_renderer_1 = __webpack_require__(10);
-var player_1 = __webpack_require__(23);
-var in_game_gui_object_1 = __webpack_require__(21);
-var dungeon_scene_1 = __webpack_require__(46);
-var lighting_object_1 = __webpack_require__(22);
+var world_1 = __webpack_require__(10);
+var grid_renderer_1 = __webpack_require__(8);
+var player_1 = __webpack_require__(18);
+var in_game_gui_object_1 = __webpack_require__(16);
+var dungeon_scene_1 = __webpack_require__(38);
+var lighting_object_1 = __webpack_require__(17);
 var sfx_db_1 = __webpack_require__(1);
 var OverworldScene = (function (_super) {
     __extends(OverworldScene, _super);
@@ -6031,7 +5503,7 @@ exports.OverworldScene = OverworldScene;
 
 
 /***/ }),
-/* 49 */
+/* 41 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6090,13 +5562,13 @@ exports.drawItemStack = drawItemStack;
 
 
 /***/ }),
-/* 50 */
+/* 42 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var nnn = __webpack_require__(51);
+var nnn = __webpack_require__(43);
 var Noise = nnn.Noise;
 var cache = new Map();
 function generateNoise(seed, chunkx, chunky) {
@@ -6116,7 +5588,7 @@ exports.generateNoise = generateNoise;
 
 
 /***/ }),
-/* 51 */
+/* 43 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -6449,7 +5921,7 @@ exports.generateNoise = generateNoise;
 
 
 /***/ }),
-/* 52 */
+/* 44 */
 /***/ (function(module, exports) {
 
 var g;
@@ -6476,7 +5948,7 @@ module.exports = g;
 
 
 /***/ }),
-/* 53 */
+/* 45 */
 /***/ (function(module, exports) {
 
 module.exports = function(module) {
@@ -6502,6 +5974,547 @@ module.exports = function(module) {
 	return module;
 };
 
+
+/***/ }),
+/* 46 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var game_object_1 = __webpack_require__(22);
+var merge = __webpack_require__(11);
+var AudioSourceObject = (function (_super) {
+    __extends(AudioSourceObject, _super);
+    function AudioSourceObject(name, audio, opts) {
+        if (opts === void 0) { opts = {}; }
+        var _this = _super.call(this, name, merge({
+            shouldRender: false
+        }, opts)) || this;
+        _this.audio = audio;
+        _this._shouldLoop = false;
+        if (typeof opts.shouldLoop !== 'undefined')
+            _this._shouldLoop = opts.shouldLoop;
+        return _this;
+    }
+    Object.defineProperty(AudioSourceObject.prototype, "shouldLoop", {
+        get: function () {
+            return this._shouldLoop;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    AudioSourceObject.prototype.addToScene = function (scene) {
+        var _this = this;
+        _super.prototype.addToScene.call(this, scene);
+        var theirAudio = this.resources.loadAudio(this.audio.src);
+        this._myAudio = document.createElement('audio');
+        this._myAudio.src = theirAudio.src;
+        this._myAudio.onended = function () {
+            if (_this._shouldLoop)
+                _this._myAudio.play();
+            else
+                _this.scene.removeObject(_this);
+        };
+        if (this.game.scene == scene)
+            this._myAudio.play();
+    };
+    Object.defineProperty(AudioSourceObject.prototype, "myAudio", {
+        get: function () {
+            return this._myAudio;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    AudioSourceObject.prototype.onSceneEnter = function () {
+        if (this.myAudio.paused)
+            this._myAudio.play();
+    };
+    AudioSourceObject.prototype.onSceneExit = function () {
+        if (!this.myAudio.paused)
+            this._myAudio.pause();
+    };
+    return AudioSourceObject;
+}(game_object_1.GameObject));
+exports.AudioSourceObject = AudioSourceObject;
+//# sourceMappingURL=audio-source-object.js.map
+
+/***/ }),
+/* 47 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var camera_1 = __webpack_require__(12);
+var FollowCamera = (function (_super) {
+    __extends(FollowCamera, _super);
+    function FollowCamera(scene) {
+        var _this = _super.call(this, scene) || this;
+        _this._follow = null;
+        _this._offset = [0, 0];
+        return _this;
+    }
+    Object.defineProperty(FollowCamera.prototype, "follow", {
+        get: function () {
+            return this._follow;
+        },
+        set: function (val) {
+            this._follow = val;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(FollowCamera.prototype, "followOffset", {
+        get: function () {
+            return [this._offset[0], this._offset[1]];
+        },
+        set: function (_a) {
+            var offsetx = _a[0], offsety = _a[1];
+            this._offset = [offsetx, offsety];
+        },
+        enumerable: true,
+        configurable: true
+    });
+    FollowCamera.prototype.tick = function (delta) {
+        if (this.follow) {
+            var target = [this._follow.x + this._offset[0], this._follow.y + this._offset[1]];
+            this.center = target;
+        }
+        _super.prototype.tick.call(this, delta);
+    };
+    return FollowCamera;
+}(camera_1.Camera));
+exports.FollowCamera = FollowCamera;
+//# sourceMappingURL=follow-camera.js.map
+
+/***/ }),
+/* 48 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var camera_1 = __webpack_require__(12);
+var GameScene = (function () {
+    function GameScene(_game) {
+        if (_game === void 0) { _game = null; }
+        this._game = _game;
+        this._objects = [];
+        this._camera = null;
+    }
+    Object.defineProperty(GameScene.prototype, "game", {
+        get: function () {
+            return this._game;
+        },
+        set: function (val) {
+            this._game = val;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    GameScene.prototype.onEnter = function () {
+        this.start();
+        for (var _i = 0, _a = this._objects; _i < _a.length; _i++) {
+            var obj = _a[_i];
+            obj.onSceneEnter();
+        }
+    };
+    GameScene.prototype.onExit = function () {
+        this.stop();
+        for (var _i = 0, _a = this._objects; _i < _a.length; _i++) {
+            var obj = _a[_i];
+            obj.onSceneExit();
+        }
+    };
+    GameScene.prototype.start = function () {
+        if (!this.camera)
+            this.initCamera();
+    };
+    GameScene.prototype.stop = function () {
+    };
+    GameScene.prototype.handleEvent = function (evt) {
+        for (var _i = 0, _a = this._objects; _i < _a.length; _i++) {
+            var obj = _a[_i];
+            if (obj.shouldTick && obj.handleEvent(evt))
+                break;
+        }
+    };
+    GameScene.prototype.tick = function (delta) {
+        for (var _i = 0, _a = this._objects; _i < _a.length; _i++) {
+            var obj = _a[_i];
+            if (obj.shouldTick)
+                obj.tick(delta);
+        }
+        if (this.camera)
+            this.camera.tick(delta);
+    };
+    GameScene.prototype.render = function (context) {
+        var defaultCamera = this.camera;
+        var lastRenderCamera = null;
+        for (var _i = 0, _a = this._objects; _i < _a.length; _i++) {
+            var obj = _a[_i];
+            if (obj.shouldRender) {
+                var renderCamera = obj.renderCamera === 'default' ? defaultCamera :
+                    obj.renderCamera !== 'none' ? obj.renderCamera :
+                        null;
+                if (lastRenderCamera != renderCamera) {
+                    if (lastRenderCamera)
+                        lastRenderCamera.pop(context);
+                    lastRenderCamera = renderCamera;
+                    if (lastRenderCamera)
+                        lastRenderCamera.push(context);
+                }
+                obj.render(context);
+            }
+        }
+        if (lastRenderCamera)
+            lastRenderCamera.pop(context);
+    };
+    GameScene.prototype.addObject = function (obj) {
+        this._objects.push(obj);
+        obj.addToScene(this);
+    };
+    GameScene.prototype.removeObject = function (obj) {
+        var idx = this._objects.indexOf(obj);
+        if (idx == -1)
+            throw new Error("Cannot remove game object '" + obj.name + "': it has not been added.");
+        this._objects.splice(idx, 1);
+        obj.removeFromScene();
+    };
+    GameScene.prototype.findObject = function (predicate) {
+        if (typeof predicate == 'string') {
+            var name_1 = predicate;
+            predicate = function (obj) { return obj.name == name_1; };
+        }
+        else if (!predicate)
+            throw new Error("Invalid predicate: " + predicate);
+        for (var _i = 0, _a = this._objects; _i < _a.length; _i++) {
+            var obj = _a[_i];
+            if (predicate(obj))
+                return obj;
+        }
+        return null;
+    };
+    GameScene.prototype.findObjects = function (predicate) {
+        if (!predicate)
+            return this._objects.slice();
+        if (typeof predicate !== 'function')
+            throw new Error("Invalid predicate: " + predicate);
+        return this._objects.filter(predicate);
+    };
+    GameScene.prototype.initCamera = function () {
+        this.camera = new camera_1.Camera(this);
+    };
+    Object.defineProperty(GameScene.prototype, "camera", {
+        get: function () {
+            return this._camera;
+        },
+        set: function (val) {
+            this._camera = val;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    return GameScene;
+}());
+exports.GameScene = GameScene;
+;
+//# sourceMappingURL=game-scene.js.map
+
+/***/ }),
+/* 49 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var resource_loader_1 = __webpack_require__(23);
+var event_queue_1 = __webpack_require__(21);
+var Game = (function () {
+    function Game(framesPerSecond) {
+        if (framesPerSecond === void 0) { framesPerSecond = 30; }
+        this.framesPerSecond = framesPerSecond;
+        this._scene = null;
+        this._nextScene = null;
+        this.LOGIC_TICKS_PER_RENDER_TICK = 3;
+        this.canvas = null;
+        this.context = null;
+        this.previousTick = null;
+        this._resourceLoader = null;
+        this._eventQueue = null;
+        this._isRunning = false;
+        this._size = [640, 480];
+        this.init();
+    }
+    Object.defineProperty(Game.prototype, "scene", {
+        get: function () {
+            return this._scene;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Game.prototype.changeScene = function (newScene) {
+        if (!newScene) {
+            throw new Error("Tried to changeScene to a bad scene!");
+        }
+        if (this._nextScene) {
+            throw new Error("Scene cannot be set more than once per tick!");
+        }
+        this._nextScene = newScene;
+        if (!this._scene) {
+            this.handleSceneChange();
+        }
+    };
+    Game.prototype.handleSceneChange = function () {
+        if (this._nextScene) {
+            if (this._scene)
+                this._scene.onExit();
+            this._scene = this._nextScene;
+            this._scene.game = this;
+            this._scene.onEnter();
+            this._nextScene = null;
+        }
+    };
+    Game.prototype.init = function () {
+        this._resourceLoader = new resource_loader_1.ResourceLoader();
+        this._eventQueue = new event_queue_1.EventQueue();
+        var body = document.getElementsByTagName('body')[0];
+        this.initResize(body);
+    };
+    Game.prototype.initResize = function (body) {
+        var _this = this;
+        body.onresize = function (e) { return _this.refreshCanvasSize(); };
+    };
+    Game.prototype.refreshCanvasSize = function () {
+        if (this.canvas) {
+            _a = this.canvasSize = [this.canvas.scrollWidth, this.canvas.scrollHeight], this.canvas.width = _a[0], this.canvas.height = _a[1];
+        }
+        var _a;
+    };
+    Object.defineProperty(Game.prototype, "resourceLoader", {
+        get: function () {
+            return this._resourceLoader;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Game.prototype, "eventQueue", {
+        get: function () {
+            return this._eventQueue;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(Game.prototype, "isRunning", {
+        get: function () {
+            return this._isRunning;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Game.prototype.start = function () {
+        var _this = this;
+        if (this.isRunning)
+            throw new Error("This game is already running. You can't run it again.");
+        this._isRunning = true;
+        if (!this.canvas)
+            this.canvas = document.getElementById('gameCanvas');
+        this.refreshCanvasSize();
+        this.context = this.canvas.getContext("2d");
+        this._intervalHandle = setInterval(function () { return _this.onTick(); }, 1000 / this.framesPerSecond);
+    };
+    Game.prototype.stop = function () {
+        if (this.isRunning)
+            clearInterval(this._intervalHandle);
+        this._isRunning = false;
+    };
+    Object.defineProperty(Game.prototype, "canvasSize", {
+        get: function () {
+            return [this._size[0], this._size[1]];
+        },
+        set: function (_a) {
+            var newWidth = _a[0], newHeight = _a[1];
+            if (newWidth == this._size[0] && newHeight == this._size[1])
+                return;
+            var prevSize = this._size;
+            this._size = [newWidth, newHeight];
+            this.eventQueue.enqueue({
+                type: 'canvasResize',
+                previousSize: prevSize,
+                size: [newWidth, newHeight]
+            });
+        },
+        enumerable: true,
+        configurable: true
+    });
+    Game.prototype.onTick = function () {
+        if (!this.isRunning)
+            throw new Error("An error occurred. Game.onTick was invoked although the game is not running.");
+        if (this.resourceLoader.isDone) {
+            var currentTime = new Date();
+            var delta = (this.previousTick == null) ? 0 : (currentTime.valueOf() - this.previousTick.valueOf()) / 1000;
+            this.previousTick = currentTime;
+            this.sendEvents();
+            for (var q = 0; q < this.LOGIC_TICKS_PER_RENDER_TICK; q++) {
+                this.tick(delta / this.LOGIC_TICKS_PER_RENDER_TICK);
+            }
+            this.render(this.context);
+        }
+        else {
+            this.resourceLoader.render(this.context);
+        }
+    };
+    Game.prototype.sendEvents = function () {
+        var events = this._eventQueue.clearQueue();
+        for (var _i = 0, events_1 = events; _i < events_1.length; _i++) {
+            var evt = events_1[_i];
+            if (this._scene) {
+                this._scene.handleEvent(evt);
+            }
+        }
+    };
+    Game.prototype.tick = function (delta) {
+        if (this._scene) {
+            this._scene.tick(delta);
+            this.handleSceneChange();
+        }
+    };
+    Game.prototype.render = function (context) {
+        if (!context)
+            throw new Error("What the heck just happened? There is no rendering context!");
+        if (this._scene) {
+            this._scene.render(context);
+        }
+    };
+    return Game;
+}());
+exports.Game = Game;
+//# sourceMappingURL=game.js.map
+
+/***/ }),
+/* 50 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+function __export(m) {
+    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
+}
+Object.defineProperty(exports, "__esModule", { value: true });
+__export(__webpack_require__(21));
+__export(__webpack_require__(23));
+__export(__webpack_require__(12));
+__export(__webpack_require__(47));
+__export(__webpack_require__(49));
+__export(__webpack_require__(22));
+__export(__webpack_require__(46));
+__export(__webpack_require__(48));
+__export(__webpack_require__(54));
+//# sourceMappingURL=index.js.map
+
+/***/ }),
+/* 51 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+function delay(millis) {
+    return new Promise(function (resolve, reject) {
+        setTimeout(function () { return resolve(); }, millis);
+    });
+}
+exports.delay = delay;
+//# sourceMappingURL=delay.js.map
+
+/***/ }),
+/* 52 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var EventEmitter = (function () {
+    function EventEmitter() {
+        this._listeners = [];
+        this._isEmitting = false;
+    }
+    EventEmitter.prototype.addListener = function (listener) {
+        if (!listener || typeof listener !== 'function')
+            throw new Error("Listener is not a function: " + listener);
+        this._listeners.push(listener);
+    };
+    EventEmitter.prototype.emit = function (val) {
+        if (this._isEmitting)
+            throw new Error("EventEmitter.emit was recursively invoked. New value: " + val);
+        this._isEmitting = true;
+        for (var _i = 0, _a = this._listeners; _i < _a.length; _i++) {
+            var listener = _a[_i];
+            listener(val);
+        }
+        this._isEmitting = false;
+    };
+    return EventEmitter;
+}());
+exports.EventEmitter = EventEmitter;
+//# sourceMappingURL=event-emitter.js.map
+
+/***/ }),
+/* 53 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var MouseButton;
+(function (MouseButton) {
+    MouseButton[MouseButton["Left"] = 0] = "Left";
+    MouseButton[MouseButton["Middle"] = 1] = "Middle";
+    MouseButton[MouseButton["Right"] = 2] = "Right";
+    MouseButton[MouseButton["BrowserBack"] = 3] = "BrowserBack";
+    MouseButton[MouseButton["BrowserForward"] = 5] = "BrowserForward";
+})(MouseButton = exports.MouseButton || (exports.MouseButton = {}));
+//# sourceMappingURL=events.js.map
+
+/***/ }),
+/* 54 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+function __export(m) {
+    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
+}
+Object.defineProperty(exports, "__esModule", { value: true });
+__export(__webpack_require__(51));
+__export(__webpack_require__(52));
+__export(__webpack_require__(53));
+__export(__webpack_require__(6));
+__export(__webpack_require__(24));
+__export(__webpack_require__(13));
+__export(__webpack_require__(25));
+//# sourceMappingURL=index.js.map
 
 /***/ })
 /******/ ]);

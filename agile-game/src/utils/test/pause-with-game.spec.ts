@@ -5,9 +5,8 @@ import * as sinon from 'sinon';
 import * as sinonChai from 'sinon-chai';
 use(sinonChai);
 
-import { GameScene } from '../../engine/game-scene';
+import { GameScene, GameObject } from '../../engine';
 import { pauseWithGame } from '../pause-with-game';
-import { GameObject } from '../../engine/game-object';
 import { AgileGame } from '../../agile-game';
 
 describe('pauseWithGame', () => {

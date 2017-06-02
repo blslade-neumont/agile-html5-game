@@ -7,7 +7,7 @@ use(sinonChai);
 
 import { Entity } from '../entity';
 import { GameObject, AudioSourceObject } from '../engine';
-import { MockEventQueue } from './mock-event-queue';
+import { MockEventQueue } from '../engine/test';
 import { MockWorld } from './mock-world';
 
 describe('Entity', () => {
