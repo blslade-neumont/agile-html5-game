@@ -1,0 +1,4 @@
+[submodule "engine"]
+	path = engine
+	url = https://github.com/blslade-neumont/agile-html5-engine.git
+	branch = master
